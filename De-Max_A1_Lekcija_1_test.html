@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De-Max A1 – Lekcija 1</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --accent:#d71920;
+      --accent-dark:#a70f15;
+      --border:#e5e7eb;
+      --ok:#15803d;
+      --bad:#b91c1c;
+      --soft:#fff1f2;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#ffffff 0,#f4f6f8 180px);
+      color:var(--text);
+    }
+    .wrap{max-width:900px;margin:0 auto;padding:22px 14px 60px}
+    .hero{
+      background:#111;
+      color:#fff;
+      border-radius:24px;
+      padding:26px;
+      box-shadow:0 18px 45px rgba(0,0,0,.12);
+      margin-bottom:20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:after{
+      content:"A1";
+      position:absolute;
+      right:18px; top:-18px;
+      font-weight:900;
+      font-size:130px;
+      color:rgba(255,255,255,.055);
+    }
+    .brand{
+      display:inline-flex;align-items:center;gap:10px;
+      font-weight:900;letter-spacing:.5px;font-size:22px
+    }
+    .brand-badge{
+      width:34px;height:34px;border-radius:10px;background:var(--accent);
+      display:grid;place-items:center;font-weight:900
+    }
+    h1{font-size:34px;line-height:1.05;margin:18px 0 8px}
+    .sub{color:#d1d5db;margin:0;font-size:16px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .chip{background:rgba(255,255,255,.1);padding:8px 11px;border-radius:999px;font-size:13px}
+    .student{
+      background:var(--card);border:1px solid var(--border);border-radius:18px;
+      padding:18px;margin-bottom:18px
+    }
+    label.title{font-weight:800;display:block;margin-bottom:8px}
+    input[type=text]{
+      width:100%;padding:13px 14px;border:1px solid #cfd4dc;border-radius:12px;
+      font-size:16px;outline:none
+    }
+    input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(215,25,32,.12)}
+    .question{
+      background:var(--card);border:1px solid var(--border);border-radius:18px;
+      padding:20px;margin:14px 0;box-shadow:0 5px 18px rgba(0,0,0,.035)
+    }
+    .qnum{color:var(--accent);font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+    .qtext{font-size:18px;font-weight:800;margin:6px 0 14px;line-height:1.4}
+    .options{display:grid;gap:10px}
+    .option{
+      display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--border);
+      border-radius:12px;cursor:pointer;transition:.15s;background:#fff
+    }
+    .option:hover{border-color:#9ca3af;transform:translateY(-1px)}
+    .option input{accent-color:var(--accent);transform:scale(1.12)}
+    .order-help{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+    .word-bank,.answer-bank{
+      min-height:54px;border:1px dashed #c7cbd1;border-radius:12px;padding:10px;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center
+    }
+    .answer-bank{background:#fafafa;margin-top:10px;border-style:solid}
+    .word{
+      border:0;background:#111;color:#fff;padding:9px 12px;border-radius:10px;
+      font-weight:700;cursor:pointer;font-size:15px
+    }
+    .word.selected{background:var(--accent)}
+    .order-actions{display:flex;gap:8px;margin-top:9px}
+    .small-btn{
+      border:1px solid var(--border);background:#fff;padding:8px 10px;border-radius:10px;
+      font-weight:700;cursor:pointer
+    }
+    .footer-actions{
+      position:sticky;bottom:12px;background:rgba(244,246,248,.93);
+      backdrop-filter:blur(10px);padding:12px;border-radius:18px;border:1px solid var(--border);
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:20px
+    }
+    .primary,.secondary{
+      flex:1;min-width:180px;padding:14px 16px;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer
+    }
+    .primary{background:var(--accent);color:#fff;border:0}
+    .primary:hover{background:var(--accent-dark)}
+    .secondary{background:#fff;color:#111;border:1px solid var(--border)}
+    #result{
+      display:none;margin-top:18px;background:#111;color:#fff;border-radius:20px;padding:22px
+    }
+    .score{font-size:40px;font-weight:950;margin:0 0 4px}
+    .result-line{margin:5px 0;color:#e5e7eb}
+    .feedback{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.15);font-size:14px}
+    .correct{border-color:#86efac!important;background:#f0fdf4!important}
+    .incorrect{border-color:#fecaca!important;background:#fef2f2!important}
+    @media(max-width:600px){
+      h1{font-size:27px}.hero{padding:20px}.question{padding:16px}.qtext{font-size:17px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="brand"><span class="brand-badge">D</span> DE-MAX</div>
+    <h1>A1 test – Lekcija 1</h1>
+    <p class="sub">Predstavljanje, lične zamenice, W-pitanja i sastavljanje osnovnih rečenica.</p>
+    <div class="meta">
+      <span class="chip">10 pitanja</span>
+      <span class="chip">10 bodova</span>
+      <span class="chip">1 tačan odgovor</span>
+      <span class="chip">Automatski rezultat</span>
+    </div>
+  </section>
+
+  <section class="student">
+    <label class="title" for="studentName">Ime i prezime učenika</label>
+    <input id="studentName" type="text" placeholder="Upiši ime i prezime">
+  </section>
+
+  <form id="quiz">
+
+    <div class="question mcq" data-answer="A">
+      <div class="qnum">Pitanje 1</div>
+      <div class="qtext">Kako pravilno odgovaramo na „Wie heißen Sie?“</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="A"> A) Ich heiße Amir.</label>
+        <label class="option"><input type="radio" name="q1" value="B"> B) Ich heißt Amir.</label>
+        <label class="option"><input type="radio" name="q1" value="C"> C) Ich heißen Amir.</label>
+        <label class="option"><input type="radio" name="q1" value="D"> D) Ich bist Amir.</label>
+      </div>
+    </div>
+
+    <div class="question mcq" data-answer="B">
+      <div class="qnum">Pitanje 2</div>
+      <div class="qtext">„Wer sind Sie?“ – označi tačan odgovor.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="A"> A) Ich habe Jasmin.</label>
+        <label class="option"><input type="radio" name="q2" value="B"> B) Ich bin Jasmin.</label>
+        <label class="option"><input type="radio" name="q2" value="C"> C) Ich heiße aus Jasmin.</label>
+        <label class="option"><input type="radio" name="q2" value="D"> D) Mein Jasmin ist.</label>
+      </div>
+    </div>
+
+    <div class="question mcq" data-answer="A">
+      <div class="qnum">Pitanje 3</div>
+      <div class="qtext">Koji odgovor je tačan za „Wie ist Ihr Name?“</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="A"> A) Mein Name ist Sara.</label>
+        <label class="option"><input type="radio" name="q3" value="B"> B) Ich Name Sara.</label>
+        <label class="option"><input type="radio" name="q3" value="C"> C) Meine Name ist Sara.</label>
+        <label class="option"><input type="radio" name="q3" value="D"> D) Mein Name sind Sara.</label>
+      </div>
+    </div>
+
+    <div class="question mcq" data-answer="B">
+      <div class="qnum">Pitanje 4</div>
+      <div class="qtext">Koja lična zamenica znači „ti“?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="A"> A) ich</label>
+        <label class="option"><input type="radio" name="q4" value="B"> B) du</label>
+        <label class="option"><input type="radio" name="q4" value="C"> C) er</label>
+        <label class="option"><input type="radio" name="q4" value="D"> D) wir</label>
+      </div>
+    </div>
+
+    <div class="question mcq" data-answer="A">
+      <div class="qnum">Pitanje 5</div>
+      <div class="qtext">Koja lična zamenica znači „mi“?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="A"> A) wir</label>
+        <label class="option"><input type="radio" name="q5" value="B"> B) ihr</label>
+        <label class="option"><input type="radio" name="q5" value="C"> C) sie</label>
+        <label class="option"><input type="radio" name="q5" value="D"> D) du</label>
+      </div>
+    </div>
+
+    <div class="question mcq" data-answer="C">
+      <div class="qnum">Pitanje 6</div>
+      <div class="qtext">Koje pitanje koristimo da pitamo odakle neko dolazi?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q6" value="A"> A) Wie heißen Sie?</label>
+        <label class="option"><input type="radio" name="q6" value="B"> B) Wer sind Sie?</label>
+        <label class="option"><input type="radio" name="q6" value="C"> C) Woher kommen Sie?</label>
+        <label class="option"><input type="radio" name="q6" value="D"> D) Wie geht es Ihnen?</label>
+      </div>
+    </div>
+
+    <div class="question order" data-correct="Ich heiße Amina.">
+      <div class="qnum">Pitanje 7 – Sastavi rečenicu</div>
+      <div class="qtext">Klikni reči pravilnim redosledom.</div>
+      <div class="order-help">Reči: heiße / Ich / Amina.</div>
+      <div class="word-bank">
+        <button type="button" class="word">heiße</button>
+        <button type="button" class="word">Ich</button>
+        <button type="button" class="word">Amina.</button>
+      </div>
+      <div class="answer-bank"></div>
+      <div class="order-actions"><button type="button" class="small-btn reset-order">Poništi</button></div>
+    </div>
+
+    <div class="question order" data-correct="Ich komme aus Serbien.">
+      <div class="qnum">Pitanje 8 – Sastavi rečenicu</div>
+      <div class="qtext">Sastavi rečenicu: „Dolazim iz Srbije.“</div>
+      <div class="word-bank">
+        <button type="button" class="word">Serbien.</button>
+        <button type="button" class="word">komme</button>
+        <button type="button" class="word">aus</button>
+        <button type="button" class="word">Ich</button>
+      </div>
+      <div class="answer-bank"></div>
+      <div class="order-actions"><button type="button" class="small-btn reset-order">Poništi</button></div>
+    </div>
+
+    <div class="question order" data-correct="Wie heißen Sie?">
+      <div class="qnum">Pitanje 9 – Sastavi pitanje</div>
+      <div class="qtext">Sastavi pravilno pitanje.</div>
+      <div class="word-bank">
+        <button type="button" class="word">Sie?</button>
+        <button type="button" class="word">heißen</button>
+        <button type="button" class="word">Wie</button>
+      </div>
+      <div class="answer-bank"></div>
+      <div class="order-actions"><button type="button" class="small-btn reset-order">Poništi</button></div>
+    </div>
+
+    <div class="question order" data-correct="Woher kommen Sie?">
+      <div class="qnum">Pitanje 10 – Sastavi pitanje</div>
+      <div class="qtext">Sastavi pitanje: „Odakle dolazite?“</div>
+      <div class="word-bank">
+        <button type="button" class="word">kommen</button>
+        <button type="button" class="word">Sie?</button>
+        <button type="button" class="word">Woher</button>
+      </div>
+      <div class="answer-bank"></div>
+      <div class="order-actions"><button type="button" class="small-btn reset-order">Poništi</button></div>
+    </div>
+
+    <div class="footer-actions">
+      <button type="button" class="primary" id="checkBtn">Završi test</button>
+      <button type="button" class="secondary" id="restartBtn">Počni ponovo</button>
+    </div>
+  </form>
+
+  <section id="result">
+    <div class="score" id="scoreText">0/10</div>
+    <div class="result-line" id="studentLine"></div>
+    <div class="result-line" id="percentLine"></div>
+    <div class="feedback" id="feedbackText"></div>
+  </section>
+</div>
+
+<script>
+  const normalize = s => s.replace(/\s+/g,' ').trim();
+
+  document.querySelectorAll('.order').forEach(q => {
+    const bank = q.querySelector('.word-bank');
+    const answer = q.querySelector('.answer-bank');
+    bank.querySelectorAll('.word').forEach(btn => {
+      btn.addEventListener('click', () => answer.appendChild(btn));
+    });
+    answer.addEventListener('click', e => {
+      if(e.target.classList.contains('word')) bank.appendChild(e.target);
+    });
+    q.querySelector('.reset-order').addEventListener('click', () => {
+      [...answer.querySelectorAll('.word')].forEach(btn => bank.appendChild(btn));
+      q.classList.remove('correct','incorrect');
+    });
+  });
+
+  document.getElementById('checkBtn').addEventListener('click', () => {
+    let score = 0;
+    let answered = 0;
+    let wrong = [];
+
+    document.querySelectorAll('.mcq').forEach((q, idx) => {
+      q.classList.remove('correct','incorrect');
+      q.querySelectorAll('.option').forEach(o => o.classList.remove('correct','incorrect'));
+      const chosen = q.querySelector('input:checked');
+      const correct = q.dataset.answer;
+      if(chosen){
+        answered++;
+        if(chosen.value === correct){
+          score++;
+          chosen.closest('.option').classList.add('correct');
+          q.classList.add('correct');
+        } else {
+          chosen.closest('.option').classList.add('incorrect');
+          q.querySelector(`input[value="${correct}"]`).closest('.option').classList.add('correct');
+          q.classList.add('incorrect');
+          wrong.push(idx+1);
+        }
+      } else {
+        q.classList.add('incorrect');
+        wrong.push(idx+1);
+      }
+    });
+
+    document.querySelectorAll('.order').forEach((q, idx) => {
+      q.classList.remove('correct','incorrect');
+      const built = normalize([...q.querySelectorAll('.answer-bank .word')].map(x=>x.textContent).join(' '));
+      const correct = normalize(q.dataset.correct);
+      const number = 7 + idx;
+      if(built) answered++;
+      if(built === correct){
+        score++;
+        q.classList.add('correct');
+      } else {
+        q.classList.add('incorrect');
+        wrong.push(number);
+      }
+    });
+
+    const result = document.getElementById('result');
+    const name = document.getElementById('studentName').value.trim() || 'Učenik';
+    const pct = Math.round(score/10*100);
+
+    document.getElementById('scoreText').textContent = `${score}/10`;
+    document.getElementById('studentLine').textContent = `${name} — rezultat`;
+    document.getElementById('percentLine').textContent = `Uspešnost: ${pct}%`;
+
+    let msg = '';
+    if(score === 10) msg = 'Odlično! Sve je tačno. 🎉';
+    else if(score >= 8) msg = 'Veoma dobro! Još malo vežbe i biće savršeno.';
+    else if(score >= 6) msg = 'Dobro. Ponovi pitanja na kojima si pogrešio/la.';
+    else msg = 'Potrebno je još vežbe. Ponovi Lekciju 1 i uradi test ponovo.';
+
+    if(wrong.length) msg += ` Netačna/neodgovorena pitanja: ${wrong.join(', ')}.`;
+    document.getElementById('feedbackText').textContent = msg;
+
+    result.style.display = 'block';
+    result.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    document.getElementById('quiz').reset();
+    document.querySelectorAll('.question,.option').forEach(el => el.classList.remove('correct','incorrect'));
+    document.querySelectorAll('.order').forEach(q => {
+      const bank = q.querySelector('.word-bank');
+      [...q.querySelectorAll('.answer-bank .word')].forEach(btn => bank.appendChild(btn));
+    });
+    document.getElementById('result').style.display = 'none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
