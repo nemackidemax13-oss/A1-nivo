@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0d1b2a" />
+  <title>DE-MAX A1 – Lekcija 7</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --card:#0e2035;
+      --card2:#122a45;
+      --text:#f5f8ff;
+      --muted:#a9bad0;
+      --accent:#ffcc33;
+      --accent2:#ffdf73;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --line:rgba(255,255,255,.11);
+      --shadow:0 18px 45px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:var(--bg);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+    }
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overscroll-behavior:none;
+      touch-action:manipulation;
+    }
+    .app{
+      width:100vw;
+      height:100dvh;
+      max-width:620px;
+      margin:auto;
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        14px
+        calc(12px + env(safe-area-inset-bottom));
+      display:grid;
+      grid-template-rows:auto auto minmax(0,1fr) auto;
+      gap:10px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(255,204,51,.15), transparent 28%),
+        linear-gradient(180deg,#091728 0%,#07111f 100%);
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:52px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:13px;
+      display:grid;place-items:center;
+      font-weight:900;font-size:16px;letter-spacing:-.5px;
+      color:#0b1727;background:var(--accent);
+      box-shadow:0 8px 22px rgba(255,204,51,.18);
+      flex:none;
+    }
+    .brandtext{min-width:0}
+    .brandtext strong{
+      display:block;font-size:16px;line-height:1.05;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .brandtext span{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+    .score{
+      background:rgba(255,255,255,.07);
+      border:1px solid var(--line);
+      padding:8px 10px;border-radius:12px;
+      font-size:12px;font-weight:800;white-space:nowrap;
+    }
+    .progress-wrap{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:9px;align-items:center;
+      color:var(--muted);font-size:11px;font-weight:700;
+    }
+    .progress{
+      height:7px;border-radius:999px;
+      overflow:hidden;background:rgba(255,255,255,.09);
+    }
+    .progress > div{
+      height:100%;width:10%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      border-radius:999px;transition:width .25s ease;
+    }
+    .stage{
+      min-height:0;
+      display:flex;
+      align-items:stretch;
+    }
+    .card{
+      width:100%;
+      min-height:0;
+      background:linear-gradient(180deg,rgba(18,42,69,.97),rgba(11,29,48,.97));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px 16px;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .tag{
+      align-self:flex-start;
+      color:#0b1727;
+      background:var(--accent);
+      border-radius:999px;
+      font-size:11px;font-weight:900;
+      padding:6px 10px;
+      margin-bottom:10px;
+    }
+    h1{
+      font-size:clamp(21px,5.6vw,30px);
+      line-height:1.12;
+      margin:0 0 7px;
+      letter-spacing:-.4px;
+    }
+    .hint{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:clamp(12px,3.2vw,14px);
+      line-height:1.35;
+    }
+    .answers{
+      display:grid;
+      gap:9px;
+      min-height:0;
+      align-content:start;
+    }
+    button{font:inherit}
+    .answer{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.055);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 13px;
+      min-height:48px;
+      font-size:clamp(14px,3.8vw,17px);
+      font-weight:750;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .answer:active{transform:scale(.99)}
+    .answer.selected{
+      border-color:var(--accent);
+      background:rgba(255,204,51,.12);
+      box-shadow:inset 0 0 0 1px rgba(255,204,51,.25);
+    }
+    .sentence{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-content:flex-start;
+    }
+    .word{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.07);
+      color:var(--text);
+      border-radius:12px;
+      padding:9px 11px;
+      font-weight:800;
+      font-size:clamp(13px,3.5vw,16px);
+      cursor:pointer;
+    }
+    .word.used{opacity:.3;pointer-events:none}
+    .built{
+      min-height:70px;
+      border:1px dashed rgba(255,255,255,.22);
+      border-radius:16px;
+      padding:10px;
+      margin-bottom:11px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      align-content:flex-start;
+      background:rgba(0,0,0,.12);
+    }
+    .built.empty::before{
+      content:"Dodirni reči pravilnim redom";
+      color:var(--muted);
+      font-size:12px;
+      align-self:center;
+    }
+    .built .word{background:rgba(255,204,51,.13);border-color:rgba(255,204,51,.4)}
+    .small-actions{
+      display:flex;gap:8px;margin-top:10px;
+    }
+    .mini{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:11px;
+      font-size:12px;font-weight:800;
+    }
+    .feedback{
+      min-height:22px;
+      margin-top:auto;
+      padding-top:10px;
+      font-size:13px;
+      font-weight:800;
+    }
+    .feedback.good{color:#86efac}
+    .feedback.bad{color:#fca5a5}
+    .nav{
+      display:grid;
+      grid-template-columns:1fr 1.35fr;
+      gap:10px;
+    }
+    .nav button{
+      border:0;
+      min-height:49px;
+      border-radius:16px;
+      font-weight:900;
+      font-size:15px;
+      cursor:pointer;
+    }
+    .secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line)!important;
+    }
+    .primary{
+      color:#0b1727;
+      background:linear-gradient(180deg,var(--accent2),var(--accent));
+    }
+    .primary:disabled{opacity:.45;cursor:not-allowed}
+    .result{
+      text-align:center;
+      justify-content:center;
+      align-items:center;
+    }
+    .result .big{
+      width:112px;height:112px;border-radius:50%;
+      display:grid;place-items:center;
+      background:rgba(255,204,51,.12);
+      border:2px solid var(--accent);
+      font-size:34px;font-weight:950;
+      margin:8px auto 16px;
+    }
+    .result p{
+      color:var(--muted);line-height:1.4;
+      font-size:14px;max-width:390px;margin:0 auto;
+    }
+    .footer-note{
+      display:none;
+    }
+
+    @media (min-width:621px){
+      .app{
+        height:min(100dvh,900px);
+        aspect-ratio:9/16;
+        width:auto;
+        border-radius:28px;
+        border:1px solid rgba(255,255,255,.12);
+      }
+      body{padding:12px}
+    }
+
+    @media (max-height:680px){
+      .app{gap:7px;padding-top:8px;padding-bottom:8px}
+      .topbar{min-height:44px}
+      .logo{width:36px;height:36px;border-radius:11px;font-size:14px}
+      .card{padding:13px;border-radius:20px}
+      h1{font-size:19px}
+      .hint{font-size:11px;margin-bottom:8px}
+      .answer{min-height:42px;padding:9px 11px;font-size:14px}
+      .answers{gap:7px}
+      .nav button{min-height:44px}
+      .built{min-height:56px;padding:8px}
+      .word{padding:7px 9px;font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">DM</div>
+        <div class="brandtext">
+          <strong>DE-MAX A1 • Lekcija 7</strong>
+          <span>Akuzativ • Futur I • Perfekt • zamenice • denn</span>
+        </div>
+      </div>
+      <div class="score" id="score">0 / 10</div>
+    </header>
+
+    <div class="progress-wrap">
+      <span id="qnum">1</span>
+      <div class="progress"><div id="bar"></div></div>
+      <span>10</span>
+    </div>
+
+    <section class="stage">
+      <article class="card" id="card"></article>
+    </section>
+
+    <nav class="nav">
+      <button class="secondary" id="backBtn">Nazad</button>
+      <button class="primary" id="nextBtn">Sledeće</button>
+    </nav>
+  </main>
+
+<script>
+const questions = [
+  {
+    type:"choice", topic:"Akuzativ",
+    q:"Ich kaufe ___ Apfel.",
+    hint:"Izaberi pravilan član u akuzativu.",
+    options:["ein","einen","einem","einer"],
+    answer:1
+  },
+  {
+    type:"choice", topic:"Akuzativ",
+    q:"Wir besuchen ___ Lehrer.",
+    hint:"Koji oblik određenog člana je tačan?",
+    options:["der","dem","den","des"],
+    answer:2
+  },
+  {
+    type:"choice", topic:"Zamenice",
+    q:"Kennst du Anna? – Ja, ich kenne ___.",
+    hint:"Izaberi odgovarajuću ličnu zamenicu.",
+    options:["sie","ihr","ihm","ihn"],
+    answer:0
+  },
+  {
+    type:"choice", topic:"denn",
+    q:"Wo wohnst du denn?",
+    hint:"Šta „denn“ ovde najčešće radi?",
+    options:[
+      "Menja vreme glagola",
+      "Daje pitanju prirodniji, zainteresovan ton",
+      "Znači uvek „jer“",
+      "Pravi negaciju"
+    ],
+    answer:1
+  },
+  {
+    type:"choice", topic:"Perfekt",
+    q:"Ich ___ gestern Fußball gespielt.",
+    hint:"Izaberi odgovarajući pomoćni glagol.",
+    options:["bin","habe","werde","hat"],
+    answer:1
+  },
+  {
+    type:"choice", topic:"Futur I",
+    q:"Morgen ___ ich meine Oma besuchen.",
+    hint:"Dopuni rečenicu u Futuru I.",
+    options:["habe","bin","werde","würde"],
+    answer:2
+  },
+  {
+    type:"order", topic:"Slaganje • Futur I",
+    q:"Složi rečenicu:",
+    hint:"„Sutra ću učiti nemački.“",
+    words:["Morgen","werde","ich","Deutsch","lernen."],
+    answer:["Morgen","werde","ich","Deutsch","lernen."]
+  },
+  {
+    type:"order", topic:"Slaganje • Perfekt",
+    q:"Složi rečenicu:",
+    hint:"„Juče smo kupili auto.“",
+    words:["Gestern","haben","wir","ein","Auto","gekauft."],
+    answer:["Gestern","haben","wir","ein","Auto","gekauft."]
+  },
+  {
+    type:"order", topic:"Slaganje • Akuzativ",
+    q:"Složi rečenicu:",
+    hint:"„On vidi jednog čoveka.“",
+    words:["Er","sieht","einen","Mann."],
+    answer:["Er","sieht","einen","Mann."]
+  },
+  {
+    type:"order", topic:"Slaganje • denn",
+    q:"Složi pitanje:",
+    hint:"„Kako se ti zapravo zoveš?“",
+    words:["Wie","heißt","du","denn?"],
+    answer:["Wie","heißt","du","denn?"]
+  }
+];
+
+let index = 0;
+const answers = Array(questions.length).fill(null);
+let finished = false;
+
+const card = document.getElementById("card");
+const qnum = document.getElementById("qnum");
+const bar = document.getElementById("bar");
+const scoreEl = document.getElementById("score");
+const nextBtn = document.getElementById("nextBtn");
+const backBtn = document.getElementById("backBtn");
+
+function scoreNow(){
+  let s=0;
+  questions.forEach((q,i)=>{
+    if(answers[i] == null) return;
+    if(q.type==="choice" && answers[i]===q.answer) s++;
+    if(q.type==="order" && JSON.stringify(answers[i])===JSON.stringify(q.answer)) s++;
+  });
+  return s;
+}
+
+function answered(i=index){
+  const a=answers[i];
+  return Array.isArray(a) ? a.length>0 : a!==null;
+}
+
+function render(){
+  if(finished){ renderResult(); return; }
+
+  const q = questions[index];
+  qnum.textContent = index+1;
+  bar.style.width = `${((index+1)/questions.length)*100}%`;
+  scoreEl.textContent = `${scoreNow()} / 10`;
+  backBtn.disabled = index===0;
+  nextBtn.textContent = index===questions.length-1 ? "Završi test" : "Sledeće";
+  nextBtn.disabled = !answered();
+
+  let html = `<div class="tag">${q.topic}</div>
+              <h1>${q.q}</h1>
+              <p class="hint">${q.hint}</p>`;
+
+  if(q.type==="choice"){
+    html += `<div class="answers">` + q.options.map((opt,i)=>
+      `<button class="answer ${answers[index]===i?'selected':''}" data-choice="${i}">${opt}</button>`
+    ).join("") + `</div><div class="feedback"></div>`;
+  } else {
+    const built = Array.isArray(answers[index]) ? answers[index] : [];
+    html += `<div class="built ${built.length?'':'empty'}" id="built">` +
+      built.map((w,i)=>`<button class="word" data-remove="${i}">${w}</button>`).join("") +
+      `</div><div class="sentence">` +
+      q.words.map((w,i)=>{
+        const usedCount = built.filter(x=>x===w).length;
+        const beforeSame = q.words.slice(0,i).filter(x=>x===w).length;
+        const used = beforeSame < usedCount;
+        return `<button class="word ${used?'used':''}" data-word="${i}">${w}</button>`;
+      }).join("") +
+      `</div>
+       <div class="small-actions">
+         <button class="mini" id="clearBtn">Obriši</button>
+       </div>
+       <div class="feedback"></div>`;
+  }
+
+  card.className = "card";
+  card.innerHTML = html;
+
+  card.querySelectorAll("[data-choice]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      answers[index] = Number(btn.dataset.choice);
+      render();
+    });
+  });
+
+  card.querySelectorAll("[data-word]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const i = Number(btn.dataset.word);
+      if(!Array.isArray(answers[index])) answers[index]=[];
+      answers[index].push(q.words[i]);
+      render();
+    });
+  });
+
+  card.querySelectorAll("[data-remove]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const i = Number(btn.dataset.remove);
+      answers[index].splice(i,1);
+      if(answers[index].length===0) answers[index]=null;
+      render();
+    });
+  });
+
+  const clearBtn=document.getElementById("clearBtn");
+  if(clearBtn) clearBtn.addEventListener("click",()=>{
+    answers[index]=null;
+    render();
+  });
+}
+
+function renderResult(){
+  const s = scoreNow();
+  qnum.textContent = "✓";
+  bar.style.width = "100%";
+  scoreEl.textContent = `${s} / 10`;
+  let msg = s===10 ? "Odlično! Sve je tačno." :
+            s>=8 ? "Vrlo dobro! Još malo i potpuno sigurno znaš lekciju." :
+            s>=6 ? "Dobro! Ponovi pitanja na kojima si pogrešio/la." :
+                   "Ponovi gradivo i pokušaj ponovo.";
+  card.className="card result";
+  card.innerHTML = `
+    <div class="tag">Rezultat</div>
+    <h1>Završio/la si Lekciju 7</h1>
+    <div class="big">${s}/10</div>
+    <p>${msg}</p>`;
+  backBtn.textContent="Pregled";
+  backBtn.disabled=false;
+  nextBtn.textContent="Ponovi test";
+  nextBtn.disabled=false;
+}
+
+nextBtn.addEventListener("click",()=>{
+  if(finished){
+    index=0; finished=false;
+    for(let i=0;i<answers.length;i++) answers[i]=null;
+    backBtn.textContent="Nazad";
+    render(); return;
+  }
+  if(!answered()) return;
+  if(index < questions.length-1){
+    index++;
+    render();
+  } else {
+    finished=true;
+    render();
+  }
+});
+
+backBtn.addEventListener("click",()=>{
+  if(finished){
+    finished=false;
+    index=questions.length-1;
+    backBtn.textContent="Nazad";
+    render();
+    return;
+  }
+  if(index>0){ index--; render(); }
+});
+
+render();
+</script>
+</body>
+</html>
