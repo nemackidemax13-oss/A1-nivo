@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b40018">
+<title>DE-MAX Dijalozi A1 sa prevodom</title>
+<style>
+:root {
+  --red:#b40018; --red2:#e10623; --ink:#171717; --muted:#6b7280; --paper:#fff;
+  --bg:#f3f4f6; --line:#e5e7eb; --a:#fff1f2; --b:#eff6ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.app{width:min(100%,520px);min-height:100dvh;margin:0 auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 35px rgba(0,0,0,.08)}
+.topbar{padding:18px;background:linear-gradient(135deg,var(--red),var(--red2));color:white;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-weight:950;font-size:24px;letter-spacing:.5px}
+.sub{font-size:13px;opacity:.92;margin-top:3px}
+.badge{background:white;color:var(--red);font-size:12px;font-weight:900;border-radius:999px;padding:6px 9px}
+.content{padding:16px;flex:1}
+.hero{border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px}
+.hero h1{font-size:23px;margin:0 0 6px}
+.hero p{font-size:14px;color:var(--muted);line-height:1.45;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:#f8fafc;border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:18px}
+.stat span{font-size:11px;color:var(--muted)}
+.list{display:grid;gap:10px}
+.topic{display:flex;align-items:center;gap:12px;width:100%;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px;text-align:left}
+.num{width:40px;height:40px;border-radius:12px;background:#fff1f2;color:var(--red);display:grid;place-items:center;font-weight:950;flex:0 0 auto}
+.topic-main{flex:1}
+.topic-title{font-size:15px;font-weight:900}
+.topic-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.chev{font-size:24px;color:#9ca3af}
+.hidden{display:none!important}
+.lesson-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{border:0;background:#f3f4f6;width:42px;height:42px;border-radius:12px;font-size:21px}
+.lesson-title{font-size:19px;font-weight:950}
+.lesson-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tool{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-weight:850;font-size:13px}
+.tool.primary{background:#111827;color:white;border-color:#111827}
+.toggle-wrap{margin-bottom:12px}
+.toggle{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-weight:850;font-size:13px}
+.dialog-card{border:1px solid var(--line);border-radius:20px;padding:14px;background:#fff;box-shadow:0 8px 26px rgba(15,23,42,.05)}
+.dialog{display:flex;flex-direction:column;gap:10px}
+.line{display:flex;gap:9px;align-items:flex-start}
+.line.B{flex-direction:row-reverse}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:950;flex:0 0 auto}
+.line.A .avatar{background:#fee2e2;color:#991b1b}
+.line.B .avatar{background:#dbeafe;color:#1d4ed8}
+.bubble{max-width:84%;padding:11px 12px;border-radius:16px;font-size:15px;line-height:1.4;position:relative}
+.line.A .bubble{background:var(--a);border-top-left-radius:5px}
+.line.B .bubble{background:var(--b);border-top-right-radius:5px}
+.de{font-weight:750}
+.translation{margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,.08);font-size:13px;line-height:1.35;color:#586174;font-style:italic}
+.speak{display:inline-flex;margin-top:8px;border:0;background:rgba(255,255,255,.82);border-radius:999px;padding:5px 8px;font-size:11px;font-weight:850}
+.practice{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.practice h3{margin:0 0 8px;font-size:15px}
+.practice p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
+.footer-note{padding:16px;text-align:center;color:#9ca3af;font-size:11px}
+@media(min-width:700px){body{padding:24px}.app{min-height:calc(100dvh - 48px);border-radius:26px;overflow:hidden}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <div class="logo">DE-MAX</div>
+        <div class="sub">Dijalozi nemačkog jezika + prevod</div>
+      </div>
+      <div class="badge">A1 • 20 tema</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="home">
+      <div class="hero">
+        <h1>Dijalozi A1</h1>
+        <p>Svaka nemačka replika sada ima i prevod na srpski. Možeš slušati pojedinačne replike ili ceo dijalog.</p>
+        <div class="stats">
+          <div class="stat"><b>20</b><span>dijaloga</span></div>
+          <div class="stat"><b>200</b><span>replika</span></div>
+          <div class="stat"><b>SR</b><span>prevod</span></div>
+        </div>
+      </div>
+      <div id="topics" class="list"></div>
+    </section>
+
+    <section id="lesson" class="hidden">
+      <div class="lesson-head">
+        <button id="backBtn" class="back">←</button>
+        <div>
+          <div id="lessonTitle" class="lesson-title"></div>
+          <div class="lesson-sub">A1 razgovor sa prevodom</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button id="playAll" class="tool primary">▶ Poslušaj sve</button>
+        <button id="stopAudio" class="tool">■ Zaustavi</button>
+      </div>
+      <div class="toggle-wrap">
+        <button id="toggleTranslation" class="toggle">🙈 Sakrij prevod</button>
+      </div>
+
+      <div class="dialog-card">
+        <div id="dialog" class="dialog"></div>
+        <div class="practice">
+          <h3>Vežba</h3>
+          <p>Najpre pročitaj nemački tekst sa prevodom. Zatim sakrij prevod i pokušaj da razumeš dijalog bez pomoći.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">DE-MAX • Dijalozi A1 sa prevodom</div>
+</div>
+
+<script>
+const DIALOGS = [{"title": "Predstavljanje", "lines": [{"role": "A", "text": "Guten Tag! Ich heiße Anna.", "translation": "Dobar dan! Zovem se Ana."}, {"role": "B", "text": "Guten Tag! Ich heiße Marko.", "translation": "Dobar dan! Zovem se Marko."}, {"role": "A", "text": "Woher kommst du?", "translation": "Odakle dolaziš?"}, {"role": "B", "text": "Ich komme aus Serbien.", "translation": "Dolazim iz Srbije."}, {"role": "A", "text": "Wo wohnst du?", "translation": "Gde stanuješ?"}, {"role": "B", "text": "Ich wohne in Berlin.", "translation": "Stanujem u Berlinu."}, {"role": "A", "text": "Wie alt bist du?", "translation": "Koliko imaš godina?"}, {"role": "B", "text": "Ich bin zwanzig Jahre alt.", "translation": "Imam dvadeset godina."}, {"role": "A", "text": "Freut mich!", "translation": "Drago mi je!"}, {"role": "B", "text": "Mich auch!", "translation": "I meni!"}]}, {"title": "Porodica", "lines": [{"role": "A", "text": "Hast du Geschwister?", "translation": "Imaš li braću ili sestre?"}, {"role": "B", "text": "Ja, ich habe einen Bruder.", "translation": "Da, imam jednog brata."}, {"role": "A", "text": "Wie heißt dein Bruder?", "translation": "Kako se zove tvoj brat?"}, {"role": "B", "text": "Er heißt Amir.", "translation": "Zove se Amir."}, {"role": "A", "text": "Wie alt ist er?", "translation": "Koliko on ima godina?"}, {"role": "B", "text": "Er ist achtzehn Jahre alt.", "translation": "Ima osamnaest godina."}, {"role": "A", "text": "Wo wohnen deine Eltern?", "translation": "Gde žive tvoji roditelji?"}, {"role": "B", "text": "Sie wohnen in Serbien.", "translation": "Oni žive u Srbiji."}, {"role": "A", "text": "Besuchst du sie oft?", "translation": "Da li ih često posećuješ?"}, {"role": "B", "text": "Ja, sehr oft.", "translation": "Da, veoma često."}]}, {"title": "Kupovina", "lines": [{"role": "A", "text": "Guten Tag. Kann ich Ihnen helfen?", "translation": "Dobar dan. Mogu li da Vam pomognem?"}, {"role": "B", "text": "Ja, ich brauche Milch und Brot.", "translation": "Da, trebaju mi mleko i hleb."}, {"role": "A", "text": "Die Milch ist dort links.", "translation": "Mleko je tamo levo."}, {"role": "B", "text": "Danke. Wo ist das Brot?", "translation": "Hvala. Gde je hleb?"}, {"role": "A", "text": "Das Brot ist neben der Kasse.", "translation": "Hleb je pored kase."}, {"role": "B", "text": "Was kostet das Brot?", "translation": "Koliko košta hleb?"}, {"role": "A", "text": "Es kostet zwei Euro.", "translation": "Košta dva evra."}, {"role": "B", "text": "Ich nehme ein Brot.", "translation": "Uzeću jedan hleb."}, {"role": "A", "text": "Brauchen Sie eine Tüte?", "translation": "Da li Vam treba kesa?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}]}, {"title": "Kuća", "lines": [{"role": "A", "text": "Ist das dein Haus?", "translation": "Da li je to tvoja kuća?"}, {"role": "B", "text": "Ja, das ist mein Haus.", "translation": "Da, to je moja kuća."}, {"role": "A", "text": "Ist es groß?", "translation": "Da li je velika?"}, {"role": "B", "text": "Ja, es ist ziemlich groß.", "translation": "Da, prilično je velika."}, {"role": "A", "text": "Wie viele Zimmer habt ihr?", "translation": "Koliko soba imate?"}, {"role": "B", "text": "Wir haben fünf Zimmer.", "translation": "Imamo pet soba."}, {"role": "A", "text": "Habt ihr einen Garten?", "translation": "Imate li dvorište?"}, {"role": "B", "text": "Ja, hinter dem Haus.", "translation": "Da, iza kuće."}, {"role": "A", "text": "Ist dein Zimmer oben?", "translation": "Da li je tvoja soba gore?"}, {"role": "B", "text": "Ja, im ersten Stock.", "translation": "Da, na prvom spratu."}]}, {"title": "Dom", "lines": [{"role": "A", "text": "Wie ist deine Wohnung?", "translation": "Kakav je tvoj stan?"}, {"role": "B", "text": "Sie ist klein, aber schön.", "translation": "Mali je, ali lep."}, {"role": "A", "text": "Wie viele Zimmer hast du?", "translation": "Koliko soba imaš?"}, {"role": "B", "text": "Ich habe drei Zimmer.", "translation": "Imam tri sobe."}, {"role": "A", "text": "Wo ist die Küche?", "translation": "Gde je kuhinja?"}, {"role": "B", "text": "Die Küche ist neben dem Wohnzimmer.", "translation": "Kuhinja je pored dnevne sobe."}, {"role": "A", "text": "Hast du einen Balkon?", "translation": "Imaš li balkon?"}, {"role": "B", "text": "Ja, einen kleinen Balkon.", "translation": "Da, mali balkon."}, {"role": "A", "text": "Gefällt dir deine Wohnung?", "translation": "Da li ti se sviđa tvoj stan?"}, {"role": "B", "text": "Ja, sehr.", "translation": "Da, veoma."}]}, {"title": "Slobodno vreme", "lines": [{"role": "A", "text": "Was machst du in deiner Freizeit?", "translation": "Šta radiš u slobodno vreme?"}, {"role": "B", "text": "Ich höre gern Musik.", "translation": "Volim da slušam muziku."}, {"role": "A", "text": "Liest du auch Bücher?", "translation": "Da li čitaš i knjige?"}, {"role": "B", "text": "Ja, manchmal.", "translation": "Da, ponekad."}, {"role": "A", "text": "Gehst du oft spazieren?", "translation": "Da li često ideš u šetnju?"}, {"role": "B", "text": "Ja, am Wochenende.", "translation": "Da, vikendom."}, {"role": "A", "text": "Triffst du deine Freunde?", "translation": "Da li se viđaš sa prijateljima?"}, {"role": "B", "text": "Ja, sehr oft.", "translation": "Da, veoma često."}, {"role": "A", "text": "Was macht ihr zusammen?", "translation": "Šta radite zajedno?"}, {"role": "B", "text": "Wir trinken Kaffee und reden.", "translation": "Pijemo kafu i razgovaramo."}]}, {"title": "Sport", "lines": [{"role": "A", "text": "Machst du Sport?", "translation": "Da li se baviš sportom?"}, {"role": "B", "text": "Ja, ich spiele Fußball.", "translation": "Da, igram fudbal."}, {"role": "A", "text": "Wie oft spielst du?", "translation": "Koliko često igraš?"}, {"role": "B", "text": "Zweimal pro Woche.", "translation": "Dva puta nedeljno."}, {"role": "A", "text": "Wo trainierst du?", "translation": "Gde treniraš?"}, {"role": "B", "text": "Auf dem Sportplatz.", "translation": "Na sportskom terenu."}, {"role": "A", "text": "Spielst du am Samstag?", "translation": "Da li igraš u subotu?"}, {"role": "B", "text": "Ja, um sechs Uhr.", "translation": "Da, u šest sati."}, {"role": "A", "text": "Viel Erfolg!", "translation": "Mnogo uspeha!"}, {"role": "B", "text": "Danke!", "translation": "Hvala!"}]}, {"title": "Nemačka", "lines": [{"role": "A", "text": "Warst du schon in Deutschland?", "translation": "Da li si već bio u Nemačkoj?"}, {"role": "B", "text": "Ja, einmal.", "translation": "Da, jednom."}, {"role": "A", "text": "Welche Stadt hast du besucht?", "translation": "Koji grad si posetio?"}, {"role": "B", "text": "Ich war in Berlin.", "translation": "Bio sam u Berlinu."}, {"role": "A", "text": "Wie gefällt dir Berlin?", "translation": "Kako ti se sviđa Berlin?"}, {"role": "B", "text": "Sehr gut.", "translation": "Veoma mi se sviđa."}, {"role": "A", "text": "Sprichst du Deutsch?", "translation": "Govoriš li nemački?"}, {"role": "B", "text": "Ein bisschen.", "translation": "Pomalo."}, {"role": "A", "text": "Möchtest du wieder fahren?", "translation": "Da li želiš ponovo da ideš?"}, {"role": "B", "text": "Ja, sehr gern.", "translation": "Da, vrlo rado."}]}, {"title": "Kod doktora", "lines": [{"role": "A", "text": "Guten Tag. Was fehlt Ihnen?", "translation": "Dobar dan. Šta Vam je?"}, {"role": "B", "text": "Ich habe Kopfschmerzen.", "translation": "Imam glavobolju."}, {"role": "A", "text": "Seit wann?", "translation": "Od kada?"}, {"role": "B", "text": "Seit gestern.", "translation": "Od juče."}, {"role": "A", "text": "Haben Sie auch Fieber?", "translation": "Da li imate i temperaturu?"}, {"role": "B", "text": "Ja, ein bisschen.", "translation": "Da, malo."}, {"role": "A", "text": "Haben Sie Husten?", "translation": "Da li kašljete?"}, {"role": "B", "text": "Ja.", "translation": "Da."}, {"role": "A", "text": "Trinken Sie viel Wasser.", "translation": "Pijte dosta vode."}, {"role": "B", "text": "Danke, Frau Doktor.", "translation": "Hvala, doktorka."}]}, {"title": "U pekari", "lines": [{"role": "A", "text": "Guten Morgen. Was möchten Sie?", "translation": "Dobro jutro. Šta želite?"}, {"role": "B", "text": "Ich möchte zwei Brötchen.", "translation": "Želeo bih dve zemičke."}, {"role": "A", "text": "Noch etwas?", "translation": "Još nešto?"}, {"role": "B", "text": "Ja, ein Brot bitte.", "translation": "Da, jedan hleb, molim."}, {"role": "A", "text": "Möchten Sie auch Kuchen?", "translation": "Da li želite i kolač?"}, {"role": "B", "text": "Nein, danke.", "translation": "Ne, hvala."}, {"role": "A", "text": "Das macht vier Euro.", "translation": "To je četiri evra."}, {"role": "B", "text": "Hier bitte.", "translation": "Izvolite."}, {"role": "A", "text": "Vielen Dank.", "translation": "Hvala Vam puno."}, {"role": "B", "text": "Auf Wiedersehen.", "translation": "Doviđenja."}]}, {"title": "U butiku", "lines": [{"role": "A", "text": "Kann ich Ihnen helfen?", "translation": "Mogu li da Vam pomognem?"}, {"role": "B", "text": "Ja, ich suche eine Jacke.", "translation": "Da, tražim jaknu."}, {"role": "A", "text": "Welche Größe tragen Sie?", "translation": "Koju veličinu nosite?"}, {"role": "B", "text": "Größe vierzig.", "translation": "Veličinu četrdeset."}, {"role": "A", "text": "Wie gefällt Ihnen diese Jacke?", "translation": "Kako Vam se dopada ova jakna?"}, {"role": "B", "text": "Sehr gut. Haben Sie sie in Blau?", "translation": "Veoma mi se dopada. Imate li je u plavoj boji?"}, {"role": "A", "text": "Ja, hier bitte.", "translation": "Da, izvolite."}, {"role": "B", "text": "Kann ich sie anprobieren?", "translation": "Mogu li da je probam?"}, {"role": "A", "text": "Natürlich.", "translation": "Naravno."}, {"role": "B", "text": "Danke.", "translation": "Hvala."}]}, {"title": "U cvećari", "lines": [{"role": "A", "text": "Guten Tag. Was möchten Sie?", "translation": "Dobar dan. Šta želite?"}, {"role": "B", "text": "Ich möchte einen Blumenstrauß.", "translation": "Želeo bih buket cveća."}, {"role": "A", "text": "Für wen sind die Blumen?", "translation": "Za koga je cveće?"}, {"role": "B", "text": "Für meine Mutter.", "translation": "Za moju majku."}, {"role": "A", "text": "Mögen Sie Rosen?", "translation": "Da li volite ruže?"}, {"role": "B", "text": "Ja, rote Rosen.", "translation": "Da, crvene ruže."}, {"role": "A", "text": "Wie viele möchten Sie?", "translation": "Koliko želite?"}, {"role": "B", "text": "Zehn Rosen bitte.", "translation": "Deset ruža, molim."}, {"role": "A", "text": "Soll ich sie einpacken?", "translation": "Da li da ih upakujem?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}]}, {"title": "U obućari", "lines": [{"role": "A", "text": "Guten Tag. Welche Schuhe suchen Sie?", "translation": "Dobar dan. Kakve cipele tražite?"}, {"role": "B", "text": "Ich suche schwarze Schuhe.", "translation": "Tražim crne cipele."}, {"role": "A", "text": "Welche Größe haben Sie?", "translation": "Koji broj nosite?"}, {"role": "B", "text": "Größe zweiundvierzig.", "translation": "Broj četrdeset dva."}, {"role": "A", "text": "Probieren Sie diese Schuhe.", "translation": "Probajte ove cipele."}, {"role": "B", "text": "Sie sind zu klein.", "translation": "Premale su."}, {"role": "A", "text": "Hier ist eine Nummer größer.", "translation": "Evo jedan broj veće."}, {"role": "B", "text": "Diese passen gut.", "translation": "Ove mi dobro odgovaraju."}, {"role": "A", "text": "Möchten Sie sie nehmen?", "translation": "Da li želite da ih uzmete?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}]}, {"title": "Kod zubara", "lines": [{"role": "A", "text": "Guten Tag. Was ist das Problem?", "translation": "Dobar dan. U čemu je problem?"}, {"role": "B", "text": "Ich habe Zahnschmerzen.", "translation": "Boli me zub."}, {"role": "A", "text": "Welcher Zahn tut weh?", "translation": "Koji zub Vas boli?"}, {"role": "B", "text": "Dieser Zahn hier.", "translation": "Ovaj zub ovde."}, {"role": "A", "text": "Seit wann haben Sie Schmerzen?", "translation": "Od kada imate bolove?"}, {"role": "B", "text": "Seit gestern Abend.", "translation": "Od sinoć."}, {"role": "A", "text": "Bitte öffnen Sie den Mund.", "translation": "Molim Vas, otvorite usta."}, {"role": "B", "text": "Tut die Behandlung weh?", "translation": "Da li lečenje boli?"}, {"role": "A", "text": "Nein, keine Sorge.", "translation": "Ne, ne brinite."}, {"role": "B", "text": "Danke.", "translation": "Hvala."}]}, {"title": "U prirodi", "lines": [{"role": "A", "text": "Das Wetter ist heute schön.", "translation": "Vreme je danas lepo."}, {"role": "B", "text": "Ja, die Sonne scheint.", "translation": "Da, sunce sija."}, {"role": "A", "text": "Gehen wir in den Wald?", "translation": "Hoćemo li u šumu?"}, {"role": "B", "text": "Gern.", "translation": "Rado."}, {"role": "A", "text": "Nehmen wir Wasser mit?", "translation": "Da li da ponesemo vodu?"}, {"role": "B", "text": "Ja, natürlich.", "translation": "Da, naravno."}, {"role": "A", "text": "Machen wir ein Picknick?", "translation": "Hoćemo li napraviti piknik?"}, {"role": "B", "text": "Das ist eine gute Idee.", "translation": "To je dobra ideja."}, {"role": "A", "text": "Nimm auch die Kamera mit.", "translation": "Ponesi i foto-aparat."}, {"role": "B", "text": "Okay.", "translation": "U redu."}]}, {"title": "U hotelu", "lines": [{"role": "A", "text": "Guten Abend. Haben Sie reserviert?", "translation": "Dobro veče. Da li ste rezervisali?"}, {"role": "B", "text": "Ja, auf den Namen Jovanović.", "translation": "Da, na ime Jovanović."}, {"role": "A", "text": "Für wie viele Nächte?", "translation": "Za koliko noći?"}, {"role": "B", "text": "Für drei Nächte.", "translation": "Za tri noći."}, {"role": "A", "text": "Ein Doppelzimmer?", "translation": "Dvokrevetna soba?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}, {"role": "A", "text": "Das Frühstück ist ab sieben Uhr.", "translation": "Doručak je od sedam sati."}, {"role": "B", "text": "Ist WLAN kostenlos?", "translation": "Da li je Wi-Fi besplatan?"}, {"role": "A", "text": "Ja, natürlich.", "translation": "Da, naravno."}, {"role": "B", "text": "Vielen Dank.", "translation": "Hvala Vam puno."}]}, {"title": "Na recepciji", "lines": [{"role": "A", "text": "Guten Tag. Wie kann ich helfen?", "translation": "Dobar dan. Kako mogu da pomognem?"}, {"role": "B", "text": "Ich habe ein Zimmer reserviert.", "translation": "Rezervisao sam sobu."}, {"role": "A", "text": "Wie ist Ihr Name?", "translation": "Kako se zovete?"}, {"role": "B", "text": "Marko Jovanović.", "translation": "Marko Jovanović."}, {"role": "A", "text": "Hier ist Ihre Zimmerkarte.", "translation": "Evo Vaše kartice za sobu."}, {"role": "B", "text": "Welche Etage ist es?", "translation": "Na kom je spratu?"}, {"role": "A", "text": "Im dritten Stock.", "translation": "Na trećem spratu."}, {"role": "B", "text": "Wann gibt es Frühstück?", "translation": "Kada je doručak?"}, {"role": "A", "text": "Ab sieben Uhr.", "translation": "Od sedam sati."}, {"role": "B", "text": "Danke für die Information.", "translation": "Hvala na informaciji."}]}, {"title": "U parku", "lines": [{"role": "A", "text": "Gehen wir heute in den Park?", "translation": "Hoćemo li danas u park?"}, {"role": "B", "text": "Ja, gern.", "translation": "Da, rado."}, {"role": "A", "text": "Das Wetter ist schön.", "translation": "Vreme je lepo."}, {"role": "B", "text": "Ja, und es ist warm.", "translation": "Da, i toplo je."}, {"role": "A", "text": "Möchtest du ein Eis?", "translation": "Da li želiš sladoled?"}, {"role": "B", "text": "Ja, sehr gern.", "translation": "Da, vrlo rado."}, {"role": "A", "text": "Setzen wir uns auf die Bank?", "translation": "Hoćemo li sesti na klupu?"}, {"role": "B", "text": "Okay.", "translation": "U redu."}, {"role": "A", "text": "Der Park ist wirklich schön.", "translation": "Park je zaista lep."}, {"role": "B", "text": "Ja, sehr ruhig.", "translation": "Da, veoma je miran."}]}, {"title": "Na kasi", "lines": [{"role": "A", "text": "Guten Tag. Haben Sie eine Kundenkarte?", "translation": "Dobar dan. Imate li karticu kupca?"}, {"role": "B", "text": "Nein, leider nicht.", "translation": "Ne, nažalost nemam."}, {"role": "A", "text": "Brauchen Sie eine Tüte?", "translation": "Da li Vam treba kesa?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}, {"role": "A", "text": "Das macht achtundzwanzig Euro.", "translation": "To je dvadeset osam evra."}, {"role": "B", "text": "Ich bezahle mit Karte.", "translation": "Platiću karticom."}, {"role": "A", "text": "Bitte geben Sie Ihre PIN ein.", "translation": "Molim Vas, unesite PIN."}, {"role": "B", "text": "Okay.", "translation": "U redu."}, {"role": "A", "text": "Möchten Sie den Kassenbon?", "translation": "Da li želite račun?"}, {"role": "B", "text": "Ja, bitte.", "translation": "Da, molim."}]}, {"title": "U restoranu", "lines": [{"role": "A", "text": "Guten Abend. Haben Sie reserviert?", "translation": "Dobro veče. Da li ste rezervisali?"}, {"role": "B", "text": "Nein. Haben Sie einen Tisch für zwei?", "translation": "Ne. Imate li sto za dvoje?"}, {"role": "A", "text": "Ja, natürlich. Hier bitte.", "translation": "Da, naravno. Izvolite."}, {"role": "B", "text": "Danke. Können wir die Speisekarte bekommen?", "translation": "Hvala. Možemo li dobiti jelovnik?"}, {"role": "A", "text": "Ja, hier ist sie.", "translation": "Da, izvolite."}, {"role": "B", "text": "Ich möchte eine Suppe und Fisch.", "translation": "Želeo bih supu i ribu."}, {"role": "A", "text": "Was möchten Sie trinken?", "translation": "Šta želite da popijete?"}, {"role": "B", "text": "Ein Wasser bitte.", "translation": "Jednu vodu, molim."}, {"role": "A", "text": "Sehr gern.", "translation": "Naravno."}, {"role": "B", "text": "Danke.", "translation": "Hvala."}]}];
+const home = document.getElementById('home');
+const lesson = document.getElementById('lesson');
+const topics = document.getElementById('topics');
+const dialog = document.getElementById('dialog');
+const lessonTitle = document.getElementById('lessonTitle');
+const toggleTranslation = document.getElementById('toggleTranslation');
+let current = 0;
+let translationsVisible = true;
+
+function renderTopics() {
+  topics.innerHTML = '';
+  DIALOGS.forEach((d,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'topic';
+    btn.innerHTML = `
+      <span class="num">${i+1}</span>
+      <span class="topic-main">
+        <div class="topic-title">Dijalog ${i+1} – ${d.title}</div>
+        <div class="topic-meta">10 kratkih A1 replika • nemački + prevod</div>
+      </span>
+      <span class="chev">›</span>`;
+    btn.onclick = () => openDialog(i);
+    topics.appendChild(btn);
+  });
+}
+
+function openDialog(i) {
+  current = i;
+  speechSynthesis.cancel();
+  home.classList.add('hidden');
+  lesson.classList.remove('hidden');
+  lessonTitle.textContent = `Dijalog ${i+1} – ${DIALOGS[i].title}`;
+  renderDialog();
+  window.scrollTo(0,0);
+}
+
+function renderDialog() {
+  dialog.innerHTML = '';
+  DIALOGS[current].lines.forEach((line, idx) => {
+    const row = document.createElement('div');
+    row.className = `line ${line.role}`;
+    row.innerHTML = `
+      <div class="avatar">${line.role}</div>
+      <div class="bubble">
+        <div class="de">${line.text}</div>
+        <div class="translation${translationsVisible ? '' : ' hidden'}">${line.translation}</div>
+        <button class="speak" data-index="${idx}">🔊 Poslušaj</button>
+      </div>`;
+    dialog.appendChild(row);
+  });
+  dialog.querySelectorAll('.speak').forEach(btn => {
+    btn.onclick = () => speakLine(Number(btn.dataset.index));
+  });
+  toggleTranslation.textContent = translationsVisible ? '🙈 Sakrij prevod' : '👁 Prikaži prevod';
+}
+
+function getGermanVoice() {
+  const voices = speechSynthesis.getVoices();
+  return voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
+}
+
+function speakLine(index) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(DIALOGS[current].lines[index].text);
+  u.lang = 'de-DE';
+  u.rate = 0.88;
+  const v = getGermanVoice();
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+function playSequential(lines, i=0) {
+  if (i >= lines.length) return;
+  const u = new SpeechSynthesisUtterance(lines[i].text);
+  u.lang = 'de-DE';
+  u.rate = 0.88;
+  const v = getGermanVoice();
+  if (v) u.voice = v;
+  u.onend = () => setTimeout(() => playSequential(lines, i+1), 250);
+  speechSynthesis.speak(u);
+}
+
+document.getElementById('playAll').onclick = () => {
+  speechSynthesis.cancel();
+  playSequential(DIALOGS[current].lines);
+};
+document.getElementById('stopAudio').onclick = () => speechSynthesis.cancel();
+document.getElementById('backBtn').onclick = () => {
+  speechSynthesis.cancel();
+  lesson.classList.add('hidden');
+  home.classList.remove('hidden');
+  window.scrollTo(0,0);
+};
+toggleTranslation.onclick = () => {
+  translationsVisible = !translationsVisible;
+  renderDialog();
+};
+
+renderTopics();
+</script>
+</body>
+</html>
