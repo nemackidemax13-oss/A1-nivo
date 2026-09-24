@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b40018">
+<title>DE-MAX Diktati A1</title>
+<style>
+:root {
+  --red:#b40018; --red2:#e10623; --ink:#171717; --muted:#6b7280;
+  --paper:#ffffff; --bg:#f4f5f7; --line:#e5e7eb; --ok:#15803d; --bad:#b91c1c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,520px);min-height:100dvh;margin:0 auto;background:var(--paper);box-shadow:0 0 35px rgba(0,0,0,.08);display:flex;flex-direction:column}
+.topbar{padding:18px 18px 15px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:900;letter-spacing:.6px;font-size:24px}
+.badge{font-size:12px;font-weight:800;background:#fff;color:var(--red);padding:6px 9px;border-radius:999px}
+.subtitle{font-size:13px;opacity:.92;margin-top:4px}
+.content{padding:16px;flex:1}
+.hero{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;margin-bottom:14px}
+.hero h1{font-size:22px;margin:0 0 6px}
+.hero p{margin:0;color:var(--muted);line-height:1.45;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:#f8fafc;border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:18px}
+.stat span{font-size:11px;color:var(--muted)}
+.list{display:grid;gap:10px}
+.topic{width:100%;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;padding:13px;border-radius:16px;text-align:left}
+.topic:hover{border-color:#cbd5e1;background:#fafafa}
+.num{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#fff1f2;color:var(--red);font-weight:900;flex:0 0 auto}
+.topic-main{min-width:0;flex:1}
+.topic-title{font-weight:850;font-size:15px}
+.topic-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.chev{font-size:24px;color:#9ca3af}
+.hidden{display:none!important}
+.lesson-head{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.back{border:0;background:#f3f4f6;width:42px;height:42px;border-radius:12px;font-size:21px}
+.lesson-title{font-size:19px;font-weight:900}
+.lesson-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.progress-wrap{height:9px;border-radius:999px;background:#eef0f2;overflow:hidden;margin:14px 0 18px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--red2));transition:.25s}
+.card{border:1px solid var(--line);border-radius:20px;padding:18px;background:#fff;box-shadow:0 8px 28px rgba(15,23,42,.05)}
+.count{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.5px}
+.instruction{font-size:16px;font-weight:750;margin:10px 0 16px;line-height:1.35}
+.audio-btn{width:100%;border:0;border-radius:15px;padding:15px;background:var(--ink);color:#fff;font-weight:900;font-size:16px;display:flex;justify-content:center;gap:10px;align-items:center}
+.audio-btn:active{transform:scale(.99)}
+.speedrow{display:flex;gap:8px;margin-top:10px}
+.speed{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px;font-size:12px;font-weight:800}
+.speed.active{border-color:var(--red);color:var(--red);background:#fff5f5}
+.answer{width:100%;border:2px solid var(--line);border-radius:14px;padding:14px;margin-top:16px;outline:none;font-size:16px}
+.answer:focus{border-color:#9ca3af}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:13px;padding:13px;font-weight:850}
+.check{background:var(--red);color:#fff}
+.show{background:#f3f4f6;color:#111}
+.next{grid-column:1/-1;background:#111827;color:#fff}
+.feedback{margin-top:12px;padding:12px;border-radius:12px;font-size:14px;line-height:1.4}
+.feedback.ok{background:#ecfdf5;color:#166534}
+.feedback.bad{background:#fef2f2;color:#991b1b}
+.solution{margin-top:12px;padding:13px;border-radius:12px;background:#f8fafc;border:1px dashed #cbd5e1;font-weight:750;line-height:1.45}
+.footer-note{text-align:center;color:#9ca3af;font-size:11px;padding:16px}
+.complete{text-align:center;padding:22px 8px}
+.complete .big{font-size:52px}
+.complete h2{margin:8px 0}
+.complete p{color:var(--muted)}
+.complete button{border:0;background:var(--red);color:#fff;border-radius:13px;padding:13px 18px;font-weight:900}
+@media (min-width:700px) {
+  body{padding:24px}
+  .app{min-height:calc(100dvh - 48px);border-radius:26px;overflow:hidden}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <div class="logo">DE-MAX</div>
+        <div class="subtitle">Diktati nemačkog jezika</div>
+      </div>
+      <div class="badge">A1 • 280 rečenica</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="home">
+      <div class="hero">
+        <h1>Diktati A1</h1>
+        <p>Izaberi temu, poslušaj rečenicu na nemačkom, napiši je i proveri odgovor.</p>
+        <div class="stats">
+          <div class="stat"><b>20</b><span>diktata</span></div>
+          <div class="stat"><b>14</b><span>rečenica po temi</span></div>
+          <div class="stat"><b>280</b><span>ukupno</span></div>
+        </div>
+      </div>
+      <div id="topics" class="list"></div>
+    </section>
+
+    <section id="lesson" class="hidden">
+      <div class="lesson-head">
+        <button class="back" id="backBtn" aria-label="Nazad">←</button>
+        <div>
+          <div id="lessonTitle" class="lesson-title"></div>
+          <div class="lesson-sub">A1 diktat • 14 rečenica</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+
+      <div id="exerciseCard" class="card">
+        <div id="sentenceCount" class="count"></div>
+        <div class="instruction">Poslušaj rečenicu i napiši ono što čuješ.</div>
+
+        <button id="listenBtn" class="audio-btn">🔊 Poslušaj rečenicu</button>
+        <div class="speedrow">
+          <button class="speed" data-rate="0.7">Sporo</button>
+          <button class="speed active" data-rate="0.9">Normalno</button>
+          <button class="speed" data-rate="1">Brže</button>
+        </div>
+
+        <input id="answerInput" class="answer" autocomplete="off" autocapitalize="sentences" spellcheck="false" placeholder="Napiši rečenicu ovde...">
+
+        <div class="actions">
+          <button id="checkBtn" class="btn check">Proveri</button>
+          <button id="showBtn" class="btn show">Prikaži rešenje</button>
+          <button id="nextBtn" class="btn next">Sledeća rečenica →</button>
+        </div>
+
+        <div id="feedback" class="feedback hidden"></div>
+        <div id="solution" class="solution hidden"></div>
+      </div>
+
+      <div id="completeCard" class="card complete hidden">
+        <div class="big">🏆</div>
+        <h2>Diktat je završen!</h2>
+        <p id="scoreText"></p>
+        <button id="restartBtn">Ponovi diktat</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">DE-MAX • Nemački jezik A1</div>
+</div>
+
+<script>
+const DICTATIONS = [{"title": "Predstavljanje", "sentences": ["Ich heiße Anna.", "Mein Name ist Paul.", "Ich bin zwanzig Jahre alt.", "Ich komme aus Serbien.", "Ich wohne in Berlin.", "Ich spreche Deutsch und Englisch.", "Ich bin Schüler.", "Ich arbeite in einem Büro.", "Ich bin verheiratet.", "Ich habe zwei Kinder.", "Meine Telefonnummer ist neu.", "Meine Adresse ist in der Stadt.", "Ich lerne gern Deutsch.", "Freut mich, dich kennenzulernen."]}, {"title": "Porodica", "sentences": ["Das ist meine Familie.", "Ich habe einen Bruder.", "Ich habe eine Schwester.", "Meine Mutter heißt Maria.", "Mein Vater heißt Peter.", "Meine Eltern wohnen in Serbien.", "Mein Bruder ist achtzehn Jahre alt.", "Meine Schwester geht zur Schule.", "Meine Oma kocht sehr gut.", "Mein Opa liest gern Zeitung.", "Wir essen oft zusammen.", "Am Sonntag besuchen wir unsere Eltern.", "Meine Familie ist sehr wichtig.", "Wir haben viel Spaß zusammen."]}, {"title": "Kupovina", "sentences": ["Ich gehe heute einkaufen.", "Ich brauche Brot und Milch.", "Die Äpfel sind frisch.", "Ein Kilo Tomaten kostet drei Euro.", "Ich kaufe zwei Flaschen Wasser.", "Wo finde ich den Zucker?", "Der Käse ist im Kühlschrank.", "Ich nehme eine Packung Reis.", "Haben Sie Eier?", "Das ist zu teuer.", "Ich möchte diese Schokolade.", "Kann ich mit Karte bezahlen?", "Ich brauche eine Tüte.", "Danke für Ihre Hilfe."]}, {"title": "Kuća", "sentences": ["Das ist unser Haus.", "Das Haus ist groß.", "Wir haben einen Garten.", "Die Küche ist im Erdgeschoss.", "Das Wohnzimmer ist hell.", "Mein Zimmer ist oben.", "Im Bad ist eine Dusche.", "Die Tür ist offen.", "Das Fenster ist geschlossen.", "Vor dem Haus steht ein Auto.", "Im Garten sind viele Blumen.", "Wir haben einen kleinen Balkon.", "Das Haus hat drei Schlafzimmer.", "Ich bin gern zu Hause."]}, {"title": "Dom", "sentences": ["Ich wohne in einer Wohnung.", "Meine Wohnung ist klein.", "Im Wohnzimmer steht ein Sofa.", "Der Tisch steht am Fenster.", "In der Küche ist ein Kühlschrank.", "Das Bett ist im Schlafzimmer.", "An der Wand hängt ein Bild.", "Ich habe einen neuen Schrank.", "Auf dem Tisch liegt ein Buch.", "Unter dem Stuhl ist eine Tasche.", "Die Lampe ist sehr schön.", "Mein Zimmer ist sauber.", "Ich räume jeden Samstag auf.", "Zu Hause fühle ich mich gut."]}, {"title": "Slobodno vreme", "sentences": ["In meiner Freizeit höre ich Musik.", "Ich lese gern Bücher.", "Am Abend sehe ich fern.", "Ich treffe meine Freunde.", "Wir trinken zusammen Kaffee.", "Am Wochenende schlafe ich länger.", "Ich gehe gern spazieren.", "Manchmal spiele ich Karten.", "Ich fotografiere gern.", "Im Sommer fahre ich Fahrrad.", "Ich koche gern am Sonntag.", "Ich höre jeden Tag Radio.", "Mein Hobby ist Musik.", "Freizeit ist wichtig für mich."]}, {"title": "Sport", "sentences": ["Ich mache gern Sport.", "Mein Lieblingssport ist Fußball.", "Ich spiele zweimal pro Woche Fußball.", "Meine Freundin spielt Tennis.", "Wir gehen oft schwimmen.", "Am Morgen laufe ich im Park.", "Sport ist gesund.", "Ich brauche neue Sportschuhe.", "Heute habe ich Training.", "Das Spiel beginnt um acht Uhr.", "Unsere Mannschaft spielt gut.", "Mein Bruder fährt gern Fahrrad.", "Im Winter fahre ich Ski.", "Nach dem Sport trinke ich Wasser."]}, {"title": "Nemačka", "sentences": ["Deutschland liegt in Europa.", "Berlin ist die Hauptstadt.", "In Deutschland spricht man Deutsch.", "Viele Menschen leben in Berlin.", "München liegt im Süden.", "Hamburg liegt im Norden.", "Der Rhein ist ein großer Fluss.", "Deutschland hat viele Städte.", "Ich möchte Deutschland besuchen.", "Ich fahre mit dem Zug nach Berlin.", "In Deutschland gibt es viele Autobahnen.", "Das Wetter ist heute kühl.", "Ich lerne Deutsch für meine Arbeit.", "Deutschland ist mein Reiseziel."]}, {"title": "Kod doktora", "sentences": ["Guten Tag, Frau Doktor.", "Ich bin heute krank.", "Ich habe Kopfschmerzen.", "Mein Hals tut weh.", "Ich habe auch Husten.", "Seit gestern habe ich Fieber.", "Ich fühle mich müde.", "Bitte öffnen Sie den Mund.", "Atmen Sie tief ein.", "Ich brauche ein Rezept.", "Nehmen Sie diese Tabletten.", "Trinken Sie viel Wasser.", "Bleiben Sie heute im Bett.", "Danke, auf Wiedersehen."]}, {"title": "U pekari", "sentences": ["Guten Morgen.", "Ich möchte zwei Brötchen.", "Haben Sie frisches Brot?", "Ich nehme ein Vollkornbrot.", "Das Croissant sieht gut aus.", "Ich möchte auch einen Kuchen.", "Was kostet das Brot?", "Das macht fünf Euro.", "Haben Sie etwas mit Käse?", "Ich nehme diese Brezel.", "Bitte noch zwei Stück Kuchen.", "Kann ich mit Karte bezahlen?", "Eine Tüte, bitte.", "Vielen Dank und schönen Tag."]}, {"title": "U butiku", "sentences": ["Guten Tag, ich suche eine Jacke.", "Welche Größe haben Sie?", "Ich trage Größe vierzig.", "Diese Jacke gefällt mir.", "Haben Sie sie in Blau?", "Wo ist die Umkleidekabine?", "Die Hose ist zu lang.", "Das Hemd ist zu klein.", "Ich brauche ein weißes T-Shirt.", "Wie viel kostet der Pullover?", "Der Pullover kostet dreißig Euro.", "Ich nehme die schwarze Hose.", "Kann ich mit Karte zahlen?", "Danke für die Beratung."]}, {"title": "U cvećari", "sentences": ["Guten Tag, ich möchte Blumen.", "Die Rosen sind sehr schön.", "Ich nehme zehn rote Rosen.", "Haben Sie auch Tulpen?", "Die gelben Tulpen gefallen mir.", "Ich brauche einen Blumenstrauß.", "Die Blumen sind für meine Mutter.", "Welche Blumen sind frisch?", "Ich möchte noch eine Karte.", "Bitte schreiben Sie Alles Gute.", "Was kostet der Strauß?", "Der Strauß kostet zwanzig Euro.", "Bitte packen Sie ihn ein.", "Vielen Dank und auf Wiedersehen."]}, {"title": "U obućari", "sentences": ["Guten Tag, ich brauche Schuhe.", "Ich trage Größe zweiundvierzig.", "Ich suche schwarze Schuhe.", "Diese Schuhe sind sehr schön.", "Kann ich sie anprobieren?", "Der linke Schuh ist zu eng.", "Haben Sie eine Nummer größer?", "Diese Größe passt gut.", "Ich brauche bequeme Schuhe.", "Die Schuhe kosten sechzig Euro.", "Haben Sie auch Sportschuhe?", "Ich nehme dieses Paar.", "Ich bezahle mit Karte.", "Danke, auf Wiedersehen."]}, {"title": "Kod zubara", "sentences": ["Guten Tag, Herr Doktor.", "Ich habe Zahnschmerzen.", "Der Zahn tut sehr weh.", "Seit gestern habe ich Schmerzen.", "Bitte machen Sie den Mund auf.", "Der Zahn ist kaputt.", "Ich brauche eine Behandlung.", "Tut das weh?", "Ich habe ein bisschen Angst.", "Bitte geben Sie mir eine Spritze.", "Die Behandlung dauert nicht lange.", "Heute essen Sie nichts Hartes.", "Mein Zahn fühlt sich besser an.", "Vielen Dank, Herr Doktor."]}, {"title": "U prirodi", "sentences": ["Heute gehen wir in die Natur.", "Das Wetter ist schön.", "Die Sonne scheint.", "Der Himmel ist blau.", "Im Wald sind viele Bäume.", "Wir hören die Vögel.", "Neben dem Weg ist ein Fluss.", "Die Blumen sind bunt.", "Wir machen ein Picknick.", "Ich trinke Wasser.", "Die Kinder spielen auf der Wiese.", "Wir machen viele Fotos.", "Am Abend gehen wir nach Hause.", "Der Tag in der Natur ist schön."]}, {"title": "U hotelu", "sentences": ["Guten Abend, wir haben eine Reservierung.", "Wir bleiben drei Nächte.", "Wir brauchen ein Doppelzimmer.", "Das Zimmer ist im zweiten Stock.", "Gibt es einen Aufzug?", "Das Frühstück ist ab sieben Uhr.", "Das WLAN ist kostenlos.", "Unser Zimmer ist sehr sauber.", "Im Zimmer gibt es einen Fernseher.", "Wir brauchen zwei Handtücher.", "Wann ist der Check-out?", "Der Check-out ist um elf Uhr.", "Wir möchten morgen frühstücken.", "Vielen Dank für Ihre Hilfe."]}, {"title": "Na recepciji", "sentences": ["Guten Tag, ich habe eine Frage.", "Mein Name ist Marko Jovanović.", "Ich habe ein Zimmer reserviert.", "Hier ist mein Pass.", "Wo ist mein Zimmer?", "Ihr Zimmer ist im dritten Stock.", "Hier ist Ihre Zimmerkarte.", "Wann gibt es Frühstück?", "Das Frühstück beginnt um sieben Uhr.", "Wie lautet das WLAN-Passwort?", "Kann ich ein Taxi bestellen?", "Ich brauche morgen ein Taxi.", "Danke für die Information.", "Ich wünsche Ihnen einen schönen Abend."]}, {"title": "U parku", "sentences": ["Heute gehe ich in den Park.", "Der Park ist sehr groß.", "Viele Kinder spielen hier.", "Ein Mann sitzt auf der Bank.", "Eine Frau liest ein Buch.", "Die Bäume sind grün.", "Wir gehen am See spazieren.", "Mein Hund läuft auf der Wiese.", "Ich sehe viele Blumen.", "Die Sonne scheint heute.", "Wir essen ein Eis.", "Im Park ist es ruhig.", "Am Abend fahren wir nach Hause.", "Ich komme morgen wieder."]}, {"title": "Na kasi", "sentences": ["Guten Tag.", "Ich möchte diese Sachen bezahlen.", "Haben Sie eine Kundenkarte?", "Nein, ich habe keine Karte.", "Brauchen Sie eine Tüte?", "Ja, eine Tüte bitte.", "Das macht achtundzwanzig Euro.", "Ich bezahle mit Karte.", "Bitte stecken Sie die Karte ein.", "Geben Sie Ihre PIN ein.", "Die Zahlung ist fertig.", "Möchten Sie den Kassenbon?", "Ja, bitte.", "Vielen Dank und auf Wiedersehen."]}, {"title": "U restoranu", "sentences": ["Guten Abend, wir möchten essen.", "Haben Sie einen Tisch für zwei?", "Hier ist die Speisekarte.", "Ich möchte eine Suppe.", "Meine Frau nimmt einen Salat.", "Als Hauptgericht nehme ich Fisch.", "Ich möchte eine Cola trinken.", "Bitte bringen Sie auch Wasser.", "Das Essen schmeckt sehr gut.", "Möchten Sie noch einen Nachtisch?", "Ja, ich nehme ein Eis.", "Wir möchten bitte bezahlen.", "Kann ich mit Karte zahlen?", "Vielen Dank, es war sehr lecker."]}];
+
+const home = document.getElementById('home');
+const lesson = document.getElementById('lesson');
+const topics = document.getElementById('topics');
+const lessonTitle = document.getElementById('lessonTitle');
+const sentenceCount = document.getElementById('sentenceCount');
+const progress = document.getElementById('progress');
+const answerInput = document.getElementById('answerInput');
+const feedback = document.getElementById('feedback');
+const solution = document.getElementById('solution');
+const exerciseCard = document.getElementById('exerciseCard');
+const completeCard = document.getElementById('completeCard');
+const scoreText = document.getElementById('scoreText');
+
+let topicIndex = 0;
+let sentenceIndex = 0;
+let correct = 0;
+let rate = 0.9;
+let checkedCurrent = false;
+
+function renderTopics() {
+  topics.innerHTML = '';
+  DICTATIONS.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'topic';
+    btn.innerHTML = `
+      <span class="num">${i+1}</span>
+      <span class="topic-main">
+        <div class="topic-title">Diktat ${i+1} – ${d.title}</div>
+        <div class="topic-meta">14 jednostavnih A1 rečenica</div>
+      </span>
+      <span class="chev">›</span>`;
+    btn.addEventListener('click', () => openTopic(i));
+    topics.appendChild(btn);
+  });
+}
+
+function openTopic(i) {
+  topicIndex = i;
+  sentenceIndex = 0;
+  correct = 0;
+  checkedCurrent = false;
+  lessonTitle.textContent = `Diktat ${i+1} – ${DICTATIONS[i].title}`;
+  home.classList.add('hidden');
+  lesson.classList.remove('hidden');
+  exerciseCard.classList.remove('hidden');
+  completeCard.classList.add('hidden');
+  showSentence();
+  window.scrollTo(0,0);
+}
+
+function showSentence() {
+  checkedCurrent = false;
+  answerInput.value = '';
+  feedback.className = 'feedback hidden';
+  feedback.textContent = '';
+  solution.classList.add('hidden');
+  solution.textContent = '';
+  sentenceCount.textContent = `Rečenica ${sentenceIndex+1} od 14`;
+  progress.style.width = `${(sentenceIndex / 14) * 100}%`;
+  answerInput.focus();
+}
+
+function normalize(s) {
+  return s
+    .trim()
+    .toLocaleLowerCase('de-DE')
+    .replace(/[„“"!?.,;:]/g,'')
+    .replace(/\s+/g,' ');
+}
+
+function currentSentence() {
+  return DICTATIONS[topicIndex].sentences[sentenceIndex];
+}
+
+function speak() {
+  if (!('speechSynthesis' in window)) {
+    feedback.className = 'feedback bad';
+    feedback.textContent = 'Ovaj pregledač ne podržava glasovni izgovor.';
+    return;
+  }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(currentSentence());
+  u.lang = 'de-DE';
+  u.rate = rate;
+  u.pitch = 1;
+  const voices = speechSynthesis.getVoices();
+  const german = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
+  if (german) u.voice = german;
+  speechSynthesis.speak(u);
+}
+
+function checkAnswer() {
+  const typed = answerInput.value;
+  if (!typed.trim()) {
+    feedback.className = 'feedback bad';
+    feedback.textContent = 'Prvo napiši rečenicu.';
+    return;
+  }
+  const isCorrect = normalize(typed) === normalize(currentSentence());
+  if (isCorrect) {
+    if (!checkedCurrent) correct++;
+    checkedCurrent = true;
+    feedback.className = 'feedback ok';
+    feedback.textContent = '✓ Tačno! Odlično.';
+  } else {
+    checkedCurrent = true;
+    feedback.className = 'feedback bad';
+    feedback.textContent = 'Nije potpuno tačno. Poslušaj još jednom ili prikaži rešenje.';
+  }
+}
+
+function showSolution() {
+  solution.textContent = currentSentence();
+  solution.classList.remove('hidden');
+}
+
+function nextSentence() {
+  if (sentenceIndex < 13) {
+    sentenceIndex++;
+    showSentence();
+  } else {
+    finishTopic();
+  }
+}
+
+function finishTopic() {
+  progress.style.width = '100%';
+  speechSynthesis.cancel();
+  exerciseCard.classList.add('hidden');
+  completeCard.classList.remove('hidden');
+  scoreText.textContent = `Tačno iz prvog/proverenog pokušaja: ${correct} od 14. Možeš ponoviti diktat koliko želiš.`;
+}
+
+document.getElementById('listenBtn').addEventListener('click', speak);
+document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+document.getElementById('showBtn').addEventListener('click', showSolution);
+document.getElementById('nextBtn').addEventListener('click', nextSentence);
+document.getElementById('restartBtn').addEventListener('click', () => openTopic(topicIndex));
+document.getElementById('backBtn').addEventListener('click', () => {
+  speechSynthesis.cancel();
+  lesson.classList.add('hidden');
+  home.classList.remove('hidden');
+  window.scrollTo(0,0);
+});
+answerInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') checkAnswer();
+});
+document.querySelectorAll('.speed').forEach(btn => {
+  btn.addEventListener('click', () => {
+    rate = Number(btn.dataset.rate);
+    document.querySelectorAll('.speed').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+renderTopics();
+</script>
+</body>
+</html>
