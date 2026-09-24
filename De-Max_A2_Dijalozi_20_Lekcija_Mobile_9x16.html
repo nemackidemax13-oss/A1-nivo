@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>De-Max A2 Dijalozi – 20 lekcija</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+  --accent:#dc2626; --accent2:#1d4ed8; --soft:#f1f5f9;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#e2e8f0;color:var(--text)}
+body{display:flex;justify-content:center}
+.app{width:min(100%,520px);min-height:100vh;background:#f8fafc;position:relative}
+header{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.96);color:#fff;padding:16px 16px 12px;box-shadow:0 4px 14px rgba(0,0,0,.16)}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand h1{font-size:20px;margin:0;line-height:1.1}
+.brand p{font-size:12px;margin:4px 0 0;color:#cbd5e1}
+.badge{background:#fff;color:#b91c1c;font-weight:900;border-radius:12px;padding:8px 10px;font-size:13px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.controls button{border:0;border-radius:12px;padding:11px 10px;font-weight:800;background:#fff;color:#0f172a}
+main{padding:14px 14px 92px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu button{text-align:left;border:0;border-radius:16px;background:#fff;padding:13px 12px;box-shadow:0 3px 10px rgba(15,23,42,.08);font-weight:750;color:#0f172a}
+.menu button span{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:7px;border-radius:9px;background:#fee2e2;color:#b91c1c;font-weight:900}
+.lesson{display:none}
+.lesson.active{display:block}
+.lesson-head{display:flex;align-items:flex-start;justify-content:space-between;background:linear-gradient(135deg,#111827,#1e293b);color:#fff;border-radius:20px;padding:16px;margin-bottom:12px}
+.kicker{font-size:11px;letter-spacing:.12em;color:#fca5a5;font-weight:900}
+.lesson h2{font-size:24px;margin:4px 0 0}
+.speak-all{border:0;border-radius:14px;background:#fff;color:#111827;width:44px;height:44px;font-size:20px}
+.line{background:#fff;border-radius:16px;padding:13px 14px;margin:10px 0;box-shadow:0 2px 8px rgba(15,23,42,.07);border-left:4px solid #dc2626}
+.de{font-weight:750;font-size:16px;line-height:1.42}
+.sr{margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;color:#475569;font-size:14px;line-height:1.4}
+.speaker{font-weight:900;color:#b91c1c}
+.hide-trans .sr{display:none}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,520px);display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(248,250,252,.96);border-top:1px solid #e2e8f0;backdrop-filter:blur(10px)}
+.bottom button{border:0;border-radius:14px;padding:12px 8px;font-weight:900;background:#0f172a;color:#fff}
+.bottom .home{background:#dc2626}
+.note{background:#eff6ff;color:#1e3a8a;padding:11px 12px;border-radius:14px;font-size:13px;margin-bottom:12px}
+@media (max-width:360px){.menu{grid-template-columns:1fr}.de{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<header>
+  <div class="brand">
+    <div>
+      <h1>DE-MAX A2 • DIJALOZI</h1>
+      <p>20 lekcija • nemački + prevod</p>
+    </div>
+    <div class="badge">A2</div>
+  </div>
+  <div class="controls">
+    <button onclick="toggleTranslation()">🇷🇸 Prevod</button>
+    <button onclick="showMenu()">☰ Lekcije</button>
+  </div>
+</header>
+
+<main>
+  <div id="menuView">
+    <div class="note">Izaberi lekciju. Svaki dijalog je prilagođen A2 nivou i koristi svakodnevni nemački, veznike i prošla vremena.</div>
+    <div class="menu"><button onclick="showLesson(1)"><span>01</span>Predstavljanje</button><button onclick="showLesson(2)"><span>02</span>Porodica</button><button onclick="showLesson(3)"><span>03</span>Kupovina</button><button onclick="showLesson(4)"><span>04</span>Kuća</button><button onclick="showLesson(5)"><span>05</span>Dom</button><button onclick="showLesson(6)"><span>06</span>Slobodno vreme</button><button onclick="showLesson(7)"><span>07</span>Sport</button><button onclick="showLesson(8)"><span>08</span>Nemačka</button><button onclick="showLesson(9)"><span>09</span>Kod doktora</button><button onclick="showLesson(10)"><span>10</span>U pekari</button><button onclick="showLesson(11)"><span>11</span>U butiku</button><button onclick="showLesson(12)"><span>12</span>U cvećari</button><button onclick="showLesson(13)"><span>13</span>U obućari</button><button onclick="showLesson(14)"><span>14</span>Kod zubara</button><button onclick="showLesson(15)"><span>15</span>U prirodi</button><button onclick="showLesson(16)"><span>16</span>U hotelu</button><button onclick="showLesson(17)"><span>17</span>Na recepciji</button><button onclick="showLesson(18)"><span>18</span>U parku</button><button onclick="showLesson(19)"><span>19</span>Na kasi</button><button onclick="showLesson(20)"><span>20</span>U restoranu</button></div>
+  </div>
+  <div id="lessonView">
+
+    <section class="lesson" data-lesson="1">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 1</div>
+          <h2>Predstavljanje</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(1)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag! Ich heiße Marko. Wie heißen Sie?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan! Zovem se Marko. Kako se Vi zovete?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich heiße Anna. Freut mich, Sie kennenzulernen.</div>
+          <div class="sr"><span class="speaker">B:</span> Zovem se Ana. Drago mi je što smo se upoznali.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Woher kommen Sie?</div>
+          <div class="sr"><span class="speaker">A:</span> Odakle dolazite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich komme aus Deutschland, aber ich wohne jetzt in Wien.</div>
+          <div class="sr"><span class="speaker">B:</span> Dolazim iz Nemačke, ali sada živim u Beču.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wie lange wohnen Sie schon dort?</div>
+          <div class="sr"><span class="speaker">A:</span> Koliko dugo već živite tamo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Seit zwei Jahren. Ich bin dorthin gezogen, weil ich dort arbeite.</div>
+          <div class="sr"><span class="speaker">B:</span> Već dve godine. Preselila sam se tamo jer tamo radim.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was machen Sie beruflich?</div>
+          <div class="sr"><span class="speaker">A:</span> Čime se bavite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich bin Verkäuferin. Früher wollte ich Lehrerin werden.</div>
+          <div class="sr"><span class="speaker">B:</span> Ja sam prodavačica. Ranije sam želela da postanem nastavnica.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Sprechen Sie auch Englisch?</div>
+          <div class="sr"><span class="speaker">A:</span> Govorite li i engleski?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ein bisschen. Ich glaube, dass Sprachen sehr wichtig sind.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, pomalo. Mislim da su jezici veoma važni.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Haben Sie heute Zeit für einen Kaffee?</div>
+          <div class="sr"><span class="speaker">A:</span> Imate li danas vremena za kafu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, gern. Wenn Sie möchten, können wir ins Café gehen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, rado. Ako želite, možemo otići u kafić.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="2">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 2</div>
+          <h2>Porodica</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(2)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hast du eine große Familie?</div>
+          <div class="sr"><span class="speaker">A:</span> Imaš li veliku porodicu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich habe zwei Brüder und eine Schwester.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, imam dva brata i jednu sestru.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wohnt ihr alle zusammen?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li svi živite zajedno?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Nein. Mein älterer Bruder ist letztes Jahr ausgezogen.</div>
+          <div class="sr"><span class="speaker">B:</span> Ne. Moj stariji brat se prošle godine odselio.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Warum ist er ausgezogen?</div>
+          <div class="sr"><span class="speaker">A:</span> Zašto se odselio?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Weil er geheiratet hat und jetzt mit seiner Frau wohnt.</div>
+          <div class="sr"><span class="speaker">B:</span> Zato što se oženio i sada živi sa suprugom.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Besucht ihr euch oft?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li se često posećujete?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja. Wenn wir Zeit haben, treffen wir uns am Wochenende.</div>
+          <div class="sr"><span class="speaker">B:</span> Da. Kada imamo vremena, sastajemo se vikendom.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wer kocht bei euch zu Hause?</div>
+          <div class="sr"><span class="speaker">A:</span> Ko kuva kod vas kod kuće?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Meistens meine Mutter, aber gestern musste ich kochen.</div>
+          <div class="sr"><span class="speaker">B:</span> Uglavnom moja majka, ali juče sam morao da kuvam.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hat es gut geschmeckt?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li je bilo ukusno?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, trotzdem war meine Schwester zuerst etwas skeptisch.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, ipak je moja sestra u početku bila malo skeptična.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="3">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 3</div>
+          <h2>Kupovina</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(3)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Entschuldigung, können Sie mir helfen?</div>
+          <div class="sr"><span class="speaker">A:</span> Izvinite, možete li mi pomoći?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Natürlich. Was suchen Sie?</div>
+          <div class="sr"><span class="speaker">B:</span> Naravno. Šta tražite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich suche ein Geschenk für meine Mutter.</div>
+          <div class="sr"><span class="speaker">A:</span> Tražim poklon za svoju majku.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Wissen Sie, ob sie Schmuck mag?</div>
+          <div class="sr"><span class="speaker">B:</span> Znate li da li voli nakit?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, aber ich möchte diesmal etwas anderes kaufen.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, ali ovaj put želim da kupim nešto drugo.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann können Sie vielleicht eine schöne Tasche nehmen.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda možda možete uzeti lepu torbu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wie viel kostet diese hier?</div>
+          <div class="sr"><span class="speaker">A:</span> Koliko košta ova ovde?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sie kostet 45 Euro, weil sie gerade im Angebot ist.</div>
+          <div class="sr"><span class="speaker">B:</span> Košta 45 evra jer je trenutno na akciji.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Kann ich mit Karte bezahlen?</div>
+          <div class="sr"><span class="speaker">A:</span> Mogu li da platim karticom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, natürlich. Sie haben gestern auch neue Farben bekommen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, naravno. Juče su dobili i nove boje.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Gut, dann nehme ich die blaue.</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro, onda uzimam plavu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sehr gern. Deshalb packe ich sie Ihnen auch als Geschenk ein.</div>
+          <div class="sr"><span class="speaker">B:</span> Vrlo rado. Zato ću je spakovati i kao poklon.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="4">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 4</div>
+          <h2>Kuća</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(4)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wie gefällt dir deine neue Wohnung?</div>
+          <div class="sr"><span class="speaker">A:</span> Kako ti se sviđa novi stan?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sehr gut. Sie ist klein, aber sehr hell.</div>
+          <div class="sr"><span class="speaker">B:</span> Veoma mi se sviđa. Mali je, ali veoma svetao.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wie viele Zimmer hast du?</div>
+          <div class="sr"><span class="speaker">A:</span> Koliko soba imaš?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich habe zwei Zimmer, eine Küche und ein Bad.</div>
+          <div class="sr"><span class="speaker">B:</span> Imam dve sobe, kuhinju i kupatilo.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hast du schon alle Möbel gekauft?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si već kupio sav nameštaj?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Noch nicht. Ich habe gestern erst einen Schrank gekauft.</div>
+          <div class="sr"><span class="speaker">B:</span> Još nisam. Juče sam tek kupio jedan ormar.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Warum noch keinen Tisch?</div>
+          <div class="sr"><span class="speaker">A:</span> Zašto još nemaš sto?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Weil ich noch nicht weiß, welcher Tisch gut passt.</div>
+          <div class="sr"><span class="speaker">B:</span> Zato što još ne znam koji sto dobro odgovara.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Kann ich dir am Samstag helfen?</div>
+          <div class="sr"><span class="speaker">A:</span> Mogu li da ti pomognem u subotu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, gern. Wenn du Zeit hast, können wir zusammen einkaufen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, rado. Ako imaš vremena, možemo zajedno u kupovinu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Früher konnte ich Möbel ganz schnell aufbauen.</div>
+          <div class="sr"><span class="speaker">A:</span> Ranije sam mogao veoma brzo da sastavim nameštaj.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Perfekt! Dann brauche ich mir keine Sorgen zu machen.</div>
+          <div class="sr"><span class="speaker">B:</span> Odlično! Onda ne moram da brinem.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="5">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 5</div>
+          <h2>Dom</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(5)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was bedeutet Zuhause für dich?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta za tebe znači dom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Für mich ist Zuhause der Ort, an dem ich mich sicher fühle.</div>
+          <div class="sr"><span class="speaker">B:</span> Za mene je dom mesto na kojem se osećam sigurno.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wohnst du schon lange in deiner Stadt?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li dugo živiš u svom gradu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich bin dort geboren und aufgewachsen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, tamo sam rođen i odrastao.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Möchtest du später einmal umziehen?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li bi kasnije želeo da se preseliš?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Vielleicht. Ich weiß noch nicht, ob ich immer dort bleiben möchte.</div>
+          <div class="sr"><span class="speaker">B:</span> Možda. Još ne znam da li želim zauvek tamo da ostanem.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was magst du an deinem Zuhause besonders?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta posebno voliš kod svog doma?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Meine Familie wohnt in der Nähe, deshalb fühle ich mich dort wohl.</div>
+          <div class="sr"><span class="speaker">B:</span> Moja porodica živi blizu, zato se tamo osećam prijatno.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hast du schon einmal im Ausland gewohnt?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si ikada živeo u inostranstvu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich habe sechs Monate in Deutschland gewohnt.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, živeo sam šest meseci u Nemačkoj.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> War das schwierig?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li je bilo teško?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Am Anfang ja, trotzdem habe ich dort viele Freunde gefunden.</div>
+          <div class="sr"><span class="speaker">B:</span> U početku jeste, ipak sam tamo stekao mnogo prijatelja.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="6">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 6</div>
+          <h2>Slobodno vreme</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(6)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was machst du gern in deiner Freizeit?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta voliš da radiš u slobodno vreme?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich lese gern und treffe mich mit Freunden.</div>
+          <div class="sr"><span class="speaker">B:</span> Volim da čitam i da se sastajem sa prijateljima.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Gehst du auch ins Kino?</div>
+          <div class="sr"><span class="speaker">A:</span> Ideš li i u bioskop?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, wenn ein guter Film läuft, gehe ich gern hin.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, kada se daje dobar film, rado idem.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was hast du letztes Wochenende gemacht?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta si radio prošlog vikenda?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich habe einen Film gesehen und danach Pizza gegessen.</div>
+          <div class="sr"><span class="speaker">B:</span> Gledao sam film i posle toga jeo picu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> War das Wetter gut?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li je vreme bilo lepo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Nein, es hat geregnet, deshalb sind wir nicht spazieren gegangen.</div>
+          <div class="sr"><span class="speaker">B:</span> Ne, padala je kiša, zato nismo išli u šetnju.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Musstest du früher am Wochenende arbeiten?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si ranije morao da radiš vikendom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, manchmal musste ich samstags arbeiten.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, ponekad sam morao da radim subotom.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Und heute?</div>
+          <div class="sr"><span class="speaker">A:</span> A danas?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Heute habe ich frei, trotzdem stehe ich oft früh auf.</div>
+          <div class="sr"><span class="speaker">B:</span> Danas sam slobodan, ipak često ustajem rano.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="7">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 7</div>
+          <h2>Sport</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(7)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Treibst du regelmäßig Sport?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li se redovno baviš sportom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich spiele zweimal pro Woche Fußball.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, igram fudbal dva puta nedeljno.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Seit wann spielst du?</div>
+          <div class="sr"><span class="speaker">A:</span> Od kada igraš?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Seit meiner Kindheit. Damals konnte ich jeden Tag trainieren.</div>
+          <div class="sr"><span class="speaker">B:</span> Od detinjstva. Tada sam mogao da treniram svakog dana.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hast du gestern auch trainiert?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si i juče trenirao?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Nein, weil ich Kopfschmerzen hatte.</div>
+          <div class="sr"><span class="speaker">B:</span> Ne, jer sam imao glavobolju.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Weißt du, ob das nächste Spiel am Samstag ist?</div>
+          <div class="sr"><span class="speaker">A:</span> Znaš li da li je sledeća utakmica u subotu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, der Trainer hat gesagt, dass wir um 15 Uhr spielen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, trener je rekao da igramo u 15 časova.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Bist du nervös?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si nervozan?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ein bisschen. Trotzdem freue ich mich auf das Spiel.</div>
+          <div class="sr"><span class="speaker">B:</span> Pomalo. Ipak se radujem utakmici.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was machst du, wenn ihr gewinnt?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta radiš kada pobedite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann feiern wir zusammen im Vereinsheim.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda slavimo zajedno u klupskim prostorijama.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="8">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 8</div>
+          <h2>Nemačka</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(8)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Warst du schon einmal in Deutschland?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si nekada bio u Nemačkoj?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich habe letztes Jahr Berlin besucht.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, prošle godine sam posetio Berlin.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wie hat dir die Stadt gefallen?</div>
+          <div class="sr"><span class="speaker">A:</span> Kako ti se svideo grad?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sehr gut, weil es dort viel zu sehen gibt.</div>
+          <div class="sr"><span class="speaker">B:</span> Veoma mi se svideo jer tamo ima mnogo toga da se vidi.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Was hast du besucht?</div>
+          <div class="sr"><span class="speaker">A:</span> Šta si posetio?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich habe das Brandenburger Tor und mehrere Museen gesehen.</div>
+          <div class="sr"><span class="speaker">B:</span> Video sam Brandenburšku kapiju i nekoliko muzeja.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Konntest du gut Deutsch sprechen?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si mogao dobro da govoriš nemački?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ein bisschen. Manchmal musste ich langsam sprechen.</div>
+          <div class="sr"><span class="speaker">B:</span> Pomalo. Ponekad sam morao da govorim polako.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Weißt du, ob du wieder hinfährst?</div>
+          <div class="sr"><span class="speaker">A:</span> Znaš li da li ćeš ponovo ići tamo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich denke, dass ich nächstes Jahr wiederkomme.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, mislim da ću sledeće godine ponovo doći.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Warum möchtest du wieder nach Deutschland?</div>
+          <div class="sr"><span class="speaker">A:</span> Zašto želiš ponovo u Nemačku?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich habe dort Freunde, deshalb möchte ich sie besuchen.</div>
+          <div class="sr"><span class="speaker">B:</span> Tamo imam prijatelje, zato želim da ih posetim.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="9">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 9</div>
+          <h2>Kod doktora</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(9)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Was fehlt Ihnen?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Šta Vam je?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich habe seit gestern Halsschmerzen und Fieber.</div>
+          <div class="sr"><span class="speaker">B:</span> Od juče imam bol u grlu i temperaturu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Haben Sie auch Husten?</div>
+          <div class="sr"><span class="speaker">A:</span> Imate li i kašalj?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, und ich habe letzte Nacht schlecht geschlafen.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, i prošle noći sam loše spavao.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich muss Sie untersuchen. Bitte machen Sie den Mund auf.</div>
+          <div class="sr"><span class="speaker">A:</span> Moram da Vas pregledam. Molim Vas otvorite usta.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ist es etwas Ernstes?</div>
+          <div class="sr"><span class="speaker">B:</span> Da li je nešto ozbiljno?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich glaube, dass es nur eine Erkältung ist.</div>
+          <div class="sr"><span class="speaker">A:</span> Mislim da je to samo prehlada.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Muss ich Medikamente nehmen?</div>
+          <div class="sr"><span class="speaker">B:</span> Da li moram da pijem lekove?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja. Wenn das Fieber steigt, nehmen Sie diese Tabletten.</div>
+          <div class="sr"><span class="speaker">A:</span> Da. Ako temperatura poraste, uzmite ove tablete.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Darf ich morgen arbeiten?</div>
+          <div class="sr"><span class="speaker">B:</span> Smem li sutra da radim?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Besser nicht, weil Sie sich ausruhen sollten.</div>
+          <div class="sr"><span class="speaker">A:</span> Bolje ne, jer bi trebalo da se odmarate.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gut, dann bleibe ich zu Hause.</div>
+          <div class="sr"><span class="speaker">B:</span> Dobro, onda ću ostati kod kuće.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="10">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 10</div>
+          <h2>U pekari</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(10)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Morgen. Was darf es sein?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro jutro. Izvolite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich hätte gern zwei Brötchen und ein Croissant.</div>
+          <div class="sr"><span class="speaker">B:</span> Želeo bih dve zemičke i jedan kroasan.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Möchten Sie auch Brot?</div>
+          <div class="sr"><span class="speaker">A:</span> Želite li i hleb?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja. Haben Sie Vollkornbrot?</div>
+          <div class="sr"><span class="speaker">B:</span> Da. Imate li integralni hleb?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, es ist heute Morgen frisch gebacken worden.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, jutros je sveže ispečen.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Super. Ich nehme ein kleines Brot.</div>
+          <div class="sr"><span class="speaker">B:</span> Odlično. Uzeću jedan mali hleb.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Sonst noch etwas?</div>
+          <div class="sr"><span class="speaker">A:</span> Još nešto?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Wissen Sie, ob diese Kuchen Nüsse enthalten?</div>
+          <div class="sr"><span class="speaker">B:</span> Znate li da li ovi kolači sadrže orahe?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, dieser Kuchen enthält Nüsse, deshalb empfehle ich den Apfelkuchen.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, ovaj kolač sadrži orahe, zato preporučujem kolač od jabuka.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann nehme ich ein Stück Apfelkuchen.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda ću uzeti jedno parče kolača od jabuka.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Das macht zusammen 8,50 Euro.</div>
+          <div class="sr"><span class="speaker">A:</span> Ukupno je 8,50 evra.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Hier bitte. Danke!</div>
+          <div class="sr"><span class="speaker">B:</span> Izvolite. Hvala!</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="11">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 11</div>
+          <h2>U butiku</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(11)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Kann ich Ihnen helfen?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Mogu li da Vam pomognem?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich suche eine Jacke für den Herbst.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, tražim jaknu za jesen.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Welche Größe tragen Sie?</div>
+          <div class="sr"><span class="speaker">A:</span> Koju veličinu nosite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Normalerweise Größe L, aber ich weiß nicht, ob dieses Modell groß ausfällt.</div>
+          <div class="sr"><span class="speaker">B:</span> Obično veličinu L, ali ne znam da li je ovaj model širi.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Probieren Sie die Jacke einfach an.</div>
+          <div class="sr"><span class="speaker">A:</span> Jednostavno probajte jaknu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Wo ist die Umkleidekabine?</div>
+          <div class="sr"><span class="speaker">B:</span> Gde je kabina za presvlačenje?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Dort hinten links.</div>
+          <div class="sr"><span class="speaker">A:</span> Tamo pozadi levo.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Die Jacke gefällt mir, weil sie sehr bequem ist.</div>
+          <div class="sr"><span class="speaker">B:</span> Jakna mi se sviđa jer je veoma udobna.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Sie ist heute reduziert.</div>
+          <div class="sr"><span class="speaker">A:</span> Danas je snižena.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gut. Früher wollte ich immer nur schwarze Jacken kaufen.</div>
+          <div class="sr"><span class="speaker">B:</span> Dobro. Ranije sam uvek želeo da kupujem samo crne jakne.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Diese blaue steht Ihnen trotzdem sehr gut.</div>
+          <div class="sr"><span class="speaker">A:</span> Ova plava Vam ipak veoma lepo stoji.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann nehme ich sie.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda ću je uzeti.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="12">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 12</div>
+          <h2>U cvećari</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(12)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Ich brauche einen Blumenstrauß.</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Potreban mi je buket cveća.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Für welchen Anlass?</div>
+          <div class="sr"><span class="speaker">B:</span> Za koju priliku?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Meine Schwester hat morgen Geburtstag.</div>
+          <div class="sr"><span class="speaker">A:</span> Moja sestra sutra ima rođendan.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Welche Blumen mag sie?</div>
+          <div class="sr"><span class="speaker">B:</span> Koje cveće voli?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich glaube, dass sie Rosen besonders gern mag.</div>
+          <div class="sr"><span class="speaker">A:</span> Mislim da posebno voli ruže.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann kann ich rote und weiße Rosen kombinieren.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda mogu da kombinujem crvene i bele ruže.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Das klingt schön. Wie viel kostet der Strauß?</div>
+          <div class="sr"><span class="speaker">A:</span> To zvuči lepo. Koliko košta buket?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Etwa 25 Euro, wenn Sie zehn Rosen nehmen.</div>
+          <div class="sr"><span class="speaker">B:</span> Oko 25 evra, ako uzmete deset ruža.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Gut. Können Sie eine Karte dazulegen?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro. Možete li da dodate i čestitku?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Natürlich. Was soll ich darauf schreiben?</div>
+          <div class="sr"><span class="speaker">B:</span> Naravno. Šta da napišem na njoj?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Schreiben Sie bitte: Alles Gute zum Geburtstag!</div>
+          <div class="sr"><span class="speaker">A:</span> Napišite, molim Vas: Srećan rođendan!</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sehr gern. Deshalb verpacke ich den Strauß auch festlich.</div>
+          <div class="sr"><span class="speaker">B:</span> Vrlo rado. Zato ću buket i svečano upakovati.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="13">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 13</div>
+          <h2>U obućari</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(13)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Ich suche bequeme Schuhe.</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Tražim udobne cipele.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Für den Alltag oder für Sport?</div>
+          <div class="sr"><span class="speaker">B:</span> Za svakodnevicu ili za sport?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Für den Alltag. Ich muss bei der Arbeit viel stehen.</div>
+          <div class="sr"><span class="speaker">A:</span> Za svakodnevicu. Na poslu moram mnogo da stojim.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Welche Größe haben Sie?</div>
+          <div class="sr"><span class="speaker">B:</span> Koji broj nosite?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Größe 43.</div>
+          <div class="sr"><span class="speaker">A:</span> Broj 43.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Probieren Sie dieses Modell. Es ist sehr leicht.</div>
+          <div class="sr"><span class="speaker">B:</span> Probajte ovaj model. Veoma je lagan.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Kann ich auch eine Nummer größer probieren?</div>
+          <div class="sr"><span class="speaker">A:</span> Mogu li da probam i broj veći?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, natürlich. Ich schaue nach, ob wir Größe 44 haben.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, naravno. Proveriću da li imamo broj 44.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Danke. Die kleineren Schuhe haben etwas gedrückt.</div>
+          <div class="sr"><span class="speaker">A:</span> Hvala. Manje cipele su malo stezale.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Deshalb ist die größere Größe wahrscheinlich besser.</div>
+          <div class="sr"><span class="speaker">B:</span> Zato je veći broj verovatno bolji.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Diese passen gut, obwohl sie etwas teurer sind.</div>
+          <div class="sr"><span class="speaker">A:</span> Ove dobro odgovaraju, iako su malo skuplje.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Wenn sie bequem sind, lohnt sich der Preis.</div>
+          <div class="sr"><span class="speaker">B:</span> Ako su udobne, cena se isplati.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="14">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 14</div>
+          <h2>Kod zubara</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(14)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Wo haben Sie Schmerzen?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Gde Vas boli?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Mein rechter Zahn tut seit zwei Tagen weh.</div>
+          <div class="sr"><span class="speaker">B:</span> Desni zub me boli već dva dana.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Tut er beim Essen besonders weh?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li posebno boli pri jelu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, wenn ich etwas Kaltes trinke, tut er sehr weh.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, kada pijem nešto hladno, mnogo boli.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich sehe, dass der Zahn ein Loch hat.</div>
+          <div class="sr"><span class="speaker">A:</span> Vidim da zub ima kvar.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Muss er gezogen werden?</div>
+          <div class="sr"><span class="speaker">B:</span> Da li mora da se izvadi?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Nein, zum Glück nicht. Ich kann ihn füllen.</div>
+          <div class="sr"><span class="speaker">A:</span> Ne, srećom ne. Mogu da ga popravim plombom.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gut. Ich hatte Angst, weil ich früher schlechte Erfahrungen gemacht habe.</div>
+          <div class="sr"><span class="speaker">B:</span> Dobro. Plašio sam se jer sam ranije imao loša iskustva.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Keine Sorge. Die Behandlung wird nicht lange dauern.</div>
+          <div class="sr"><span class="speaker">A:</span> Ne brinite. Tretman neće dugo trajati.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Kann ich danach normal essen?</div>
+          <div class="sr"><span class="speaker">B:</span> Mogu li posle toga normalno da jedem?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Warten Sie bitte zwei Stunden.</div>
+          <div class="sr"><span class="speaker">A:</span> Sačekajte, molim Vas, dva sata.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> In Ordnung. Trotzdem bin ich etwas nervös.</div>
+          <div class="sr"><span class="speaker">B:</span> U redu. Ipak sam malo nervozan.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="15">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 15</div>
+          <h2>U prirodi</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(15)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wollen wir am Sonntag wandern gehen?</div>
+          <div class="sr"><span class="speaker">A:</span> Hoćemo li u nedelju na planinarenje?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gern, wenn das Wetter schön ist.</div>
+          <div class="sr"><span class="speaker">B:</span> Rado, ako vreme bude lepo.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich habe gesehen, dass es sonnig werden soll.</div>
+          <div class="sr"><span class="speaker">A:</span> Video sam da bi trebalo da bude sunčano.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Super. Wohin möchtest du fahren?</div>
+          <div class="sr"><span class="speaker">B:</span> Odlično. Gde želiš da idemo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> In die Berge. Dort gibt es einen schönen See.</div>
+          <div class="sr"><span class="speaker">A:</span> U planine. Tamo ima jedno lepo jezero.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Warst du schon einmal dort?</div>
+          <div class="sr"><span class="speaker">B:</span> Da li si već bio tamo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, ich bin letzten Sommer dort gewesen.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, bio sam tamo prošlog leta.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Was müssen wir mitnehmen?</div>
+          <div class="sr"><span class="speaker">B:</span> Šta moramo da ponesemo?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wasser, etwas Essen und gute Schuhe.</div>
+          <div class="sr"><span class="speaker">A:</span> Vodu, nešto hrane i dobre cipele.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Letztes Mal musste ich ohne Regenjacke zurückgehen.</div>
+          <div class="sr"><span class="speaker">B:</span> Prošli put sam morao da se vratim bez kabanice.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Deshalb nehmen wir diesmal eine mit.</div>
+          <div class="sr"><span class="speaker">A:</span> Zato ćemo ovaj put poneti jednu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gut, trotzdem hoffe ich, dass es nicht regnet.</div>
+          <div class="sr"><span class="speaker">B:</span> Dobro, ipak se nadam da neće padati kiša.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="16">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 16</div>
+          <h2>U hotelu</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(16)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Abend. Haben Sie ein Zimmer reserviert?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro veče. Da li ste rezervisali sobu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, auf den Namen Petrović.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, na prezime Petrović.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Einen Moment bitte. Ja, ich sehe Ihre Reservierung.</div>
+          <div class="sr"><span class="speaker">A:</span> Samo trenutak. Da, vidim Vašu rezervaciju.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ist das Frühstück im Preis enthalten?</div>
+          <div class="sr"><span class="speaker">B:</span> Da li je doručak uključen u cenu?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, das Frühstück ist von sieben bis zehn Uhr.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, doručak je od sedam do deset časova.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Wissen Sie, ob das WLAN kostenlos ist?</div>
+          <div class="sr"><span class="speaker">B:</span> Znate li da li je Wi-Fi besplatan?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, natürlich. Das Passwort steht auf Ihrer Karte.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, naravno. Lozinka piše na Vašoj kartici.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Sehr gut. Ich bin lange gefahren, deshalb bin ich ziemlich müde.</div>
+          <div class="sr"><span class="speaker">B:</span> Veoma dobro. Dugo sam vozio, zato sam prilično umoran.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ihr Zimmer liegt im dritten Stock.</div>
+          <div class="sr"><span class="speaker">A:</span> Vaša soba se nalazi na trećem spratu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Gibt es einen Aufzug?</div>
+          <div class="sr"><span class="speaker">B:</span> Ima li lift?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja. Wenn Sie Hilfe mit dem Gepäck brauchen, sagen Sie bitte Bescheid.</div>
+          <div class="sr"><span class="speaker">A:</span> Da. Ako Vam treba pomoć sa prtljagom, recite.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Danke. Das ist sehr freundlich.</div>
+          <div class="sr"><span class="speaker">B:</span> Hvala. To je veoma ljubazno.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="17">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 17</div>
+          <h2>Na recepciji</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(17)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Morgen. Kann ich Ihnen helfen?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro jutro. Mogu li da Vam pomognem?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ich möchte heute auschecken.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, želeo bih danas da se odjavim.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Welche Zimmernummer haben Sie?</div>
+          <div class="sr"><span class="speaker">A:</span> Koji je broj Vaše sobe?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Zimmer 214.</div>
+          <div class="sr"><span class="speaker">B:</span> Soba 214.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Haben Sie etwas aus der Minibar genommen?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li ste nešto uzeli iz minibara?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Nein, ich glaube nicht.</div>
+          <div class="sr"><span class="speaker">B:</span> Ne, mislim da nisam.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ich prüfe kurz, ob alles bezahlt ist.</div>
+          <div class="sr"><span class="speaker">A:</span> Kratko ću proveriti da li je sve plaćeno.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> In Ordnung. Ich habe gestern schon die Übernachtung bezahlt.</div>
+          <div class="sr"><span class="speaker">B:</span> U redu. Juče sam već platio noćenje.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Ja, das stimmt. Sie müssen nur noch die Kurtaxe bezahlen.</div>
+          <div class="sr"><span class="speaker">A:</span> Da, tačno je. Morate još samo da platite boravišnu taksu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Kann ich mit Karte zahlen?</div>
+          <div class="sr"><span class="speaker">B:</span> Mogu li da platim karticom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Natürlich. Danach kann ich Ihnen auch ein Taxi rufen.</div>
+          <div class="sr"><span class="speaker">A:</span> Naravno. Posle toga mogu i da Vam pozovem taksi.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Danke, das wäre gut, weil mein Zug bald fährt.</div>
+          <div class="sr"><span class="speaker">B:</span> Hvala, to bi bilo dobro jer moj voz uskoro polazi.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="18">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 18</div>
+          <h2>U parku</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(18)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Schönes Wetter heute, oder?</div>
+          <div class="sr"><span class="speaker">A:</span> Lepo vreme danas, zar ne?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, deshalb sind so viele Menschen im Park.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, zato je toliko ljudi u parku.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Kommst du oft hierher?</div>
+          <div class="sr"><span class="speaker">A:</span> Dolaziš li često ovde?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, wenn ich Zeit habe, gehe ich hier spazieren.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, kada imam vremena, šetam ovde.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Hast du den neuen Spielplatz schon gesehen?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li si već video novo igralište?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, er ist letzte Woche eröffnet worden.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, otvoreno je prošle nedelje.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Meine Kinder wollten sofort dort spielen.</div>
+          <div class="sr"><span class="speaker">A:</span> Moja deca su odmah želela da se tamo igraju.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Verständlich. Der Spielplatz sieht wirklich gut aus.</div>
+          <div class="sr"><span class="speaker">B:</span> Razumljivo. Igralište stvarno lepo izgleda.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Weißt du, ob man hier Fahrräder mieten kann?</div>
+          <div class="sr"><span class="speaker">A:</span> Znaš li da li ovde mogu da se iznajme bicikli?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, dort am Eingang gibt es eine Station.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, tamo kod ulaza ima jedna stanica.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Trotzdem gehe ich heute lieber zu Fuß.</div>
+          <div class="sr"><span class="speaker">A:</span> Ipak danas radije idem peške.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Das ist auch gut. Bewegung ist gesund.</div>
+          <div class="sr"><span class="speaker">B:</span> I to je dobro. Kretanje je zdravo.</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="19">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 19</div>
+          <h2>Na kasi</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(19)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Tag. Haben Sie alles gefunden?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobar dan. Da li ste sve pronašli?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Fast alles. Ich habe nur keine Milch gefunden.</div>
+          <div class="sr"><span class="speaker">B:</span> Skoro sve. Samo nisam pronašao mleko.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Die Milch steht hinten neben dem Joghurt.</div>
+          <div class="sr"><span class="speaker">A:</span> Mleko stoji pozadi pored jogurta.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Danke. Dann hole ich noch schnell eine Packung.</div>
+          <div class="sr"><span class="speaker">B:</span> Hvala. Onda ću brzo uzeti još jedno pakovanje.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Kein Problem. Haben Sie eine Kundenkarte?</div>
+          <div class="sr"><span class="speaker">A:</span> Nema problema. Imate li karticu kupca?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, hier ist sie.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, evo je.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Heute bekommen Sie zehn Prozent Rabatt, weil Sie mehr als 30 Euro eingekauft haben.</div>
+          <div class="sr"><span class="speaker">A:</span> Danas dobijate deset posto popusta jer ste kupili više od 30 evra.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Das ist gut. Ich wusste nicht, dass es heute Rabatt gibt.</div>
+          <div class="sr"><span class="speaker">B:</span> To je dobro. Nisam znao da danas ima popusta.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Möchten Sie bar oder mit Karte zahlen?</div>
+          <div class="sr"><span class="speaker">A:</span> Želite li da platite gotovinom ili karticom?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Mit Karte, bitte.</div>
+          <div class="sr"><span class="speaker">B:</span> Karticom, molim.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wenn Sie möchten, kann ich Ihnen den Kassenbon geben.</div>
+          <div class="sr"><span class="speaker">A:</span> Ako želite, mogu Vam dati račun.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, bitte. Danke und auf Wiedersehen!</div>
+          <div class="sr"><span class="speaker">B:</span> Da, molim. Hvala i doviđenja!</div>
+        </div>
+
+    </section>
+
+    <section class="lesson" data-lesson="20">
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">LEKCIJA 20</div>
+          <h2>U restoranu</h2>
+        </div>
+        <button class="speak-all" onclick="speakLesson(20)">🔊</button>
+      </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Guten Abend. Haben Sie reserviert?</div>
+          <div class="sr"><span class="speaker">A:</span> Dobro veče. Da li ste rezervisali?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, einen Tisch für zwei Personen auf den Namen Jović.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, sto za dve osobe na prezime Jović.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Bitte kommen Sie mit. Hier ist Ihr Tisch.</div>
+          <div class="sr"><span class="speaker">A:</span> Pođite sa mnom, molim Vas. Ovo je Vaš sto.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Danke. Können wir die Speisekarte bekommen?</div>
+          <div class="sr"><span class="speaker">B:</span> Hvala. Možemo li dobiti jelovnik?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Natürlich. Möchten Sie schon etwas trinken?</div>
+          <div class="sr"><span class="speaker">A:</span> Naravno. Želite li već nešto da popijete?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ja, ein Mineralwasser und einen Apfelsaft, bitte.</div>
+          <div class="sr"><span class="speaker">B:</span> Da, mineralnu vodu i sok od jabuke, molim.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Wissen Sie schon, was Sie essen möchten?</div>
+          <div class="sr"><span class="speaker">A:</span> Da li već znate šta želite da jedete?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Ich weiß nicht, ob ich die Suppe oder den Fisch nehme.</div>
+          <div class="sr"><span class="speaker">B:</span> Ne znam da li da uzmem supu ili ribu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Der Fisch ist heute sehr frisch, weil er heute Morgen geliefert wurde.</div>
+          <div class="sr"><span class="speaker">A:</span> Riba je danas veoma sveža jer je jutros dostavljena.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Dann nehme ich den Fisch. Meine Frau möchte die Suppe.</div>
+          <div class="sr"><span class="speaker">B:</span> Onda ću uzeti ribu. Moja supruga želi supu.</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">A:</span> Sehr gern. Möchten Sie danach noch ein Dessert?</div>
+          <div class="sr"><span class="speaker">A:</span> Vrlo rado. Želite li posle toga i desert?</div>
+        </div>
+
+        <div class="line">
+          <div class="de"><span class="speaker">B:</span> Vielleicht später. Wir haben heute schon viel gegessen, trotzdem klingt der Kuchen gut.</div>
+          <div class="sr"><span class="speaker">B:</span> Možda kasnije. Danas smo već mnogo jeli, ipak kolač zvuči dobro.</div>
+        </div>
+
+    </section>
+
+  </div>
+</main>
+
+<div class="bottom" id="bottomNav" style="display:none">
+  <button onclick="prevLesson()">← Prethodna</button>
+  <button class="home" onclick="showMenu()">☰ 20 lekcija</button>
+  <button onclick="nextLesson()">Sledeća →</button>
+</div>
+</div>
+<script>
+let current=1;
+let translations=true;
+function showLesson(n){
+  current=n;
+  document.getElementById('menuView').style.display='none';
+  document.getElementById('lessonView').style.display='block';
+  document.querySelectorAll('.lesson').forEach(x=>x.classList.remove('active'));
+  const el=document.querySelector(`[data-lesson="${n}"]`);
+  if(el) el.classList.add('active');
+  document.getElementById('bottomNav').style.display='grid';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showMenu(){
+  document.getElementById('menuView').style.display='block';
+  document.getElementById('lessonView').style.display='none';
+  document.getElementById('bottomNav').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prevLesson(){ showLesson(current<=1?20:current-1); }
+function nextLesson(){ showLesson(current>=20?1:current+1); }
+function toggleTranslation(){
+  translations=!translations;
+  document.getElementById('app').classList.toggle('hide-trans',!translations);
+}
+function speakLesson(n){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const lesson=document.querySelector(`[data-lesson="${n}"]`);
+  const text=[...lesson.querySelectorAll('.de')].map(x=>x.innerText).join(' ');
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='de-DE'; u.rate=.86;
+  speechSynthesis.speak(u);
+}
+document.getElementById('lessonView').style.display='none';
+</script>
+</body>
+</html>
