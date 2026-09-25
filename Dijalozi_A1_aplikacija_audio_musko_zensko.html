@@ -63,8 +63,18 @@ function loadVoices(){
   if(!('speechSynthesis' in window)) return;
   availableVoices=speechSynthesis.getVoices()||[];
 }
+function waitForVoices(timeout=2500){
+  return new Promise(resolve=>{
+    loadVoices();
+    if(availableVoices.length){ resolve(); return; }
+    let done=false;
+    const finish=()=>{ if(done)return; done=true; loadVoices(); resolve(); };
+    speechSynthesis.onvoiceschanged=finish;
+    setTimeout(finish,timeout);
+  });
+}
 loadVoices();
-if('speechSynthesis' in window && 'onvoiceschanged' in speechSynthesis){
+if('speechSynthesis' in window){
   speechSynthesis.onvoiceschanged=loadVoices;
 }
 
@@ -78,8 +88,8 @@ function pickGermanVoice(kind){
   if(!de.length) return null;
   const name=v=>(v.name||'').toLowerCase();
 
-  const femaleHints=['anna','katja','helena','vicki','petra','female','frau','marlene','amala'];
-  const maleHints=['conrad','markus','male','mann','stefan','hans','martin','klaus','bernd','heinz','ralf','dieter','german male','de-de male'];
+  const femaleHints=['katja','anna','helena','vicki','petra','marlene','amala','female','frau'];
+  const maleHints=['conrad','stefan','markus','hans','martin','klaus','bernd','heinz','ralf','dieter','male','mann','german male','de-de male'];
 
   const hints=kind==='female'?femaleHints:kind==='male'?maleHints:[];
   let found=de.find(v=>hints.some(h=>name(v).includes(h)));
@@ -105,7 +115,7 @@ function speakerProfile(line){
   if(line.role==='A'){
     return {kind:'female',rate:.88,pitch:1.06};
   }
-  return {kind:'male',rate:.84,pitch:.62};
+  return {kind:'male',rate:.86,pitch:.78};
 }
 
 function renderTopics(){
@@ -116,7 +126,7 @@ function renderTopics(){
    b.onclick=()=>openDialog(i);$('topics').appendChild(b);
  });
 }
-function openDialog(i){
+async function openDialog(i){
   current=i;
   stopAudio();
   $('home').classList.add('hidden');
@@ -124,7 +134,7 @@ function openDialog(i){
   $('lessonName').textContent=`Dijalog ${i+1} – ${DIALOGS[i].title}`;
   renderDialog();
   scrollTo(0,0);
-  // Pokreni dijalog automatski odmah nakon izbora teme.
+  await waitForVoices();
   playAll();
 }
 function renderDialog(){
