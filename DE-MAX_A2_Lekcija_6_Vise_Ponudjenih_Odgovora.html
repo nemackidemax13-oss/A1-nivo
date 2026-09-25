@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b55d4">
+<title>DE-MAX A2 • Lekcija 6</title>
+<style>
+:root{
+  --blue:#0b55d4;
+  --blue2:#073b9e;
+  --blue3:#3b82f6;
+  --sky:#eef6ff;
+  --ink:#0e2346;
+  --muted:#667792;
+  --line:#dbeafe;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0,#f8fbff 48%,#edf6ff 100%);
+  color:var(--ink);
+}
+button{font:inherit;cursor:pointer}
+.app{width:min(100%,540px);min-height:100dvh;margin:auto;padding:18px 16px 30px;}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.logo{font-size:28px;font-weight:1000;letter-spacing:-1px;color:#e11d48;}
+.logo span{color:var(--blue)}
+.badge{padding:8px 12px;border-radius:999px;background:#fff;color:var(--blue);border:1px solid var(--line);font-size:12px;font-weight:900;box-shadow:0 8px 24px rgba(11,85,212,.08);}
+.hero{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-radius:30px;padding:24px 22px;box-shadow:0 20px 45px rgba(11,85,212,.22);margin-bottom:16px;position:relative;overflow:hidden;}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-80px;background:rgba(255,255,255,.08);}
+.hero h1{margin:0 0 8px;font-size:30px;line-height:1.08;}
+.hero p{margin:0;line-height:1.5;font-size:14px;opacity:.96;}
+.panel,.qcard{background:#fff;border:1px solid #d7e8ff;border-radius:24px;box-shadow:0 12px 35px rgba(11,85,212,.08);}
+.panel{padding:16px}
+.start,.primary{width:100%;border:0;border-radius:18px;padding:15px 18px;background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;font-size:16px;font-weight:900;box-shadow:0 12px 24px rgba(11,85,212,.18);}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.stat{background:#f7fbff;border:1px solid #e4efff;border-radius:18px;padding:12px 8px;text-align:center;}
+.stat b{display:block;font-size:20px;color:var(--blue);}
+.stat span{font-size:11px;color:var(--muted);font-weight:750;}
+.topicstrip{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;}
+.topicstrip span{background:#edf5ff;color:var(--blue);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;}
+.hidden{display:none!important}
+.top{display:flex;gap:10px;align-items:center;margin-bottom:12px;}
+.back{border:0;background:#fff;color:var(--blue);font-weight:900;border-radius:14px;padding:10px 12px;box-shadow:0 8px 20px rgba(11,85,212,.08);}
+.meta{flex:1}.meta b{display:block;font-size:15px}.meta span{font-size:12px;color:var(--muted)}
+.pill{display:inline-block;background:#edf5ff;color:var(--blue);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;}
+.progress{height:10px;background:#deebff;border-radius:999px;overflow:hidden;margin:10px 0 18px;}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,var(--blue));transition:.25s;}
+.qcard{padding:20px}
+.counter{color:var(--blue);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;}
+.q{font-size:22px;line-height:1.3;font-weight:900;margin:10px 0 16px;}
+.opts{display:grid;gap:10px;}
+.opt{text-align:left;width:100%;border:1px solid #dce9fb;background:#f8fbff;color:var(--ink);padding:14px 15px;border-radius:16px;font-size:16px;font-weight:760;transition:.15s;}
+.opt:hover{border-color:#98bfff;background:#f1f7ff;}
+.opt.correct{background:#ecfdf3;border-color:#86d8a4;color:#116b31;}
+.opt.wrong{background:#fff1f1;border-color:#efaaaa;color:#a11d1d;}
+.feedback{display:none;margin-top:14px;border-radius:16px;padding:14px 15px;background:#f4f8ff;border:1px solid #dbeafe;font-size:14px;line-height:1.5;}
+.actions{display:flex;gap:10px;margin-top:14px;}
+.result{text-align:center}
+.score{font-size:58px;font-weight:1000;color:#fff;letter-spacing:-3px;margin:8px 0 0;}
+.result h2{margin:8px 0}.result p{margin:0;line-height:1.55;opacity:.95;}
+.footer{text-align:center;color:#8ca0bc;font-size:12px;margin-top:16px;}
+@media(max-width:390px){.hero h1{font-size:26px}.q{font-size:20px}.app{padding:14px 12px 24px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <div class="logo">DE-<span>MAX</span></div>
+    <div class="badge">A2 • LEKCIJA 6</div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h1>Više ponuđenih odgovora</h1>
+      <p>
+        Lekcija 6 • <b>Konjunktion dass</b>, <b>indirektna pitanja</b>,
+        <b>ob</b> i <b>adjektivdeklinacija sa određenim članom</b>.
+      </p>
+    </div>
+
+    <div class="panel">
+      <button class="start" id="startBtn">Pokreni test</button>
+
+      <div class="stats">
+        <div class="stat"><b>36</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+
+      <div class="topicstrip">
+        <span>dass</span>
+        <span>W-Fragen</span>
+        <span>ob</span>
+        <span>glagol na kraju</span>
+        <span>određeni član</span>
+        <span>adjektivni nastavci</span>
+      </div>
+    </div>
+
+    <div class="footer">De-Max Deutsch • A2 Lekcija 6</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top">
+      <button id="backBtn" class="back">←</button>
+      <div class="meta">
+        <b id="quizTitle">Lekcija 6</b>
+        <span>dass • indirektna pitanja • ob • pridevska deklinacija</span>
+      </div>
+      <div class="pill" id="liveScore">0 bod.</div>
+    </div>
+
+    <div class="progress"><div class="bar" id="bar"></div></div>
+
+    <div class="qcard">
+      <div class="counter" id="counter"></div>
+      <div class="q" id="question"></div>
+      <div class="opts" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button id="nextBtn" class="primary" disabled>Sledeće pitanje</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="hero result">
+      <div class="pill">REZULTAT</div>
+      <div class="score" id="scorePct">0%</div>
+      <h2 id="resultTitle">Test je završen</h2>
+      <p id="resultText"></p>
+    </div>
+
+    <div class="panel">
+      <button id="retryBtn" class="primary">Ponovi test</button>
+      <div style="height:10px"></div>
+      <button id="homeBtn" class="back" style="width:100%">Nazad na početak</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const DATA = {
+  title: "Lekcija 6",
+  questions: [
+    {q:"Ich weiß, ___ du Deutsch lernst.",o:["dass","ob","wenn","weil"],a:0,e:"Kad izražavamo saznanje ili mišljenje, često koristimo veznik „dass“."},
+    {q:"Ich glaube, ___ er heute kommt.",o:["dass","ob","denn","als"],a:0,e:"„glauben“ često uvodi zavisnu rečenicu sa „dass“."},
+    {q:"Sie sagt, ___ sie krank ist.",o:["dass","ob","wann","damit"],a:0,e:"Kod prenošenja nečijih reči indirektno koristimo „dass“."},
+    {q:"Pravilo za red reči sa „dass“ je:",o:["glagol ide na kraj zavisne rečenice","glagol ide odmah posle dass","subjekat ide na kraj","nema promene reda reči"],a:0,e:"U rečenici sa „dass“ glagol stoji na kraju zavisne rečenice."},
+    {q:"Koja rečenica je pravilna?",o:["Ich denke, dass Deutsch wichtig ist.","Ich denke, dass ist Deutsch wichtig.","Ich denke, Deutsch dass wichtig ist.","Ich denke, ist dass Deutsch wichtig."],a:0,e:"Posle „dass“ ide subjekat i ostali delovi, a glagol stoji na kraju."},
+    {q:"Koja rečenica je pravilna?",o:["Wir wissen, dass Anna gut Deutsch spricht.","Wir wissen, dass Anna spricht gut Deutsch.","Wir wissen, Anna dass gut Deutsch spricht.","Wir wissen, dass spricht Anna gut Deutsch."],a:0,e:"U zavisnoj rečenici glagol „spricht“ stoji na kraju."},
+    {q:"Dass du Recht hast, ___ ich.",o:["glaube","glaubt","glauben","geglaubt"],a:0,e:"Kod inverzije glavna rečenica može stajati iza zavisne: „Dass du Recht hast, glaube ich.“"},
+    {q:"Dass die Prüfung leicht ist, ___ der Lehrer.",o:["sagt","sagen","ist","meintest"],a:0,e:"Pravilno je: „Dass die Prüfung leicht ist, sagt der Lehrer.“"},
+    {q:"Ich freue mich, ___ du hier bist.",o:["dass","ob","wo","weil"],a:0,e:"„sich freuen“ takođe može ići sa zavisnom rečenicom uz „dass“."},
+    {q:"Koji prevod je tačan? „Ich finde, dass der Kurs Spaß macht.“",o:["Mislim da je kurs zabavan.","Pitamo da li je kurs zabavan.","Kurs nije zanimljiv.","Da li kurs počinje danas?"],a:0,e:"Značenje je: „Smatram / mislim da je kurs zabavan.“"},
+
+    {q:"Indirektna pitanja sa upitnim rečima najčešće počinju sa:",o:["wer / was / wann / wo ...","dass","weil","als"],a:0,e:"Indirektna pitanja preuzimaju istu upitnu reč kao i direktna pitanja."},
+    {q:"Kod indirektnih pitanja glagol obično stoji:",o:["na kraju rečenice","na drugom mestu","na prvom mestu","odmah posle subjekta"],a:0,e:"U indirektnim pitanjima glagol ide na kraj zavisne rečenice."},
+    {q:"Können Sie mir sagen, ___ das heißt?",o:["was","ob","dass","weil"],a:0,e:"Direktno pitanje „Was heißt das?“ prelazi u indirektno sa „was“."},
+    {q:"Wissen Sie, ___ die Banken geöffnet haben?",o:["wann","ob","dass","denn"],a:0,e:"Za pitanje „Wann haben die Banken geöffnet?“ koristimo „wann“."},
+    {q:"Mich interessiert, ___ man das Geld abheben kann.",o:["wo","ob","dass","wer"],a:0,e:"Direktno pitanje glasi: „Wo kann man das Geld abheben?“"},
+    {q:"Ich wollte noch fragen, ___ du Deutsch lernst.",o:["wo","ob","dass","wenn"],a:0,e:"Direktno: „Wo lernst du Deutsch?“ → indirektno: „..., wo du Deutsch lernst.“"},
+    {q:"Ich frage mich, ___ du am Samstag machst.",o:["was","wann","wo","ob"],a:0,e:"Direktno pitanje: „Was machst du am Samstag?“"},
+    {q:"Ich möchte gerne wissen, ___ heute Fußball spielt.",o:["wer","was","wann","ob"],a:0,e:"Kad pitamo za osobu, koristimo „wer“."},
+    {q:"Koja rečenica je pravilna?",o:["Können Sie mir sagen, was ich jetzt machen soll?","Können Sie mir sagen, was soll ich jetzt machen?","Können Sie mir sagen, ich was jetzt machen soll?","Können Sie mir sagen, was ich soll jetzt machen?"],a:0,e:"U indirektnom pitanju glagol „soll“ stoji na kraju."},
+    {q:"Koja rečenica je pravilna?",o:["Ich weiß nicht, wo ich Geld abheben kann.","Ich weiß nicht, wo kann ich Geld abheben.","Ich weiß nicht, kann ich wo Geld abheben.","Ich weiß nicht, wo ich kann Geld abheben."],a:0,e:"Posle upitne reči glagol ide na kraj: „... wo ich Geld abheben kann.“"},
+
+    {q:"Za indirektna pitanja na koja se odgovara sa da/ne koristimo:",o:["ob","dass","wer","weil"],a:0,e:"Kad nema upitne reči, u nemačkom koristimo veznik „ob“."},
+    {q:"Können Sie mir sagen, ___ Sie heute kommen?",o:["ob","dass","wann","warum"],a:0,e:"Direktno pitanje „Kommen Sie heute?“ postaje indirektno sa „ob“."},
+    {q:"Wissen Sie, ___ die Banken öffnen?",o:["ob","dass","wie","wer"],a:0,e:"„Öffnen die Banken?“ → „..., ob die Banken öffnen.“"},
+    {q:"Ich möchte wissen, ___ du Hunger hast.",o:["ob","was","wann","dass"],a:0,e:"Za pitanje „Hast du Hunger?“ koristimo „ob“."},
+    {q:"Ich frage mich, ___ er zu Hause ist.",o:["ob","wo","warum","dass"],a:0,e:"„Ist er zu Hause?“ → „..., ob er zu Hause ist.“"},
+    {q:"Koja rečenica je pravilna?",o:["Ich möchte gerne wissen, ob du Fußball spielst.","Ich möchte gerne wissen, ob spielst du Fußball.","Ich möchte gerne wissen, du ob Fußball spielst.","Ich möchte gerne wissen, ob du spielst Fußball."],a:0,e:"U zavisnoj rečenici sa „ob“ glagol stoji na kraju."},
+
+    {q:"Nominativ muškog roda sa određenim članom glasi:",o:["der schöne Mann","der schönen Mann","den schöne Mann","dem schöne Mann"],a:0,e:"Nominativ maskulin sa određenim članom ima nastavak -e."},
+    {q:"Akuzativ muškog roda sa određenim članom glasi:",o:["den schönen Mann","den schöne Mann","der schönen Mann","dem schönen Mann"],a:0,e:"Akuzativ maskulin uz određeni član dobija nastavak -en."},
+    {q:"Dativ ženskog roda sa određenim članom glasi:",o:["der schönen Frau","die schöne Frau","der schöne Frau","den schönen Frau"],a:0,e:"Dativ feminin uz određeni član ima nastavak -en."},
+    {q:"Nominativ srednjeg roda je:",o:["das schöne Haus","das schönen Haus","dem schöne Haus","den schönen Haus"],a:0,e:"Nominativ neutrum uz određeni član ima nastavak -e."},
+    {q:"Dativ srednjeg roda je:",o:["dem schönen Haus","dem schöne Haus","das schönen Haus","der schönen Haus"],a:0,e:"Dativ neutrum uz određeni član dobija -en."},
+    {q:"Nominativ množine uz određeni član glasi:",o:["die schönen Männer","die schöne Männer","den schönen Männer","der schönen Männer"],a:0,e:"U množini sa određenim članom u nominativu koristimo nastavak -en."},
+    {q:"Ich sehe den schön__ Garten.",o:["en","e","er","em"],a:0,e:"Akuzativ muškog roda: „den schönen Garten“."},
+    {q:"Die nett__ Lehrerin erklärt die Aufgabe.",o:["e","en","er","es"],a:0,e:"Nominativ ženskog roda: „die nette Lehrerin“."},
+    {q:"Ich helfe dem klein__ Kind.",o:["en","e","er","es"],a:0,e:"Dativ neutrum: „dem kleinen Kind“."},
+    {q:"Die alt__ Bücher liegen auf dem Tisch.",o:["en","e","er","es"],a:0,e:"Množina sa određenim članom: „die alten Bücher“."},
+    {q:"Wir sprechen mit dem neu__ Schüler.",o:["en","e","er","es"],a:0,e:"Dativ muškog roda: „mit dem neuen Schüler“."},
+    {q:"Der gut__ Freund kommt heute.",o:["e","en","er","es"],a:0,e:"Nominativ muškog roda: „der gute Freund“."}
+  ]
+};
+
+let index = 0;
+let score = 0;
+let answered = false;
+const $ = id => document.getElementById(id);
+
+function show(id){
+  ["home","quiz","result"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function startQuiz(){
+  index = 0; score = 0; answered = false;
+  $("liveScore").textContent = "0 bod.";
+  show("quiz"); render();
+}
+function render(){
+  const q = DATA.questions[index]; answered = false;
+  $("counter").textContent = `Pitanje ${index+1} od ${DATA.questions.length}`;
+  $("question").textContent = q.q;
+  $("options").innerHTML = "";
+  $("feedback").style.display = "none";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = index === DATA.questions.length - 1 ? "Završi test" : "Sledeće pitanje";
+  $("bar").style.width = `${(index / DATA.questions.length) * 100}%`;
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt"; btn.textContent = opt;
+    btn.onclick = () => choose(i, btn);
+    $("options").appendChild(btn);
+  });
+}
+function choose(i, btn){
+  if(answered) return; answered = true;
+  const q = DATA.questions[index];
+  const buttons = [...document.querySelectorAll('.opt')];
+  buttons.forEach((x,j)=>{x.disabled=true; if(j===q.a) x.classList.add('correct');});
+  if(i===q.a){ score++; $("feedback").innerHTML = `<b>Tačno.</b> ${q.e}`; }
+  else { btn.classList.add('wrong'); $("feedback").innerHTML = `<b>Netačno.</b> Tačan odgovor je: <b>${q.o[q.a]}</b><br>${q.e}`; }
+  $("feedback").style.display = "block";
+  $("liveScore").textContent = `${score} bod.`;
+  $("bar").style.width = `${((index+1)/DATA.questions.length)*100}%`;
+  $("nextBtn").disabled = false;
+}
+function finish(){
+  const pct = Math.round(score / DATA.questions.length * 100);
+  $("scorePct").textContent = pct + "%";
+  $("resultTitle").textContent = "Lekcija 6 • završen test";
+  let msg = "";
+  if(pct >= 90) msg = "Odlično! Veoma dobro poznaješ gradivo Lekcije 6.";
+  else if(pct >= 75) msg = "Vrlo dobro! Ponovi još nekoliko primera sa dass, ob i pridevskim nastavcima.";
+  else if(pct >= 60) msg = "Dobro, ali ponovi red reči u zavisnim rečenicama i nastavke prideva.";
+  else msg = "Preporuka: ponovi Lekciju 6 i uradi test ponovo.";
+  $("resultText").textContent = `${score} od ${DATA.questions.length} tačnih odgovora. ${msg}`;
+  show("result");
+}
+$("startBtn").onclick = startQuiz;
+$("backBtn").onclick = () => show("home");
+$("homeBtn").onclick = () => show("home");
+$("retryBtn").onclick = startQuiz;
+$("nextBtn").onclick = () => {
+  if(!answered) return;
+  if(index < DATA.questions.length - 1){ index++; render(); }
+  else finish();
+};
+</script>
+</body>
+</html>
