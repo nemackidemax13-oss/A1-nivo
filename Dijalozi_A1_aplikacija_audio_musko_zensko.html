@@ -79,15 +79,22 @@ function pickGermanVoice(kind){
   const name=v=>(v.name||'').toLowerCase();
 
   const femaleHints=['anna','katja','helena','vicki','petra','female','frau','marlene','amala'];
-  const maleHints=['conrad','markus','male','mann','stefan','hans','martin','klaus'];
+  const maleHints=['conrad','markus','male','mann','stefan','hans','martin','klaus','bernd','heinz','ralf','dieter','german male','de-de male'];
 
   const hints=kind==='female'?femaleHints:kind==='male'?maleHints:[];
   let found=de.find(v=>hints.some(h=>name(v).includes(h)));
   if(found) return found;
 
   // Ako sistem nema jasno označene polove, koristi različite nemačke glasove.
-  if(kind==='female') return de[0]||null;
-  if(kind==='male') return de[1]||de[0]||null;
+  if(kind==='female'){
+    const v=de[0]||null;
+    pickGermanVoice._femaleVoice=v;
+    return v;
+  }
+  if(kind==='male'){
+    const different=de.find(v=>v!==pickGermanVoice._femaleVoice);
+    return different||de[1]||de[0]||null;
+  }
   return de[0]||null;
 }
 
@@ -98,7 +105,7 @@ function speakerProfile(line){
   if(line.role==='A'){
     return {kind:'female',rate:.88,pitch:1.06};
   }
-  return {kind:'male',rate:.86,pitch:.92};
+  return {kind:'male',rate:.84,pitch:.62};
 }
 
 function renderTopics(){
