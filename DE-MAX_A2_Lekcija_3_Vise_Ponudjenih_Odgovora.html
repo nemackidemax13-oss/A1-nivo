@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DE-MAX A2 • Lekcija 3 • Više ponuđenih odgovora</title>
+<style>
+  :root{
+    --blue:#0a3f9c;
+    --blue2:#0b62d6;
+    --blue3:#eaf4ff;
+    --ink:#10233f;
+    --muted:#667892;
+    --line:#d9e8f8;
+    --ok:#18a558;
+    --bad:#df3f4c;
+    --gold:#f5c64b;
+    --white:#fff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 90% 5%, rgba(54,143,255,.18), transparent 26%),
+      radial-gradient(circle at 8% 92%, rgba(30,111,226,.14), transparent 28%),
+      linear-gradient(180deg,#eef7ff 0%,#f9fcff 42%,#edf6ff 100%);
+  }
+  .wrap{width:min(940px,94vw);margin:0 auto;padding:22px 0 46px}
+  .brandbar{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    background:linear-gradient(135deg,#07357f,#0b62d6);
+    color:#fff;border-radius:24px;padding:16px 18px;
+    box-shadow:0 14px 34px rgba(10,63,156,.24);
+    border:1px solid rgba(255,255,255,.22);
+  }
+  .logo{
+    display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:.8px;
+    font-size:clamp(21px,4vw,30px)
+  }
+  .logo-badge{
+    width:44px;height:44px;border-radius:14px;background:#fff;color:var(--blue);
+    display:grid;place-items:center;font-weight:1000;box-shadow:inset 0 0 0 2px rgba(10,63,156,.08)
+  }
+  .pill{
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.27);
+    padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800;white-space:nowrap
+  }
+  .card{
+    background:rgba(255,255,255,.95);border:1px solid #d6e8fb;border-radius:28px;
+    box-shadow:0 18px 48px rgba(31,82,138,.13);
+    overflow:hidden;margin-top:18px
+  }
+  .hero{padding:34px 30px 30px;text-align:center}
+  .eyebrow{
+    color:var(--blue2);font-size:13px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase
+  }
+  h1{margin:8px 0 10px;font-size:clamp(34px,7vw,58px);line-height:1.03;color:#0b3e92}
+  .lead{
+    max-width:720px;margin:0 auto;color:#516781;font-size:clamp(15px,2.6vw,18px);line-height:1.65
+  }
+  .topics{
+    display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:22px 0 2px
+  }
+  .topic{
+    background:#eff7ff;border:1px solid #cde2fa;color:#0a4aa8;border-radius:999px;
+    padding:9px 13px;font-weight:850;font-size:13px
+  }
+  .stats{
+    margin:28px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:640px
+  }
+  .stat{background:#f6fbff;border:1px solid var(--line);border-radius:18px;padding:14px 10px}
+  .stat b{display:block;color:var(--blue);font-size:22px}.stat span{font-size:12px;color:#6b7e97}
+  button{
+    border:0;cursor:pointer;font:inherit;font-weight:900;transition:.2s ease;
+  }
+  .primary{
+    margin-top:26px;background:linear-gradient(135deg,#0a3f9c,#0d6ce7);color:white;
+    border-radius:16px;padding:15px 24px;min-width:220px;
+    box-shadow:0 10px 24px rgba(11,98,214,.26)
+  }
+  .primary:hover{transform:translateY(-1px);box-shadow:0 13px 27px rgba(11,98,214,.32)}
+  .quiz{display:none}
+  .quiz-head{
+    padding:20px 22px 14px;border-bottom:1px solid var(--line);background:#fbfdff
+  }
+  .qtop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .qcount{font-weight:900;color:var(--blue)}
+  .scorebox{font-size:13px;font-weight:850;color:#54708f}
+  .progress{height:9px;background:#e7f0fa;border-radius:20px;overflow:hidden;margin-top:13px}
+  .progress > div{height:100%;width:0;background:linear-gradient(90deg,#0a3f9c,#37a0ff);transition:.35s ease}
+  .qbody{padding:25px 22px 23px}
+  .tag{
+    display:inline-flex;align-items:center;gap:7px;background:#eaf4ff;color:#0a4aa8;
+    border:1px solid #cfe4fb;padding:7px 10px;border-radius:999px;font-weight:850;font-size:12px
+  }
+  .question{
+    font-size:clamp(21px,4vw,29px);line-height:1.35;font-weight:900;margin:16px 0 18px;color:#132947
+  }
+  .options{display:grid;gap:11px}
+  .option{
+    width:100%;text-align:left;background:#fff;border:2px solid #dce9f7;border-radius:17px;
+    padding:15px 16px;color:#203653;display:flex;gap:12px;align-items:flex-start
+  }
+  .option:hover{border-color:#91bff2;background:#f8fbff}
+  .letter{
+    flex:0 0 32px;height:32px;border-radius:10px;background:#edf5fe;color:#0a55b8;
+    display:grid;place-items:center;font-weight:950
+  }
+  .option.correct{border-color:#73d5a0;background:#eefbf4;color:#12613a}
+  .option.wrong{border-color:#ef9aa3;background:#fff2f3;color:#8f2731}
+  .option.disabled{pointer-events:none}
+  .feedback{
+    display:none;margin-top:16px;border-radius:17px;padding:15px 16px;line-height:1.55;font-size:14px
+  }
+  .feedback.ok{display:block;background:#effaf4;border:1px solid #bde8ce;color:#155c39}
+  .feedback.no{display:block;background:#fff4f5;border:1px solid #f0c4c9;color:#7a2b35}
+  .feedback b{display:block;margin-bottom:4px}
+  .nav{
+    margin-top:18px;display:flex;justify-content:flex-end
+  }
+  .next{
+    display:none;background:#0a4aa8;color:#fff;border-radius:14px;padding:13px 19px
+  }
+  .result{display:none;padding:34px 28px;text-align:center}
+  .circle{
+    width:148px;height:148px;border-radius:50%;margin:8px auto 18px;
+    display:grid;place-items:center;background:conic-gradient(#0b62d6 var(--p,0%),#e8f1fb 0);
+    position:relative
+  }
+  .circle:after{
+    content:"";position:absolute;width:116px;height:116px;border-radius:50%;background:#fff
+  }
+  .circle strong{position:relative;z-index:2;font-size:30px;color:#0a3f9c}
+  .result h2{font-size:32px;margin:4px 0 8px;color:#0a3f9c}
+  .result p{color:#60748e;line-height:1.55}
+  .result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .secondary{background:#eef6ff;color:#0a4aa8;border:1px solid #cfe1f6;border-radius:14px;padding:13px 18px}
+  .footer{text-align:center;color:#6f8198;font-size:12px;margin-top:16px}
+  .mini{font-size:12px;color:#70859f;margin-top:10px}
+  @media(max-width:620px){
+    .wrap{width:min(96vw,560px);padding-top:10px}
+    .brandbar{border-radius:18px;padding:13px}
+    .pill{display:none}
+    .card{border-radius:22px;margin-top:12px}
+    .hero{padding:28px 17px 25px}
+    .stats{gap:7px}.stat{padding:12px 7px}.stat b{font-size:18px}
+    .quiz-head,.qbody{padding-left:15px;padding-right:15px}
+    .option{padding:14px 13px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar">
+    <div class="logo"><div class="logo-badge">D</div><span>DE-MAX</span></div>
+    <div class="pill">A2 • LEKCIJA 3</div>
+  </div>
+
+  <section id="intro" class="card hero">
+    <div class="eyebrow">A2 • LEKCIJA 3</div>
+    <h1>Više ponuđenih odgovora</h1>
+    <p class="lead">
+      Vežbanje prema materijalu 3. lekcije: <b>sollten</b> u Konjunktivu II,
+      veznik <b>deshalb</b>, povratne zamenice u akuzativu i osnovni rečnik iz kuhinje.
+      Izaberi tačan odgovor i odmah proveri objašnjenje.
+    </p>
+    <div class="topics">
+      <span class="topic">sollte / solltest / sollten</span>
+      <span class="topic">deshalb</span>
+      <span class="topic">mich / dich / sich / uns / euch</span>
+      <span class="topic">Küche • Wortschatz</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>24</b><span>pitanja</span></div>
+      <div class="stat"><b>A2</b><span>nivo</span></div>
+      <div class="stat"><b>4</b><span>odgovora</span></div>
+    </div>
+    <button class="primary" onclick="startQuiz()">Pokreni test</button>
+    <div class="mini">De-Max Deutsch • plavo-beli dizajn • automatsko bodovanje</div>
+  </section>
+
+  <section id="quiz" class="card quiz">
+    <div class="quiz-head">
+      <div class="qtop">
+        <div id="qcount" class="qcount">Pitanje 1 / 24</div>
+        <div id="scorebox" class="scorebox">0 bodova</div>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+    </div>
+    <div class="qbody">
+      <span id="tag" class="tag">GRAMATIKA</span>
+      <div id="question" class="question"></div>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback"></div>
+      <div class="nav"><button id="nextBtn" class="next" onclick="nextQuestion()">Sledeće pitanje →</button></div>
+    </div>
+  </section>
+
+  <section id="result" class="card result">
+    <div id="circle" class="circle"><strong id="percent">0%</strong></div>
+    <h2>Test je završen</h2>
+    <p id="resultText"></p>
+    <div class="result-actions">
+      <button class="primary" onclick="restartQuiz()">Ponovi test</button>
+      <button class="secondary" onclick="goHome()">Nazad na početak</button>
+    </div>
+  </section>
+
+  <div class="footer">DE-MAX Tutin • A2 • Lekcija 3</div>
+</div>
+
+<script>
+const questions = [
+  {
+    tag:"SOLLEN • KONJUNKTIV II",
+    q:"Du ___ mehr Wasser trinken.",
+    a:["sollte","solltest","solltet","sollten"], c:1,
+    e:"Uz „du“ ide oblik „solltest“: Du solltest mehr Wasser trinken."
+  },
+  {
+    tag:"SOLLEN • KONJUNKTIV II",
+    q:"Wir ___ früher schlafen gehen.",
+    a:["sollte","solltest","sollten","solltet"], c:2,
+    e:"Uz „wir“ ide „sollten“."
+  },
+  {
+    tag:"SOLLEN • KONJUNKTIV II",
+    q:"Ihr ___ jeden Tag Deutsch sprechen.",
+    a:["sollten","solltet","solltest","sollte"], c:1,
+    e:"Uz „ihr“ ide „solltet“."
+  },
+  {
+    tag:"SOLLEN • KONJUNKTIV II",
+    q:"Er ___ nicht so viel Kaffee trinken.",
+    a:["solltet","sollten","sollte","solltest"], c:2,
+    e:"Uz „er/sie/es“ ide „sollte“."
+  },
+  {
+    tag:"SOLLEN • KONJUNKTIV II",
+    q:"Kinder, ihr ___ mehr lernen.",
+    a:["sollte","solltet","sollten","solltest"], c:1,
+    e:"Direktno obraćanje množini „ihr“ → „solltet“."
+  },
+  {
+    tag:"SOLLEN • ZNAČENJE",
+    q:"Koja rečenica znači: „Trebalo bi da ranije spavaš“?",
+    a:[
+      "Du solltest früher schlafen.",
+      "Du schläfst gestern früh.",
+      "Du musstest früher schlafen.",
+      "Du willst früher schlafen."
+    ], c:0,
+    e:"Za savet/preporuku koristimo „solltest“."
+  },
+  {
+    tag:"DESHALB • RED REČI",
+    q:"Peter ist krank. Deshalb ___ er zum Arzt.",
+    a:["geht","er geht","gehen","ginge"], c:0,
+    e:"Kada „deshalb“ stoji na 1. poziciji, glagol je odmah na 2. poziciji: Deshalb geht er..."
+  },
+  {
+    tag:"DESHALB • RED REČI",
+    q:"Ich bin erkältet. Ich ___ deshalb im Bett.",
+    a:["deshalb bleibe","bleibe","bleiben","bin bleiben"], c:1,
+    e:"Ako je „deshalb“ na 3. poziciji: Ich bleibe deshalb im Bett."
+  },
+  {
+    tag:"DESHALB • ZNAČENJE",
+    q:"Es regnet draußen. ___ nehme ich einen Regenschirm.",
+    a:["Weil","Trotzdem","Deshalb","Dass"], c:2,
+    e:"„Deshalb“ znači „zato / zbog toga“ i uvodi posledicu."
+  },
+  {
+    tag:"DESHALB • RED REČI",
+    q:"Mein Auto ist kaputt. Deshalb ___ ich mit dem Bus.",
+    a:["ich fahre","fahre","fahren","bin fahren"], c:1,
+    e:"Posle „deshalb“ dolazi glagol: Deshalb fahre ich..."
+  },
+  {
+    tag:"DESHALB • SMISAO",
+    q:"Ich habe Hunger. Welche Fortsetzung passt?",
+    a:[
+      "Deshalb esse ich eine Pizza.",
+      "Deshalb lerne ich Deutsch.",
+      "Deshalb nehme ich einen Regenschirm.",
+      "Deshalb schlafe ich im Bus."
+    ], c:0,
+    e:"Glad je razlog, a jedenje pice je logična posledica."
+  },
+  {
+    tag:"DESHALB • SMISAO",
+    q:"Ich lerne viel Deutsch. Welche Fortsetzung passt?",
+    a:[
+      "Deshalb spreche ich besser Deutsch.",
+      "Deshalb ist mein Auto kaputt.",
+      "Deshalb regnet es.",
+      "Deshalb kaufe ich einen Kühlschrank."
+    ], c:0,
+    e:"Mnogo učenja vodi boljem govoru nemačkog."
+  },
+  {
+    tag:"REFLEXIVPRONOMEN",
+    q:"Ich interessiere ___ für Musik.",
+    a:["dich","sich","mich","uns"], c:2,
+    e:"Uz „ich“ povratna zamenica u akuzativu je „mich“."
+  },
+  {
+    tag:"REFLEXIVPRONOMEN",
+    q:"Wir treffen ___ heute im Café.",
+    a:["uns","euch","mich","sich"], c:0,
+    e:"Uz „wir“ ide „uns“."
+  },
+  {
+    tag:"REFLEXIVPRONOMEN",
+    q:"Du konzentrierst ___ nicht gut.",
+    a:["euch","dich","sich","mich"], c:1,
+    e:"Uz „du“ ide „dich“."
+  },
+  {
+    tag:"REFLEXIVPRONOMEN",
+    q:"Anna freut ___ über die Nachricht.",
+    a:["mich","uns","euch","sich"], c:3,
+    e:"Uz „Anna / sie“ ide „sich“."
+  },
+  {
+    tag:"REFLEXIVPRONOMEN",
+    q:"Ihr freut ___ auf die Reise.",
+    a:["dich","euch","uns","sich"], c:1,
+    e:"Uz „ihr“ ide „euch“."
+  },
+  {
+    tag:"REFLEXIVE VERBEN",
+    q:"Koja rečenica je pravilna?",
+    a:[
+      "Ich dusche mich jeden Morgen.",
+      "Ich dusche dich jeden Morgen.",
+      "Ich mich dusche jeden Morgen.",
+      "Ich duschen mich jeden Morgen."
+    ], c:0,
+    e:"Pravilno: subjekat + glagol + povratna zamenica."
+  },
+  {
+    tag:"REFLEXIVE VERBEN",
+    q:"Koja rečenica je pravilna?",
+    a:[
+      "Wir entspannen sich am Wochenende.",
+      "Wir entspannen uns am Wochenende.",
+      "Wir uns entspannen am Wochenende.",
+      "Wir entspanne uns am Wochenende."
+    ], c:1,
+    e:"Uz „wir“ ide „uns“, a glagol u množini je „entspannen“."
+  },
+  {
+    tag:"REFLEXIVE VERBEN",
+    q:"Ich kann ___ nicht konzentrieren.",
+    a:["mich","dich","sich","euch"], c:0,
+    e:"Kod modalnog glagola: Ich kann mich nicht konzentrieren."
+  },
+  {
+    tag:"KÜCHE • WORTSCHATZ",
+    q:"Kako se na nemačkom kaže „kašika“?",
+    a:["die Gabel","das Messer","der Löffel","der Teller"], c:2,
+    e:"„Kašika“ = der Löffel."
+  },
+  {
+    tag:"KÜCHE • WORTSCHATZ",
+    q:"Kako se na nemačkom kaže „tiganj“?",
+    a:["die Pfanne","der Topf","die Tasse","die Reibe"], c:0,
+    e:"„Tiganj“ = die Pfanne."
+  },
+  {
+    tag:"KÜCHE • WORTSCHATZ",
+    q:"Koja reč znači „frižider“?",
+    a:["der Teller","der Kühlschrank","die Schüssel","die Flasche"], c:1,
+    e:"„Frižider“ = der Kühlschrank."
+  },
+  {
+    tag:"KÜCHE • WORTSCHATZ",
+    q:"Koja reč znači „činija / zdela“?",
+    a:["die Schüssel","die Tasse","die Gabel","das Glas"], c:0,
+    e:"„Činija / zdela“ = die Schüssel."
+  }
+];
+
+let index=0, score=0, locked=false;
+
+function startQuiz(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("result").style.display="none";
+  document.getElementById("quiz").style.display="block";
+  index=0;score=0;render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function render(){
+  locked=false;
+  const q=questions[index];
+  document.getElementById("qcount").textContent=`Pitanje ${index+1} / ${questions.length}`;
+  document.getElementById("scorebox").textContent=`${score} ${score===1?"bod":"bodova"}`;
+  document.getElementById("bar").style.width=`${((index)/questions.length)*100}%`;
+  document.getElementById("tag").textContent=q.tag;
+  document.getElementById("question").textContent=q.q;
+  const box=document.getElementById("options");
+  box.innerHTML="";
+  ["A","B","C","D"].forEach((l,i)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.innerHTML=`<span class="letter">${l}</span><span>${q.a[i]}</span>`;
+    b.onclick=()=>choose(i,b);
+    box.appendChild(b);
+  });
+  const fb=document.getElementById("feedback");
+  fb.className="feedback";fb.innerHTML="";
+  document.getElementById("nextBtn").style.display="none";
+}
+function choose(i,btn){
+  if(locked)return;
+  locked=true;
+  const q=questions[index];
+  const opts=[...document.querySelectorAll(".option")];
+  opts.forEach(x=>x.classList.add("disabled"));
+  opts[q.c].classList.add("correct");
+  const fb=document.getElementById("feedback");
+  if(i===q.c){
+    score++;
+    btn.classList.add("correct");
+    fb.className="feedback ok";
+    fb.innerHTML=`<b>Tačno ✓</b>${q.e}`;
+  }else{
+    btn.classList.add("wrong");
+    fb.className="feedback no";
+    fb.innerHTML=`<b>Netačno</b>${q.e}`;
+  }
+  document.getElementById("scorebox").textContent=`${score} ${score===1?"bod":"bodova"}`;
+  const n=document.getElementById("nextBtn");
+  n.style.display="inline-block";
+  n.textContent=index===questions.length-1 ? "Prikaži rezultat →" : "Sledeće pitanje →";
+}
+function nextQuestion(){
+  if(index<questions.length-1){index++;render();}
+  else finish();
+}
+function finish(){
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="block";
+  const p=Math.round(score/questions.length*100);
+  document.getElementById("percent").textContent=p+"%";
+  document.getElementById("circle").style.setProperty("--p",p+"%");
+  let msg="";
+  if(p>=90) msg="Odlično! Veoma sigurno vladaš sadržajem 3. lekcije.";
+  else if(p>=75) msg="Vrlo dobro! Ponovi samo nekoliko detalja i biće još bolje.";
+  else if(p>=60) msg="Dobro! Vredi ponoviti red reči uz „deshalb“ i povratne zamenice.";
+  else msg="Ponovi lekciju i uradi test još jednom. Fokus: sollten, deshalb i Reflexivpronomen.";
+  document.getElementById("resultText").innerHTML=`Osvojio/la si <b>${score} od ${questions.length}</b> bodova.<br>${msg}`;
+  document.getElementById("bar").style.width="100%";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function restartQuiz(){startQuiz()}
+function goHome(){
+  document.getElementById("result").style.display="none";
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("intro").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
