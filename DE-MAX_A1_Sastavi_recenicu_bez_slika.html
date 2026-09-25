@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b40018">
+<title>DE-MAX A1 • Sastavi rečenicu</title>
+<style>
+:root{--red:#b40018;--red2:#e10623;--ink:#171717;--muted:#6b7280;--line:#e5e7eb;--bg:#f4f5f7;--ok:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}.app{width:min(100%,520px);min-height:100dvh;margin:auto;background:#fff;box-shadow:0 0 35px #0001;overflow:hidden}
+.topbar{padding:18px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff}.brand{font-weight:950;font-size:24px}.sub{font-size:13px;opacity:.92;margin-top:3px}
+.content{padding:16px}.hero{border:1px solid var(--line);border-radius:20px;padding:16px;background:#fff;box-shadow:0 8px 25px #0000000a}.hero h1{font-size:23px;margin:0 0 6px}.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+.progressWrap{height:9px;background:#eef0f2;border-radius:999px;overflow:hidden;margin:16px 0}.progress{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));width:0;transition:.25s}
+.card{border:1px solid var(--line);border-radius:20px;padding:18px;background:#fff;box-shadow:0 8px 25px #0000000a}.count{font-size:12px;font-weight:900;color:var(--red);text-transform:uppercase}.task{font-size:17px;font-weight:850;margin:10px 0 6px}.translation{font-size:13px;color:var(--muted);margin-bottom:16px}
+.words,.answer{display:flex;gap:8px;flex-wrap:wrap;min-height:58px;border:1px dashed #d1d5db;border-radius:15px;padding:11px;background:#fafafa}
+.answer{margin-top:12px;background:#fff}.word{border:0;border-radius:11px;padding:9px 11px;background:#f1f2f4;font-weight:850;box-shadow:0 2px 6px #0000000c}.answer .word{background:#fff1f2;color:#9f0014}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.btn{border:0;border-radius:13px;padding:13px;font-weight:900}.check{background:var(--red);color:#fff}.reset{background:#f3f4f6}.next{grid-column:1/-1;background:#171717;color:#fff}
+.feedback{margin-top:12px;padding:12px;border-radius:12px;font-weight:800;font-size:14px}.ok{background:#ecfdf5;color:#166534}.bad{background:#fef2f2;color:#991b1b}.hidden{display:none}
+.complete{text-align:center}.complete .big{font-size:54px}.complete h2{margin:8px 0}.complete p{color:var(--muted)}.footer{text-align:center;padding:16px;color:#aaa;font-size:11px}
+@media(min-width:700px){body{padding:24px}.app{min-height:calc(100dvh - 48px);border-radius:28px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar"><div class="brand">DE-MAX</div><div class="sub">A1 • Sastavi rečenicu</div></header>
+<main class="content">
+<section class="hero"><h1>Sastavi rečenicu</h1><p>Dodirni reči pravilnim redosledom i sastavi nemačku rečenicu. Ova verzija je bez slika.</p></section>
+<div class="progressWrap"><div id="progress" class="progress"></div></div>
+<section id="exercise" class="card">
+<div id="count" class="count"></div>
+<div class="task">Sastavi pravilnu rečenicu:</div>
+<div id="translation" class="translation"></div>
+<div id="words" class="words"></div>
+<div id="answer" class="answer"></div>
+<div class="actions">
+<button id="check" class="btn check">Proveri</button>
+<button id="reset" class="btn reset">Ponovo</button>
+<button id="next" class="btn next">Sledeća rečenica →</button>
+</div>
+<div id="feedback" class="feedback hidden"></div>
+</section>
+<section id="complete" class="card complete hidden">
+<div class="big">🏆</div><h2>Odlično!</h2><p>Završio/la si sve rečenice.</p>
+<button id="restart" class="btn check">Počni ponovo</button>
+</section>
+</main>
+<div class="footer">DE-MAX • Nemački jezik A1</div>
+</div>
+<script>
+const DATA=[
+{de:"Anna wohnt in Berlin.",sr:"Ana stanuje u Berlinu."},
+{de:"Marko kommt aus Serbien.",sr:"Marko dolazi iz Srbije."},
+{de:"Lena lernt jeden Tag Deutsch.",sr:"Lena svakog dana uči nemački."},
+{de:"Emir arbeitet in einem Hotel.",sr:"Emir radi u hotelu."},
+{de:"Sara hat einen Bruder.",sr:"Sara ima jednog brata."},
+{de:"Lukas spielt gern Fußball.",sr:"Lukas rado igra fudbal."},
+{de:"Mia trinkt am Morgen Kaffee.",sr:"Mia ujutru pije kafu."},
+{de:"Amir kauft Brot und Milch.",sr:"Amir kupuje hleb i mleko."},
+{de:"Nina fährt mit dem Bus.",sr:"Nina ide autobusom."},
+{de:"David liest ein interessantes Buch.",sr:"David čita zanimljivu knjigu."},
+{de:"Lea geht heute zur Schule.",sr:"Lea danas ide u školu."},
+{de:"Omar wohnt mit seiner Familie.",sr:"Omar stanuje sa svojom porodicom."},
+{de:"Sofia kocht heute eine Suppe.",sr:"Sofija danas kuva supu."},
+{de:"Daniel hat zwei Kinder.",sr:"Daniel ima dvoje dece."},
+{de:"Mila hört gern Musik.",sr:"Mila rado sluša muziku."},
+{de:"Leon besucht am Sonntag seine Eltern.",sr:"Leon u nedelju posećuje roditelje."},
+{de:"Amina braucht eine neue Jacke.",sr:"Amina treba novu jaknu."},
+{de:"Jonas macht am Wochenende Sport.",sr:"Jonas se vikendom bavi sportom."},
+{de:"Elena arbeitet von Montag bis Freitag.",sr:"Elena radi od ponedeljka do petka."},
+{de:"Samir spricht Deutsch und Englisch.",sr:"Samir govori nemački i engleski."}
+];
+let index=0,selected=[];
+const el=id=>document.getElementById(id);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function tokens(s){return s.replace(/[.!?]$/,"").split(" ")}
+function render(){
+ const item=DATA[index];selected=[];
+ el("count").textContent=`Rečenica ${index+1} od ${DATA.length}`;
+ el("translation").textContent=item.sr;
+ el("progress").style.width=`${index/DATA.length*100}%`;
+ el("feedback").className="feedback hidden";el("feedback").textContent="";
+ el("answer").innerHTML="";
+ const shuffled=shuffle(tokens(item.de));
+ el("words").innerHTML="";
+ shuffled.forEach((w,i)=>{
+  const b=document.createElement("button");b.className="word";b.textContent=w;b.dataset.id=i;
+  b.onclick=()=>{selected.push({w,id:i});b.disabled=true;b.style.opacity=".35";drawAnswer(shuffled)};
+  el("words").appendChild(b);
+ });
+}
+function drawAnswer(shuffled){
+ el("answer").innerHTML="";
+ selected.forEach((x,pos)=>{
+  const b=document.createElement("button");b.className="word";b.textContent=x.w;
+  b.onclick=()=>{selected.splice(pos,1);document.querySelector(`#words [data-id="${x.id}"]`).disabled=false;document.querySelector(`#words [data-id="${x.id}"]`).style.opacity="1";drawAnswer(shuffled)};
+  el("answer").appendChild(b);
+ });
+}
+function norm(s){return s.toLowerCase().replace(/[.!?]/g,"").replace(/\s+/g," ").trim()}
+el("check").onclick=()=>{
+ const got=selected.map(x=>x.w).join(" "),right=DATA[index].de;
+ if(norm(got)===norm(right)){el("feedback").className="feedback ok";el("feedback").textContent="✓ Tačno! "+right}
+ else{el("feedback").className="feedback bad";el("feedback").textContent="Nije tačno. Pokušaj ponovo."}
+};
+el("reset").onclick=render;
+el("next").onclick=()=>{
+ if(index<DATA.length-1){index++;render()}
+ else{el("exercise").classList.add("hidden");el("complete").classList.remove("hidden");el("progress").style.width="100%"}
+};
+el("restart").onclick=()=>{index=0;el("complete").classList.add("hidden");el("exercise").classList.remove("hidden");render()};
+render();
+</script>
+</body></html>
