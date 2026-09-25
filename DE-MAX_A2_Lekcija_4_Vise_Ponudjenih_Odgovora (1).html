@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>DE-MAX A2 • Lekcija 4</title>
+<style>
+:root{
+  --blue:#0756c9;
+  --blue2:#0c73ef;
+  --navy:#08285f;
+  --sky:#eaf5ff;
+  --line:#cfe5ff;
+  --text:#102544;
+  --muted:#6f809b;
+  --green:#16a34a;
+  --red:#e53935;
+  --yellow:#f6c344;
+  --shadow:0 18px 50px rgba(20,80,150,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:
+radial-gradient(circle at 10% 0%,#dff1ff 0,transparent 30%),
+radial-gradient(circle at 90% 10%,#e7f3ff 0,transparent 28%),
+linear-gradient(180deg,#f8fcff,#eef7ff 60%,#f7fbff)}
+body{display:flex;justify-content:center}
+.app{width:min(100%,760px);min-height:100vh;padding:18px 16px 34px}
+.brand{display:flex;align-items:center;gap:12px;margin:4px 2px 22px}
+.logo{font-weight:1000;letter-spacing:-2px;font-size:34px;line-height:1;color:#ef1d22;text-shadow:0 1px 0 #fff}
+.logo span{color:#111}
+.logo small{display:block;color:#f5be00;font-size:12px;letter-spacing:4px;margin-left:37px;margin-top:3px}
+.brandTag{margin-left:auto;background:#fff;border:1px solid #d8e8fb;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;color:#5f7190;box-shadow:0 6px 20px rgba(41,103,170,.08)}
+.hero,.quiz{background:rgba(255,255,255,.96);border:1px solid #d7e8fb;border-radius:28px;box-shadow:var(--shadow);overflow:hidden}
+.heroTop{padding:30px 24px 22px;background:
+linear-gradient(135deg,#0756c9 0%,#0d76ef 65%,#69b6ff 100%);color:#fff;position:relative}
+.heroTop:after{content:"";position:absolute;right:-36px;top:-52px;width:190px;height:190px;border:28px solid rgba(255,255,255,.12);border-radius:50%}
+.kicker{font-weight:900;letter-spacing:1.5px;font-size:13px;opacity:.92}
+h1{font-size:34px;line-height:1.03;margin:8px 0 10px;letter-spacing:-1.2px}
+.sub{font-size:15px;line-height:1.5;max-width:620px;color:#eaf5ff}
+.heroBody{padding:22px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:#eff7ff;color:#0a58c8;border:1px solid #cfe7ff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800}
+.start{appearance:none;border:0;width:100%;border-radius:17px;background:linear-gradient(135deg,#0756c9,#0a78ee);color:#fff;font-size:17px;font-weight:900;padding:16px;cursor:pointer;box-shadow:0 10px 22px rgba(0,99,220,.25)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{padding:13px 10px;border-radius:16px;background:#f7fbff;border:1px solid #dcecff;text-align:center}
+.stat b{display:block;color:#0b59c8;font-size:18px}.stat span{font-size:11px;color:#74839c;font-weight:700}
+.quiz{display:none}
+.quizHead{padding:18px 18px 14px;border-bottom:1px solid #e1edf9}
+.row{display:flex;align-items:center;gap:10px}
+.badge{font-size:12px;font-weight:900;color:#0b5ac8;background:#eaf5ff;border:1px solid #cce5ff;border-radius:999px;padding:7px 10px}
+.score{margin-left:auto;font-weight:900;color:#5e7292}
+.progress{height:9px;background:#eaf2fb;border-radius:999px;overflow:hidden;margin-top:12px}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,#0b5ed7,#1aa0ff);border-radius:inherit;transition:.25s}
+.quizBody{padding:22px}
+.topic{font-size:12px;font-weight:900;letter-spacing:.8px;color:#1680e9;text-transform:uppercase;margin-bottom:8px}
+.question{font-size:24px;line-height:1.25;font-weight:950;letter-spacing:-.5px;margin:0 0 18px}
+.answers{display:grid;gap:11px}
+.answer{width:100%;text-align:left;border:1.5px solid #d7e7f8;background:#fff;border-radius:16px;padding:14px 15px;font-size:16px;font-weight:800;color:#173355;cursor:pointer;transition:.16s;box-shadow:0 5px 16px rgba(17,81,150,.05)}
+.answer:hover{transform:translateY(-1px);border-color:#8fc7ff;background:#f7fbff}
+.answer.correct{border-color:#56c779;background:#ebfff1;color:#176e34}
+.answer.wrong{border-color:#ff8f8f;background:#fff1f1;color:#a32929}
+.answer.dim{opacity:.58}
+.feedback{min-height:54px;margin-top:14px;padding:13px 14px;border-radius:14px;background:#f7fbff;border:1px solid #e0edf9;color:#536985;line-height:1.45;font-size:14px}
+.next{margin-top:14px;width:100%;border:0;border-radius:16px;padding:15px;background:#08285f;color:#fff;font-size:16px;font-weight:900;cursor:pointer;display:none}
+.footerNote{text-align:center;color:#8190a7;font-size:11px;margin-top:16px}
+.result{text-align:center;padding:34px 22px}
+.result .circle{width:118px;height:118px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;background:linear-gradient(135deg,#eaf5ff,#fff);border:9px solid #0b66db;color:#0756c9;font-size:30px;font-weight:1000}
+.result h2{margin:0 0 8px;font-size:29px}.result p{color:#6c7f9d;line-height:1.5}
+.restart{border:0;border-radius:16px;background:#0b62d6;color:#fff;font-weight:900;padding:14px 20px;cursor:pointer;font-size:16px}
+@media(max-width:520px){
+  .app{padding:10px 10px 24px}.brand{margin-bottom:12px}.logo{font-size:28px}.brandTag{font-size:10px;padding:7px 9px}
+  .heroTop{padding:24px 18px 20px}h1{font-size:30px}.heroBody{padding:17px}.quizBody{padding:18px}
+  .question{font-size:21px}.answer{font-size:15px}.stats{gap:7px}.stat{padding:11px 6px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <div class="logo">DE-MAX <span></span><small>TUTIN</small></div>
+    <div class="brandTag">A2 • LEKCIJA 4</div>
+  </div>
+
+  <section class="hero" id="home">
+    <div class="heroTop">
+      <div class="kicker">DE-MAX DEUTSCH • A2 NIVO</div>
+      <h1>Više ponuđenih odgovora</h1>
+      <div class="sub">Lekcija 4 • Glagoli sa predlozima, <b>lassen</b>, pitanje <b>Woher?</b> sa <b>aus/von</b> i Konjunktiv II sa <b>könnte/könnten</b>.</div>
+    </div>
+    <div class="heroBody">
+      <div class="chips">
+        <span class="chip">Verben mit Präpositionen</span>
+        <span class="chip">lassen</span>
+        <span class="chip">aus / von + Dativ</span>
+        <span class="chip">könnte / könnten</span>
+      </div>
+      <button class="start" id="startBtn">Pokreni test</button>
+      <div class="stats">
+        <div class="stat"><b>24</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quiz" id="quiz">
+    <div class="quizHead">
+      <div class="row">
+        <span class="badge" id="counter">Pitanje 1 / 24</span>
+        <span class="score" id="score">0 bod.</span>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+    </div>
+    <div class="quizBody" id="quizBody">
+      <div class="topic" id="topic"></div>
+      <h2 class="question" id="question"></h2>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback">Izaberi jedan odgovor.</div>
+      <button class="next" id="nextBtn">Sledeće pitanje</button>
+    </div>
+  </section>
+
+  <div class="footerNote">De-Max Deutsch • A2 Lekcija 4</div>
+</div>
+
+<script>
+const Q = [
+ {t:"Verben mit Präpositionen",q:"Ich interessiere mich ___ Deutsch.",a:["an","für","mit","von"],c:1,e:"sich interessieren für + Akkusativ → Ich interessiere mich für Deutsch."},
+ {t:"Verben mit Präpositionen",q:"Ich warte ___ den Bus.",a:["auf","bei","zu","nach"],c:0,e:"warten auf + Akkusativ → auf den Bus."},
+ {t:"Verben mit Präpositionen",q:"Ich denke ___ die Prüfung.",a:["von","an","mit","bei"],c:1,e:"denken an + Akkusativ → an die Prüfung."},
+ {t:"Verben mit Präpositionen",q:"Ich spreche ___ dem Lehrer.",a:["über","für","mit","um"],c:2,e:"sprechen mit + Dativ → mit dem Lehrer."},
+ {t:"Verben mit Präpositionen",q:"Ich träume ___ einer Reise nach Berlin.",a:["von","auf","an","zu"],c:0,e:"träumen von + Dativ → von einer Reise."},
+ {t:"Verben mit Präpositionen",q:"Ich bitte dich ___ Hilfe.",a:["bei","um","von","nach"],c:1,e:"bitten um + Akkusativ → um Hilfe."},
+
+ {t:"lassen + Infinitiv",q:"Ich ___ mein Fahrrad reparieren.",a:["lasse","lässt","lassen","lasst"],c:0,e:"ich → lasse. Drugi glagol stoji u infinitivu na kraju."},
+ {t:"lassen + Infinitiv",q:"Du ___ dir die Haare schneiden.",a:["lassen","lässt","lasse","lasst"],c:1,e:"du → lässt. Promena a → ä u 2. licu jednine."},
+ {t:"lassen + Infinitiv",q:"Wir ___ die Wohnung putzen.",a:["lässt","lasst","lassen","lasse"],c:2,e:"wir → lassen."},
+ {t:"lassen + Infinitiv",q:"Koja rečenica je tačna?",a:["Ich lasse reparieren das Auto.","Ich das Auto lasse reparieren.","Ich lasse das Auto reparieren.","Ich reparieren lasse das Auto."],c:2,e:"Kod lassen konstrukcije: konjugovani lassen je na 2. mestu, infinitiv na kraju."},
+ {t:"lassen + Infinitiv",q:"Ich muss mir eine Karte ___ lassen.",a:["ausstellen","stellt aus","ausgestellt","ausstelle"],c:0,e:"Uz modalni glagol i lassen: ... eine Karte ausstellen lassen."},
+ {t:"lassen + Infinitiv",q:"Er lässt die Taschen ___.",a:["getragen","tragen","trägt","trug"],c:1,e:"Posle lassen ide infinitiv: tragen."},
+
+ {t:"Woher? • aus/von + Dativ",q:"Sie kommt ___ Supermarkt.",a:["aus dem","aus den","von der","von den"],c:0,e:"aus + Dativ → aus dem Supermarkt."},
+ {t:"Woher? • aus/von + Dativ",q:"Sie kommt ___ Post.",a:["aus dem","aus der","von dem","von den"],c:1,e:"die Post → Dativ: der → aus der Post."},
+ {t:"Woher? • aus/von + Dativ",q:"Sie kommt ___ Arzt.",a:["vom","aus der","von die","aus den"],c:0,e:"von + dem = vom → vom Arzt."},
+ {t:"Woher? • aus/von + Dativ",q:"Sie kommt ___ Schule.",a:["vom","von der","aus dem","aus den"],c:1,e:"von + Dativ, die Schule → von der Schule."},
+ {t:"Woher? • aus/von + Dativ",q:"Die Kette ist ___ Gold.",a:["vom","von dem","aus","aus dem"],c:2,e:"Za materijal se koristi aus bez člana: aus Gold."},
+ {t:"Woher? • aus/von + Dativ",q:"Koje pitanje odgovara rečenici „Ich komme aus Deutschland“?",a:["Wohin?","Wo?","Woher?","Wann?"],c:2,e:"Woher? pita odakle neko dolazi."},
+
+ {t:"Konjunktiv II • Vorschlag",q:"Ich ___ heute mehr Deutsch lernen.",a:["könnte","könntest","könnten","könntet"],c:0,e:"ich → könnte."},
+ {t:"Konjunktiv II • Vorschlag",q:"Du ___ mir bitte helfen.",a:["könnten","könntest","könnte","könntet"],c:1,e:"du → könntest."},
+ {t:"Konjunktiv II • Vorschlag",q:"Wir ___ am Wochenende spazieren gehen.",a:["könnte","könntest","könnten","könntet"],c:2,e:"wir → könnten."},
+ {t:"Konjunktiv II • Vorschlag",q:"Ihr ___ zusammen eine Übung machen.",a:["könntet","könnten","könnte","könntest"],c:0,e:"ihr → könntet."},
+ {t:"Konjunktiv II • Vorschlag",q:"Koja rečenica predstavlja predlog?",a:["Wir müssen zu Hause bleiben.","Wir könnten ins Kino gehen.","Wir gehen gestern ins Kino.","Wir wollen gegangen."],c:1,e:"Wir könnten ... je tipična konstrukcija za blag predlog."},
+ {t:"Konjunktiv II • Vorschlag",q:"Es ist schönes Wetter. – Wir könnten ___.",a:["spazieren gehen","gespaziert","spazieren gegangen","gehen spazieren könnten"],c:0,e:"Posle könnten infinitivska grupa ide na kraj: Wir könnten spazieren gehen."}
+];
+
+let idx=0, points=0, locked=false;
+const $=id=>document.getElementById(id);
+
+$("startBtn").onclick=()=>{
+  $("home").style.display="none";
+  $("quiz").style.display="block";
+  render();
+};
+
+function render(){
+  locked=false;
+  const x=Q[idx];
+  $("counter").textContent=`Pitanje ${idx+1} / ${Q.length}`;
+  $("score").textContent=`${points} bod.`;
+  $("bar").style.width=`${(idx/Q.length)*100}%`;
+  $("topic").textContent=x.t;
+  $("question").textContent=x.q;
+  $("feedback").textContent="Izaberi jedan odgovor.";
+  $("nextBtn").style.display="none";
+  const box=$("answers"); box.innerHTML="";
+  x.a.forEach((txt,i)=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=txt;
+    b.onclick=()=>choose(i,b);
+    box.appendChild(b);
+  });
+}
+function choose(i,btn){
+  if(locked)return;
+  locked=true;
+  const x=Q[idx];
+  const bs=[...document.querySelectorAll(".answer")];
+  bs.forEach((b,j)=>{
+    if(j===x.c)b.classList.add("correct");
+    else if(j===i)b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+  if(i===x.c){points++; $("feedback").innerHTML="✅ <b>Tačno!</b> "+x.e;}
+  else {$("feedback").innerHTML="❌ <b>Nije tačno.</b> "+x.e;}
+  $("score").textContent=`${points} bod.`;
+  $("bar").style.width=`${((idx+1)/Q.length)*100}%`;
+  $("nextBtn").style.display="block";
+  $("nextBtn").textContent=idx===Q.length-1 ? "Prikaži rezultat" : "Sledeće pitanje";
+}
+$("nextBtn").onclick=()=>{
+  idx++;
+  if(idx<Q.length) render(); else finish();
+};
+function finish(){
+  const pct=Math.round(points/Q.length*100);
+  $("quizBody").innerHTML=`
+    <div class="result">
+      <div class="circle">${pct}%</div>
+      <h2>Završen test</h2>
+      <p>Osvojili ste <b>${points} od ${Q.length}</b> poena.</p>
+      <button class="restart" onclick="location.reload()">Ponovi test</button>
+    </div>`;
+  $("counter").textContent="Rezultat";
+  $("score").textContent=`${points} / ${Q.length}`;
+  $("bar").style.width="100%";
+}
+</script>
+</body>
+</html>
