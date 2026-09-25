@@ -1,10 +1,485 @@
-<!doctype html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b55d4"><title>DE-MAX A2 • Lekcija 3</title><style>
-:root{--blue:#0b55d4;--blue2:#073b9e;--ink:#0f2240;--muted:#667892;--line:#dbeafe}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eaf4ff 0,#f8fbff 48%,#eef6ff 100%);color:var(--ink)}
-button{font:inherit;cursor:pointer}.app{width:min(100%,540px);min-height:100dvh;margin:auto;padding:18px 16px 30px}.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.logo{font-size:28px;font-weight:1000;letter-spacing:-1px;color:#e11d48}.logo span{color:var(--blue)}.badge{padding:8px 12px;border-radius:999px;background:#fff;color:var(--blue);border:1px solid var(--line);font-size:12px;font-weight:900;box-shadow:0 8px 24px rgba(11,85,212,.08)}
-.hero{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-radius:30px;padding:24px 22px;box-shadow:0 20px 45px rgba(11,85,212,.22);margin-bottom:16px}.hero h1{margin:0 0 8px;font-size:30px;line-height:1.08}.hero p{margin:0;line-height:1.5;font-size:14px;opacity:.96}.panel,.qcard{background:#fff;border:1px solid #d7e8ff;border-radius:24px;box-shadow:0 12px 35px rgba(11,85,212,.08)}.panel{padding:16px}.start,.primary{width:100%;border:0;border-radius:18px;padding:15px 18px;background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;font-size:16px;font-weight:900;box-shadow:0 12px 24px rgba(11,85,212,.18)}.primary:disabled{opacity:.45}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.stat{background:#f7fbff;border:1px solid #e4efff;border-radius:18px;padding:12px 8px;text-align:center}.stat b{display:block;font-size:20px;color:var(--blue)}.stat span{font-size:11px;color:var(--muted);font-weight:750}.topicstrip{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.topicstrip span{background:#edf5ff;color:var(--blue);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900}.hidden{display:none!important}.top{display:flex;gap:10px;align-items:center;margin-bottom:12px}.back{border:0;background:#fff;color:var(--blue);font-weight:900;border-radius:14px;padding:10px 12px;box-shadow:0 8px 20px rgba(11,85,212,.08)}.meta{flex:1}.meta b{display:block;font-size:15px}.meta span{font-size:12px;color:var(--muted)}.pill{display:inline-block;background:#edf5ff;color:var(--blue);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900}.progress{height:10px;background:#deebff;border-radius:999px;overflow:hidden;margin:10px 0 18px}.bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,var(--blue));transition:.25s}.qcard{padding:20px}.counter{color:var(--blue);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.q{font-size:22px;line-height:1.3;font-weight:900;margin:10px 0 16px}.opts{display:grid;gap:10px}.opt{width:100%;text-align:left;border:1px solid #dce9fb;background:#f8fbff;color:var(--ink);padding:14px 15px;border-radius:16px;font-size:16px;font-weight:760}.opt.correct{background:#ecfdf3;border-color:#86d8a4;color:#116b31}.opt.wrong{background:#fff1f1;border-color:#efaaaa;color:#a11d1d}.feedback{display:none;margin-top:14px;border-radius:16px;padding:14px 15px;background:#f4f8ff;border:1px solid #dbeafe;font-size:14px;line-height:1.5}.actions{display:flex;gap:10px;margin-top:14px}.result{text-align:center}.score{font-size:58px;font-weight:1000;color:#fff;letter-spacing:-3px;margin:8px 0 0}.result p{margin:0;line-height:1.55;opacity:.95}.footer{text-align:center;color:#8ca0bc;font-size:12px;margin-top:16px}@media(max-width:390px){.hero h1{font-size:26px}.q{font-size:20px}.app{padding:14px 12px 24px}}
-</style></head><body><div class="app"><div class="brand"><div class="logo">DE-<span>MAX</span></div><div class="badge">A2 • LEKCIJA 3</div></div>
-<section id="home"><div class="hero"><h1>Više ponuđenih odgovora</h1><p>Lekcija 3 • <b>sollten</b>, <b>deshalb</b>, povratne zamenice i kuhinjski vokabular.</p></div><div class="panel"><button class="start" id="startBtn">Pokreni test</button><div class="stats"><div class="stat"><b>24</b><span>pitanja</span></div><div class="stat"><b>A2</b><span>nivo</span></div><div class="stat"><b>4</b><span>odgovora</span></div></div><div class="topicstrip"><span>sollte</span><span>deshalb</span><span>Reflexivpronomen</span><span>Küche</span></div></div><div class="footer">De-Max Deutsch • A2 Lekcija 3</div></section>
-<section id="quiz" class="hidden"><div class="top"><button id="backBtn" class="back">←</button><div class="meta"><b>Lekcija 3</b><span>sollten • deshalb • Reflexivpronomen • Küche</span></div><div class="pill" id="liveScore">0 bod.</div></div><div class="progress"><div class="bar" id="bar"></div></div><div class="qcard"><div class="counter" id="counter"></div><div class="q" id="question"></div><div class="opts" id="options"></div><div class="feedback" id="feedback"></div><div class="actions"><button id="nextBtn" class="primary" disabled>Sledeće pitanje</button></div></div></section>
-<section id="result" class="hidden"><div class="hero result"><div class="pill">REZULTAT</div><div class="score" id="scorePct">0%</div><h2>Lekcija 3 • završen test</h2><p id="resultText"></p></div><div class="panel"><button id="retryBtn" class="primary">Ponovi test</button><div style="height:10px"></div><button id="homeBtn" class="back" style="width:100%">Nazad na početak</button></div></section></div>
-<script>const D=[["Du ___ mehr Wasser trinken.",["sollte","solltest","solltet","sollten"],1,"Uz „du“ ide „solltest“."],["Wir ___ früher schlafen gehen.",["sollte","solltest","sollten","solltet"],2,"Uz „wir“ ide „sollten“."],["Ihr ___ jeden Tag Deutsch sprechen.",["sollten","solltet","solltest","sollte"],1,"Uz „ihr“ ide „solltet“."],["Er ___ nicht so viel Kaffee trinken.",["solltet","sollten","sollte","solltest"],2,"Uz „er/sie/es“ ide „sollte“."],["Koja rečenica znači „Trebalo bi da ranije spavaš“?",["Du solltest früher schlafen.","Du schläfst früher.","Du musstest früher schlafen.","Du willst früher schlafen."],0,"Za savet koristimo „solltest“."],["Ich bin krank. ___ gehe ich zum Arzt.",["Weil","Deshalb","Wenn","Obwohl"],1,"„Deshalb“ znači „zato / zbog toga“."],["Es regnet. Deshalb ___ ich zu Hause.",["bleibe","ich bleibe","bleiben","blieb"],0,"Posle „deshalb“ glagol je na drugom mestu."],["Mein Auto ist kaputt. Deshalb ___ ich mit dem Bus.",["fahre","ich fahre","fahren","bin"],0,"Pravilno: Deshalb fahre ich mit dem Bus."],["Ich habe Hunger. Deshalb ___ ich eine Pizza.",["esse","ich esse","essen","isst"],0,"Posle „deshalb“ ide glagol: esse."],["Ich lerne viel. Deshalb ___ ich besser Deutsch.",["spreche","ich spreche","spricht","sprechen"],0,"Pravilno: Deshalb spreche ich besser Deutsch."],["Ich interessiere ___ für Musik.",["dich","sich","mich","uns"],2,"Uz „ich“ ide „mich“."],["Du freust ___ auf den Urlaub.",["mich","dich","sich","euch"],1,"Uz „du“ ide „dich“."],["Er erinnert ___ an die Schule.",["mich","dich","sich","uns"],2,"Uz „er“ ide „sich“."],["Wir treffen ___ heute im Café.",["uns","euch","mich","sich"],0,"Uz „wir“ ide „uns“."],["Ihr konzentriert ___ auf die Aufgabe.",["uns","euch","sich","dich"],1,"Uz „ihr“ ide „euch“."],["„der Löffel“ znači:",["kašika","viljuška","nož","čaša"],0,"der Löffel = kašika."],["„die Gabel“ znači:",["viljuška","tanjir","šolja","flaša"],0,"die Gabel = viljuška."],["„das Messer“ znači:",["nož","kašika","šerpa","rende"],0,"das Messer = nož."],["„der Kühlschrank“ znači:",["frižider","šporet","tanjir","čaša"],0,"der Kühlschrank = frižider."],["„die Pfanne“ znači:",["tiganj","šolja","činija","flaša"],0,"die Pfanne = tiganj."],["„die Schüssel“ znači:",["činija","rende","tanjir","lonac"],0,"die Schüssel = činija."],["„der Teller“ znači:",["tanjir","kašika","šolja","nož"],0,"der Teller = tanjir."],["„die Tasse“ znači:",["šolja","čaša","flaša","činija"],0,"die Tasse = šolja."],["Koja rečenica je pravilan savet?",["Du solltest mehr lernen.","Du solltet mehr lernen.","Du sollten mehr lernen.","Du sollte mehr lernen."],0,"Uz „du“ ide „solltest“."]];let i=0,s=0,answered=false,$=x=>document.getElementById(x);function show(id){["home","quiz","result"].forEach(x=>$(x).classList.toggle("hidden",x!==id));scrollTo(0,0)}function start(){i=0;s=0;$("liveScore").textContent="0 bod.";show("quiz");render()}function render(){answered=false;let q=D[i];$("counter").textContent="Pitanje "+(i+1)+" od "+D.length;$("question").textContent=q[0];$("options").innerHTML="";$("feedback").style.display="none";$("nextBtn").disabled=true;$("nextBtn").textContent=i===D.length-1?"Završi test":"Sledeće pitanje";$("bar").style.width=i/D.length*100+"%";q[1].forEach((o,j)=>{let b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=()=>choose(j,b);$("options").appendChild(b)})}function choose(j,b){if(answered)return;answered=true;let q=D[i],bs=[...document.querySelectorAll(".opt")];bs.forEach((x,k)=>{x.disabled=true;if(k===q[2])x.classList.add("correct")});if(j===q[2]){s++;$("feedback").innerHTML="<b>Tačno.</b> "+q[3]}else{b.classList.add("wrong");$("feedback").innerHTML="<b>Netačno.</b> Tačan odgovor je: <b>"+q[1][q[2]]+"</b><br>"+q[3]}$("feedback").style.display="block";$("liveScore").textContent=s+" bod.";$("bar").style.width=(i+1)/D.length*100+"%";$("nextBtn").disabled=false}function finish(){let p=Math.round(s/D.length*100);$("scorePct").textContent=p+"%";$("resultText").textContent=s+" od "+D.length+" tačnih odgovora.";show("result")}$("startBtn").onclick=start;$("backBtn").onclick=()=>show("home");$("homeBtn").onclick=()=>show("home");$("retryBtn").onclick=start;$("nextBtn").onclick=()=>{if(!answered)return;if(i<D.length-1){i++;render()}else finish()};</script></body></html>
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b55d4">
+<title>DE-MAX A2 • Lekcija 3</title>
+<style>
+:root{
+  --blue:#0b55d4;
+  --blue2:#073b9e;
+  --blue3:#3b82f6;
+  --sky:#eef6ff;
+  --ink:#0e2346;
+  --muted:#667792;
+  --line:#dbeafe;
+  --ok:#15803d;
+  --bad:#c62828;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0,#f8fbff 48%,#edf6ff 100%);
+  color:var(--ink);
+}
+button{font:inherit;cursor:pointer}
+.app{
+  width:min(100%,540px);
+  min-height:100dvh;
+  margin:auto;
+  padding:18px 16px 30px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.logo{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-1px;
+  color:#e11d48;
+}
+.logo span{color:var(--blue)}
+.badge{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 8px 24px rgba(11,85,212,.08);
+}
+.hero{
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  border-radius:30px;
+  padding:24px 22px;
+  box-shadow:0 20px 45px rgba(11,85,212,.22);
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;
+  border-radius:50%;
+  right:-70px;top:-80px;
+  background:rgba(255,255,255,.08);
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+  line-height:1.08;
+}
+.hero p{
+  margin:0;
+  line-height:1.5;
+  font-size:14px;
+  opacity:.96;
+}
+.panel,.qcard{
+  background:#fff;
+  border:1px solid #d7e8ff;
+  border-radius:24px;
+  box-shadow:0 12px 35px rgba(11,85,212,.08);
+}
+.panel{padding:16px}
+.start,.primary{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:15px 18px;
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 12px 24px rgba(11,85,212,.18);
+}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.stat{
+  background:#f7fbff;
+  border:1px solid #e4efff;
+  border-radius:18px;
+  padding:12px 8px;
+  text-align:center;
+}
+.stat b{
+  display:block;
+  font-size:20px;
+  color:var(--blue);
+}
+.stat span{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:750;
+}
+.topicstrip{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.topicstrip span{
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:900;
+}
+.hidden{display:none!important}
+.top{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.back{
+  border:0;
+  background:#fff;
+  color:var(--blue);
+  font-weight:900;
+  border-radius:14px;
+  padding:10px 12px;
+  box-shadow:0 8px 20px rgba(11,85,212,.08);
+}
+.meta{flex:1}
+.meta b{display:block;font-size:15px}
+.meta span{font-size:12px;color:var(--muted)}
+.pill{
+  display:inline-block;
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+}
+.progress{
+  height:10px;
+  background:#deebff;
+  border-radius:999px;
+  overflow:hidden;
+  margin:10px 0 18px;
+}
+.bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#60a5fa,var(--blue));
+  transition:.25s;
+}
+.qcard{padding:20px}
+.counter{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.q{
+  font-size:22px;
+  line-height:1.3;
+  font-weight:900;
+  margin:10px 0 16px;
+}
+.opts{
+  display:grid;
+  gap:10px;
+}
+.opt{
+  text-align:left;
+  width:100%;
+  border:1px solid #dce9fb;
+  background:#f8fbff;
+  color:var(--ink);
+  padding:14px 15px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:760;
+  transition:.15s;
+}
+.opt:hover{
+  border-color:#98bfff;
+  background:#f1f7ff;
+}
+.opt.correct{
+  background:#ecfdf3;
+  border-color:#86d8a4;
+  color:#116b31;
+}
+.opt.wrong{
+  background:#fff1f1;
+  border-color:#efaaaa;
+  color:#a11d1d;
+}
+.feedback{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:14px 15px;
+  background:#f4f8ff;
+  border:1px solid #dbeafe;
+  font-size:14px;
+  line-height:1.5;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.result{text-align:center}
+.score{
+  font-size:58px;
+  font-weight:1000;
+  color:#fff;
+  letter-spacing:-3px;
+  margin:8px 0 0;
+}
+.result h2{margin:8px 0}
+.result p{
+  margin:0;
+  line-height:1.55;
+  opacity:.95;
+}
+.footer{
+  text-align:center;
+  color:#8ca0bc;
+  font-size:12px;
+  margin-top:16px;
+}
+@media(max-width:390px){
+  .hero h1{font-size:26px}
+  .q{font-size:20px}
+  .app{padding:14px 12px 24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand">
+    <div class="logo">DE-<span>MAX</span></div>
+    <div class="badge">A2 • LEKCIJA 3</div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h1>Više ponuđenih odgovora</h1>
+      <p>
+        Lekcija 3 • <b>sollten • deshalb</b>, pitanje <b>Wo?</b>,
+        nastavci u dativu i lokalni predlozi.
+      </p>
+    </div>
+
+    <div class="panel">
+      <button class="start" id="startBtn">Pokreni test</button>
+
+      <div class="stats">
+        <div class="stat"><b>24</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+
+      <div class="topicstrip">
+        <span>sollten • deshalb</span>
+        <span>deshalb</span>
+        <span>Reflexivpronomen</span>
+        <span>Küche</span>
+      </div>
+    </div>
+
+    <div class="footer">De-Max Deutsch • A2 Lekcija 3</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top">
+      <button id="backBtn" class="back">←</button>
+      <div class="meta">
+        <b id="quizTitle">Lekcija 3</b>
+        <span>sollten • deshalb • lokalni predlozi</span>
+      </div>
+      <div class="pill" id="liveScore">0 bod.</div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="qcard">
+      <div class="counter" id="counter"></div>
+      <div class="q" id="question"></div>
+      <div class="opts" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button id="nextBtn" class="primary" disabled>Sledeće pitanje</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="hero result">
+      <div class="pill">REZULTAT</div>
+      <div class="score" id="scorePct">0%</div>
+      <h2 id="resultTitle">Test je završen</h2>
+      <p id="resultText"></p>
+    </div>
+
+    <div class="panel">
+      <button id="retryBtn" class="primary">Ponovi test</button>
+      <div style="height:10px"></div>
+      <button id="homeBtn" class="back" style="width:100%">Nazad na početak</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const DATA = {
+  title: "Lekcija 3",
+  questions: [
+    {q:"Du ___ mehr Wasser trinken.",o:["sollte","solltest","solltet","sollten"],a:1,e:"Uz „du“ ide „solltest“."},
+    {q:"Wir ___ früher schlafen gehen.",o:["sollte","solltest","sollten","solltet"],a:2,e:"Uz „wir“ ide „sollten“."},
+    {q:"Ihr ___ jeden Tag Deutsch sprechen.",o:["sollten","solltet","solltest","sollte"],a:1,e:"Uz „ihr“ ide „solltet“."},
+    {q:"Er ___ nicht so viel Kaffee trinken.",o:["solltet","sollten","sollte","solltest"],a:2,e:"Uz „er“ ide „sollte“."},
+    {q:"Koja rečenica znači „Trebalo bi da ranije spavaš“?",o:["Du solltest früher schlafen.","Du schläfst früher.","Du musstest früher schlafen.","Du willst früher schlafen."],a:0,e:"Za savet koristimo „solltest“."},
+    {q:"Ich bin krank. ___ gehe ich zum Arzt.",o:["Weil","Deshalb","Wenn","Obwohl"],a:1,e:"„Deshalb“ znači „zato / zbog toga“."},
+    {q:"Es regnet. Deshalb ___ ich zu Hause.",o:["bleibe","ich bleibe","bleiben","blieb"],a:0,e:"Posle „deshalb“ glagol je na drugom mestu."},
+    {q:"Mein Auto ist kaputt. Deshalb ___ ich mit dem Bus.",o:["fahre","ich fahre","fahren","bin"],a:0,e:"Pravilno: Deshalb fahre ich mit dem Bus."},
+    {q:"Ich habe Hunger. Deshalb ___ ich eine Pizza.",o:["esse","ich esse","essen","isst"],a:0,e:"Posle „deshalb“ ide glagol."},
+    {q:"Ich lerne viel. Deshalb ___ ich besser Deutsch.",o:["spreche","ich spreche","spricht","sprechen"],a:0,e:"Pravilno: Deshalb spreche ich besser Deutsch."},
+    {q:"Ich interessiere ___ für Musik.",o:["dich","sich","mich","uns"],a:2,e:"Uz „ich“ ide „mich“."},
+    {q:"Du freust ___ auf den Urlaub.",o:["mich","dich","sich","euch"],a:1,e:"Uz „du“ ide „dich“."},
+    {q:"Er erinnert ___ an die Schule.",o:["mich","dich","sich","uns"],a:2,e:"Uz „er“ ide „sich“."},
+    {q:"Wir treffen ___ heute im Café.",o:["uns","euch","mich","sich"],a:0,e:"Uz „wir“ ide „uns“."},
+    {q:"Ihr konzentriert ___ auf die Aufgabe.",o:["uns","euch","sich","dich"],a:1,e:"Uz „ihr“ ide „euch“."},
+    {q:"„der Löffel“ znači:",o:["kašika","viljuška","nož","čaša"],a:0,e:"der Löffel = kašika."},
+    {q:"„die Gabel“ znači:",o:["viljuška","tanjir","šolja","flaša"],a:0,e:"die Gabel = viljuška."},
+    {q:"„das Messer“ znači:",o:["nož","kašika","šerpa","rende"],a:0,e:"das Messer = nož."},
+    {q:"„der Kühlschrank“ znači:",o:["frižider","šporet","tanjir","čaša"],a:0,e:"der Kühlschrank = frižider."},
+    {q:"„die Pfanne“ znači:",o:["tiganj","šolja","činija","flaša"],a:0,e:"die Pfanne = tiganj."},
+    {q:"„die Schüssel“ znači:",o:["činija","rende","tanjir","lonac"],a:0,e:"die Schüssel = činija."},
+    {q:"„der Teller“ znači:",o:["tanjir","kašika","šolja","nož"],a:0,e:"der Teller = tanjir."},
+    {q:"„die Tasse“ znači:",o:["šolja","čaša","flaša","činija"],a:0,e:"die Tasse = šolja."},
+    {q:"Koja rečenica je pravilan savet?",o:["Du solltest mehr lernen.","Du solltet mehr lernen.","Du sollten mehr lernen.","Du sollte mehr lernen."],a:0,e:"Uz „du“ ide „solltest“."}
+  ]
+};
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+const $ = id => document.getElementById(id);
+
+function show(id){
+  ["home","quiz","result"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function startQuiz(){
+  index = 0;
+  score = 0;
+  answered = false;
+  $("liveScore").textContent = "0 bod.";
+  show("quiz");
+  render();
+}
+
+function render(){
+  const q = DATA.questions[index];
+  answered = false;
+
+  $("counter").textContent = `Pitanje ${index+1} od ${DATA.questions.length}`;
+  $("question").textContent = q.q;
+  $("options").innerHTML = "";
+  $("feedback").style.display = "none";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = index === DATA.questions.length - 1
+    ? "Završi test"
+    : "Sledeće pitanje";
+  $("bar").style.width = `${(index / DATA.questions.length) * 100}%`;
+
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = opt;
+    btn.onclick = () => choose(i, btn);
+    $("options").appendChild(btn);
+  });
+}
+
+function choose(i, btn){
+  if(answered) return;
+  answered = true;
+
+  const q = DATA.questions[index];
+  const buttons = [...document.querySelectorAll(".opt")];
+
+  buttons.forEach((x, j) => {
+    x.disabled = true;
+    if(j === q.a) x.classList.add("correct");
+  });
+
+  if(i === q.a){
+    score++;
+    $("feedback").innerHTML = `<b>Tačno.</b> ${q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    $("feedback").innerHTML =
+      `<b>Netačno.</b> Tačan odgovor je: <b>${q.o[q.a]}</b><br>${q.e}`;
+  }
+
+  $("feedback").style.display = "block";
+  $("liveScore").textContent = `${score} bod.`;
+  $("bar").style.width = `${((index+1)/DATA.questions.length)*100}%`;
+  $("nextBtn").disabled = false;
+}
+
+function finish(){
+  const pct = Math.round(score / DATA.questions.length * 100);
+  $("scorePct").textContent = pct + "%";
+  $("resultTitle").textContent = "Lekcija 3 • završen test";
+
+  let msg = "";
+  if(pct >= 90) msg = "Odlično! Veoma dobro poznaješ dativ i lokalne predloge.";
+  else if(pct >= 75) msg = "Vrlo dobro! Ponovi još nekoliko nastavaka u dativu.";
+  else if(pct >= 60) msg = "Dobro, ali ponovi članove i pitanje Wo?.";
+  else msg = "Preporuka: ponovi Lekciju 2 i uradi test ponovo.";
+
+  $("resultText").textContent =
+    `${score} od ${DATA.questions.length} tačnih odgovora. ${msg}`;
+
+  show("result");
+}
+
+$("startBtn").onclick = startQuiz;
+$("backBtn").onclick = () => show("home");
+$("homeBtn").onclick = () => show("home");
+$("retryBtn").onclick = startQuiz;
+
+$("nextBtn").onclick = () => {
+  if(!answered) return;
+
+  if(index < DATA.questions.length - 1){
+    index++;
+    render();
+  } else {
+    finish();
+  }
+};
+</script>
+</body>
+</html>
