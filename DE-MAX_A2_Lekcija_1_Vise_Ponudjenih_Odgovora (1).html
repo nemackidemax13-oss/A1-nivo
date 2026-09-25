@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b55d4">
+<title>DE-MAX A2 • Lekcija 1</title>
+<style>
+:root{
+  --blue:#0b55d4;
+  --blue2:#073b9e;
+  --sky:#eef6ff;
+  --ink:#0f2240;
+  --muted:#667892;
+  --white:#ffffff;
+  --line:#dbeafe;
+  --ok:#15803d;
+  --bad:#c62828;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0,#f7fbff 45%,#eef6ff 100%);
+  color:var(--ink);
+}
+button{font:inherit;cursor:pointer}
+.app{
+  width:min(100%,540px);
+  margin:0 auto;
+  min-height:100vh;
+  padding:18px 16px 30px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.logo{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-1px;
+  color:#e11d48;
+}
+.logo span{color:var(--blue)}
+.badge{
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 8px 24px rgba(11,85,212,.08);
+}
+.hero{
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  border-radius:30px;
+  padding:24px 22px;
+  box-shadow:0 20px 45px rgba(11,85,212,.22);
+  margin-bottom:16px;
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+  line-height:1.08;
+}
+.hero p{
+  margin:0;
+  line-height:1.5;
+  opacity:.95;
+  font-size:14px;
+}
+.panel{
+  background:rgba(255,255,255,.88);
+  border:1px solid #d7e8ff;
+  border-radius:24px;
+  padding:16px;
+  box-shadow:0 12px 35px rgba(9,58,131,.08);
+  backdrop-filter:blur(8px);
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.stat{
+  background:#fff;
+  border-radius:18px;
+  padding:12px 8px;
+  border:1px solid #e5efff;
+  text-align:center;
+}
+.stat b{
+  display:block;
+  font-size:19px;
+}
+.stat span{
+  display:block;
+  margin-top:2px;
+  font-size:11px;
+  color:var(--muted);
+  font-weight:700;
+}
+.startBtn,.primary{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:15px 18px;
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 12px 24px rgba(11,85,212,.18);
+}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.hidden{display:none!important}
+.top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+.back{
+  border:0;
+  background:#fff;
+  color:var(--blue);
+  border-radius:14px;
+  padding:10px 12px;
+  font-weight:900;
+  box-shadow:0 8px 20px rgba(11,85,212,.08);
+}
+.meta{flex:1}
+.meta b{
+  display:block;
+  font-size:15px;
+}
+.meta span{
+  font-size:12px;
+  color:var(--muted);
+}
+.pill{
+  display:inline-block;
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+}
+.progress{
+  height:10px;
+  background:#deebff;
+  border-radius:999px;
+  overflow:hidden;
+  margin:10px 0 18px;
+}
+.bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#60a5fa,var(--blue));
+  transition:.25s;
+}
+.qcard{
+  background:#fff;
+  border-radius:26px;
+  border:1px solid #e2eeff;
+  padding:20px;
+  box-shadow:0 16px 40px rgba(11,85,212,.08);
+}
+.counter{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.q{
+  font-size:22px;
+  line-height:1.28;
+  font-weight:900;
+  margin:10px 0 16px;
+}
+.opts{
+  display:grid;
+  gap:10px;
+}
+.opt{
+  text-align:left;
+  width:100%;
+  border:1px solid #dce9fb;
+  background:#f8fbff;
+  color:var(--ink);
+  padding:14px 15px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:750;
+  transition:.15s;
+}
+.opt:hover{border-color:#96bfff;background:#f1f7ff}
+.opt.correct{
+  background:#ecfdf3;
+  border-color:#8dd7a8;
+  color:#116b31;
+}
+.opt.wrong{
+  background:#fff1f1;
+  border-color:#efb0b0;
+  color:#a11d1d;
+}
+.feedback{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:14px 15px;
+  background:#f4f8ff;
+  border:1px solid #dbeafe;
+  font-size:14px;
+  line-height:1.5;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.result{
+  text-align:center;
+}
+.score{
+  font-size:56px;
+  font-weight:1000;
+  color:var(--blue);
+  letter-spacing:-3px;
+  margin:10px 0 0;
+}
+.result h2{
+  margin:8px 0 8px;
+}
+.result p{
+  color:var(--muted);
+  line-height:1.55;
+  margin:0 0 16px;
+}
+.footer{
+  text-align:center;
+  color:#8ca0bc;
+  font-size:12px;
+  margin-top:16px;
+}
+@media (max-width:390px){
+  .hero h1{font-size:26px}
+  .q{font-size:20px}
+  .app{padding:14px 12px 24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <div class="logo">DE-<span>MAX</span></div>
+    <div class="badge">A2 • LEKCIJA 1</div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h1>Više ponuđenih odgovora</h1>
+      <p>
+        Lekcija 1 A2 • vežbanje na temu <b>weil</b>, razlog i red reči.
+        Izaberi tačan odgovor, pročitaj objašnjenje i prati rezultat.
+      </p>
+    </div>
+
+    <div class="panel">
+      <button class="startBtn" id="startBtn">Pokreni test</button>
+      <div class="stats">
+        <div class="stat"><b>20</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+    </div>
+    <div class="footer">De-Max Deutsch • plavo-beli dizajn</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top">
+      <button class="back" id="backBtn">←</button>
+      <div class="meta">
+        <b id="quizTitle">Lekcija 1 • weil</b>
+        <span>Više ponuđenih odgovora • automatsko bodovanje</span>
+      </div>
+      <div class="pill" id="liveScore">0 bod.</div>
+    </div>
+
+    <div class="progress"><div class="bar" id="bar"></div></div>
+
+    <div class="qcard">
+      <div class="counter" id="counter"></div>
+      <div class="q" id="question"></div>
+      <div class="opts" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="primary" id="nextBtn" disabled>Sledeće pitanje</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="hero result">
+      <div class="pill">REZULTAT</div>
+      <div class="score" id="scorePct">0%</div>
+      <h2 id="resultTitle">Test je završen</h2>
+      <p id="resultText"></p>
+    </div>
+    <div class="panel">
+      <button class="primary" id="retryBtn">Ponovi test</button>
+      <div style="height:10px"></div>
+      <button class="back" style="width:100%" id="homeBtn">Nazad na početak</button>
+    </div>
+    <div class="footer">De-Max Deutsch • A2 Lekcija 1</div>
+  </section>
+</div>
+
+<script>
+const DATA = {
+  title: "Lekcija 1",
+  subtitle: "weil – razlog i red reči",
+  questions: [
+    {q:"Ich bleibe zu Hause, ___ ich krank bin.", o:["weil","deshalb","wenn","trotzdem"], a:0, e:"Posle veznika „weil“ objašnjavamo razlog."},
+    {q:"Sie lernt viel, weil sie morgen einen Test ___.", o:["hat","haben","hast","habt"], a:0, e:"Subjekat je „sie“, zato ide „hat“."},
+    {q:"Koja rečenica je pravilna?", o:["Ich lerne Deutsch, weil ich in Deutschland arbeiten möchte.","Ich lerne Deutsch, weil ich möchte in Deutschland arbeiten.","Ich lerne Deutsch, weil möchte ich in Deutschland arbeiten.","Ich lerne Deutsch, weil in Deutschland ich arbeiten möchte."], a:0, e:"U zavisnoj rečenici sa „weil“ glagol ide na kraj."},
+    {q:"Ich esse jetzt, weil ich großen Hunger ___.", o:["habe","bin","hat","sein"], a:0, e:"Pravilna konstrukcija je „Hunger haben“."},
+    {q:"Warum kaufst du ein Auto? – Weil ich es für die Arbeit ___.", o:["brauche","braucht","brauchst","brauchen"], a:0, e:"Uz „ich“ ide oblik „brauche“."},
+    {q:"Ich gehe heute nicht zum Sport, weil ich müde ___.", o:["bin","bist","ist","habe"], a:0, e:"Uz „ich“ ide „bin“."},
+    {q:"Dopuni: Ich lerne viel, weil ich eine Prüfung ___.", o:["habe","bin","werde","seid"], a:0, e:"Pravilno je „eine Prüfung haben“."},
+    {q:"Gde stoji glagol u rečenici sa „weil“?", o:["Na kraju zavisne rečenice","Na početku rečenice","Uvek na drugom mestu","Ispred subjekta"], a:0, e:"„weil“ šalje konjugovani glagol na kraj zavisne rečenice."},
+    {q:"Koji odgovor najbolje odgovara na pitanje „Warum bleibst du zu Hause?“", o:["Weil ich keine Zeit habe.","Trotzdem ich keine Zeit habe.","Deshalb ich keine Zeit habe.","Wenn ich keine Zeit habe."], a:0, e:"Na pitanje „Warum?“ najprirodniji odgovor sa razlogom daje „weil“."},
+    {q:"Izaberi pravilan red reči.", o:["weil ich Deutsch lernen will","weil ich will Deutsch lernen","weil will ich Deutsch lernen","weil Deutsch ich will lernen"], a:0, e:"Kod modalnih glagola i „weil“, glagolski deo ide na kraj."},
+    {q:"Koja rečenica je pravilna?", o:["Ich bin fit, weil ich viel Sport mache.","Ich bin fit, weil ich mache viel Sport.","Ich bin fit, weil mache ich viel Sport.","Ich bin fit, weil viel Sport ich mache."], a:0, e:"U zavisnoj rečenici sa „weil“ glagol „mache“ ide na kraj."},
+    {q:"___ ich krank bin, bleibe ich zu Hause.", o:["Weil","Deshalb","Aber","Dann"], a:0, e:"Ovde cela rečenica počinje zavisnom rečenicom sa „weil“."},
+    {q:"Koja rečenica je pravilna?", o:["Ich habe keine Zeit, weil ich viel lernen muss.","Ich habe keine Zeit, weil ich muss viel lernen.","Ich habe keine Zeit, weil muss ich viel lernen.","Ich habe keine Zeit, weil ich viel muss lernen."], a:0, e:"Kod modalnog glagola „müssen“, infinitiv ide na kraj, a modalni kao poslednji deo."},
+    {q:"Dopuni: Ich lerne Deutsch, weil ich in Deutschland arbeiten ___ .", o:["möchte","mögen","mag","möchtet"], a:0, e:"Uz „ich“ ide oblik „möchte“."},
+    {q:"Koja rečenica je pravilna?", o:["Sie bleibt zu Hause, weil sie krank ist.","Sie bleibt zu Hause, weil sie ist krank.","Sie bleibt zu Hause, weil krank sie ist.","Sie bleibt zu Hause, weil ist sie krank."], a:0, e:"U rečenici sa „weil“ glagol ide na kraj: „krank ist“."},
+    {q:"Koja reč izražava razlog?", o:["weil","obwohl","trotzdem","dann"], a:0, e:"„weil“ znači „jer“ i uvodi razlog."},
+    {q:"Izaberi tačnu opciju: Ich treffe Freunde, weil ich gute Laune ___.", o:["habe","bin","hat","seid"], a:0, e:"Kažemo „gute Laune haben“."},
+    {q:"Koja rečenica je pravilna?", o:["Wir bleiben zu Hause, weil wir Hunger haben.","Wir bleiben zu Hause, weil wir haben Hunger.","Wir bleiben zu Hause, weil Hunger wir haben.","Wir bleiben zu Hause, weil haben wir Hunger."], a:0, e:"Glagol „haben“ ide na kraj zavisne rečenice."},
+    {q:"Dopuni: Er kauft ein Auto, weil er es für die Arbeit ___.", o:["braucht","brauchen","brauchst","brauche"], a:0, e:"Uz „er“ ide „braucht“."},
+    {q:"Koja rečenica je pravilna?", o:["Ich bleibe zu Hause, weil ich keine Zeit habe.","Ich bleibe zu Hause, weil ich habe keine Zeit.","Ich bleibe zu Hause, weil keine Zeit ich habe.","Ich bleibe zu Hause, weil habe ich keine Zeit."], a:0, e:"Tačan red reči je: subjekat + ostalo + glagol na kraju."}
+  ]
+};
+
+let idx = 0, score = 0, answered = false;
+
+const $ = id => document.getElementById(id);
+
+function show(id){
+  ["home","quiz","result"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function startQuiz(){
+  idx = 0;
+  score = 0;
+  answered = false;
+  $("quizTitle").textContent = DATA.title + " • " + DATA.subtitle;
+  $("liveScore").textContent = "0 bod.";
+  show("quiz");
+  render();
+}
+
+function render(){
+  const q = DATA.questions[idx];
+  answered = false;
+  $("counter").textContent = `Pitanje ${idx+1} od ${DATA.questions.length}`;
+  $("question").textContent = q.q;
+  $("options").innerHTML = "";
+  $("feedback").style.display = "none";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = idx === DATA.questions.length - 1 ? "Završi test" : "Sledeće pitanje";
+  $("bar").style.width = `${(idx / DATA.questions.length) * 100}%`;
+
+  q.o.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = opt;
+    b.onclick = () => choose(i, b);
+    $("options").appendChild(b);
+  });
+}
+
+function choose(i, btn){
+  if(answered) return;
+  answered = true;
+  const q = DATA.questions[idx];
+  const buttons = [...document.querySelectorAll(".opt")];
+  buttons.forEach((x, j) => {
+    x.disabled = true;
+    if(j === q.a) x.classList.add("correct");
+  });
+
+  if(i === q.a){
+    score++;
+    $("feedback").innerHTML = `<b>Tačno.</b> ${q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    $("feedback").innerHTML = `<b>Netačno.</b> Tačan odgovor je: <b>${q.o[q.a]}</b><br>${q.e}`;
+  }
+
+  $("feedback").style.display = "block";
+  $("liveScore").textContent = `${score} bod.`;
+  $("bar").style.width = `${((idx + 1) / DATA.questions.length) * 100}%`;
+  $("nextBtn").disabled = false;
+}
+
+function finish(){
+  const pct = Math.round(score / DATA.questions.length * 100);
+  $("scorePct").textContent = pct + "%";
+  $("resultTitle").textContent = DATA.title + " • završen test";
+  let msg = "";
+  if(pct >= 90) msg = "Odlično! Veoma dobro poznaješ gradivo iz prve lekcije.";
+  else if(pct >= 75) msg = "Vrlo dobro! Još malo vežbe i biće savršeno.";
+  else if(pct >= 60) msg = "Dobro je, ali ponovi pravilo o redu reči posle „weil“.";
+  else msg = "Preporuka: ponovi lekciju i uradi test ponovo.";
+  $("resultText").textContent = `${score} od ${DATA.questions.length} tačnih odgovora. ${msg}`;
+  show("result");
+}
+
+$("startBtn").onclick = startQuiz;
+$("backBtn").onclick = () => show("home");
+$("homeBtn").onclick = () => show("home");
+$("retryBtn").onclick = startQuiz;
+$("nextBtn").onclick = () => {
+  if(!answered) return;
+  if(idx < DATA.questions.length - 1){
+    idx++;
+    render();
+  } else {
+    finish();
+  }
+};
+</script>
+</body>
+</html>
