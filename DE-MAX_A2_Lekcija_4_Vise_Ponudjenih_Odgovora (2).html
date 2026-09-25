@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b55d4">
+<title>DE-MAX A2 • Lekcija 4</title>
+<style>
+:root{
+  --blue:#0b55d4;
+  --blue2:#073b9e;
+  --blue3:#3b82f6;
+  --sky:#eef6ff;
+  --ink:#0e2346;
+  --muted:#667792;
+  --line:#dbeafe;
+  --ok:#15803d;
+  --bad:#c62828;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0,#f8fbff 48%,#edf6ff 100%);
+  color:var(--ink);
+}
+button{font:inherit;cursor:pointer}
+.app{
+  width:min(100%,540px);
+  min-height:100dvh;
+  margin:auto;
+  padding:18px 16px 30px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.logo{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-1px;
+  color:#e11d48;
+}
+.logo span{color:var(--blue)}
+.badge{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 8px 24px rgba(11,85,212,.08);
+}
+.hero{
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  border-radius:30px;
+  padding:24px 22px;
+  box-shadow:0 20px 45px rgba(11,85,212,.22);
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;
+  border-radius:50%;
+  right:-70px;top:-80px;
+  background:rgba(255,255,255,.08);
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+  line-height:1.08;
+}
+.hero p{
+  margin:0;
+  line-height:1.5;
+  font-size:14px;
+  opacity:.96;
+}
+.panel,.qcard{
+  background:#fff;
+  border:1px solid #d7e8ff;
+  border-radius:24px;
+  box-shadow:0 12px 35px rgba(11,85,212,.08);
+}
+.panel{padding:16px}
+.start,.primary{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:15px 18px;
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 12px 24px rgba(11,85,212,.18);
+}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.stat{
+  background:#f7fbff;
+  border:1px solid #e4efff;
+  border-radius:18px;
+  padding:12px 8px;
+  text-align:center;
+}
+.stat b{
+  display:block;
+  font-size:20px;
+  color:var(--blue);
+}
+.stat span{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:750;
+}
+.topicstrip{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.topicstrip span{
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:900;
+}
+.hidden{display:none!important}
+.top{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.back{
+  border:0;
+  background:#fff;
+  color:var(--blue);
+  font-weight:900;
+  border-radius:14px;
+  padding:10px 12px;
+  box-shadow:0 8px 20px rgba(11,85,212,.08);
+}
+.meta{flex:1}
+.meta b{display:block;font-size:15px}
+.meta span{font-size:12px;color:var(--muted)}
+.pill{
+  display:inline-block;
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+}
+.progress{
+  height:10px;
+  background:#deebff;
+  border-radius:999px;
+  overflow:hidden;
+  margin:10px 0 18px;
+}
+.bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#60a5fa,var(--blue));
+  transition:.25s;
+}
+.qcard{padding:20px}
+.counter{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.q{
+  font-size:22px;
+  line-height:1.3;
+  font-weight:900;
+  margin:10px 0 16px;
+}
+.opts{
+  display:grid;
+  gap:10px;
+}
+.opt{
+  text-align:left;
+  width:100%;
+  border:1px solid #dce9fb;
+  background:#f8fbff;
+  color:var(--ink);
+  padding:14px 15px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:760;
+  transition:.15s;
+}
+.opt:hover{
+  border-color:#98bfff;
+  background:#f1f7ff;
+}
+.opt.correct{
+  background:#ecfdf3;
+  border-color:#86d8a4;
+  color:#116b31;
+}
+.opt.wrong{
+  background:#fff1f1;
+  border-color:#efaaaa;
+  color:#a11d1d;
+}
+.feedback{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:14px 15px;
+  background:#f4f8ff;
+  border:1px solid #dbeafe;
+  font-size:14px;
+  line-height:1.5;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.result{text-align:center}
+.score{
+  font-size:58px;
+  font-weight:1000;
+  color:#fff;
+  letter-spacing:-3px;
+  margin:8px 0 0;
+}
+.result h2{margin:8px 0}
+.result p{
+  margin:0;
+  line-height:1.55;
+  opacity:.95;
+}
+.footer{
+  text-align:center;
+  color:#8ca0bc;
+  font-size:12px;
+  margin-top:16px;
+}
+@media(max-width:390px){
+  .hero h1{font-size:26px}
+  .q{font-size:20px}
+  .app{padding:14px 12px 24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand">
+    <div class="logo">DE-<span>MAX</span></div>
+    <div class="badge">A2 • LEKCIJA 4</div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h1>Više ponuđenih odgovora</h1>
+      <p>
+        Lekcija 4 • <b>glagoli sa predlozima</b>, <b>zamenički prilozi</b>,
+        <b>komparacija prideva</b>, <b>Woher?</b>, <b>könnte</b> i <b>lassen</b>.
+      </p>
+    </div>
+
+    <div class="panel">
+      <button class="start" id="startBtn">Pokreni test</button>
+
+      <div class="stats">
+        <div class="stat"><b>32</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+
+      <div class="topicstrip">
+        <span>Verben + Präpositionen</span>
+        <span>Präpositionaladverbien</span>
+        <span>Komparation</span>
+        <span>Woher?</span>
+        <span>könnte</span>
+        <span>lassen</span>
+      </div>
+    </div>
+
+    <div class="footer">De-Max Deutsch • A2 Lekcija 4</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top">
+      <button id="backBtn" class="back">←</button>
+      <div class="meta">
+        <b id="quizTitle">Lekcija 4</b>
+        <span>predlozi • komparacija • Woher? • Konjunktiv II</span>
+      </div>
+      <div class="pill" id="liveScore">0 bod.</div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="qcard">
+      <div class="counter" id="counter"></div>
+      <div class="q" id="question"></div>
+      <div class="opts" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button id="nextBtn" class="primary" disabled>Sledeće pitanje</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="hero result">
+      <div class="pill">REZULTAT</div>
+      <div class="score" id="scorePct">0%</div>
+      <h2 id="resultTitle">Test je završen</h2>
+      <p id="resultText"></p>
+    </div>
+
+    <div class="panel">
+      <button id="retryBtn" class="primary">Ponovi test</button>
+      <div style="height:10px"></div>
+      <button id="homeBtn" class="back" style="width:100%">Nazad na početak</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const DATA = {
+  title: "Lekcija 4",
+  questions: [
+    {q:"Ich warte ___ den Bus.",o:["auf","an","mit","von"],a:0,e:"Glagol „warten“ ide sa predlogom „auf“ + Akkusativ."},
+    {q:"Ich denke ___ die Prüfung.",o:["an","auf","über","bei"],a:0,e:"„denken an“ znači misliti na nekoga/nešto."},
+    {q:"Ich freue mich ___ den Urlaub.",o:["auf","von","mit","nach"],a:0,e:"„sich freuen auf“ koristi se za nešto čemu se radujemo u budućnosti."},
+    {q:"Ich erinnere mich ___ die Schule.",o:["an","für","von","zu"],a:0,e:"„sich erinnern an“ + Akkusativ."},
+    {q:"Wir sprechen ___ Deutsch.",o:["über","nach","bei","zu"],a:0,e:"„sprechen über“ znači govoriti o nekoj temi."},
+    {q:"Ich bitte ___ Hilfe.",o:["um","auf","mit","von"],a:0,e:"„bitten um“ znači moliti za nešto."},
+    {q:"Ich spreche ___ meinem Freund.",o:["mit","auf","über","um"],a:0,e:"„sprechen mit“ + Dativ znači razgovarati sa nekim."},
+    {q:"Ich träume ___ Deutschland.",o:["von","an","auf","bei"],a:0,e:"„träumen von“ + Dativ."},
+    {q:"Er sucht ___ dem Schlüssel.",o:["nach","für","über","um"],a:0,e:"„suchen nach“ + Dativ."},
+    {q:"Ich gratuliere dir ___ Geburtstag.",o:["zum","am","im","vom"],a:0,e:"„gratulieren zu“ + Dativ; „zu dem“ = „zum“."},
+
+    {q:"Pitanje uz „denken an“ za stvar je:",o:["woran?","womit?","worauf?","wovon?"],a:0,e:"wo + an → woran. Dodaje se „r“ jer „an“ počinje samoglasnikom."},
+    {q:"Odgovor na „Woran denkst du?“ može biti:",o:["Daran.","Damit.","Darauf.","Davon."],a:0,e:"an → daran."},
+    {q:"Pitanje uz „warten auf“ za stvar je:",o:["worauf?","woran?","womit?","worum?"],a:0,e:"auf → worauf."},
+    {q:"Odgovor na „Worauf wartest du?“ počinje sa:",o:["Darauf","Daran","Damit","Davon"],a:0,e:"auf → darauf."},
+    {q:"Pitanje uz „mit“ za stvar je:",o:["womit?","worüber?","wofür?","wovon?"],a:0,e:"mit → womit."},
+    {q:"Odgovor na „Womit bezahlst du?“ može biti:",o:["Damit.","Dafür.","Darum.","Davon."],a:0,e:"mit → damit."},
+
+    {q:"Komparativ od „schön“ je:",o:["schöner","am schönsten","schönsten","mehr schön"],a:0,e:"Pozitiv: schön → komparativ: schöner."},
+    {q:"Superlativ od „schnell“ je:",o:["am schnellsten","schneller","am schneller","schnellest"],a:0,e:"schnell → schneller → am schnellsten."},
+    {q:"Komparativ od „teuer“ je:",o:["teurer","teuerer","am teuersten","teuester"],a:0,e:"Kod „teuer“ u komparativu obično ispada jedno „e“: teurer."},
+    {q:"Koji niz je pravilan?",o:["jung – jünger – am jüngsten","jung – junger – am jungsten","jung – jüngerer – jüngste","jung – mehr jung – am meisten jung"],a:0,e:"Jednosložni pridev „jung“ dobija umlaut: jünger, am jüngsten."},
+    {q:"Superlativ od „interessant“ je:",o:["am interessantesten","am interessantsten","interessanter","interessantest"],a:0,e:"Pridevi na -t dobijaju -esten u superlativu."},
+    {q:"Komparativ od „gesund“ je:",o:["gesünder","gesunder","gesündesten","am gesünder"],a:0,e:"gesund → gesünder → am gesündesten."},
+
+    {q:"Woher kommt Frau Graf? – Sie kommt ___ Supermarkt.",o:["aus dem","von dem","aus der","vom der"],a:0,e:"„aus“ + Dativ; der Supermarkt → dem Supermarkt."},
+    {q:"Sie kommt ___ Post.",o:["aus der","aus dem","von den","vom"],a:0,e:"die Post → Dativ: der Post."},
+    {q:"Sie kommt ___ Arzt.",o:["vom","aus dem","von der","aus der"],a:0,e:"von + dem = vom: „vom Arzt“."},
+    {q:"Sie kommt ___ Ärztin.",o:["von der","vom","aus dem","von dem"],a:0,e:"die Ärztin → Dativ: von der Ärztin."},
+    {q:"Die Kette ist ___ Gold.",o:["aus","von","mit","bei"],a:0,e:"Za materijal koristimo „aus“: aus Gold."},
+
+    {q:"Ich ___ morgen früher aufstehen.",o:["könnte","könntest","könnten","könntet"],a:0,e:"ich → könnte."},
+    {q:"Du ___ mir bitte helfen.",o:["könntest","könnte","könnten","könntet"],a:0,e:"du → könntest."},
+    {q:"Wir ___ zusammen Deutsch üben.",o:["könnten","könnte","könntest","könntet"],a:0,e:"wir → könnten."},
+    {q:"Ihr ___ noch einmal die Aufgabe machen.",o:["könntet","könnten","könnte","könntest"],a:0,e:"ihr → könntet."},
+
+    {q:"Ich lasse mein Auto ___.",o:["reparieren","repariert","repariere","zu reparieren"],a:0,e:"Uz „lassen“ drugi glagol stoji u infinitivu: „reparieren lassen“."}
+  ]
+};
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+const $ = id => document.getElementById(id);
+
+function show(id){
+  ["home","quiz","result"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function startQuiz(){
+  index = 0;
+  score = 0;
+  answered = false;
+  $("liveScore").textContent = "0 bod.";
+  show("quiz");
+  render();
+}
+
+function render(){
+  const q = DATA.questions[index];
+  answered = false;
+
+  $("counter").textContent = `Pitanje ${index+1} od ${DATA.questions.length}`;
+  $("question").textContent = q.q;
+  $("options").innerHTML = "";
+  $("feedback").style.display = "none";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = index === DATA.questions.length - 1
+    ? "Završi test"
+    : "Sledeće pitanje";
+  $("bar").style.width = `${(index / DATA.questions.length) * 100}%`;
+
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = opt;
+    btn.onclick = () => choose(i, btn);
+    $("options").appendChild(btn);
+  });
+}
+
+function choose(i, btn){
+  if(answered) return;
+  answered = true;
+
+  const q = DATA.questions[index];
+  const buttons = [...document.querySelectorAll(".opt")];
+
+  buttons.forEach((x, j) => {
+    x.disabled = true;
+    if(j === q.a) x.classList.add("correct");
+  });
+
+  if(i === q.a){
+    score++;
+    $("feedback").innerHTML = `<b>Tačno.</b> ${q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    $("feedback").innerHTML =
+      `<b>Netačno.</b> Tačan odgovor je: <b>${q.o[q.a]}</b><br>${q.e}`;
+  }
+
+  $("feedback").style.display = "block";
+  $("liveScore").textContent = `${score} bod.`;
+  $("bar").style.width = `${((index+1)/DATA.questions.length)*100}%`;
+  $("nextBtn").disabled = false;
+}
+
+function finish(){
+  const pct = Math.round(score / DATA.questions.length * 100);
+  $("scorePct").textContent = pct + "%";
+  $("resultTitle").textContent = "Lekcija 4 • završen test";
+
+  let msg = "";
+  if(pct >= 90) msg = "Odlično! Veoma dobro poznaješ gradivo Lekcije 4.";
+  else if(pct >= 75) msg = "Vrlo dobro! Ponovi još nekoliko predloga i oblika.";
+  else if(pct >= 60) msg = "Dobro, ali ponovi glagole sa predlozima, komparaciju i Konjunktiv II.";
+  else msg = "Preporuka: ponovi Lekciju 4 i uradi test ponovo.";
+
+  $("resultText").textContent =
+    `${score} od ${DATA.questions.length} tačnih odgovora. ${msg}`;
+
+  show("result");
+}
+
+$("startBtn").onclick = startQuiz;
+$("backBtn").onclick = () => show("home");
+$("homeBtn").onclick = () => show("home");
+$("retryBtn").onclick = startQuiz;
+
+$("nextBtn").onclick = () => {
+  if(!answered) return;
+
+  if(index < DATA.questions.length - 1){
+    index++;
+    render();
+  } else {
+    finish();
+  }
+};
+</script>
+</body>
+</html>
