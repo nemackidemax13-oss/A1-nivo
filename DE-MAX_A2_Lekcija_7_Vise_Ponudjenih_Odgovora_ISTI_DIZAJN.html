@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b55d4">
+<title>DE-MAX A2 • Lekcija 7</title>
+<style>
+:root{
+  --blue:#0b55d4;
+  --blue2:#073b9e;
+  --blue3:#3b82f6;
+  --sky:#eef6ff;
+  --ink:#0e2346;
+  --muted:#667792;
+  --line:#dbeafe;
+  --ok:#15803d;
+  --bad:#c62828;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0,#f8fbff 48%,#edf6ff 100%);
+  color:var(--ink);
+}
+button{font:inherit;cursor:pointer}
+.app{
+  width:min(100%,540px);
+  min-height:100dvh;
+  margin:auto;
+  padding:18px 16px 30px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.logo{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-1px;
+  color:#e11d48;
+}
+.logo span{color:var(--blue)}
+.badge{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 8px 24px rgba(11,85,212,.08);
+}
+.hero{
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  border-radius:30px;
+  padding:24px 22px;
+  box-shadow:0 20px 45px rgba(11,85,212,.22);
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;
+  border-radius:50%;
+  right:-70px;top:-80px;
+  background:rgba(255,255,255,.08);
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+  line-height:1.08;
+}
+.hero p{
+  margin:0;
+  line-height:1.5;
+  font-size:14px;
+  opacity:.96;
+}
+.panel,.qcard{
+  background:#fff;
+  border:1px solid #d7e8ff;
+  border-radius:24px;
+  box-shadow:0 12px 35px rgba(11,85,212,.08);
+}
+.panel{padding:16px}
+.start,.primary{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:15px 18px;
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 12px 24px rgba(11,85,212,.18);
+}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.stat{
+  background:#f7fbff;
+  border:1px solid #e4efff;
+  border-radius:18px;
+  padding:12px 8px;
+  text-align:center;
+}
+.stat b{
+  display:block;
+  font-size:20px;
+  color:var(--blue);
+}
+.stat span{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:750;
+}
+.topicstrip{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.topicstrip span{
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:900;
+}
+.hidden{display:none!important}
+.top{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.back{
+  border:0;
+  background:#fff;
+  color:var(--blue);
+  font-weight:900;
+  border-radius:14px;
+  padding:10px 12px;
+  box-shadow:0 8px 20px rgba(11,85,212,.08);
+}
+.meta{flex:1}
+.meta b{display:block;font-size:15px}
+.meta span{font-size:12px;color:var(--muted)}
+.pill{
+  display:inline-block;
+  background:#edf5ff;
+  color:var(--blue);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+}
+.progress{
+  height:10px;
+  background:#deebff;
+  border-radius:999px;
+  overflow:hidden;
+  margin:10px 0 18px;
+}
+.bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#60a5fa,var(--blue));
+  transition:.25s;
+}
+.qcard{padding:20px}
+.counter{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.q{
+  font-size:22px;
+  line-height:1.3;
+  font-weight:900;
+  margin:10px 0 16px;
+}
+.opts{
+  display:grid;
+  gap:10px;
+}
+.opt{
+  text-align:left;
+  width:100%;
+  border:1px solid #dce9fb;
+  background:#f8fbff;
+  color:var(--ink);
+  padding:14px 15px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:760;
+  transition:.15s;
+}
+.opt:hover{
+  border-color:#98bfff;
+  background:#f1f7ff;
+}
+.opt.correct{
+  background:#ecfdf3;
+  border-color:#86d8a4;
+  color:#116b31;
+}
+.opt.wrong{
+  background:#fff1f1;
+  border-color:#efaaaa;
+  color:#a11d1d;
+}
+.feedback{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:14px 15px;
+  background:#f4f8ff;
+  border:1px solid #dbeafe;
+  font-size:14px;
+  line-height:1.5;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.result{text-align:center}
+.score{
+  font-size:58px;
+  font-weight:1000;
+  color:#fff;
+  letter-spacing:-3px;
+  margin:8px 0 0;
+}
+.result h2{margin:8px 0}
+.result p{
+  margin:0;
+  line-height:1.55;
+  opacity:.95;
+}
+.footer{
+  text-align:center;
+  color:#8ca0bc;
+  font-size:12px;
+  margin-top:16px;
+}
+@media(max-width:390px){
+  .hero h1{font-size:26px}
+  .q{font-size:20px}
+  .app{padding:14px 12px 24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand">
+    <div class="logo">DE-<span>MAX</span></div>
+    <div class="badge">A2 • LEKCIJA 7</div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h1>Više ponuđenih odgovora</h1>
+      <p>
+        Lekcija 7 • <b>trotzdem i veznici</b>, <b>jaka deklinacija prideva</b>,
+        <b>Was für ein...?</b> i lokacioni predlozi.
+      </p>
+    </div>
+
+    <div class="panel">
+      <button class="start" id="startBtn">Pokreni test</button>
+
+      <div class="stats">
+        <div class="stat"><b>24</b><span>pitanja</span></div>
+        <div class="stat"><b>A2</b><span>nivo</span></div>
+        <div class="stat"><b>4</b><span>odgovora</span></div>
+      </div>
+
+      <div class="topicstrip">
+        <span>trotzdem</span>
+        <span>veznici</span>
+        <span>Adjektivdeklination</span>
+        <span>Was für ein...?</span>
+        <span>lokalni predlozi</span>
+      </div>
+    </div>
+
+    <div class="footer">De-Max Deutsch • A2 Lekcija 7</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top">
+      <button id="backBtn" class="back">←</button>
+      <div class="meta">
+        <b id="quizTitle">Lekcija 7</b>
+        <span>trotzdem • deklinacija • predlozi</span>
+      </div>
+      <div class="pill" id="liveScore">0 bod.</div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="qcard">
+      <div class="counter" id="counter"></div>
+      <div class="q" id="question"></div>
+      <div class="opts" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button id="nextBtn" class="primary" disabled>Sledeće pitanje</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="hero result">
+      <div class="pill">REZULTAT</div>
+      <div class="score" id="scorePct">0%</div>
+      <h2 id="resultTitle">Test je završen</h2>
+      <p id="resultText"></p>
+    </div>
+
+    <div class="panel">
+      <button id="retryBtn" class="primary">Ponovi test</button>
+      <div style="height:10px"></div>
+      <button id="homeBtn" class="back" style="width:100%">Nazad na početak</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const DATA = {"title": "Lekcija 7", "questions": [{"q": "Es regnet stark, ___ gehe ich spazieren.", "o": ["weil", "trotzdem", "dass", "wenn"], "a": 1, "e": "„trotzdem“ uvodi dopusnu glavnu rečenicu: Es regnet stark, trotzdem gehe ich spazieren."}, {"q": "Thomas ist attraktiv. ___ hat er keine Freundin.", "o": ["Trotzdem", "Deshalb", "Weil", "Dass"], "a": 0, "e": "Na početku glavne rečenice: Trotzdem hat er keine Freundin."}, {"q": "Pia ist hungrig. Sie isst ___ nichts.", "o": ["dass", "wenn", "trotzdem", "weil"], "a": 2, "e": "„trotzdem“ može stajati i u sredini glavne rečenice."}, {"q": "Rudy ist krank. Er geht ___ nicht zum Arzt.", "o": ["trotzdem", "ob", "dass", "weil"], "a": 0, "e": "Ispravno: Er geht trotzdem nicht zum Arzt."}, {"q": "Es ist kalt. ___ trägt Paula keine Jacke.", "o": ["Weil", "Trotzdem", "Dass", "Wenn"], "a": 1, "e": "Kontrast/dopusnost: Trotzdem trägt Paula keine Jacke."}, {"q": "Ich habe keine Lust. Ich lerne ___ die Wörter.", "o": ["trotzdem", "dass", "ob", "weil"], "a": 0, "e": "Ispravno: Ich lerne trotzdem die Wörter."}, {"q": "Ich bleibe zu Hause, ___ ich krank bin.", "o": ["weil", "trotzdem", "deshalb", "ob"], "a": 0, "e": "„weil“ uvodi zavisnu rečenicu i glagol ide na kraj."}, {"q": "Meine Mutter sagt, ___ ich mehr lernen soll.", "o": ["wenn", "dass", "trotzdem", "deshalb"], "a": 1, "e": "Ispravno: Meine Mutter sagt, dass ich mehr lernen soll."}, {"q": "Wenn ich Zeit habe, ___ ich meinen Freund.", "o": ["besuche", "besuchen", "besucht", "besuchst"], "a": 0, "e": "U glavnoj rečenici glagol je na drugom mestu: besuche ich."}, {"q": "Ich weiß nicht, ___ er heute kommt.", "o": ["weil", "ob", "trotzdem", "deshalb"], "a": 1, "e": "Za indirektno pitanje „da li“ koristi se „ob“."}, {"q": "Gut___ Kaffee ist teuer.", "o": ["-er", "-e", "-es", "-en"], "a": 0, "e": "Nominativ, muški rod, bez člana: guter Kaffee."}, {"q": "Kalt___ Wasser ist gesund.", "o": ["-e", "-er", "-es", "-em"], "a": 2, "e": "Nominativ, srednji rod, bez člana: kaltes Wasser."}, {"q": "Schön___ Musik macht gute Laune.", "o": ["-e", "-er", "-es", "-en"], "a": 0, "e": "Nominativ, ženski rod: schöne Musik."}, {"q": "Klein___ Kinder spielen im Park.", "o": ["-e", "-en", "-er", "-es"], "a": 0, "e": "Nominativ množine bez člana: kleine Kinder."}, {"q": "Ich trinke heiß___ Tee.", "o": ["-er", "-en", "-e", "-es"], "a": 1, "e": "Akuzativ, muški rod: heißen Tee."}, {"q": "Er kauft frisch___ Brot.", "o": ["-es", "-e", "-en", "-em"], "a": 0, "e": "Akuzativ, srednji rod: frisches Brot."}, {"q": "Mit gut___ Freunden gehe ich ins Kino.", "o": ["-em", "-en", "-er", "-es"], "a": 1, "e": "Dativ množine: mit guten Freunden."}, {"q": "Bei schön___ Wetter gehen wir spazieren.", "o": ["-em", "-er", "-en", "-e"], "a": 0, "e": "Dativ, srednji rod: bei schönem Wetter."}, {"q": "Was für ___ Mann ist das?", "o": ["ein", "eine", "einen", "—"], "a": 0, "e": "Nominativ, muški rod: Was für ein Mann?"}, {"q": "Was für ___ Frau ist sie?", "o": ["ein", "eine", "einen", "—"], "a": 1, "e": "Nominativ, ženski rod: Was für eine Frau?"}, {"q": "Was für ___ Kaffee trinkst du?", "o": ["ein", "einen", "eine", "—"], "a": 1, "e": "Akuzativ, muški rod: Was für einen Kaffee?"}, {"q": "Wir fahren direkt ___ die Altstadt.", "o": ["gegenüber", "durch", "bis zur", "am vorbei"], "a": 1, "e": "Kretanje kroz prostor: durch die Altstadt."}, {"q": "Danach fährst du ___ die Brücke.", "o": ["über", "gegenüber", "entlang", "bis zum"], "a": 0, "e": "Kretanje preko nečega: über die Brücke."}, {"q": "Die Apotheke liegt ___ der Kirche.", "o": ["durch", "über", "gegenüber", "entlang"], "a": 2, "e": "„gegenüber“ = naspram, uz dativ: gegenüber der Kirche."}]};
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+const $ = id => document.getElementById(id);
+
+function show(id){
+  ["home","quiz","result"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function startQuiz(){
+  index = 0;
+  score = 0;
+  answered = false;
+  $("liveScore").textContent = "0 bod.";
+  show("quiz");
+  render();
+}
+
+function render(){
+  const q = DATA.questions[index];
+  answered = false;
+
+  $("counter").textContent = `Pitanje ${index+1} od ${DATA.questions.length}`;
+  $("question").textContent = q.q;
+  $("options").innerHTML = "";
+  $("feedback").style.display = "none";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = index === DATA.questions.length - 1
+    ? "Završi test"
+    : "Sledeće pitanje";
+  $("bar").style.width = `${(index / DATA.questions.length) * 100}%`;
+
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = opt;
+    btn.onclick = () => choose(i, btn);
+    $("options").appendChild(btn);
+  });
+}
+
+function choose(i, btn){
+  if(answered) return;
+  answered = true;
+
+  const q = DATA.questions[index];
+  const buttons = [...document.querySelectorAll(".opt")];
+
+  buttons.forEach((x, j) => {
+    x.disabled = true;
+    if(j === q.a) x.classList.add("correct");
+  });
+
+  if(i === q.a){
+    score++;
+    $("feedback").innerHTML = `<b>Tačno.</b> ${q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    $("feedback").innerHTML =
+      `<b>Netačno.</b> Tačan odgovor je: <b>${q.o[q.a]}</b><br>${q.e}`;
+  }
+
+  $("feedback").style.display = "block";
+  $("liveScore").textContent = `${score} bod.`;
+  $("bar").style.width = `${((index+1)/DATA.questions.length)*100}%`;
+  $("nextBtn").disabled = false;
+}
+
+function finish(){
+  const pct = Math.round(score / DATA.questions.length * 100);
+  $("scorePct").textContent = pct + "%";
+  $("resultTitle").textContent = "Lekcija 7 • završen test";
+
+  let msg = "";
+  if(pct >= 90) msg = "Odlično! Veoma dobro poznaješ gradivo Lekcije 7.";
+  else if(pct >= 75) msg = "Vrlo dobro! Ponovi još nekoliko pravila iz Lekcije 7.";
+  else if(pct >= 60) msg = "Dobro, ali ponovi veznike, deklinaciju i predloge.";
+  else msg = "Preporuka: ponovi Lekciju 7 i uradi test ponovo.";
+
+  $("resultText").textContent =
+    `${score} od ${DATA.questions.length} tačnih odgovora. ${msg}`;
+
+  show("result");
+}
+
+$("startBtn").onclick = startQuiz;
+$("backBtn").onclick = () => show("home");
+$("homeBtn").onclick = () => show("home");
+$("retryBtn").onclick = startQuiz;
+
+$("nextBtn").onclick = () => {
+  if(!answered) return;
+
+  if(index < DATA.questions.length - 1){
+    index++;
+    render();
+  } else {
+    finish();
+  }
+};
+</script>
+</body>
+</html>
