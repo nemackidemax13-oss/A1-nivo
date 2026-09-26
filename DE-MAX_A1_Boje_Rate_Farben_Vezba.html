@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#123b9c">
+<title>De-Max A1 • Rate Farben!</title>
+<style>
+:root{--blue:#103b98;--blue2:#08296f;--yellow:#ffd51a;--ink:#071a42;--muted:#69758a;--ok:#11844a;--bad:#cd3349}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{width:min(100%,960px);margin:auto;padding:10px}
+.hero{text-align:center;padding:12px 6px 5px}
+.hero h1{margin:0;font-size:clamp(2.4rem,7vw,4.8rem);font-weight:1000;letter-spacing:.02em;color:var(--blue2);text-shadow:0 3px 0 #e5e8ef}
+.hero p{display:inline-block;margin:4px 0 0;background:var(--yellow);border:2px solid #e2b900;border-radius:999px;padding:7px 18px;font-weight:1000}
+.track{margin-top:13px;padding:14px;border:2px solid #dce4ef;border-radius:22px;background:#fbfcff}
+.dots{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}
+.dot{aspect-ratio:1;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px #d9dfeb,0 4px 10px rgba(20,40,80,.12);display:grid;place-items:center;font-weight:1000;font-size:1.25rem;color:#fff;text-shadow:0 1px 3px #000}
+.dot.light{color:#101828;text-shadow:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stat{background:#f6f8fb;border:1px solid #e0e6ef;border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;color:var(--blue);font-size:1.3rem}.stat span{font-size:.72rem;color:var(--muted)}
+.progw{height:9px;background:#e7edf5;border-radius:99px;overflow:hidden;margin-top:8px}.prog{height:100%;width:0;background:linear-gradient(90deg,#ef1b1b,#ffd51a,#28b51e,#1769d2,#8b3de0);transition:.25s}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.tab{border:0;border-radius:13px;padding:11px;font-weight:1000;cursor:pointer;background:#edf2fb;color:var(--blue)}.tab.active{background:var(--blue);color:#fff}
+.quiz{margin-top:12px;border:2px solid #d6e0ee;border-radius:20px;overflow:hidden}
+.qhead{background:var(--blue);color:#fff;padding:9px 14px;display:flex;justify-content:space-between;gap:10px;font-weight:1000}
+.qbody{padding:15px;text-align:center}
+.bigColor{width:min(54vw,230px);aspect-ratio:1;border-radius:50%;margin:4px auto 12px;border:8px solid #fff;box-shadow:0 0 0 3px #d9e1ed,0 8px 22px rgba(20,40,80,.14)}
+.question{font-size:clamp(1.35rem,3.3vw,2rem);font-weight:1000;margin:8px 0}
+.hint{color:var(--muted);font-size:.88rem;margin-bottom:10px}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;max-width:620px;margin:auto}
+.opt{border:2px solid #d5dfed;background:#fff;border-radius:13px;padding:13px;font-size:1.05rem;font-weight:1000;cursor:pointer}
+.opt.correct{background:#effaf3;border-color:#7bc99a;color:var(--ok)}.opt.wrong{background:#fff0f3;border-color:#e59cab;color:var(--bad)}
+.feedback{font-weight:900;min-height:24px;margin-top:8px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.solution{display:none;margin:8px auto 0;max-width:620px;padding:10px 12px;border-radius:12px;background:#eef6ff;border:1px solid #c8dcf3;line-height:1.45}.solution.show{display:block}
+.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;background:var(--blue);color:#fff}.btn.ghost{background:#edf2f9;color:var(--blue)}
+.listenChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:650px;margin:auto}
+.colorChoice{aspect-ratio:1;border-radius:16px;border:4px solid #fff;box-shadow:0 0 0 2px #d5dfeb;cursor:pointer}
+.colorChoice.correct{box-shadow:0 0 0 4px #1a9a58}.colorChoice.wrong{box-shadow:0 0 0 4px #d63a50}
+.complete{display:none;margin-top:14px;padding:20px;text-align:center;background:#effaf3;border:2px solid #8fcda8;border-radius:17px}.complete.show{display:block}
+.footer{text-align:center;color:#7a8493;font-size:.74rem;padding:15px 0}
+@media(max-width:650px){.dots{grid-template-columns:repeat(4,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.options{grid-template-columns:1fr 1fr}.listenChoices{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero">
+  <h1>RATE FARBEN!</h1>
+  <p>Welche Farbe ist das?</p>
+</section>
+
+<section class="track" id="track"></section>
+
+<section class="stats">
+  <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+  <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+  <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+  <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+</section>
+<div class="progw"><div class="prog" id="prog"></div></div>
+
+<div class="tabs">
+  <button class="tab active" id="tabSee" type="button">🎨 Pogledaj → izaberi naziv</button>
+  <button class="tab" id="tabListen" type="button">🎧 Poslušaj → izaberi boju</button>
+</div>
+
+<section class="quiz" id="seeQuiz">
+  <div class="qhead"><span>VEŽBA 1 • BOJE</span><span id="seeCounter">1 / 12</span></div>
+  <div class="qbody">
+    <div class="bigColor" id="bigColor"></div>
+    <div class="question">Welche Farbe ist das?</div>
+    <div class="hint">Koja je ovo boja? Izaberi nemački naziv.</div>
+    <div class="options" id="nameOptions"></div>
+    <div class="feedback" id="seeFeedback"></div>
+    <div class="solution" id="seeSolution"></div>
+    <div class="controls"><button class="btn" id="repeatQuestion" type="button">🔊 Ponovi pitanje</button></div>
+  </div>
+</section>
+
+<section class="quiz" id="listenQuiz" style="display:none">
+  <div class="qhead"><span>VEŽBA 2 • SLUŠANJE</span><span id="listenCounter">1 / 12</span></div>
+  <div class="qbody">
+    <div style="font-size:4rem">🎧</div>
+    <div class="question">Welche Farbe hörst du?</div>
+    <div class="hint">Naziv boje se automatski izgovara. Izaberi odgovarajuću boju.</div>
+    <div class="listenChoices" id="colorOptions"></div>
+    <div class="feedback" id="listenFeedback"></div>
+    <div class="solution" id="listenSolution"></div>
+    <div class="controls"><button class="btn" id="repeatColor" type="button">🔁 Ponovi izgovor</button></div>
+  </div>
+</section>
+
+<section class="complete" id="complete">
+  <div style="font-size:2.5rem">🏆</div>
+  <h2>Vežba završena!</h2>
+  <p id="finalScore"></p>
+</section>
+
+<div class="footer">De-Max • A1 nemački jezik • Farben</div>
+</div>
+
+<script>
+const colors=[{"de": "rot", "sr": "crvena", "hex": "#ef1b1b"}, {"de": "weiß", "sr": "bela", "hex": "#ffffff"}, {"de": "gelb", "sr": "žuta", "hex": "#ffd51a"}, {"de": "grün", "sr": "zelena", "hex": "#28b51e"}, {"de": "rosa", "sr": "roze", "hex": "#ff6aa7"}, {"de": "blau", "sr": "plava", "hex": "#1769d2"}, {"de": "bunt", "sr": "šarena", "hex": "linear-gradient(135deg,#ef1b1b 0 18%,#ff9818 18% 34%,#ffd51a 34% 50%,#28b51e 50% 66%,#1769d2 66% 82%,#7c35d8 82%)"}, {"de": "schwarz", "sr": "crna", "hex": "#151515"}, {"de": "lila", "sr": "ljubičasta", "hex": "#8b3de0"}, {"de": "grau", "sr": "siva", "hex": "#9da1a8"}, {"de": "orange", "sr": "narandžasta", "hex": "#ff7812"}, {"de": "braun", "sr": "braon", "hex": "#914817"}];
+let seeOrder=[...colors.keys()], listenOrder=[...colors.keys()];
+function shuffle(a){let x=[...a];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+seeOrder=shuffle(seeOrder);listenOrder=shuffle(listenOrder);
+let seePos=0,listenPos=0,correct=0,wrong=0,seeLocked=false,listenLocked=false;
+
+function gv(){let vs=speechSynthesis.getVoices();return vs.find(v=>/^de(-|_)/i.test(v.lang))}
+function speak(text,rate=.8,onEnd=null){if(!("speechSynthesis"in window)){if(onEnd)onEnd();return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang="de-DE";u.rate=rate;let v=gv();if(v)u.voice=v;let f=false,done=()=>{if(f)return;f=true;if(onEnd)onEnd()};u.onend=done;u.onerror=done;speechSynthesis.speak(u)}
+speechSynthesis.onvoiceschanged=()=>gv();
+
+function bg(c){return c.hex.startsWith("linear")?c.hex:c.hex}
+function light(c){return ["weiß","gelb"].includes(c.de)}
+
+const track=document.getElementById("track");
+const dots=document.createElement("div");dots.className="dots";
+colors.forEach((c,i)=>{let d=document.createElement("div");d.className="dot"+(light(c)?" light":"");d.style.background=bg(c);d.textContent=i+1;d.title=c.de+" – "+c.sr;d.onclick=()=>speak(c.de,.78);dots.appendChild(d)});
+track.appendChild(dots);
+
+function renderSee(){
+ seeLocked=false;let c=colors[seeOrder[seePos]];
+ seeCounter.textContent=`${seePos+1} / ${colors.length}`;bigColor.style.background=bg(c);
+ nameOptions.innerHTML="";seeFeedback.textContent="";seeFeedback.className="feedback";seeSolution.classList.remove("show");seeSolution.innerHTML="";
+ let others=shuffle(colors.filter(x=>x.de!==c.de)).slice(0,3);
+ shuffle([c,...others]).forEach(o=>{let b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o.de;b.onclick=()=>chooseSee(o,b);nameOptions.appendChild(b)});
+ setTimeout(()=>speak("Welche Farbe ist das?",.82),350);
+}
+function chooseSee(o,b){
+ if(seeLocked)return;seeLocked=true;let c=colors[seeOrder[seePos]],ok=o.de===c.de;
+ [...nameOptions.children].forEach(x=>{x.disabled=true;if(x.textContent===c.de)x.classList.add("correct")});if(!ok)b.classList.add("wrong");
+ seeFeedback.className="feedback "+(ok?"ok":"bad");seeFeedback.textContent=ok?"✓ Tačno!":"✗ Nije tačno. Tačan odgovor je označen.";
+ if(ok)correct++;else wrong++;
+ seeSolution.innerHTML=`<b>Das ist ${c.de}.</b><br>Prevod: ${c.sr} boja.`;seeSolution.classList.add("show");update();
+ speak("Das ist "+c.de+".",.78,()=>setTimeout(()=>{if(seePos<colors.length-1){seePos++;renderSee()}else{switchToListen()}},650));
+}
+
+function renderListen(){
+ listenLocked=false;let c=colors[listenOrder[listenPos]];
+ listenCounter.textContent=`${listenPos+1} / ${colors.length}`;colorOptions.innerHTML="";listenFeedback.textContent="";listenFeedback.className="feedback";listenSolution.classList.remove("show");listenSolution.innerHTML="";
+ let others=shuffle(colors.filter(x=>x.de!==c.de)).slice(0,3);
+ shuffle([c,...others]).forEach(o=>{let b=document.createElement("button");b.type="button";b.className="colorChoice";b.style.background=bg(o);b.setAttribute("aria-label","Boja");b.onclick=()=>chooseListen(o,b);colorOptions.appendChild(b)});
+ setTimeout(()=>speak(c.de,.76),500);
+}
+function chooseListen(o,b){
+ if(listenLocked)return;listenLocked=true;let c=colors[listenOrder[listenPos]],ok=o.de===c.de;
+ [...colorOptions.children].forEach(x=>x.disabled=true);if(ok)b.classList.add("correct");else b.classList.add("wrong");
+ if(!ok){[...colorOptions.children].forEach(x=>{if(x.style.background===bg(c)||x.style.backgroundImage===bg(c))x.classList.add("correct")})}
+ listenFeedback.className="feedback "+(ok?"ok":"bad");listenFeedback.textContent=ok?"✓ Tačno!":"✗ Nije tačno.";
+ if(ok)correct++;else wrong++;
+ listenSolution.innerHTML=`<b>${c.de}</b> = ${c.sr}`;listenSolution.classList.add("show");update();
+ speak(c.de,.76,()=>setTimeout(()=>{if(listenPos<colors.length-1){listenPos++;renderListen()}else{finish()}},600));
+}
+
+function switchToListen(){seeQuiz.style.display="none";listenQuiz.style.display="block";tabSee.classList.remove("active");tabListen.classList.add("active");renderListen();listenQuiz.scrollIntoView({behavior:"smooth",block:"start"})}
+function finish(){listenQuiz.style.display="none";complete.classList.add("show");let d=correct+wrong;finalScore.textContent=`Tačnost: ${Math.round(correct/d*100)}% • Tačno: ${correct} • Greške: ${wrong}`}
+function update(){let d=correct+wrong,total=colors.length*2;done.textContent=d;document.getElementById("correct").textContent=correct;document.getElementById("wrong").textContent=wrong;accuracy.textContent=(d?Math.round(correct/d*100):0)+"%";prog.style.width=Math.round(d/total*100)+"%"}
+repeatQuestion.onclick=()=>speak("Welche Farbe ist das?",.82);
+repeatColor.onclick=()=>speak(colors[listenOrder[listenPos]].de,.76);
+tabSee.onclick=()=>{seeQuiz.style.display="block";listenQuiz.style.display="none";tabSee.classList.add("active");tabListen.classList.remove("active")};
+tabListen.onclick=()=>{seeQuiz.style.display="none";listenQuiz.style.display="block";tabSee.classList.remove("active");tabListen.classList.add("active");renderListen()};
+renderSee();update();
+</script>
+</body>
+</html>
