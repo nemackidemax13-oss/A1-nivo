@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>DE-MAX | Razdvojivi glagoli</title>
+<style>
+:root{
+  --green:#0b8f2f;
+  --green2:#087326;
+  --green-soft:#eaf8ef;
+  --yellow:#ffd51f;
+  --ink:#111827;
+  --muted:#687385;
+  --line:#dbe7df;
+  --red:#d92f2f;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#f3f7f4;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{min-height:100vh}
+button{font:inherit}
+.app{width:min(100%,760px);margin:auto;min-height:100vh;background:#fff;box-shadow:0 0 35px rgba(17,24,39,.08)}
+.hero{padding:20px 16px 18px;background:linear-gradient(135deg,#fff 0%,#f4fff6 100%);border-bottom:1px solid var(--line);text-align:center}
+.brand{display:flex;justify-content:center;align-items:center;gap:9px;font-weight:1000;color:var(--green);letter-spacing:.08em;font-size:15px}
+.brand-dot{width:12px;height:12px;border-radius:50%;background:var(--yellow);border:3px solid var(--green)}
+h1{margin:8px 0 5px;font-size:clamp(28px,7vw,46px);line-height:.98;text-transform:uppercase;font-weight:1000;letter-spacing:-.045em}
+.hero-line{display:inline-block;margin-top:8px;background:var(--green);color:#fff;padding:8px 16px;border-radius:10px;font-weight:1000;font-size:clamp(17px,4.6vw,25px)}
+.sub{margin:10px auto 0;color:var(--muted);font-weight:700;max-width:560px;font-size:14px}
+
+.tabs{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);backdrop-filter:blur(9px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.tab{border:2px solid var(--green);background:#fff;color:var(--green);border-radius:14px;padding:11px 8px;font-weight:1000;cursor:pointer}
+.tab.active{background:var(--green);color:#fff}
+
+main{padding:14px}
+.panel{display:none}
+.panel.active{display:block}
+
+.rule{border:2px solid var(--green);border-radius:18px;overflow:hidden;margin-bottom:14px}
+.rule-title{background:var(--green);color:white;padding:11px 14px;font-weight:1000;text-transform:uppercase;font-size:18px}
+.rule-body{padding:13px;background:linear-gradient(180deg,#fff,#fbfffc)}
+.rule-row{display:flex;gap:9px;align-items:flex-start;margin:8px 0;font-weight:700}
+.check{flex:0 0 24px;width:24px;height:24px;background:var(--green);color:#fff;border-radius:50%;display:grid;place-items:center;font-weight:1000}
+.formula{display:flex;flex-wrap:wrap;gap:7px;align-items:center;justify-content:center;margin-top:12px}
+.token{border:1.7px solid #aeb9b1;background:#fff;border-radius:9px;padding:7px 10px;font-weight:1000}
+.token.g{background:var(--green);color:#fff;border-color:var(--green)}
+.token.y{background:var(--yellow);border-color:#efc900}
+.arrow{font-weight:1000;color:#1f2937}
+
+.card{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 8px 22px rgba(17,24,39,.06);padding:15px;margin-bottom:14px}
+.headline{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.num{width:38px;height:38px;border-radius:50%;background:var(--green);color:white;display:grid;place-items:center;font-weight:1000;font-size:20px;flex:0 0 38px}
+.headline h2{margin:0;font-size:19px;line-height:1.15}
+.small{font-size:13px;color:var(--muted);font-weight:700}
+.progress-wrap{height:11px;border-radius:99px;background:#e9eeeb;overflow:hidden;margin:10px 0 14px}
+.progress{height:100%;background:linear-gradient(90deg,var(--green),#32b854);width:0%;transition:.3s}
+.scoreline{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:13px;font-weight:900;color:#4b5563;margin-bottom:10px}
+
+.type-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:var(--green-soft);color:var(--green2);font-weight:1000;font-size:12px;text-transform:uppercase}
+.prompt{margin:10px 0 4px;font-size:16px;color:#4b5563;font-weight:800}
+.serbian{font-size:22px;font-weight:1000;line-height:1.2;margin:4px 0 14px}
+.answers{display:grid;gap:9px}
+.answer{width:100%;text-align:left;border:2px solid #d9e3dc;background:#fff;border-radius:14px;padding:12px 13px;cursor:pointer;font-weight:900;line-height:1.35;transition:.18s}
+.answer:hover{border-color:#9bcfaa;background:#f8fff9}
+.answer.correct{border-color:var(--green);background:#e9f9ee;color:#086826}
+.answer.wrong{border-color:#e05c5c;background:#fff0f0;color:#ad2424}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:12px;border-radius:14px;padding:12px 13px;font-weight:850;line-height:1.45}
+.feedback.show{display:block}
+.feedback.ok{background:#e8f8ed;color:#086826}
+.feedback.no{background:#fff1f1;color:#a52323}
+.correct-line{display:block;margin-top:4px;color:#111827}
+.actions{display:flex;gap:8px;margin-top:12px}
+.btn{border:0;border-radius:13px;padding:11px 14px;font-weight:1000;cursor:pointer}
+.btn.primary{background:var(--green);color:#fff;flex:1}
+.btn.secondary{background:#edf4ef;color:#21562e}
+.btn:active{transform:translateY(1px)}
+
+.verb-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.verb-card{border:2px solid #dce9df;border-radius:16px;padding:13px;background:linear-gradient(180deg,#fff,#fbfffc)}
+.verb-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.verb{font-size:21px;font-weight:1000}
+.meaning{font-size:14px;color:#4b5563;font-weight:800;margin-top:3px}
+.split{margin-top:9px;padding:9px 10px;background:#f5f7f5;border-radius:10px;font-weight:900}
+.hl{background:var(--yellow);border-radius:6px;padding:1px 5px}
+.speak{width:38px;height:38px;border-radius:12px;border:0;background:var(--green);color:#fff;cursor:pointer;font-size:17px}
+.example{margin-top:8px;font-size:14px;font-weight:800;color:#374151}.translation{margin-top:5px;font-size:13px;font-weight:800;color:var(--green2);background:var(--green-soft);border-radius:9px;padding:7px 9px}
+
+.mini-q{border-top:1px dashed #cbd8ce;margin-top:15px;padding-top:15px}
+.prefix-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mini-translation{margin-top:8px;font-size:14px;font-weight:900;color:var(--green2);background:var(--green-soft);border-radius:10px;padding:9px 10px}
+.prefix{border:2px solid #d7e2da;border-radius:12px;padding:10px;background:#fff;font-weight:1000;cursor:pointer}
+.prefix.correct{border-color:var(--green);background:#eaf8ef;color:#086826}
+.prefix.wrong{border-color:#df5b5b;background:#fff0f0;color:#a52323}
+
+.footer{text-align:center;padding:22px 14px 28px;color:#7a8490;font-size:12px;font-weight:800}
+.hidden{display:none!important}
+@media (min-width:640px){
+  .verb-grid{grid-template-columns:1fr 1fr}
+  main{padding:18px}
+}
+
+.build-area{min-height:62px;border:2px dashed #a9cbb2;border-radius:16px;background:#f9fffa;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;margin:10px 0}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.word-chip,.built-chip{border:2px solid #d5e3d8;border-radius:12px;padding:9px 11px;background:#fff;font-weight:1000;cursor:pointer;box-shadow:0 3px 8px rgba(17,24,39,.04)}
+.word-chip:hover{border-color:#82bf91;background:#f3fff6}
+.built-chip{background:var(--green-soft);border-color:#9dcea8;color:#0a6d29}
+.build-placeholder{color:#89958d;font-weight:800;font-size:14px;padding:8px 4px}
+.build-feedback{display:none;margin-top:10px;border-radius:14px;padding:12px 13px;font-weight:900}
+.build-feedback.show{display:block}
+.build-feedback.ok{background:#e9f8ee;color:#086826}
+.build-feedback.no{background:#fff0f0;color:#a52323}
+.scramble-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.scramble-actions .wide{grid-column:1 / -1}
+@media(max-width:520px){
+ .tabs{grid-template-columns:1fr 1fr 1fr}
+ .tab{font-size:11px;padding:10px 4px}
+}
+
+
+.auto-audio-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:12px 14px 0;padding:10px 12px;border:1px solid #cfe1d3;
+  border-radius:14px;background:#f4fff7;font-weight:900;font-size:13px
+}
+.auto-toggle{
+  border:0;border-radius:999px;background:var(--green);color:#fff;
+  padding:8px 12px;font-weight:1000;cursor:pointer;white-space:nowrap
+}
+.auto-toggle.off{background:#9aa3a0}
+.listen-all{
+  width:100%;border:0;border-radius:13px;background:var(--green);color:#fff;
+  padding:11px 14px;font-weight:1000;cursor:pointer;margin:0 0 12px
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="brand"><span class="brand-dot"></span> DE-MAX NEMAČKI JEZIK</div>
+    <h1>Razdvojivi glagoli</h1>
+    <div class="hero-line">Potvrdne i upitne rečenice</div>
+    <p class="sub">Vežbaj red reči, mesto glagola i razdvojeni prefiks na kraju rečenice.</p>
+  </header>
+
+  <div class="auto-audio-bar">
+    <span>🔊 Automatski nemački izgovor</span>
+    <button id="autoAudioToggle" class="auto-toggle">UKLJUČEN</button>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="exercise">1. REČENICE</button>
+    <button class="tab" data-tab="verbs">2. GLAGOLI</button>
+    <button class="tab" data-tab="scramble">3. SLOŽI REČENICU</button>
+  </nav>
+
+  <main>
+    <section id="exercise" class="panel active">
+<div class="card">
+        <div class="headline">
+          <div class="num">1</div>
+          <div>
+            <h2>Izaberi tačnu rečenicu</h2>
+            <div class="small">Potvrdne i upitne rečenice se smenjuju.</div>
+          </div>
+        </div>
+
+        <div class="scoreline">
+          <span id="counter">Pitanje 1 / 24</span>
+          <span id="score">Tačno: 0</span>
+        </div>
+        <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+
+        <span id="typePill" class="type-pill">Potvrdna rečenica</span>
+        <div class="prompt">Prevedi pravilnim redom reči:</div>
+        <div id="serbian" class="serbian"></div>
+        <div id="answers" class="answers"></div>
+        <div id="feedback" class="feedback"></div>
+
+        <div class="actions">
+          <button id="speakBtn" class="btn secondary">🔊 Izgovor</button>
+          <button id="nextBtn" class="btn primary">Sledeće →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="verbs" class="panel">
+      <div class="card">
+        <div class="headline">
+          <div class="num">2</div>
+          <div>
+            <h2>Lista razdvojivih glagola</h2>
+            <div class="small">Klikni na zvučnik za nemački izgovor.</div>
+          </div>
+        </div>
+        <button id="listenAllVerbs" class="listen-all">▶ Automatski preslušaj sve glagole i primere</button>
+        <div id="verbGrid" class="verb-grid"></div>
+      </div>
+
+      <div class="card">
+        <div class="headline">
+          <div class="num">✓</div>
+          <div>
+            <h2>Brza vežba prefiksa</h2>
+            <div class="small">Izaberi koji prefiks ide na kraj rečenice.</div>
+          </div>
+        </div>
+        <div id="miniExercise"></div>
+      </div>
+    </section>
+
+    <section id="scramble" class="panel">
+      <div class="card">
+        <div class="headline">
+          <div class="num">3</div>
+          <div>
+            <h2>Složi rečenicu</h2>
+            <div class="small">Klikni na reči pravilnim redom. Prefiks ide na kraj.</div>
+          </div>
+        </div>
+
+        <div class="scoreline">
+          <span id="scrambleCounter">Primer 1 / 24</span>
+          <span id="scrambleScore">Tačno: 0</span>
+        </div>
+        <div class="progress-wrap"><div id="scrambleProgress" class="progress"></div></div>
+
+        <span id="scrambleType" class="type-pill">Potvrdna rečenica</span>
+        <div class="prompt">Prevod:</div>
+        <div id="scrambleTranslation" class="serbian"></div>
+
+        <div class="prompt">Sastavi nemačku rečenicu:</div>
+        <div id="buildArea" class="build-area">
+          <span class="build-placeholder">Ovde će se pojaviti izabrane reči…</span>
+        </div>
+
+        <div id="wordBank" class="word-bank"></div>
+        <div id="buildFeedback" class="build-feedback"></div>
+
+        <div class="scramble-actions">
+          <button id="undoWord" class="btn secondary">↶ Vrati reč</button>
+          <button id="resetWords" class="btn secondary">↺ Počni ponovo</button>
+          <button id="checkSentence" class="btn primary wide">✓ Proveri rečenicu</button>
+          <button id="nextScramble" class="btn primary wide">Sledeći primer →</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="footer">DE-MAX • A1 nemački • Razdvojivi glagoli</div>
+</div>
+
+<script>
+const items = [
+  {type:"Potvrdna rečenica", sr:"Ja ustajem rano svakog dana.", correct:"Ich stehe jeden Tag früh auf.", wrong:["Ich aufstehe jeden Tag früh.","Ich stehe auf jeden Tag früh."]},
+  {type:"Upitna rečenica", sr:"Da li ustaješ rano?", correct:"Stehst du früh auf?", wrong:["Du stehst früh auf?","Aufstehst du früh?"]},
+  {type:"Potvrdna rečenica", sr:"Ja otvaram prozor.", correct:"Ich mache das Fenster auf.", wrong:["Ich aufmache das Fenster.","Ich mache auf das Fenster."]},
+  {type:"Upitna rečenica", sr:"Da li otvaraš vrata?", correct:"Machst du die Tür auf?", wrong:["Du machst die Tür auf?","Aufmachst du die Tür?"]},
+  {type:"Potvrdna rečenica", sr:"On zatvara vrata.", correct:"Er macht die Tür zu.", wrong:["Er zumacht die Tür.","Er macht zu die Tür."]},
+  {type:"Upitna rečenica", sr:"Da li zatvaraš prozor?", correct:"Machst du das Fenster zu?", wrong:["Du machst das Fenster zu?","Zumachst du das Fenster?"]},
+  {type:"Potvrdna rečenica", sr:"Ja palim svetlo.", correct:"Ich mache das Licht an.", wrong:["Ich anmache das Licht.","Ich mache an das Licht."]},
+  {type:"Upitna rečenica", sr:"Da li pališ televizor?", correct:"Machst du den Fernseher an?", wrong:["Du machst den Fernseher an?","Anmachst du den Fernseher?"]},
+  {type:"Potvrdna rečenica", sr:"Ona gasi računar.", correct:"Sie macht den Computer aus.", wrong:["Sie ausmacht den Computer.","Sie macht aus den Computer."]},
+  {type:"Upitna rečenica", sr:"Da li gasiš svetlo?", correct:"Machst du das Licht aus?", wrong:["Du machst das Licht aus?","Ausmachst du das Licht?"]},
+  {type:"Potvrdna rečenica", sr:"Mi gledamo televiziju uveče.", correct:"Wir sehen am Abend fern.", wrong:["Wir fernsehen am Abend.","Wir sehen fern am Abend."]},
+  {type:"Upitna rečenica", sr:"Da li gledaš televiziju danas?", correct:"Siehst du heute fern?", wrong:["Du siehst heute fern?","Fernsiehst du heute?"]},
+  {type:"Potvrdna rečenica", sr:"Ja zovem svoju drugaricu.", correct:"Ich rufe meine Freundin an.", wrong:["Ich anrufe meine Freundin.","Ich rufe an meine Freundin."]},
+  {type:"Upitna rečenica", sr:"Da li zoveš majku?", correct:"Rufst du deine Mutter an?", wrong:["Du rufst deine Mutter an?","Anrufst du deine Mutter?"]},
+  {type:"Potvrdna rečenica", sr:"Ja sređujem svoju sobu.", correct:"Ich räume mein Zimmer auf.", wrong:["Ich aufräume mein Zimmer.","Ich räume auf mein Zimmer."]},
+  {type:"Upitna rečenica", sr:"Da li sređuješ sobu?", correct:"Räumst du dein Zimmer auf?", wrong:["Du räumst dein Zimmer auf?","Aufräumst du dein Zimmer?"]},
+  {type:"Potvrdna rečenica", sr:"Mi ustajemo u sedam sati.", correct:"Wir stehen um sieben Uhr auf.", wrong:["Wir aufstehen um sieben Uhr.","Wir stehen auf um sieben Uhr."]},
+  {type:"Upitna rečenica", sr:"Da li ona otvara prodavnicu?", correct:"Macht sie das Geschäft auf?", wrong:["Sie macht das Geschäft auf?","Aufmacht sie das Geschäft?"]},
+  {type:"Potvrdna rečenica", sr:"Ti zatvaraš knjigu.", correct:"Du machst das Buch zu.", wrong:["Du zumachst das Buch.","Du machst zu das Buch."]},
+  {type:"Upitna rečenica", sr:"Da li on pali radio?", correct:"Macht er das Radio an?", wrong:["Er macht das Radio an?","Anmacht er das Radio?"]},
+  {type:"Potvrdna rečenica", sr:"Ja gasim telefon.", correct:"Ich mache das Handy aus.", wrong:["Ich ausmache das Handy.","Ich mache aus das Handy."]},
+  {type:"Upitna rečenica", sr:"Da li vi gledate televiziju?", correct:"Seht ihr fern?", wrong:["Ihr seht fern?","Fernseht ihr?"]},
+  {type:"Potvrdna rečenica", sr:"Ona zove lekara.", correct:"Sie ruft den Arzt an.", wrong:["Sie anruft den Arzt.","Sie ruft an den Arzt."]},
+  {type:"Upitna rečenica", sr:"Da li oni sređuju stan?", correct:"Räumen sie die Wohnung auf?", wrong:["Sie räumen die Wohnung auf?","Aufräumen sie die Wohnung?"]}
+];
+
+const verbs = [
+  {v:"aufstehen", m:"ustati", split:"steht … auf", ex:"Ich stehe um 7 Uhr auf.", tr:"Ja ustajem u 7 sati."},
+  {v:"aufmachen", m:"otvoriti", split:"macht … auf", ex:"Ich mache das Fenster auf.", tr:"Ja otvaram prozor."},
+  {v:"zumachen", m:"zatvoriti", split:"macht … zu", ex:"Ich mache die Tür zu.", tr:"Ja zatvaram vrata."},
+  {v:"anmachen", m:"upaliti / uključiti", split:"macht … an", ex:"Ich mache das Licht an.", tr:"Ja palim svetlo."},
+  {v:"ausmachen", m:"ugasiti / isključiti", split:"macht … aus", ex:"Ich mache den Fernseher aus.", tr:"Ja gasim televizor."},
+  {v:"fernsehen", m:"gledati televiziju", split:"sieht … fern", ex:"Ich sehe am Abend fern.", tr:"Ja gledam televiziju uveče."},
+  {v:"anrufen", m:"pozvati telefonom", split:"ruft … an", ex:"Ich rufe meine Freundin an.", tr:"Ja zovem svoju drugaricu."},
+  {v:"aufräumen", m:"srediti / pospremiti", split:"räumt … auf", ex:"Ich räume mein Zimmer auf.", tr:"Ja sređujem svoju sobu."}
+];
+
+let idx=0, score=0, answered=false, currentCorrect="";
+const $=s=>document.querySelector(s);
+let autoAudio = true;
+let verbAutoRun = false;
+
+function stopSpeech(){
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+}
+
+function speakSequence(lines, index=0){
+  if(!autoAudio || !("speechSynthesis" in window) || index>=lines.length){
+    verbAutoRun=false;
+    return;
+  }
+  const u=new SpeechSynthesisUtterance(lines[index]);
+  u.lang="de-DE"; u.rate=.88; u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const de=voices.find(v=>v.lang && v.lang.toLowerCase().startsWith("de"));
+  if(de) u.voice=de;
+  u.onend=()=>setTimeout(()=>speakSequence(lines,index+1),400);
+  speechSynthesis.speak(u);
+}
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="de-DE"; u.rate=.9; u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const de=voices.find(v=>v.lang && v.lang.toLowerCase().startsWith("de"));
+  if(de) u.voice=de;
+  speechSynthesis.speak(u);
+}
+function autoSpeak(text){
+  if(autoAudio) speak(text);
+}
+function renderQuestion(){
+  answered=false;
+  const q=items[idx];
+  currentCorrect=q.correct;
+  $("#counter").textContent=`Pitanje ${idx+1} / ${items.length}`;
+  $("#score").textContent=`Tačno: ${score}`;
+  $("#progress").style.width=`${(idx/items.length)*100}%`;
+  $("#typePill").textContent=q.type;
+  $("#serbian").textContent=q.sr;
+  $("#feedback").className="feedback";
+  $("#feedback").innerHTML="";
+  const opts=shuffle([q.correct,...q.wrong]);
+  $("#answers").innerHTML="";
+  opts.forEach(t=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=t;
+    b.onclick=()=>answer(b,t,q);
+    $("#answers").appendChild(b);
+  });
+}
+function answer(btn,text,q){
+  if(answered)return;
+  answered=true;
+  document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
+  const ok=text===q.correct;
+  if(ok){score++; btn.classList.add("correct")}
+  else{
+    btn.classList.add("wrong");
+    [...document.querySelectorAll(".answer")].find(b=>b.textContent===q.correct)?.classList.add("correct");
+  }
+  $("#score").textContent=`Tačno: ${score}`;
+  $("#feedback").className=`feedback show ${ok?"ok":"no"}`;
+  $("#feedback").innerHTML = ok
+    ? `✓ Tačno! <span class="correct-line">${q.correct}</span><span class="correct-line" style="color:#4b5563">Prevod: ${q.s}</span>`
+    : `✕ Nije tačno. <span class="correct-line">Tačno: ${q.correct}</span><span class="correct-line" style="color:#4b5563">Prevod: ${q.s}</span>`;
+  autoSpeak(q.correct);
+}
+$("#nextBtn").onclick=()=>{
+  if(idx<items.length-1){idx++;renderQuestion()}
+  else{
+    $("#progress").style.width="100%";
+    $("#answers").innerHTML="";
+    $("#typePill").textContent="Završeno";
+    $("#serbian").textContent=`Rezultat: ${score} / ${items.length} (${Math.round(score/items.length*100)}%)`;
+    $("#feedback").className="feedback show ok";
+    $("#feedback").innerHTML= score>=20 ? "Odlično! Razdvojivi glagoli su ti veoma dobri." : "Ponovi glagole i pokušaj još jednom.";
+    $("#nextBtn").textContent="Ponovi vežbu";
+    $("#nextBtn").onclick=()=>location.reload();
+  }
+};
+$("#speakBtn").onclick=()=>speak(currentCorrect);
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById(t.dataset.tab).classList.add("active");
+    if(t.dataset.tab!=="verbs" && verbAutoRun){
+      stopSpeech();
+      verbAutoRun=false;
+      if($("#listenAllVerbs")) $("#listenAllVerbs").textContent="▶ Automatski preslušaj sve glagole i primere";
+    }
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+});
+
+const grid=$("#verbGrid");
+verbs.forEach((v,i)=>{
+  const d=document.createElement("div");
+  d.className="verb-card";
+  const parts=v.split.split("…");
+  d.innerHTML=`
+    <div class="verb-top">
+      <div><div class="verb">${i+1}. ${v.v}</div><div class="meaning">${v.m}</div></div>
+      <button class="speak" aria-label="Izgovor">🔊</button>
+    </div>
+    <div class="split"><span class="hl">${parts[0].trim()}</span> … <span class="hl">${parts[1].trim()}</span></div>
+    <div class="example">${v.ex}</div><div class="translation">→ ${v.tr}</div>`;
+  d.querySelector(".speak").onclick=()=>speak(v.v+". "+v.ex);
+  grid.appendChild(d);
+});
+
+const miniData=[
+  {s:"Ich stehe jeden Morgen ___ .", a:"auf", full:"Ich stehe jeden Morgen auf.", tr:"Ja ustajem svakog jutra.", opts:["auf","an","aus","zu"]},
+  {s:"Machst du das Fenster ___ ?", a:"zu", full:"Machst du das Fenster zu?", tr:"Da li zatvaraš prozor?", opts:["an","fern","zu","auf"]},
+  {s:"Ich rufe meinen Vater ___ .", a:"an", full:"Ich rufe meinen Vater an.", tr:"Ja zovem svog oca.", opts:["aus","an","auf","zu"]},
+  {s:"Wir sehen heute Abend ___ .", a:"fern", full:"Wir sehen heute Abend fern.", tr:"Mi gledamo televiziju večeras.", opts:["auf","fern","an","aus"]},
+  {s:"Sie macht das Licht ___ .", a:"aus", full:"Sie macht das Licht aus.", tr:"Ona gasi svetlo.", opts:["zu","auf","aus","fern"]},
+  {s:"Räumst du dein Zimmer ___ ?", a:"auf", full:"Räumst du dein Zimmer auf?", tr:"Da li sređuješ svoju sobu?", opts:["auf","an","zu","aus"]}
+];
+let mini=0;
+function renderMini(){
+  const q=miniData[mini];
+  $("#miniExercise").innerHTML=`
+    <div class="type-pill">Primer ${mini+1} / ${miniData.length}</div>
+    <div class="serbian" style="font-size:20px;margin-top:10px">${q.s}</div>
+    <div class="mini-translation">Prevod: ${q.tr}</div>
+    <div class="prefix-options">${shuffle(q.opts).map(o=>`<button class="prefix" data-v="${o}">${o}</button>`).join("")}</div>
+    <div id="miniFeedback" class="feedback"></div>
+    <div class="actions"><button id="miniNext" class="btn primary">Sledeće →</button></div>`;
+  document.querySelectorAll(".prefix").forEach(b=>b.onclick=()=>{
+    if(document.querySelector(".prefix:disabled"))return;
+    document.querySelectorAll(".prefix").forEach(x=>x.disabled=true);
+    if(b.dataset.v===q.a){
+      b.classList.add("correct");
+      $("#miniFeedback").className="feedback show ok";
+      $("#miniFeedback").innerHTML=`✓ Tačno!<span class="correct-line">Prevod: ${q.tr}</span>`;
+    } else {
+      b.classList.add("wrong");
+      [...document.querySelectorAll(".prefix")].find(x=>x.dataset.v===q.a)?.classList.add("correct");
+      $("#miniFeedback").className="feedback show no";
+      $("#miniFeedback").innerHTML=`Tačan prefiks je: ${q.a}<span class="correct-line">Prevod: ${q.tr}</span>`;
+    }
+    autoSpeak(q.full);
+  });
+  $("#miniNext").onclick=()=>{
+    mini=(mini+1)%miniData.length;
+    renderMini();
+  };
+}
+
+$("#autoAudioToggle").onclick=()=>{
+  autoAudio=!autoAudio;
+  const b=$("#autoAudioToggle");
+  b.textContent=autoAudio?"UKLJUČEN":"ISKLJUČEN";
+  b.classList.toggle("off",!autoAudio);
+  if(!autoAudio) stopSpeech();
+};
+
+$("#listenAllVerbs").onclick=()=>{
+  if(verbAutoRun){
+    stopSpeech();
+    verbAutoRun=false;
+    $("#listenAllVerbs").textContent="▶ Automatski preslušaj sve glagole i primere";
+    return;
+  }
+  if(!autoAudio){
+    autoAudio=true;
+    $("#autoAudioToggle").textContent="UKLJUČEN";
+    $("#autoAudioToggle").classList.remove("off");
+  }
+  stopSpeech();
+  verbAutoRun=true;
+  $("#listenAllVerbs").textContent="■ Zaustavi preslušavanje";
+  const lines=[];
+  verbs.forEach(v=>{
+    lines.push(v.v);
+    lines.push(v.ex);
+  });
+  function runVerbLines(index=0){
+    if(!verbAutoRun || index>=lines.length){
+      verbAutoRun=false;
+      $("#listenAllVerbs").textContent="▶ Automatski preslušaj sve glagole i primere";
+      return;
+    }
+    const u=new SpeechSynthesisUtterance(lines[index]);
+    u.lang="de-DE"; u.rate=.88; u.pitch=1;
+    const voices=speechSynthesis.getVoices();
+    const de=voices.find(v=>v.lang && v.lang.toLowerCase().startsWith("de"));
+    if(de) u.voice=de;
+    u.onend=()=>setTimeout(()=>runVerbLines(index+1),350);
+    speechSynthesis.speak(u);
+  }
+  runVerbLines();
+};
+
+renderQuestion();
+renderMini();
+
+const scrambleItems = [
+  {type:"Potvrdna rečenica", tr:"Ja ustajem u sedam sati.", sentence:"Ich stehe um sieben Uhr auf."},
+  {type:"Upitna rečenica", tr:"Da li ustaješ rano?", sentence:"Stehst du früh auf?"},
+  {type:"Potvrdna rečenica", tr:"Ja otvaram prozor.", sentence:"Ich mache das Fenster auf."},
+  {type:"Upitna rečenica", tr:"Da li otvaraš vrata?", sentence:"Machst du die Tür auf?"},
+  {type:"Potvrdna rečenica", tr:"Ja zatvaram vrata.", sentence:"Ich mache die Tür zu."},
+  {type:"Upitna rečenica", tr:"Da li zatvaraš prozor?", sentence:"Machst du das Fenster zu?"},
+  {type:"Potvrdna rečenica", tr:"Ja palim svetlo.", sentence:"Ich mache das Licht an."},
+  {type:"Upitna rečenica", tr:"Da li pališ radio?", sentence:"Machst du das Radio an?"},
+  {type:"Potvrdna rečenica", tr:"Ja gasim televizor.", sentence:"Ich mache den Fernseher aus."},
+  {type:"Upitna rečenica", tr:"Da li gasiš svetlo?", sentence:"Machst du das Licht aus?"},
+  {type:"Potvrdna rečenica", tr:"Ja gledam televiziju uveče.", sentence:"Ich sehe am Abend fern."},
+  {type:"Upitna rečenica", tr:"Da li gledaš televiziju danas?", sentence:"Siehst du heute fern?"},
+  {type:"Potvrdna rečenica", tr:"Ja zovem svoju mamu.", sentence:"Ich rufe meine Mutter an."},
+  {type:"Upitna rečenica", tr:"Da li zoveš svog tatu?", sentence:"Rufst du deinen Vater an?"},
+  {type:"Potvrdna rečenica", tr:"Ja sređujem svoju sobu.", sentence:"Ich räume mein Zimmer auf."},
+  {type:"Upitna rečenica", tr:"Da li sređuješ svoju sobu?", sentence:"Räumst du dein Zimmer auf?"},
+  {type:"Potvrdna rečenica", tr:"On ustaje rano.", sentence:"Er steht früh auf."},
+  {type:"Potvrdna rečenica", tr:"Ona otvara knjigu.", sentence:"Sie macht das Buch auf."},
+  {type:"Potvrdna rečenica", tr:"Mi zatvaramo prozor.", sentence:"Wir machen das Fenster zu."},
+  {type:"Potvrdna rečenica", tr:"On pali računar.", sentence:"Er macht den Computer an."},
+  {type:"Potvrdna rečenica", tr:"Ona gasi radio.", sentence:"Sie macht das Radio aus."},
+  {type:"Potvrdna rečenica", tr:"Mi gledamo televiziju.", sentence:"Wir sehen fern."},
+  {type:"Potvrdna rečenica", tr:"On zove lekara.", sentence:"Er ruft den Arzt an."},
+  {type:"Potvrdna rečenica", tr:"Mi sređujemo stan.", sentence:"Wir räumen die Wohnung auf."}
+];
+
+let scrambleIndex=0, scrambleScore=0, selectedWords=[], scrambledPool=[], scrambleAnswered=false;
+
+function tokenizeSentence(sentence){
+  return sentence.replace(/[?.!]/g,"").split(/\s+/);
+}
+function sentenceEnding(sentence){
+  const m=sentence.match(/[?.!]$/);
+  return m ? m[0] : "";
+}
+function shuffleSafe(arr){
+  let out=[...arr];
+  for(let i=out.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [out[i],out[j]]=[out[j],out[i]];
+  }
+  if(out.join(" ")===arr.join(" ") && out.length>2){
+    [out[0],out[1]]=[out[1],out[0]];
+  }
+  return out;
+}
+function renderScramble(){
+  scrambleAnswered=false;
+  selectedWords=[];
+  const q=scrambleItems[scrambleIndex];
+  scrambledPool=shuffleSafe(tokenizeSentence(q.sentence).map((w,i)=>({id:i,w})));
+  $("#scrambleCounter").textContent=`Primer ${scrambleIndex+1} / ${scrambleItems.length}`;
+  $("#scrambleScore").textContent=`Tačno: ${scrambleScore}`;
+  $("#scrambleProgress").style.width=`${(scrambleIndex/scrambleItems.length)*100}%`;
+  $("#scrambleType").textContent=q.type;
+  $("#scrambleTranslation").textContent=q.tr;
+  $("#buildFeedback").className="build-feedback";
+  $("#buildFeedback").innerHTML="";
+  $("#nextScramble").disabled=false;
+  renderBuilder();
+}
+function renderBuilder(){
+  const area=$("#buildArea");
+  const bank=$("#wordBank");
+  area.innerHTML="";
+  bank.innerHTML="";
+  if(selectedWords.length===0){
+    area.innerHTML='<span class="build-placeholder">Ovde će se pojaviti izabrane reči…</span>';
+  } else {
+    selectedWords.forEach(obj=>{
+      const b=document.createElement("button");
+      b.className="built-chip";
+      b.textContent=obj.w;
+      b.title="Klikni da vratiš ovu reč";
+      b.onclick=()=>{
+        if(scrambleAnswered)return;
+        selectedWords=selectedWords.filter(x=>x.id!==obj.id);
+        renderBuilder();
+      };
+      area.appendChild(b);
+    });
+  }
+  scrambledPool.filter(obj=>!selectedWords.some(x=>x.id===obj.id)).forEach(obj=>{
+    const b=document.createElement("button");
+    b.className="word-chip";
+    b.textContent=obj.w;
+    b.onclick=()=>{
+      if(scrambleAnswered)return;
+      selectedWords.push(obj);
+      renderBuilder();
+    };
+    bank.appendChild(b);
+  });
+}
+$("#undoWord").onclick=()=>{
+  if(scrambleAnswered || !selectedWords.length)return;
+  selectedWords.pop();
+  renderBuilder();
+};
+$("#resetWords").onclick=()=>{
+  if(scrambleAnswered)return;
+  selectedWords=[];
+  renderBuilder();
+};
+$("#checkSentence").onclick=()=>{
+  if(scrambleAnswered)return;
+  const q=scrambleItems[scrambleIndex];
+  const built=selectedWords.map(x=>x.w).join(" ");
+  const correctNoPunct=tokenizeSentence(q.sentence).join(" ");
+  $("#buildFeedback").className="build-feedback show";
+  if(built===correctNoPunct){
+    scrambleAnswered=true;
+    scrambleScore++;
+    $("#scrambleScore").textContent=`Tačno: ${scrambleScore}`;
+    $("#buildFeedback").className="build-feedback show ok";
+    $("#buildFeedback").innerHTML=`✓ Tačno!<span class="correct-line">${q.sentence}</span><span class="correct-line" style="color:#4b5563">Prevod: ${q.tr}</span>`;
+    autoSpeak(q.sentence);
+  } else {
+    $("#buildFeedback").className="build-feedback show no";
+    if(selectedWords.length < tokenizeSentence(q.sentence).length){
+      $("#buildFeedback").textContent="Dodaj još reči pa ponovo proveri.";
+    } else {
+      $("#buildFeedback").innerHTML=`Nije dobar red reči. Pokušaj ponovo.<span class="correct-line" style="color:#4b5563">Pazi: razdvojivi prefiks ide na kraj.</span>`;
+    }
+  }
+};
+$("#nextScramble").onclick=()=>{
+  if(scrambleIndex<scrambleItems.length-1){
+    scrambleIndex++;
+    renderScramble();
+  }else{
+    $("#scrambleProgress").style.width="100%";
+    $("#wordBank").innerHTML="";
+    $("#buildArea").innerHTML="";
+    $("#scrambleType").textContent="Završeno";
+    $("#scrambleTranslation").textContent=`Rezultat: ${scrambleScore} / ${scrambleItems.length} (${Math.round(scrambleScore/scrambleItems.length*100)}%)`;
+    $("#buildFeedback").className="build-feedback show ok";
+    $("#buildFeedback").textContent="Vežba je završena.";
+    $("#nextScramble").textContent="Ponovi vežbu";
+    $("#nextScramble").onclick=()=>{
+      scrambleIndex=0; scrambleScore=0;
+      $("#nextScramble").textContent="Sledeći primer →";
+      $("#nextScramble").onclick=null;
+      location.reload();
+    };
+  }
+};
+renderScramble();
+
+</script>
+</body>
+</html>
