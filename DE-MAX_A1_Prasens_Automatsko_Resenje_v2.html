@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d94153">
+<title>De-Max A1 • Präsens • Vežba glagola</title>
+<style>
+:root{
+  --red:#db4457;
+  --red2:#c93649;
+  --blue:#3c73b9;
+  --blue2:#1f4f92;
+  --light-blue:#dfeaf6;
+  --light-red:#f8e5e8;
+  --ink:#13233f;
+  --muted:#5c6980;
+  --line:#c9d7ea;
+  --card:#ffffff;
+  --bg:#f3f6fb;
+  --ok:#11824d;
+  --bad:#bf3044;
+  --shadow:0 10px 28px rgba(21,40,78,.09);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#f7f8fc,#edf2f8);
+  color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+.app{
+  width:min(100%,980px);
+  margin:0 auto;
+  background:rgba(255,255,255,.72);
+  min-height:100vh;
+  padding:14px;
+}
+.hero{
+  background:linear-gradient(135deg,var(--red2),var(--red));
+  color:#fff;
+  border-radius:22px;
+  padding:18px 18px 16px;
+  box-shadow:var(--shadow);
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:84px 1fr 84px;
+  align-items:center;
+  gap:14px;
+}
+.icon-circle{
+  width:84px;height:84px;border-radius:50%;
+  background:#fff; color:var(--blue2);
+  display:grid;place-items:center;
+  font-size:2.4rem;font-weight:900;
+  border:4px solid rgba(255,255,255,.25);
+}
+.hero h1{
+  margin:0;text-align:center;
+  font-size:clamp(2rem,5vw,4.2rem);
+  letter-spacing:.03em;
+  line-height:1;
+  font-weight:1000;
+}
+.hero h2{
+  margin:4px 0 0;text-align:center;
+  font-size:clamp(1.35rem,3.2vw,2.4rem);
+  font-style:italic;font-weight:500;
+}
+.info{
+  margin-top:16px;
+  background:#dfe9f5;
+  border:2px solid #bfd0e7;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:130px 1fr;
+  gap:16px;
+  align-items:center;
+}
+.idea{
+  width:112px;height:112px;border-radius:50%;
+  background:#fff;
+  display:grid;place-items:center;
+  font-size:3rem;
+  margin:auto;
+  box-shadow:0 8px 20px rgba(26,67,124,.12)
+}
+.info p{
+  margin:0 0 10px;
+  font-size:clamp(1rem,2vw,1.15rem);
+  line-height:1.58;
+}
+.info b{color:var(--blue2)}
+
+.dual{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-top:18px;
+}
+.panel{
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  background:#fff;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  color:#fff;padding:16px 10px 12px;
+}
+.panel-head .hdicon{
+  width:54px;height:54px;border-radius:50%;
+  background:#fff;
+  display:grid;place-items:center;
+  font-size:1.65rem;
+}
+.panel-head h3{
+  margin:0;text-align:center;line-height:1;
+  font-size:clamp(1.8rem,3vw,2.6rem)
+}
+.panel-head small{
+  display:block;font-size:clamp(1rem,2vw,1.45rem);opacity:.95
+}
+.blue .panel-head{background:var(--blue)}
+.blue .hdicon{color:var(--blue2)}
+.red .panel-head{background:var(--red)}
+.red .hdicon{color:#b41f33}
+
+.rows{
+  background:#fff;
+}
+.row{
+  display:grid;
+  grid-template-columns:86px 1fr;
+  align-items:center;
+  min-height:72px;
+  border-top:2px solid #d8e3f1;
+}
+.red .row{border-top:2px solid #eed0d7}
+.num{
+  display:flex;align-items:center;justify-content:center;
+}
+.badge{
+  width:52px;height:52px;border-radius:50%;
+  display:grid;place-items:center;
+  color:#fff;font-weight:900;font-size:1.05rem;
+}
+.blue .badge{background:#184e9f}
+.red .badge{background:#e64255}
+.end{
+  display:flex;align-items:center;gap:18px;
+  font-size:clamp(1.5rem,3vw,2.2rem);
+  font-weight:1000;
+  padding-right:14px;
+}
+.sep{
+  color:#c04f62;font-weight:500;font-size:2rem;
+}
+.tip{
+  margin-top:16px;
+  background:#fff;
+  border:2px solid #c8d7eb;
+  border-radius:18px;
+  padding:14px 16px;
+  display:grid;grid-template-columns:76px 1fr 76px;
+  align-items:center;gap:10px;
+  box-shadow:var(--shadow);
+}
+.tip .i{text-align:center;font-size:3rem}
+.tip .t{font-size:clamp(1rem,2vw,1.12rem);line-height:1.5}
+.tip .tag{
+  display:inline-block;background:#194f9f;color:#fff;
+  border-radius:10px;padding:6px 12px;font-weight:900;
+  margin-right:8px
+}
+
+.section{
+  margin-top:20px;
+  background:#fff;
+  border:1px solid #d7e2f0;
+  border-radius:22px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.section h4{
+  margin:0 0 10px;
+  color:var(--blue2);
+  font-size:1.3rem
+}
+.sub{
+  margin:0 0 12px;
+  color:var(--muted);
+  line-height:1.5
+}
+.progressbox{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:12px;
+}
+.stat{
+  background:#eef4fb;border-radius:15px;padding:10px;text-align:center
+}
+.stat b{display:block;font-size:1.4rem;color:var(--blue2)}
+.stat span{font-size:.8rem;color:var(--muted)}
+.exercise{
+  border:1px solid #dbe5f1;
+  border-radius:18px;
+  padding:14px;
+  background:#fbfdff;
+  margin-bottom:12px;
+}
+.label{
+  display:inline-block;
+  background:var(--red);
+  color:#fff;
+  border-radius:999px;
+  padding:5px 10px;
+  font-weight:800;
+  font-size:.78rem;
+  margin-bottom:9px
+}
+.q{
+  font-size:1.12rem;font-weight:800;margin-bottom:6px
+}
+.trans{
+  color:var(--muted);font-size:.9rem;margin-bottom:10px
+}
+.options{
+  display:grid;gap:8px
+}
+.opt{
+  width:100%;
+  border:1.5px solid #cfdaea;
+  background:#fff;
+  color:var(--ink);
+  border-radius:13px;
+  padding:11px 12px;
+  text-align:left;
+  font-weight:800;
+  cursor:pointer;
+}
+.opt:hover{background:#f4f8fd}
+.opt.correct{background:#edf9f1;border-color:#8fd1a8;color:var(--ok)}
+.opt.wrong{background:#fff1f3;border-color:#efb1ba;color:var(--bad)}
+.feedback{
+  margin-top:8px;font-weight:900;font-size:.92rem
+}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+
+.line{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  font-size:1.12rem;font-weight:800
+}
+.blank{
+  min-width:120px;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 12px;border:2px dashed #b7cbe4;border-radius:12px;background:#fff
+}
+.wordbank{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:10px
+}
+.word{
+  border:1px solid #cfdaea;background:#fff;border-radius:12px;
+  padding:9px 11px;font-weight:800;cursor:pointer
+}
+.answer .word{
+  background:#3c73b9;color:#fff;border-color:#3c73b9
+}
+.answer{
+  min-height:52px;border:2px dashed #b7cbe4;background:#fbfdff;border-radius:13px;
+  padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin-top:8px
+}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{
+  border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer
+}
+.primary{background:var(--blue);color:#fff}
+.ghost{background:#e9f0fa;color:var(--blue2)}
+
+
+.solutionbox{
+  display:none;
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:13px;
+  background:#f0f6ff;
+  border:1px solid #c8d9ef;
+  line-height:1.5;
+}
+.solutionbox.show{display:block}
+.solutionbox b{color:var(--blue2)}
+.solutionbox .sr{display:block;color:var(--muted);font-size:.9rem;margin-top:3px}
+
+.footer{
+  text-align:center;color:var(--muted);font-size:.78rem;padding:10px 0 18px
+}
+@media(max-width:760px){
+  .hero-grid{grid-template-columns:66px 1fr 66px}
+  .icon-circle{width:66px;height:66px;font-size:2rem}
+  .info-grid,.dual{grid-template-columns:1fr}
+  .tip{grid-template-columns:1fr}
+  .tip .i{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="icon-circle">📅</div>
+      <div>
+        <h1>PRÄSENS</h1>
+        <h2>Prezent</h2>
+      </div>
+      <div class="icon-circle">💬</div>
+    </div>
+  </section>
+
+  <section class="info">
+    <div class="info-grid">
+      <div class="idea">💡</div>
+      <div>
+        <p>Prezent je prosto sadašnje vreme koje se gradi od <b>glagolske osnove</b> i <b>nastavaka po licima</b>.</p>
+        <p>Da bismo pravilno menjali glagole u prezentu, treba da znamo <b>lične zamenice</b> i nastavke koje dodajemo na glagol.</p>
+        <p><b>Nastavke koje dodajemo na glagole po licima u prezentu</b> vidiš ispod, a zatim uradi vežbe.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dual">
+    <div class="panel blue">
+      <div class="panel-head">
+        <div class="hdicon">👤</div>
+        <h3>Singular<small>jednina</small></h3>
+      </div>
+      <div class="rows">
+        <div class="row"><div class="num"><div class="badge">1.</div></div><div class="end"><span class="sep">:</span><span>e</span></div></div>
+        <div class="row"><div class="num"><div class="badge">2.</div></div><div class="end"><span class="sep">:</span><span>st</span></div></div>
+        <div class="row"><div class="num"><div class="badge">3.</div></div><div class="end"><span class="sep">:</span><span>t</span></div></div>
+      </div>
+    </div>
+
+    <div class="panel red">
+      <div class="panel-head">
+        <div class="hdicon">👥</div>
+        <h3>Plural<small>množina</small></h3>
+      </div>
+      <div class="rows">
+        <div class="row"><div class="num"><div class="badge">1.</div></div><div class="end"><span class="sep">:</span><span>en</span></div></div>
+        <div class="row"><div class="num"><div class="badge">2.</div></div><div class="end"><span class="sep">:</span><span>t</span></div></div>
+        <div class="row"><div class="num"><div class="badge">3.</div></div><div class="end"><span class="sep">:</span><span>en</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tip">
+    <div class="i">📘</div>
+    <div class="t"><span class="tag">TIPP:</span> Nastavci se dodaju <b>direktno na glagolsku osnovu</b>. Primer: <b>machen → mach + e = ich mache</b>.</div>
+    <div class="i">💡</div>
+  </section>
+
+  <section class="section">
+    <h4>Interaktivne vežbe — glagoli u prezentu</h4>
+    <p class="sub">Vežbe su bazirane na pravilnim glagolima: <b>machen, lernen, wohnen, spielen, arbeiten, heißen</b>.</p>
+
+    <div class="progressbox">
+      <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+      <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+      <div class="stat"><b id="percent">0%</b><span>tačnost</span></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="mache">
+      <div class="label">Vežba 1</div>
+      <div class="q">Ich ______ Hausaufgaben.</div>
+      <div class="trans">Ja radim domaći zadatak.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'mache')">mache</button>
+        <button class="opt" onclick="checkMCQ(this,'machst')">machst</button>
+        <button class="opt" onclick="checkMCQ(this,'macht')">macht</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Ich mache Hausaufgaben.<span class="sr">Ja radim domaći zadatak.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="wohnst">
+      <div class="label">Vežba 2</div>
+      <div class="q">Du ______ in Tutin.</div>
+      <div class="trans">Ti stanuješ u Tutinu.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'wohne')">wohne</button>
+        <button class="opt" onclick="checkMCQ(this,'wohnst')">wohnst</button>
+        <button class="opt" onclick="checkMCQ(this,'wohnen')">wohnen</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Du wohnst in Tutin.<span class="sr">Ti stanuješ u Tutinu.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="lernt">
+      <div class="label">Vežba 3</div>
+      <div class="q">Er ______ Deutsch.</div>
+      <div class="trans">On uči nemački.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'lerne')">lerne</button>
+        <button class="opt" onclick="checkMCQ(this,'lernt')">lernt</button>
+        <button class="opt" onclick="checkMCQ(this,'lernen')">lernen</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Er lernt Deutsch.<span class="sr">On uči nemački.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="spielen">
+      <div class="label">Vežba 4</div>
+      <div class="q">Wir ______ Fußball.</div>
+      <div class="trans">Mi igramo fudbal.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'spielt')">spielt</button>
+        <button class="opt" onclick="checkMCQ(this,'spielen')">spielen</button>
+        <button class="opt" onclick="checkMCQ(this,'spielst')">spielst</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Wir spielen Fußball.<span class="sr">Mi igramo fudbal.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="arbeitet">
+      <div class="label">Vežba 5</div>
+      <div class="q">Ihr ______ viel.</div>
+      <div class="trans">Vi mnogo radite.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'arbeitet')">arbeitet</button>
+        <button class="opt" onclick="checkMCQ(this,'arbeite')">arbeite</button>
+        <button class="opt" onclick="checkMCQ(this,'arbeiten')">arbeiten</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Ihr arbeitet viel.<span class="sr">Vi mnogo radite.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise build" data-answer="Sie heißen Anna und Amir.">
+      <div class="label">Vežba 6</div>
+      <div class="q">Sastavi rečenicu:</div>
+      <div class="trans">Oni se zovu Ana i Amir.</div>
+      <div class="line"><span>Rešenje:</span></div>
+      <div class="answer"></div>
+      <div class="wordbank"></div>
+      <div class="btnrow">
+        <button class="btn primary" onclick="checkBuild(this)">Proveri</button>
+        <button class="btn ghost" onclick="resetBuild(this)">Ponovo</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Sie heißen Anna und Amir.<span class="sr">Oni se zovu Ana i Amir.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise build" data-answer="Wie arbeitest du?">
+      <div class="label">Vežba 7</div>
+      <div class="q">Sastavi pitanje:</div>
+      <div class="trans">Kako ti radiš?</div>
+      <div class="answer"></div>
+      <div class="wordbank"></div>
+      <div class="btnrow">
+        <button class="btn primary" onclick="checkBuild(this)">Proveri</button>
+        <button class="btn ghost" onclick="resetBuild(this)">Ponovo</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> Wie arbeitest du?<span class="sr">Kako ti radiš?</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="machen">
+      <div class="label">Vežba 8</div>
+      <div class="q">Koji je infinitiv oblika <b>macht</b>?</div>
+      <div class="trans">Izaberi osnovni oblik glagola.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'mache')">mache</button>
+        <button class="opt" onclick="checkMCQ(this,'machen')">machen</button>
+        <button class="opt" onclick="checkMCQ(this,'machst')">machst</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> machen<span class="sr">Infinitiv glagola „macht“ je „machen“ – raditi / praviti.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="t">
+      <div class="label">Vežba 9</div>
+      <div class="q">Koji nastavak ide uz <b>ihr</b> u prezentu?</div>
+      <div class="trans">Izaberi tačan nastavak.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'st')">st</button>
+        <button class="opt" onclick="checkMCQ(this,'t')">t</button>
+        <button class="opt" onclick="checkMCQ(this,'en')">en</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> t<span class="sr">Uz „ihr“ se u prezentu dodaje nastavak „-t“.</span></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise mcq" data-answer="en">
+      <div class="label">Vežba 10</div>
+      <div class="q">Koji nastavak ide uz <b>wir / sie / Sie</b>?</div>
+      <div class="trans">Izaberi tačan nastavak.</div>
+      <div class="options">
+        <button class="opt" onclick="checkMCQ(this,'e')">e</button>
+        <button class="opt" onclick="checkMCQ(this,'en')">en</button>
+        <button class="opt" onclick="checkMCQ(this,'t')">t</button>
+      </div>
+      <div class="btnrow">
+        <button class="btn ghost" type="button" onclick="toggleSolution(this)">💡 Prikaži rešenje</button>
+      </div>
+      <div class="solutionbox"><b>Rešenje:</b> en<span class="sr">Uz „wir“, „sie“ i formalno „Sie“ dodaje se nastavak „-en“.</span></div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <div class="footer">De-Max • A1 Nemački jezik • Präsens • Vežba glagola</div>
+</div>
+
+<script>
+function normalize(s){
+  return (s||'').trim().toLowerCase().replace(/\s+/g,' ').replace(/[.!?]+$/,'');
+}
+const track = [...document.querySelectorAll('.exercise')];
+
+function refresh(){
+  const states = track.map(x=>x.dataset.state).filter(Boolean);
+  const done = states.length;
+  const correct = states.filter(x=>x==='1').length;
+  const percent = done ? Math.round(correct/done*100) : 0;
+  document.getElementById('done').textContent = done;
+  document.getElementById('correct').textContent = correct;
+  document.getElementById('percent').textContent = percent + '%';
+}
+function setState(ex, ok){
+  ex.dataset.state = ok ? '1' : '0';
+  refresh();
+}
+
+function showSolutionAutomatically(ex){
+  const box = ex.querySelector('.solutionbox');
+  if(!box) return;
+  box.classList.add('show');
+  const btn = ex.querySelector('button[onclick*="toggleSolution"]');
+  if(btn) btn.textContent = '🙈 Sakrij rešenje';
+}
+
+function checkMCQ(btn, value){
+  const ex = btn.closest('.exercise');
+  ex.querySelectorAll('.opt').forEach(x=>x.classList.remove('correct','wrong'));
+  const ok = normalize(value) === normalize(ex.dataset.answer);
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  const fb = ex.querySelector('.feedback');
+  fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+  fb.textContent = ok ? '✓ Tačno!' : '✗ Nije tačno. Rešenje je prikazano ispod.';
+  if(!ok) showSolutionAutomatically(ex);
+  setState(ex, ok);
+}
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function initBuild(ex){
+  const ans = ex.dataset.answer;
+  const bank = ex.querySelector('.wordbank');
+  const answer = ex.querySelector('.answer');
+  bank.innerHTML = '';
+  answer.innerHTML = '';
+  const words = ans.replace(/[.!?]$/,'').split(/\s+/);
+  const punct = (ans.match(/[.!?]$/)||[''])[0];
+  ex.dataset.punct = punct;
+  shuffle(words).forEach(w=>{
+    const b = document.createElement('button');
+    b.type='button';
+    b.className='word';
+    b.textContent = w;
+    b.onclick = ()=> answer.appendChild(b);
+    bank.appendChild(b);
+  });
+  const fb = ex.querySelector('.feedback');
+  fb.textContent = '';
+  fb.className = 'feedback';
+  delete ex.dataset.state;
+  refresh();
+}
+document.querySelectorAll('.build').forEach(initBuild);
+
+function currentSentence(ex){
+  const words = [...ex.querySelector('.answer').querySelectorAll('.word')].map(x=>x.textContent);
+  return words.join(' ') + (ex.dataset.punct || '');
+}
+function checkBuild(btn){
+  const ex = btn.closest('.exercise');
+  const ok = normalize(currentSentence(ex)) === normalize(ex.dataset.answer);
+  const fb = ex.querySelector('.feedback');
+  fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+  fb.textContent = ok ? '✓ Tačno!' : '✗ Redosled još nije dobar. Tačno rešenje i prevod su automatski prikazani ispod.';
+  if(!ok) showSolutionAutomatically(ex);
+  setState(ex, ok);
+}
+function resetBuild(btn){
+  const ex = btn.closest('.exercise');
+  initBuild(ex);
+  const box = ex.querySelector('.solutionbox');
+  if(box) box.classList.remove('show');
+  const solBtn = ex.querySelector('button[onclick*="toggleSolution"]');
+  if(solBtn) solBtn.textContent = '💡 Prikaži rešenje';
+}
+
+function toggleSolution(btn){
+  const ex = btn.closest('.exercise');
+  const box = ex.querySelector('.solutionbox');
+  const show = !box.classList.contains('show');
+  box.classList.toggle('show', show);
+  btn.textContent = show ? '🙈 Sakrij rešenje' : '💡 Prikaži rešenje';
+}
+
+refresh();
+</script>
+</body>
+</html>
