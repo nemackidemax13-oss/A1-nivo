@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b6d35">
+<title>De-Max A1 • Abeceda i spelovanje</title>
+<style>
+:root{--g:#159447;--g2:#0b6d35;--g3:#eaf8ef;--ink:#173426;--muted:#6b7d72;--line:#d7eadc;--good:#098745;--bad:#c43a3a;--shadow:0 12px 32px rgba(11,109,53,.11)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#f8fffa,#edf8f1);color:var(--ink)}.app{width:min(100%,780px);margin:auto;min-height:100vh;background:rgba(255,255,255,.88)}
+.hero{padding:18px 14px 14px;background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;position:sticky;top:0;z-index:10}.brand{display:flex;gap:10px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:#fff;color:var(--g2);display:grid;place-items:center;font-weight:950}.hero h1{font-size:1.12rem;margin:0}.hero p{margin:4px 0 0;font-size:.85rem;opacity:.92}.progress-wrap{margin-top:12px}.progress-row{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:6px}.bar{height:8px;background:rgba(255,255,255,.24);border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:.25s}
+main{padding:14px 10px 28px}.card,.q{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}.card h2{margin:0 0 7px;font-size:1rem}.sub{margin:0;color:var(--muted);font-size:.84rem;line-height:1.5}.translation{color:var(--muted);font-size:.85rem;margin:5px 0 10px;padding-left:10px;border-left:3px solid #bfe2cb}.wordbig{font-size:1.5rem;font-weight:950;color:var(--g2);margin:3px 0}.qnum{font-size:.72rem;font-weight:900;color:var(--g2);text-transform:uppercase;letter-spacing:.05em}.btnrow,.letters,.quizopts{display:flex;gap:7px;flex-wrap:wrap}.btnrow{margin-top:10px}.btn,.letter,.qopt{border:0;border-radius:11px;padding:9px 11px;font-weight:900;cursor:pointer}.primary{background:var(--g);color:#fff}.ghost{background:var(--g3);color:var(--g2)}.letter{width:43px;height:43px;padding:0;border:1px solid #cde5d4;background:#fff;color:var(--g2);font-size:1rem}.letter:active,.btn:active,.qopt:active{transform:scale(.97)}.alphabet-note{font-size:.8rem;color:var(--muted);margin:9px 0 0}.quizbox{background:var(--g3);border-radius:14px;padding:12px;margin-top:10px}.quiztitle{font-weight:900;margin-bottom:8px}.qopt{background:#fff;color:var(--ink);border:1px solid #cde5d4;min-width:50px}.qopt.good{background:#e6faee;color:var(--good);border-color:#9ed7b1}.qopt.bad{background:#fff0f0;color:var(--bad);border-color:#efb2b2}.feedback{font-size:.84rem;font-weight:850;margin-top:8px}.ok{color:var(--good)}.no{color:var(--bad)}.footer{text-align:center;color:var(--muted);font-size:.73rem;padding:5px 0 16px}
+@media(max-width:520px){.hero{padding:15px 11px 12px}.hero h1{font-size:1.02rem}main{padding:11px 8px 22px}.card,.q{padding:12px;border-radius:16px}.letter{width:39px;height:39px}.btn{flex:1}.wordbig{font-size:1.35rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero"><div class="brand"><div class="logo">DM</div><div><h1>De-Max A1 • Abeceda i spelovanje</h1><p>Izgovor slova, reči i spelovanje</p></div></div><div class="progress-wrap"><div class="progress-row"><span>Poslušano spelovanje</span><strong id="barText">0%</strong></div><div class="bar"><span id="barFill"></span></div></div></header>
+<main>
+<section class="card">
+ <h2>1. Nemačka abeceda — poslušaj slovo</h2>
+ <p class="sub">Klikni bilo koje slovo i čućeš njegov nemački naziv.</p>
+ <div class="letters" id="alphabet"></div>
+ <p class="alphabet-note">Uključena su i slova Ä, Ö, Ü i ß.</p><p class="alphabet-note"><strong>Izgovor:</strong> F = ef · H = ha · I = i · M = em · T = te · U = u · V = fau · X = iks</p>
+ <div class="quizbox">
+   <div class="quiztitle">Vežba: poslušaj slovo i izaberi koje je</div>
+   <div class="btnrow"><button class="btn primary" id="playQuiz">🔊 Poslušaj slovo</button><button class="btn ghost" id="newQuiz">Nova vežba</button></div>
+   <div class="quizopts" id="quizOpts"></div><div id="quizFeedback" class="feedback"></div>
+ </div>
+</section>
+<section class="card"><h2>2. Spelovanje reči</h2><p class="sub">Prvo poslušaj izgovor cele reči, a zatim kako se reč speluje slovo po slovo.</p></section>
+<div id="words"></div>
+<div class="footer">De-Max • A1 nemački jezik</div>
+</main></div>
+<script>
+const letterNames={
+ A:{label:'a',tts:'ah'}, B:{label:'be',tts:'beh'}, C:{label:'ce',tts:'zeh'}, D:{label:'de',tts:'deh'},
+ E:{label:'e',tts:'eh'}, F:{label:'ef',tts:'Eff'}, G:{label:'ge',tts:'geh'}, H:{label:'ha',tts:'Ha'},
+ I:{label:'i',tts:'I'}, J:{label:'jot',tts:'jott'}, K:{label:'ka',tts:'kah'}, L:{label:'el',tts:'ell'},
+ M:{label:'M',tts:'M'}, N:{label:'en',tts:'enn'}, O:{label:'o',tts:'oh'}, P:{label:'pe',tts:'peh'},
+ Q:{label:'qu',tts:'kuh'}, R:{label:'er',tts:'err'}, S:{label:'es',tts:'ess'}, T:{label:'te',tts:'Te'},
+ U:{label:'u',tts:'U'}, V:{label:'fau',tts:'Fau'}, W:{label:'we',tts:'weh'}, X:{label:'iks',tts:'Iks'},
+ Y:{label:'ipsilon',tts:'Ypsilon'}, Z:{label:'cet',tts:'zett'},
+ 'Ä':{label:'ä',tts:'Ä'}, 'Ö':{label:'ö',tts:'Ö'}, 'Ü':{label:'ü',tts:'Ü'}, 'ß':{label:'es-cet',tts:'Eszett'}
+};
+const alphabet=Object.keys(letterNames);
+const wordData=[
+ ['Name','ime'],['Familie','porodica'],['Schule','škola'],['Straße','ulica'],['Deutschland','Nemačka'],['Wohnung','stan'],['Arbeit','posao'],['Freund','prijatelj'],['Freundin','prijateljica'],['Lehrer','nastavnik'],['Lehrerin','nastavnica'],['Bahnhof','železnička stanica'],['Flughafen','aerodrom'],['Telefon','telefon'],['Adresse','adresa'],['Geburtstag','rođendan'],['Sprache','jezik'],['Frühstück','doručak'],['Getränk','piće'],['Gemüse','povrće'],['Österreich','Austrija'],['München','Minhen'],['Köln','Keln'],['Tutin','Tutin']
+];
+function voice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/^de(-|_)/i.test(v.lang))||vs.find(v=>/German|Deutsch/i.test(v.name))||null}
+function utter(text,rate=.82,onend=null){if(!('speechSynthesis' in window)){alert('Ovaj pregledač ne podržava izgovor.');return}const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=rate;const v=voice();if(v)u.voice=v;if(onend)u.onend=onend;speechSynthesis.speak(u)}
+function speak(text,rate=.82){if(!('speechSynthesis' in window)){alert('Ovaj pregledač ne podržava izgovor.');return}speechSynthesis.cancel();utter(text,rate)}
+function speakLetter(letter){speechSynthesis.cancel();const item=letterNames[letter];const txt=item?item.tts:letter;utter(letter==='M'?txt:txt+'.',.68)}
+function spell(word){if(!('speechSynthesis' in window)){alert('Ovaj pregledač ne podržava izgovor.');return}speechSynthesis.cancel();const chars=[...word];let i=0;function next(){if(i>=chars.length)return;const raw=chars[i++];const key=raw==='ß'?'ß':raw.toUpperCase();const item=letterNames[key];{const txt=item?item.tts:raw;utter(key==='M'?txt:txt+'.',.62,()=>setTimeout(next,240))}}next()}
+
+const alphabetEl=document.getElementById('alphabet');alphabet.forEach(l=>{const b=document.createElement('button');b.type='button';b.className='letter';b.textContent=l;b.title='Izgovor: '+letterNames[l].label;b.addEventListener('click',()=>speakLetter(l));alphabetEl.appendChild(b)});
+let quizAnswer='A';function newQuiz(){quizAnswer=alphabet[Math.floor(Math.random()*alphabet.length)];const pool=new Set([quizAnswer]);while(pool.size<4)pool.add(alphabet[Math.floor(Math.random()*alphabet.length)]);const opts=[...pool].sort(()=>Math.random()-.5);const wrap=document.getElementById('quizOpts');wrap.innerHTML='';document.getElementById('quizFeedback').textContent='';opts.forEach(l=>{const b=document.createElement('button');b.type='button';b.className='qopt';b.textContent=l;b.addEventListener('click',()=>{wrap.querySelectorAll('.qopt').forEach(x=>x.classList.remove('good','bad'));const ok=l===quizAnswer;b.classList.add(ok?'good':'bad');const f=document.getElementById('quizFeedback');f.className='feedback '+(ok?'ok':'no');f.textContent=ok?'✓ Tačno!':'✗ Nije tačno. Poslušaj ponovo.'});wrap.appendChild(b)})}
+document.getElementById('playQuiz').addEventListener('click',()=>speakLetter(quizAnswer));document.getElementById('newQuiz').addEventListener('click',newQuiz);newQuiz();
+
+const wordsEl=document.getElementById('words'),heard=new Set();function updateBar(){const p=Math.round(heard.size/wordData.length*100);document.getElementById('barFill').style.width=p+'%';document.getElementById('barText').textContent=p+'%'}
+wordData.forEach(([word,tr],i)=>{const q=document.createElement('div');q.className='q spellcard';q.innerHTML=`<div class="qnum">Reč ${i+1}</div><div class="wordbig">${word}</div><div class="translation">${tr}</div><div class="btnrow"><button class="btn ghost say">🔊 Izgovor reči</button><button class="btn primary spell">🔤 Poslušaj spelovanje</button></div>`;q.querySelector('.say').addEventListener('click',()=>speak(word,.82));q.querySelector('.spell').addEventListener('click',()=>{heard.add(word);updateBar();spell(word)});wordsEl.appendChild(q)});
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}
+updateBar();
+</script>
+</body></html>

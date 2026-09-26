@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b6d35">
+<title>De-Max A1 • W-Fragen</title>
+<style>
+:root{--g:#159447;--g2:#0b6d35;--g3:#eaf8ef;--ink:#173426;--muted:#6b7d72;--line:#d7eadc;--white:#fff;--good:#098745;--bad:#c43a3a;--shadow:0 12px 32px rgba(11,109,53,.11)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#f8fffa,#edf8f1);color:var(--ink)}
+.app{width:min(100%,780px);margin:0 auto;min-height:100vh;background:rgba(255,255,255,.88);box-shadow:0 0 60px rgba(7,93,45,.07)}
+.hero{padding:18px 14px 14px;background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 6px 20px rgba(8,91,45,.18)}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;border-radius:14px;background:#fff;color:var(--g2);display:grid;place-items:center;font-weight:950}.hero h1{font-size:1.15rem;margin:0}.hero p{margin:4px 0 0;opacity:.92;font-size:.86rem}
+.progress-wrap{margin-top:12px}.progress-row{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:6px}.bar{height:8px;background:rgba(255,255,255,.24);border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:.25s}
+main{padding:14px 10px 28px}.card,.q{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}.card h2{margin:0 0 8px;font-size:1rem}.sub{margin:0;color:var(--muted);font-size:.85rem;line-height:1.5}
+.wbank{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.wchip{border:1px solid #bfe0ca;background:var(--g3);color:var(--g2);border-radius:999px;padding:7px 10px;font-weight:900;font-size:.8rem}.wchip strong{color:#084b28}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px;border-radius:12px;font-weight:900;cursor:pointer}.tab.active{background:var(--g);color:#fff;border-color:var(--g)}.panel{display:none}.panel.active{display:block}
+.qnum{font-size:.72rem;font-weight:900;color:var(--g2);text-transform:uppercase;letter-spacing:.05em}.prompt{font-weight:900;font-size:1.06rem;line-height:1.5;margin:5px 0}.translation{color:var(--muted);font-size:.85rem;margin:4px 0 10px;padding-left:10px;border-left:3px solid #bfe2cb}
+.options,.wordbank,.answerline,.btnrow{display:flex;gap:7px;flex-wrap:wrap}.options{margin-top:9px}.choice,.token,.btn{border:0;border-radius:11px;padding:9px 11px;font-weight:900;cursor:pointer;font-size:.86rem}.choice,.token{border:1px solid #cde5d4;background:#fff;color:var(--ink)}.choice.selected,.answerline .token{background:var(--g);color:#fff;border-color:var(--g)}.btnrow{margin-top:10px}.primary{background:var(--g);color:#fff}.ghost{background:var(--g3);color:var(--g2)}.btn:active,.choice:active,.token:active{transform:scale(.98)}
+.answerline{min-height:47px;border:2px dashed #b9d9c3;background:#fbfffc;border-radius:12px;padding:8px;align-items:center}.wordbank{margin-top:8px}.feedback{font-size:.84rem;font-weight:850;margin-top:8px}.ok{color:var(--good)}.no{color:var(--bad)}
+.scorebox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat{background:var(--g3);border-radius:13px;text-align:center;padding:8px 5px}.stat b{display:block;color:var(--g2);font-size:1.08rem}.stat span{font-size:.7rem;color:var(--muted)}.footer{text-align:center;color:var(--muted);font-size:.73rem;padding:5px 0 16px}
+@media(max-width:520px){.hero{padding:15px 11px 12px}.hero h1{font-size:1.03rem}main{padding:11px 8px 22px}.card,.q{padding:12px;border-radius:16px}.wchip{font-size:.74rem;padding:6px 8px}.choice,.token{padding:8px 9px}.btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+  <div class="brand"><div class="logo">DM</div><div><h1>De-Max A1 • W-Fragen</h1><p>W-reči su odmah vidljive • bez padajućeg menija</p></div></div>
+  <div class="progress-wrap"><div class="progress-row"><span>Napredak</span><strong id="barText">0%</strong></div><div class="bar"><span id="barFill"></span></div></div>
+</header>
+<main>
+<section class="card">
+  <h2>W-Fragen <span style="color:#0b6d35">— upitne reči</span></h2>
+  <p class="sub">Izaberi odgovarajuću W-reč ili složi celo pitanje. Prevod i izgovor su dostupni uz svaku vežbu.</p>
+  <div class="wbank" aria-label="W-Fragen">
+    <span class="wchip"><strong>Wie</strong> — kako</span><span class="wchip"><strong>Wo</strong> — gde</span><span class="wchip"><strong>Woher</strong> — odakle</span><span class="wchip"><strong>Wer</strong> — ko</span><span class="wchip"><strong>Was</strong> — šta</span><span class="wchip"><strong>Wann</strong> — kada</span><span class="wchip"><strong>Warum</strong> — zašto</span><span class="wchip"><strong>Wohin</strong> — kuda/gde</span><span class="wchip"><strong>Wie viel</strong> — koliko</span><span class="wchip"><strong>Welche</strong> — koji/koja</span>
+  </div>
+  <div class="tabs"><button class="tab active" data-panel="fill">1. Izaberi W-reč</button><button class="tab" data-panel="build">2. Složi pitanje</button></div>
+  <div class="scorebox"><div class="stat"><b id="correct">0</b><span>tačno</span></div><div class="stat"><b id="done">0</b><span>urađeno</span></div><div class="stat"><b id="percent">0%</b><span>tačnost</span></div></div>
+</section>
+
+<section id="fill" class="panel active"></section>
+<section id="build" class="panel"></section>
+<div class="footer">De-Max • A1 nemački jezik</div>
+</main>
+</div>
+<script>
+const wOptions=['Wie','Wo','Woher','Wer','Was','Wann','Warum','Wohin','Wie viel','Welche'];
+const fillData=[
+ ['Wie','___ heißen Sie?','Wie heißen Sie?','Kako se zovete?'],
+ ['Wo','___ wohnen Sie?','Wo wohnen Sie?','Gde stanujete?'],
+ ['Woher','___ kommen Sie?','Woher kommen Sie?','Odakle dolazite?'],
+ ['Wer','___ sind Sie?','Wer sind Sie?','Ko ste Vi?'],
+ ['Was','___ machen Sie beruflich?','Was machen Sie beruflich?','Šta radite po zanimanju?'],
+ ['Wann','___ beginnt der Kurs?','Wann beginnt der Kurs?','Kada počinje kurs?'],
+ ['Warum','___ lernen Sie Deutsch?','Warum lernen Sie Deutsch?','Zašto učite nemački?'],
+ ['Wohin','___ fahren Sie morgen?','Wohin fahren Sie morgen?','Kuda idete sutra?'],
+ ['Wie viel','___ kostet das?','Wie viel kostet das?','Koliko to košta?'],
+ ['Welche','___ Sprache sprechen Sie?','Welche Sprache sprechen Sie?','Koji jezik govorite?']
+];
+const buildData=[
+ ['Wie heißen Sie?','Kako se zovete?'],['Wo wohnen Sie?','Gde stanujete?'],['Woher kommen Sie?','Odakle dolazite?'],['Wer sind Sie?','Ko ste Vi?'],['Was machen Sie beruflich?','Šta radite po zanimanju?'],['Wann beginnt der Kurs?','Kada počinje kurs?'],['Warum lernen Sie Deutsch?','Zašto učite nemački?'],['Wohin fahren Sie morgen?','Kuda idete sutra?']
+];
+let doneSet=new Set(), correctSet=new Set();
+function germanVoice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/^de(-|_)/i.test(v.lang))||vs.find(v=>/German|Deutsch/i.test(v.name))||null}
+function speak(text,rate=.86){if(!('speechSynthesis' in window)){alert('Ovaj pregledač ne podržava izgovor.');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=rate;const v=germanVoice();if(v)u.voice=v;speechSynthesis.speak(u)}
+function updateStats(){const total=fillData.length+buildData.length;const done=doneSet.size,correct=correctSet.size,p=total?Math.round(done/total*100):0,acc=done?Math.round(correct/done*100):0;document.getElementById('barFill').style.width=p+'%';document.getElementById('barText').textContent=p+'%';document.getElementById('done').textContent=done;document.getElementById('correct').textContent=correct;document.getElementById('percent').textContent=acc+'%'}
+function mark(id,ok,fb){doneSet.add(id);if(ok)correctSet.add(id);else correctSet.delete(id);fb.className='feedback '+(ok?'ok':'no');fb.textContent=ok?'✓ Tačno!':'✗ Pokušaj ponovo.';updateStats()}
+
+const fill=document.getElementById('fill');
+fillData.forEach((it,i)=>{const [ans,prompt,full,tr]=it;const q=document.createElement('div');q.className='q';q.innerHTML=`<div class="qnum">W-Frage ${i+1}</div><div class="prompt">${prompt}</div><div class="translation">${tr}</div><div class="options"></div><div class="btnrow"><button class="btn ghost audio">🔊 Izgovor</button></div><div class="feedback"></div>`;const opts=q.querySelector('.options');wOptions.forEach(w=>{const b=document.createElement('button');b.className='choice';b.type='button';b.textContent=w;b.addEventListener('click',()=>{opts.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');mark('f'+i,w===ans,q.querySelector('.feedback'))});opts.appendChild(b)});q.querySelector('.audio').addEventListener('click',()=>speak(full));fill.appendChild(q)});
+
+const build=document.getElementById('build');
+buildData.forEach((it,i)=>{const [sentence,tr]=it;const words=sentence.replace('?','').split(' ');const shuffled=[...words].sort(()=>Math.random()-.5);const q=document.createElement('div');q.className='q';q.innerHTML=`<div class="qnum">Složi pitanje ${i+1}</div><div class="translation">${tr}</div><div class="answerline"></div><div class="wordbank"></div><div class="btnrow"><button class="btn primary check">Proveri</button><button class="btn ghost reset">Poništi</button><button class="btn ghost audio">🔊 Izgovor</button></div><div class="feedback"></div>`;const line=q.querySelector('.answerline'),bank=q.querySelector('.wordbank');
+ function makeToken(word,target){const b=document.createElement('button');b.type='button';b.className='token';b.textContent=word;b.addEventListener('click',()=>{(target===bank?line:bank).appendChild(b)});target.appendChild(b)}
+ shuffled.forEach(w=>makeToken(w,bank));
+ q.querySelector('.check').addEventListener('click',()=>{const current=[...line.children].map(x=>x.textContent).join(' ')+'?';mark('b'+i,current===sentence,q.querySelector('.feedback'))});
+ q.querySelector('.reset').addEventListener('click',()=>{[...line.children].forEach(x=>bank.appendChild(x));q.querySelector('.feedback').textContent=''});
+ q.querySelector('.audio').addEventListener('click',()=>speak(sentence));build.appendChild(q)
+});
+
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.panel).classList.add('active')}));
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}
+updateStats();
+</script>
+</body></html>
