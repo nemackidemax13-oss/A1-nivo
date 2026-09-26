@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>De-Max A1 • Brauchen – trebati</title>
+<style>
+:root{--p:#7b35d3;--p2:#5e1db2;--b:#0870df;--b2:#0755af;--ink:#071a42;--muted:#69758b;--ok:#13864c;--bad:#cc3349}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}
+.app{max-width:960px;margin:auto;padding:10px}
+.hero{text-align:center;padding:10px 5px}.hero h1{margin:0;font-size:clamp(2rem,6vw,4rem);font-weight:1000}.hero .g{background:linear-gradient(90deg,var(--p),var(--b));-webkit-background-clip:text;color:transparent}
+.table{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.col{border:2px solid #ddd;border-radius:20px;overflow:hidden}.col.p{border-color:#c9a1ef}.col.b{border-color:#96c3f4}
+.head{text-align:center;padding:10px;font-size:1.45rem;font-weight:1000}.p .head{color:var(--p2)}.b .head{color:var(--b2)}.head small{display:block;color:#111;font-size:.7em}
+.row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:center;padding:10px;border-top:1px solid #ececf1;font-size:1.2rem;font-weight:900}
+.n{width:50px;height:50px;border-radius:12px;display:grid;place-items:center;color:#fff}.p .n{background:var(--p)}.b .n{background:var(--b)}.fp{color:var(--p2)}.fb{color:var(--b2)}
+.note{margin-top:12px;border:2px solid #a875e4;border-radius:14px;padding:10px;text-align:center;font-weight:900}.note b{color:var(--p2)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.stat{background:#f7f9fc;border:1px solid #e1e7ef;border-radius:12px;padding:8px;text-align:center}.stat b{display:block;color:var(--b2);font-size:1.25rem}.stat span{font-size:.72rem;color:var(--muted)}
+.progw{height:9px;background:#e7edf5;border-radius:99px;overflow:hidden;margin-top:8px}.prog{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--b))}
+.quiz{margin-top:14px;border:2px solid #d8e1ec;border-radius:18px;overflow:hidden}.qhead{background:linear-gradient(90deg,var(--p2),var(--b2));color:#fff;padding:9px 14px;display:flex;justify-content:space-between;font-weight:1000}
+.body{padding:15px}.tag{display:inline-block;background:#f1e9ff;color:var(--p2);border-radius:999px;padding:5px 10px;font-weight:900;font-size:.8rem}
+.sentence{font-size:clamp(1.35rem,3vw,2rem);font-weight:1000;margin:14px 0 8px}.blank{display:inline-block;min-width:125px;text-align:center;border-bottom:3px solid var(--b);color:var(--p2)}
+.tr{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}.opt{border:2px solid #d4dfed;background:#fff;border-radius:12px;padding:12px;font-weight:1000;font-size:1rem;cursor:pointer}.opt.correct{background:#effaf3;border-color:#7ac99a;color:var(--ok)}.opt.wrong{background:#fff0f3;border-color:#e49aaa;color:var(--bad)}
+.feedback{font-weight:900;min-height:24px;margin-top:8px}.ok{color:var(--ok)}.bad{color:var(--bad)}.solution{display:none;margin-top:8px;padding:10px;background:#eef6ff;border:1px solid #c9dcf3;border-radius:12px;line-height:1.5}.solution.show{display:block}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;color:#fff;background:var(--b)}.btn.p{background:var(--p)}.btn.g{background:#edf2f9;color:var(--b2)}
+.donebox{display:none;margin-top:14px;padding:20px;text-align:center;background:#effaf3;border:2px solid #8ecea8;border-radius:16px}.donebox.show{display:block}
+.footer{text-align:center;color:#7b8493;font-size:.74rem;padding:15px 0}
+@media(max-width:650px){.table{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero"><h1><span class="g">BRAUCHEN</span> – TREBATI</h1><p>Präsens • pravilan glagol • A1</p></section>
+<section class="table">
+<div class="col p"><div class="head">SINGULAR <small>jednina</small></div>
+<div class="row"><div class="n">1.</div><div>ich <span class="fp">brauche</span></div></div>
+<div class="row"><div class="n">2.</div><div>du <span class="fp">brauchst</span></div></div>
+<div class="row"><div class="n">3.</div><div>er / sie / es <span class="fp">braucht</span></div></div></div>
+<div class="col b"><div class="head">PLURAL <small>množina</small></div>
+<div class="row"><div class="n">1.</div><div>wir <span class="fb">brauchen</span></div></div>
+<div class="row"><div class="n">2.</div><div>ihr <span class="fb">braucht</span></div></div>
+<div class="row"><div class="n">3.</div><div>sie / Sie <span class="fb">brauchen</span></div></div></div>
+</section>
+<div class="note">GLAGOL <b>BRAUCHEN</b> NAM JE PRAVILAN GLAGOL.</div>
+
+<section class="stats">
+<div class="stat"><b id="done">0</b><span>urađeno</span></div>
+<div class="stat"><b id="correct">0</b><span>tačno</span></div>
+<div class="stat"><b id="wrong">0</b><span>greške</span></div>
+<div class="stat"><b id="acc">0%</b><span>tačnost</span></div>
+</section>
+<div class="progw"><div class="prog" id="prog"></div></div>
+
+<section class="quiz" id="quiz"><div class="qhead"><span>VEŽBA • DOPUNI GLAGOL</span><span id="counter"></span></div>
+<div class="body">
+<div class="tag" id="tag">ICH</div>
+<div class="sentence" id="sentence"></div>
+<div class="tr" id="tr"></div>
+<div class="opts" id="opts"></div>
+<div class="feedback" id="feedback"></div>
+<div class="solution" id="solution"></div>
+<div class="controls"><button class="btn p" id="hearS">🔊 Poslušaj rečenicu</button><button class="btn g" id="hearV">🎧 brauchen</button></div>
+</div></section>
+
+<section class="donebox" id="donebox"><div style="font-size:2.4rem">✅</div><h2>Vežba završena!</h2><p id="score"></p></section>
+<div class="footer">De-Max • A1 nemački jezik • brauchen</div>
+</div>
+
+<script>
+const tasks=[{"pronoun": "ich", "form": "brauche", "sentence": "Ich brauche Wasser.", "sr": "Treba mi voda."}, {"pronoun": "du", "form": "brauchst", "sentence": "Du brauchst einen Stift.", "sr": "Treba ti olovka."}, {"pronoun": "er", "form": "braucht", "sentence": "Er braucht ein Auto.", "sr": "Njemu treba auto."}, {"pronoun": "sie", "form": "braucht", "sentence": "Sie braucht eine Tasche.", "sr": "Njoj treba torba."}, {"pronoun": "es", "form": "braucht", "sentence": "Es braucht Zeit.", "sr": "Za to je potrebno vreme."}, {"pronoun": "wir", "form": "brauchen", "sentence": "Wir brauchen Brot.", "sr": "Treba nam hleb."}, {"pronoun": "ihr", "form": "braucht", "sentence": "Ihr braucht Hilfe.", "sr": "Treba vam pomoć."}, {"pronoun": "sie", "form": "brauchen", "sentence": "Sie brauchen einen Tisch.", "sr": "Njima treba sto."}, {"pronoun": "Sie", "form": "brauchen", "sentence": "Sie brauchen Ihren Pass.", "sr": "Vama je potreban pasoš."}, {"pronoun": "ich", "form": "brauche", "sentence": "Ich brauche eine Jacke.", "sr": "Treba mi jakna."}, {"pronoun": "du", "form": "brauchst", "sentence": "Du brauchst ein Handy.", "sr": "Treba ti mobilni telefon."}, {"pronoun": "er", "form": "braucht", "sentence": "Er braucht Kaffee.", "sr": "Njemu treba kafa."}, {"pronoun": "sie", "form": "braucht", "sentence": "Sie braucht Milch.", "sr": "Njoj treba mleko."}, {"pronoun": "wir", "form": "brauchen", "sentence": "Wir brauchen zwei Tickets.", "sr": "Trebaju nam dve karte."}, {"pronoun": "ihr", "form": "braucht", "sentence": "Ihr braucht mehr Zeit.", "sr": "Treba vam više vremena."}, {"pronoun": "sie", "form": "brauchen", "sentence": "Sie brauchen eine Wohnung.", "sr": "Njima treba stan."}, {"pronoun": "Sie", "form": "brauchen", "sentence": "Sie brauchen einen Termin.", "sr": "Vama je potreban termin."}, {"pronoun": "ich", "form": "brauche", "sentence": "Ich brauche einen Arzt.", "sr": "Treba mi lekar."}, {"pronoun": "du", "form": "brauchst", "sentence": "Du brauchst neue Schuhe.", "sr": "Trebaju ti nove cipele."}, {"pronoun": "er", "form": "braucht", "sentence": "Er braucht einen Computer.", "sr": "Njemu treba računar."}, {"pronoun": "sie", "form": "braucht", "sentence": "Sie braucht eine Brille.", "sr": "Njoj trebaju naočare."}, {"pronoun": "es", "form": "braucht", "sentence": "Es braucht Ruhe.", "sr": "Za to je potreban mir."}, {"pronoun": "wir", "form": "brauchen", "sentence": "Wir brauchen eine Pause.", "sr": "Treba nam pauza."}, {"pronoun": "ihr", "form": "braucht", "sentence": "Ihr braucht Geld.", "sr": "Treba vam novac."}, {"pronoun": "sie", "form": "brauchen", "sentence": "Sie brauchen Lebensmittel.", "sr": "Njima trebaju namirnice."}, {"pronoun": "Sie", "form": "brauchen", "sentence": "Sie brauchen eine Fahrkarte.", "sr": "Vama je potrebna karta."}, {"pronoun": "ich", "form": "brauche", "sentence": "Ich brauche ein Kilo Äpfel.", "sr": "Treba mi kilogram jabuka."}, {"pronoun": "du", "form": "brauchst", "sentence": "Du brauchst eine Flasche Wasser.", "sr": "Treba ti flaša vode."}, {"pronoun": "wir", "form": "brauchen", "sentence": "Wir brauchen drei Stühle.", "sr": "Trebaju nam tri stolice."}, {"pronoun": "sie", "form": "brauchen", "sentence": "Sie brauchen einen Schlüssel.", "sr": "Njima treba ključ."}], forms=["brauche","brauchst","braucht","brauchen"];
+let order=[...tasks.keys()],pos=0,correct=0,wrong=0,locked=false;
+for(let i=order.length-1;i>0;i--){let x=Math.floor(Math.random()*(i+1));[order[i],order[x]]=[order[x],order[i]]}
+function gv(){let v=speechSynthesis.getVoices();return v.find(x=>/^de(-|_)/i.test(x.lang))}
+function speak(t,r=.8,end=null){if(!("speechSynthesis"in window)){if(end)end();return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="de-DE";u.rate=r;let v=gv();if(v)u.voice=v;let d=false,f=()=>{if(d)return;d=true;if(end)end()};u.onend=f;u.onerror=f;speechSynthesis.speak(u)}
+speechSynthesis.onvoiceschanged=()=>gv();
+function sh(a){let x=[...a];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function cur(){return tasks[order[pos]]}
+function blank(t){let i=t.sentence.toLowerCase().indexOf(t.form.toLowerCase());return t.sentence.slice(0,i)+'<span class="blank">_____</span>'+t.sentence.slice(i+t.form.length)}
+function render(){locked=false;let t=cur();counter.textContent=`${pos+1} / ${tasks.length}`;tag.textContent=t.pronoun.toUpperCase();sentence.innerHTML=blank(t);tr.textContent=t.sr;feedback.textContent="";feedback.className="feedback";solution.classList.remove("show");solution.innerHTML="";opts.innerHTML="";sh(forms).forEach(f=>{let b=document.createElement("button");b.className="opt";b.textContent=f;b.onclick=()=>choose(f,b);opts.appendChild(b)});upd()}
+function choose(f,b){if(locked)return;locked=true;let t=cur(),ok=f===t.form;[...opts.children].forEach(x=>{x.disabled=true;if(x.textContent===t.form)x.classList.add("correct")});if(!ok)b.classList.add("wrong");feedback.className="feedback "+(ok?"ok":"bad");feedback.textContent=ok?"✓ Tačno!":"✗ Nije tačno. Tačan oblik je označen.";if(ok)correct++;else wrong++;sentence.textContent=t.sentence;solution.innerHTML=`<b>${t.sentence}</b><br>${t.sr}`;solution.classList.add("show");upd();speak(t.sentence,.78,()=>setTimeout(next,650))}
+function next(){if(pos<tasks.length-1){pos++;render()}else{quiz.style.display="none";donebox.classList.add("show");let total=correct+wrong;score.textContent=`Tačnost: ${Math.round(correct/total*100)}% • Tačno: ${correct} • Greške: ${wrong}`}}
+function upd(){let d=correct+wrong;done.textContent=d;document.getElementById("correct").textContent=correct;document.getElementById("wrong").textContent=wrong;acc.textContent=(d?Math.round(correct/d*100):0)+"%";prog.style.width=Math.round(d/tasks.length*100)+"%"}
+hearS.onclick=()=>speak(cur().sentence,.78);hearV.onclick=()=>speak("brauchen",.78);render();
+</script>
+</body>
+</html>
