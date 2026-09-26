@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d94153">
+<title>De-Max A1 • Trocifreni i četvorocifreni brojevi</title>
+<style>
+:root{
+  --red:#db4457;--red2:#c93649;--blue:#3c73b9;--blue2:#1f4f92;
+  --ink:#15243d;--muted:#617087;--line:#d5dfec;
+  --ok:#0c824b;--bad:#c23248;--shadow:0 10px 28px rgba(24,46,82,.10)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:linear-gradient(180deg,#f8f9fc,#edf2f8);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+}
+.app{width:min(100%,900px);min-height:100vh;margin:auto;padding:12px}
+.hero{
+  background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;
+  border-radius:22px;padding:18px;box-shadow:var(--shadow)
+}
+.hero-grid{display:grid;grid-template-columns:66px 1fr 66px;gap:10px;align-items:center}
+.circle{
+  width:66px;height:66px;border-radius:50%;background:#fff;color:var(--blue2);
+  display:grid;place-items:center;font-size:1.15rem;font-weight:1000;text-align:center
+}
+.hero h1{margin:0;text-align:center;font-size:clamp(1.55rem,4vw,2.8rem);line-height:1.05}
+.hero p{margin:7px 0 0;text-align:center;opacity:.96}
+.info{
+  margin-top:14px;background:#dfe9f5;border:2px solid #bfd0e7;border-radius:20px;
+  padding:14px 16px;box-shadow:var(--shadow);line-height:1.52
+}
+.examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.example{
+  background:#fff;border:1px solid #c8d8e9;border-radius:12px;padding:8px 10px;
+  color:var(--blue2);font-weight:900
+}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+.stat{
+  background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center;
+  padding:9px;box-shadow:var(--shadow)
+}
+.stat b{display:block;color:var(--blue2);font-size:1.3rem}
+.stat span{font-size:.75rem;color:var(--muted)}
+.progress{height:9px;background:#dce5f0;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--red));transition:.25s}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
+.tab{
+  border:0;border-radius:14px;padding:12px;font-weight:1000;cursor:pointer;
+  background:#e8eff8;color:var(--blue2)
+}
+.tab.active{background:var(--blue);color:#fff}
+.tab.four.active{background:var(--red)}
+
+.section{
+  margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:14px;box-shadow:var(--shadow)
+}
+.section h2{margin:0 0 4px;color:var(--blue2);font-size:1.16rem}
+.section.four h2{color:var(--red2)}
+.sub{margin:0 0 12px;color:var(--muted);font-size:.88rem;line-height:1.45}
+
+.exercise{display:none;border:1px solid #d9e3ef;border-radius:18px;padding:14px;background:#fbfdff}
+.exercise.active{display:block}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{
+  display:inline-block;background:var(--blue);color:#fff;border-radius:999px;
+  padding:5px 10px;font-size:.73rem;font-weight:900
+}
+.four .tag{background:var(--red)}
+.num{font-size:.8rem;color:var(--muted);font-weight:900}
+.listenbox{
+  text-align:center;background:#f6f9fd;border:1px solid #d6e1ef;border-radius:16px;
+  padding:16px 10px;margin-top:10px
+}
+.ear{font-size:3rem}
+.listen-title{font-weight:1000;color:var(--blue2);margin:6px 0 3px}
+.four .listen-title{color:var(--red2)}
+.listen-help{font-size:.84rem;color:var(--muted)}
+.btnrow{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer}
+.ghost{background:#e8eff8;color:var(--blue2)}
+
+.prompt{text-align:center;font-size:1.08rem;font-weight:1000;margin:13px 0 9px}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.opt{
+  border:1.5px solid #cad8e8;background:#fff;color:var(--ink);border-radius:14px;
+  padding:15px 9px;font-size:1.22rem;font-weight:1000;cursor:pointer
+}
+.opt.correct{background:#edf9f2;border-color:#84cca0;color:var(--ok)}
+.opt.wrong{background:#fff0f2;border-color:#e6a5af;color:var(--bad)}
+.opt:disabled{cursor:default;opacity:.92}
+.feedback{text-align:center;font-size:.9rem;font-weight:900;margin-top:10px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.solution{
+  display:none;margin-top:9px;padding:11px;border:1px solid #cadbee;
+  background:#eef5fd;border-radius:13px;text-align:center;line-height:1.5
+}
+.solution.show{display:block}
+.solution b{color:var(--blue2)}
+.solution .word{display:block;font-weight:900;color:var(--red2);word-break:break-word}
+
+.finished{
+  display:none;text-align:center;padding:22px 10px
+}
+.finished.show{display:block}
+.finished .icon{font-size:3rem}
+.finished h3{margin:5px 0;color:var(--blue2)}
+.footer{text-align:center;color:var(--muted);font-size:.75rem;padding:13px 0 20px}
+
+@media(max-width:600px){
+  .app{padding:8px}.hero{padding:14px 9px}.hero-grid{grid-template-columns:52px 1fr 52px}
+  .circle{width:52px;height:52px;font-size:.9rem}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .options{grid-template-columns:1fr 1fr}
+  .opt{font-size:1.1rem;padding:13px 5px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="circle">123</div>
+    <div>
+      <h1>ZAHLEN • 3 & 4 STELLEN</h1>
+      <p>Trocifreni i četvorocifreni brojevi • slušanje</p>
+    </div>
+    <div class="circle">1245</div>
+  </div>
+</section>
+
+<section class="info">
+  Broj se <b>automatski izgovara na nemačkom</b>. Učenik ne vidi nemački zapis pre odgovora — samo sluša i bira broj koji je čuo.
+  <div class="examples">
+    <span class="example">123 → einhundertdreiundzwanzig</span>
+    <span class="example">1245 → eintausendzweihundertfünfundvierzig</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+  <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+  <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+  <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+</div>
+<div class="progress"><span id="progress"></span></div>
+
+<div class="tabs">
+  <button id="tab3" class="tab active" onclick="switchMode('three')">3 cifre • 100–999</button>
+  <button id="tab4" class="tab four" onclick="switchMode('four')">4 cifre • 1000–9999</button>
+</div>
+
+<section id="threeSection" class="section">
+  <h2>1. Trocifreni brojevi</h2>
+  <p class="sub">Poslušaj broj i označi jedan od četiri ponuđena odgovora.</p>
+  <div id="threeQuiz"></div>
+  <div id="threeFinished" class="finished">
+    <div class="icon">✅</div><h3>Trocifreni brojevi završeni!</h3>
+    <p>Možeš preći na četvorocifrene brojeve.</p>
+  </div>
+</section>
+
+<section id="fourSection" class="section four" style="display:none">
+  <h2>2. Četvorocifreni brojevi</h2>
+  <p class="sub">Poslušaj broj i označi jedan od četiri ponuđena odgovora.</p>
+  <div id="fourQuiz"></div>
+  <div id="fourFinished" class="finished">
+    <div class="icon">🏆</div><h3>Četvorocifreni brojevi završeni!</h3>
+    <p>Završio/la si sve slušne vežbe.</p>
+  </div>
+</section>
+
+<div class="footer">De-Max • A1 nemački jezik • Trocifreni i četvorocifreni brojevi</div>
+</div>
+
+<script>
+function under100(n){
+  const units=["null","eins","zwei","drei","vier","fünf","sechs","sieben","acht","neun"];
+  const teens={
+    10:"zehn",11:"elf",12:"zwölf",13:"dreizehn",14:"vierzehn",
+    15:"fünfzehn",16:"sechzehn",17:"siebzehn",18:"achtzehn",19:"neunzehn"
+  };
+  const tens={
+    20:"zwanzig",30:"dreißig",40:"vierzig",50:"fünfzig",
+    60:"sechzig",70:"siebzig",80:"achtzig",90:"neunzig"
+  };
+  if(n<10) return units[n];
+  if(teens[n]) return teens[n];
+  if(tens[n]) return tens[n];
+  const t=Math.floor(n/10)*10,u=n%10;
+  return (u===1?"ein":units[u])+"und"+tens[t];
+}
+function germanNumber(n){
+  if(n<100) return under100(n);
+  if(n<1000){
+    const h=Math.floor(n/100), rest=n%100;
+    const head=(h===1?"ein":under100(h))+"hundert";
+    return rest===0?head:head+under100(rest);
+  }
+  if(n<10000){
+    const th=Math.floor(n/1000), rest=n%1000;
+    const head=(th===1?"ein":under100(th))+"tausend";
+    if(rest===0)return head;
+    if(rest<100)return head+under100(rest);
+    const h=Math.floor(rest/100), r=rest%100;
+    const hundred=(h===1?"ein":under100(h))+"hundert";
+    return head+hundred+(r?under100(r):"");
+  }
+  return String(n);
+}
+
+const threeNums=[
+  123,147,218,256,304,319,375,421,468,509,
+  543,586,612,649,703,728,764,815,867,942
+];
+const fourNums=[
+  1024,1147,1245,1368,1492,2036,2187,2459,3014,3276,
+  3481,4125,4673,5098,5364,6182,6749,7023,7586,8147,
+  8294,9036,9475,9861
+];
+
+function getGermanVoice(){
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/^de(-|_)/i.test(v.lang) && /Google|Microsoft|Katja|Anna|Conrad|Vicki/i.test(v.name))
+      || vs.find(v=>/^de(-|_)/i.test(v.lang))
+      || vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+function speakNumber(n){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(germanNumber(Number(n)));
+  u.lang="de-DE";
+  u.rate=.72;
+  u.pitch=1;
+  const v=getGermanVoice();if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>getGermanVoice();
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function distractors(n,type){
+  const min=type==="three"?100:1000;
+  const max=type==="three"?999:9999;
+  const candidates=[];
+  const offsets=type==="three"
+    ? [-100,100,-20,20,-9,9,-3,3,11,-11]
+    : [-1000,1000,-100,100,-20,20,-9,9,11,-11];
+  offsets.forEach(o=>{
+    const x=n+o;
+    if(x>=min&&x<=max&&x!==n)candidates.push(x);
+  });
+  while(candidates.length<8){
+    const span=type==="three"?900:9000;
+    const x=min+Math.floor(Math.random()*span);
+    if(x!==n&&!candidates.includes(x))candidates.push(x);
+  }
+  return shuffle(candidates).slice(0,3);
+}
+function makeOptions(n,type){return shuffle([n,...distractors(n,type)])}
+
+function buildQuiz(nums,rootId,type){
+  const root=document.getElementById(rootId);
+  nums.forEach((n,i)=>{
+    const ex=document.createElement("div");
+    ex.className="exercise track "+(i===0?"active ":"")+(type==="four"?"four":"");
+    ex.dataset.answer=String(n);
+    ex.dataset.index=String(i);
+    ex.dataset.type=type;
+    const opts=makeOptions(n,type);
+    ex.innerHTML=`
+      <div class="top">
+        <span class="tag">${type==="three"?"3 CIFRE":"4 CIFRE"}</span>
+        <span class="num">${i+1}/${nums.length}</span>
+      </div>
+      <div class="listenbox">
+        <div class="ear">🎧</div>
+        <div class="listen-title">Poslušaj broj</div>
+        <div class="listen-help">Broj se pušta automatski.</div>
+        <div class="btnrow">
+          <button class="btn ghost" onclick="repeatNumber(this)">🔁 Ponovi izgovor</button>
+        </div>
+      </div>
+      <div class="prompt">Koji broj čuješ?</div>
+      <div class="options">
+        ${opts.map(x=>`<button class="opt" onclick="answer(this,'${x}')">${x}</button>`).join("")}
+      </div>
+      <div class="feedback"></div>
+      <div class="solution">
+        <b>Tačno rešenje: ${n}</b>
+        <span class="word">${germanNumber(n)}</span>
+      </div>`;
+    root.appendChild(ex);
+  });
+}
+buildQuiz(threeNums,"threeQuiz","three");
+buildQuiz(fourNums,"fourQuiz","four");
+
+let activeMode="three";
+
+function currentExercise(type){
+  const id=type==="three"?"threeQuiz":"fourQuiz";
+  return document.querySelector(`#${id} .exercise.active`);
+}
+function playCurrent(type=activeMode){
+  const ex=currentExercise(type);
+  if(ex)setTimeout(()=>speakNumber(ex.dataset.answer),350);
+}
+function repeatNumber(btn){
+  const ex=btn.closest(".exercise");
+  speakNumber(ex.dataset.answer);
+}
+function answer(btn,value){
+  const ex=btn.closest(".exercise");
+  if(ex.dataset.locked==="1")return;
+  ex.dataset.locked="1";
+
+  const ok=String(value)===ex.dataset.answer;
+  ex.querySelectorAll(".opt").forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===ex.dataset.answer)b.classList.add("correct");
+  });
+  if(!ok)btn.classList.add("wrong");
+
+  const fb=ex.querySelector(".feedback");
+  fb.className="feedback "+(ok?"ok":"bad");
+
+  if(ok){
+    fb.textContent="✓ Tačno!";
+  }else{
+    fb.textContent="✗ Nije tačno. Prikazano je tačno rešenje.";
+    ex.querySelector(".solution").classList.add("show");
+  }
+
+  ex.dataset.state=ok?"1":"0";
+  refresh();
+
+  setTimeout(()=>nextExercise(ex),1300);
+}
+function nextExercise(ex){
+  const type=ex.dataset.type;
+  const nums=type==="three"?threeNums:fourNums;
+  const idx=Number(ex.dataset.index);
+  ex.classList.remove("active");
+
+  if(idx<nums.length-1){
+    const root=type==="three"?"threeQuiz":"fourQuiz";
+    const next=document.querySelector(`#${root} .exercise[data-index="${idx+1}"]`);
+    next.classList.add("active");
+    next.scrollIntoView({behavior:"smooth",block:"center"});
+    activeMode=type;
+    playCurrent(type);
+  }else{
+    const finish=document.getElementById(type==="three"?"threeFinished":"fourFinished");
+    finish.classList.add("show");
+    finish.scrollIntoView({behavior:"smooth",block:"center"});
+    if(type==="three"){
+      setTimeout(()=>switchMode("four"),1000);
+    }
+  }
+}
+function switchMode(type){
+  activeMode=type;
+  const three=type==="three";
+  document.getElementById("threeSection").style.display=three?"block":"none";
+  document.getElementById("fourSection").style.display=three?"none":"block";
+  document.getElementById("tab3").classList.toggle("active",three);
+  document.getElementById("tab4").classList.toggle("active",!three);
+
+  const ex=currentExercise(type);
+  if(ex){
+    ex.scrollIntoView({behavior:"smooth",block:"center"});
+    setTimeout(()=>playCurrent(type),600);
+  }
+}
+function refresh(){
+  const all=[...document.querySelectorAll(".track")];
+  const states=all.map(x=>x.dataset.state).filter(Boolean);
+  const done=states.length;
+  const correct=states.filter(x=>x==="1").length;
+  const wrong=states.filter(x=>x==="0").length;
+  document.getElementById("done").textContent=done;
+  document.getElementById("correct").textContent=correct;
+  document.getElementById("wrong").textContent=wrong;
+  document.getElementById("accuracy").textContent=(done?Math.round(correct/done*100):0)+"%";
+  document.getElementById("progress").style.width=(all.length?Math.round(done/all.length*100):0)+"%";
+}
+refresh();
+window.addEventListener("load",()=>setTimeout(()=>playCurrent("three"),800));
+</script>
+</body>
+</html>
