@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>De-Max B1 • Lekcija 1</title>
+<style>
+  :root{
+    --yellow:#ffd800;
+    --yellow2:#fff2a8;
+    --ink:#171717;
+    --muted:#6f6f6f;
+    --line:#eadb7f;
+    --white:#ffffff;
+    --green:#168a45;
+    --greenbg:#e9f8ef;
+    --red:#c92d2d;
+    --redbg:#fff0f0;
+    --shadow:0 14px 40px rgba(34,27,0,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(255,216,0,.20), transparent 26rem),
+      linear-gradient(180deg,#fffdf2 0%,#fff 36%,#fffaf0 100%);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  button{font:inherit}
+  .app{
+    width:min(100%, 760px);
+    margin:0 auto;
+    min-height:100vh;
+    padding:18px 16px 40px;
+  }
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    margin:-18px -16px 16px;
+    padding:12px 16px;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .topline{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    max-width:760px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px; min-width:0;
+  }
+  .brandmark{
+    width:48px;height:48px;border-radius:15px;
+    background:var(--yellow); color:#111;
+    display:grid;place-items:center;
+    font-weight:1000; letter-spacing:-1px;
+    border:2px solid #111;
+    box-shadow:4px 4px 0 #111;
+    flex:0 0 auto;
+  }
+  .brandtext{min-width:0}
+  .brandtext b{display:block;font-size:17px;line-height:1}
+  .brandtext span{font-size:12px;color:var(--muted)}
+  .mini-score{
+    border-radius:14px;
+    padding:9px 11px;
+    background:#111;color:#fff;
+    font-weight:800;font-size:12px;
+    white-space:nowrap;
+  }
+
+  .hero{
+    overflow:hidden;
+    position:relative;
+    border-radius:28px;
+    padding:25px 22px;
+    background:linear-gradient(135deg,#111 0%,#272200 100%);
+    color:#fff;
+    box-shadow:var(--shadow);
+    border:1px solid #000;
+    margin-bottom:16px;
+  }
+  .hero:after{
+    content:"B1";
+    position:absolute;
+    right:-15px; bottom:-40px;
+    font-size:150px; font-weight:1000;
+    color:rgba(255,216,0,.15);
+    line-height:1;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;
+    border-radius:999px;
+    background:var(--yellow);color:#111;
+    padding:7px 11px;font-size:12px;font-weight:900;
+    margin-bottom:13px;
+  }
+  h1{font-size:34px;line-height:1.02;margin:0 0 9px;letter-spacing:-1.5px}
+  .hero p{margin:0;color:#e9e7dc;max-width:520px;line-height:1.5;font-size:14px}
+  .hero .dots{display:flex;gap:6px;margin-top:18px}
+  .hero .dots i{display:block;width:28px;height:5px;border-radius:99px;background:#fff2}
+  .hero .dots i:first-child{background:var(--yellow);width:54px}
+
+  .section-title{
+    display:flex;align-items:end;justify-content:space-between;gap:12px;
+    margin:21px 2px 11px;
+  }
+  .section-title h2{font-size:18px;margin:0}
+  .section-title span{font-size:12px;color:var(--muted)}
+
+  .lesson-grid{display:grid;gap:12px}
+  .lesson-card{
+    appearance:none;width:100%;text-align:left;
+    background:#fff;border:1px solid #eee0a0;border-radius:22px;
+    padding:17px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.055);
+    transition:.18s transform,.18s border-color,.18s box-shadow;
+    position:relative;overflow:hidden;
+  }
+  .lesson-card:hover{transform:translateY(-2px);border-color:#d5b900;box-shadow:0 12px 30px rgba(0,0,0,.08)}
+  .lesson-card:active{transform:scale(.99)}
+  .lesson-card .row{display:flex;gap:13px;align-items:center}
+  .lesson-num{
+    width:50px;height:50px;border-radius:16px;
+    background:var(--yellow);display:grid;place-items:center;
+    font-size:21px;font-weight:1000;border:2px solid #111;
+    flex:0 0 auto;
+  }
+  .lesson-card h3{margin:0 0 3px;font-size:17px}
+  .lesson-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .chip{
+    background:#fff9d2;border:1px solid #f0dd78;
+    border-radius:999px;padding:6px 9px;
+    font-size:11px;font-weight:800;color:#4b4100;
+  }
+  .go{
+    position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:12px;
+    display:grid;place-items:center;background:#111;color:#fff;font-weight:900;
+  }
+
+  .screen{display:none}
+  .screen.active{display:block}
+  .quiz-head{
+    display:flex;align-items:center;gap:12px;margin:4px 0 12px;
+  }
+  .back{
+    width:43px;height:43px;border:0;border-radius:14px;background:#111;color:#fff;
+    cursor:pointer;font-size:20px;font-weight:900;box-shadow:0 6px 16px #0002;
+  }
+  .quiz-title{flex:1;min-width:0}
+  .quiz-title h2{margin:0 0 2px;font-size:20px}
+  .quiz-title div{font-size:12px;color:var(--muted)}
+  .counter{
+    border-radius:999px;background:var(--yellow);padding:8px 11px;
+    font-size:12px;font-weight:1000;border:1px solid #c9ad00;
+  }
+  .progress{
+    height:10px;background:#f2f0e8;border-radius:99px;overflow:hidden;
+    border:1px solid #e4e0d3;margin-bottom:14px;
+  }
+  .progress > div{
+    height:100%;width:0;background:linear-gradient(90deg,#111,var(--yellow));
+    transition:.25s width;
+  }
+
+  .question-card{
+    background:#fff;border:1px solid #eee1a7;border-radius:25px;
+    padding:20px;box-shadow:var(--shadow);
+  }
+  .q-label{
+    display:inline-flex;align-items:center;gap:7px;
+    background:#fff8c5;border:1px solid #ead04a;
+    color:#514700;border-radius:999px;padding:6px 10px;
+    font-size:11px;font-weight:900;margin-bottom:12px;
+  }
+  .q-text{
+    font-size:21px;line-height:1.35;font-weight:900;
+    margin:0 0 17px;letter-spacing:-.25px;
+  }
+  .options{display:grid;gap:10px}
+  .option{
+    width:100%;display:flex;align-items:center;gap:11px;text-align:left;
+    border:1.5px solid #e5e0cc;border-radius:17px;background:#fff;
+    padding:13px 14px;cursor:pointer;font-weight:750;
+    transition:.15s background,.15s border-color,.15s transform;
+  }
+  .option:hover:not(:disabled){transform:translateY(-1px);border-color:#c8ab00;background:#fffdf2}
+  .option:disabled{cursor:default}
+  .letter{
+    width:30px;height:30px;border-radius:10px;background:#111;color:#fff;
+    display:grid;place-items:center;font-size:12px;font-weight:1000;flex:0 0 auto;
+  }
+  .option.correct{background:var(--greenbg);border-color:#72c491;color:#0c5f2d}
+  .option.correct .letter{background:var(--green)}
+  .option.wrong{background:var(--redbg);border-color:#e49a9a;color:#8f1e1e}
+  .option.wrong .letter{background:var(--red)}
+  .feedback{
+    display:none;margin-top:14px;border-radius:17px;padding:13px 14px;
+    line-height:1.45;font-size:13px;border:1px solid;
+  }
+  .feedback.show{display:block}
+  .feedback.good{background:var(--greenbg);border-color:#9ed6b2;color:#0b5e2c}
+  .feedback.bad{background:var(--redbg);border-color:#efbbbb;color:#8b2020}
+  .feedback b{display:block;margin-bottom:3px}
+  .next{
+    display:none;width:100%;border:0;border-radius:16px;background:#111;color:#fff;
+    padding:14px 16px;margin-top:14px;font-weight:950;cursor:pointer;
+    box-shadow:0 7px 0 var(--yellow);
+  }
+  .next.show{display:block}
+  .next:active{transform:translateY(3px);box-shadow:0 4px 0 var(--yellow)}
+
+  .result{
+    text-align:center;background:#fff;border:1px solid #ebdd8b;border-radius:27px;
+    padding:28px 20px;box-shadow:var(--shadow);
+  }
+  .result .medal{
+    width:86px;height:86px;border-radius:28px;background:var(--yellow);
+    border:3px solid #111;display:grid;place-items:center;margin:0 auto 14px;
+    font-size:35px;box-shadow:7px 7px 0 #111;
+  }
+  .result h2{margin:0 0 6px;font-size:29px}
+  .result p{margin:0;color:var(--muted);font-size:14px}
+  .big-score{font-size:54px;font-weight:1000;letter-spacing:-2px;margin:12px 0 1px}
+  .result-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+  .result-actions button{
+    border-radius:15px;padding:13px 10px;font-weight:900;cursor:pointer;
+  }
+  .again{background:var(--yellow);border:2px solid #111;color:#111}
+  .homebtn{background:#111;border:2px solid #111;color:#fff}
+
+  .footer{
+    text-align:center;color:#948d6d;font-size:11px;padding:22px 5px 4px;
+  }
+  @media(min-width:640px){
+    .lesson-grid{grid-template-columns:1fr 1fr}
+    .lesson-card:last-child{grid-column:1/-1}
+    .question-card{padding:25px}
+    .q-text{font-size:24px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topline">
+      <div class="brand">
+        <div class="brandmark">DM</div>
+        <div class="brandtext">
+          <b>DE-MAX B1</b>
+          <span>Interaktivni testovi</span>
+        </div>
+      </div>
+      <div class="mini-score" id="miniScore">20 PITANJA</div>
+    </div>
+  </div>
+
+  <section class="screen" id="homeScreen" style="display:none">
+    <div class="hero">
+      <div class="eyebrow">● B1 NIVO • DE-MAX</div>
+      <h1>Test<br>Lekcija 1</h1>
+      <p>Žuto-beli interaktivni test za De-Max B1 • Lekcija 1.</p>
+      <div class="dots"><i></i><i></i><i></i></div>
+    </div>
+
+    <div class="section-title"><h2>Pokreni test</h2><span>20 pitanja</span></div><div class="lesson-grid"><button class="lesson-card" onclick="startQuiz(0)"><span class="go">→</span><div class="row"><div class="lesson-num">1</div><div><h3>Lekcija 1</h3><p>De-Max B1 test</p></div></div></button></div><div class="footer">DE-MAX • B1 nemački jezik • prilagođeno telefonu 9:16</div>
+  </section>
+
+  <section class="screen active" id="quizScreen">
+    <div class="quiz-head">
+      <button class="back" onclick="restartQuiz()" aria-label="Ponovi test">‹</button>
+      <div class="quiz-title">
+        <h2 id="lessonTitle">Lekcija 1</h2>
+        <div id="lessonTopics">als • Präteritum • Plusquamperfekt</div>
+      </div>
+      <div class="counter" id="counter">1/20</div>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+
+    <div class="question-card" id="questionCard">
+      <div class="q-label" id="qLabel">PITANJE</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="nextBtn" onclick="nextQuestion()">Sledeće pitanje →</button>
+    </div>
+
+    <div class="result" id="resultBox" style="display:none">
+      <div class="medal">✓</div>
+      <h2>Test završen!</h2>
+      <p id="resultLesson">Lekcija 1</p>
+      <div class="big-score" id="bigScore">0%</div>
+      <p id="resultText"></p>
+      <div class="result-actions">
+        <button class="again" onclick="restartQuiz()">Ponovi test</button>
+        <button class="homebtn" onclick="restartQuiz()">Ponovi</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const lessons = [
+{
+  title:"Lekcija 1",
+  topics:"1–3. čas • als • Präteritum • Plusquamperfekt",
+  questions:[
+    {tag:"ALS",q:"Kada se u nemačkom najčešće koristi veznik „als“?",o:["Za radnju koja se redovno ponavlja","Za jedinstvenu radnju ili stanje u prošlosti","Samo za budućnost","Samo za sadašnjost"],a:1,e:"„als“ se koristi za događaj ili stanje u prošlosti koje se ne ponavlja."},
+    {tag:"ALS",q:"Izaberi pravilnu rečenicu.",o:["Als ich klein war, spielte ich jeden Tag draußen.","Als ich klein war, ich spielte jeden Tag draußen.","Als ich war klein, spielte jeden Tag ich draußen.","Als war ich klein, ich spielte draußen."],a:0,e:"U zavisnoj rečenici sa „als“ glagol ide na kraj: „als ich klein war“."},
+    {tag:"ALS",q:"Kako pravilno preokrenuti: „Ich war sehr glücklich, als ich die Prüfung bestanden habe.“?",o:["Als ich die Prüfung bestanden habe, ich war sehr glücklich.","Als ich die Prüfung bestanden habe, war ich sehr glücklich.","Als habe ich die Prüfung bestanden, war ich glücklich.","Als ich bestanden die Prüfung habe, war ich glücklich."],a:1,e:"Kada „als“ rečenica stoji prva, u glavnoj rečenici sledi inverzija: „war ich“."},
+    {tag:"PRÄTERITUM",q:"Präteritum glagola „gehen“ za „ich“ je:",o:["gehte","ging","gegangen","ginge"],a:1,e:"gehen → ging."},
+    {tag:"PRÄTERITUM",q:"Dopuni: „Er ___ gestern spät nach Hause.“ (kommen)",o:["kommte","kam","gekommen","kommt"],a:1,e:"kommen → kam u Präteritumu."},
+    {tag:"PRÄTERITUM",q:"Dopuni: „Ihr ___ nach dem Sport sehr müde.“ (sein)",o:["wart","waren","seid","gewesen"],a:0,e:"Präteritum od „sein“ za „ihr“ je „wart“."},
+    {tag:"PRÄTERITUM",q:"Dopuni: „Du ___ am Abend viel Zeit.“ (haben)",o:["hattest","hast","hatte","gehabt"],a:0,e:"Präteritum od „haben“ za „du“ je „hattest“."},
+    {tag:"PRÄTERITUM",q:"Koja rečenica ima pravilan red reči?",o:["Wir zusammen Hausaufgaben machten.","Wir machten zusammen Hausaufgaben.","Machten zusammen wir Hausaufgaben.","Wir Hausaufgaben zusammen machten."],a:1,e:"U potvrdnoj rečenici glagol u Präteritumu stoji na drugom mestu."},
+    {tag:"PRÄTERITUM",q:"Koje W-pitanje je pravilno?",o:["Wo du warst gestern?","Wo gestern warst du?","Wo warst du gestern?","Wo bist du gestern war?"],a:2,e:"W-reč + glagol + lice + ostalo: „Wo warst du gestern?“"},
+    {tag:"PRÄTERITUM",q:"Koje pitanje bez W-reči je pravilno?",o:["Du gingst zur Schule?","Gingst du zur Schule?","Zur Schule du gingst?","Ging du zur Schule?"],a:1,e:"Kod pitanja bez W-reči glagol ide na prvo mesto."},
+    {tag:"PRÄTERITUM",q:"Präteritum glagola „trinken“ za „er/sie“ je:",o:["trinkte","trank","getrunken","trunke"],a:1,e:"trinken → trank."},
+    {tag:"PRÄTERITUM",q:"Präteritum glagola „sehen“ je:",o:["sah","sehte","gesehen","sieht"],a:0,e:"sehen → sah."},
+    {tag:"PRÄTERITUM",q:"Präteritum glagola „sprechen“ je:",o:["sprach","sprech­te","gesprochen","sprich"],a:0,e:"sprechen → sprach."},
+    {tag:"PLUSQUAMPERFEKT",q:"Kako se gradi Plusquamperfekt?",o:["haben/sein u prezentu + infinitiv","hatte/war + Partizip II","werden + infinitiv","wurde + Partizip II"],a:1,e:"Plusquamperfekt = Präteritum pomoćnog glagola haben/sein + Partizip II."},
+    {tag:"PLUSQUAMPERFEKT",q:"Dopuni: „Ich ___ früh ___.“ (aufstehen)",o:["hatte / aufgestanden","war / aufgestanden","bin / aufgestanden","wurde / aufstehen"],a:1,e:"Kod kretanja/promene stanja koristi se „sein“: „war aufgestanden“."},
+    {tag:"PLUSQUAMPERFEKT",q:"Dopuni: „Wir ___ lange ___.“ (arbeiten)",o:["waren / gearbeitet","hatten / gearbeitet","haben / gearbeitet","hatten / arbeiten"],a:1,e:"„arbeiten“ gradi složena vremena sa „haben“: „hatten gearbeitet“."},
+    {tag:"PLUSQUAMPERFEKT",q:"Dopuni: „Du ___ ihn gestern ___.“ (sehen)",o:["warst / gesehen","hattest / gesehen","hattest / sehen","hast / gesehen"],a:1,e:"„Du hattest ihn gestern gesehen.“"},
+    {tag:"PLUSQUAMPERFEKT",q:"Dopuni: „Sie ___ nach Hause ___.“ (gehen)",o:["hatte / gegangen","war / gegangen","ist / gegangen","wurde / gegangen"],a:1,e:"„gehen“ koristi pomoćni glagol „sein“: „war gegangen“."},
+    {tag:"PLUSQUAMPERFEKT",q:"Koja rečenica je pravilna?",o:["Er hatte das Buch gelesen.","Er war das Buch gelesen.","Er hatte gelesen das Buch.","Er hat das Buch gelesen hatte."],a:0,e:"U Plusquamperfektu: „hatte“ je na 2. mestu, Partizip II na kraju."},
+    {tag:"PLUSQUAMPERFEKT",q:"Koja radnja se Plusquamperfektom obično označava?",o:["Radnja koja će se tek desiti","Radnja koja se desila pre druge radnje u prošlosti","Navika u sadašnjosti","Trajna buduća radnja"],a:1,e:"Plusquamperfekt izražava pretprošlost — ono što se desilo pre druge prošle radnje."}
+  ]
+}
+];
+
+let lessonIndex=0, qIndex=0, score=0, answered=false;
+
+const homeScreen=document.getElementById("homeScreen");
+const quizScreen=document.getElementById("quizScreen");
+const lessonTitle=document.getElementById("lessonTitle");
+const lessonTopics=document.getElementById("lessonTopics");
+const counter=document.getElementById("counter");
+const progressBar=document.getElementById("progressBar");
+const qLabel=document.getElementById("qLabel");
+const qText=document.getElementById("qText");
+const options=document.getElementById("options");
+const feedback=document.getElementById("feedback");
+const nextBtn=document.getElementById("nextBtn");
+const questionCard=document.getElementById("questionCard");
+const resultBox=document.getElementById("resultBox");
+const bigScore=document.getElementById("bigScore");
+const resultText=document.getElementById("resultText");
+const resultLesson=document.getElementById("resultLesson");
+const miniScore=document.getElementById("miniScore");
+
+function startQuiz(i){
+  lessonIndex=i; qIndex=0; score=0; answered=false;
+  homeScreen.classList.remove("active");
+  quizScreen.classList.add("active");
+  questionCard.style.display="block";
+  resultBox.style.display="none";
+  window.scrollTo({top:0,behavior:"smooth"});
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const L=lessons[lessonIndex], Q=L.questions[qIndex];
+  answered=false;
+  lessonTitle.textContent=L.title;
+  lessonTopics.textContent=L.topics;
+  counter.textContent=`${qIndex+1}/${L.questions.length}`;
+  progressBar.style.width=`${(qIndex/L.questions.length)*100}%`;
+  qLabel.textContent=Q.tag;
+  qText.textContent=Q.q;
+  feedback.className="feedback";
+  feedback.innerHTML="";
+  nextBtn.className="next";
+  nextBtn.textContent=qIndex===L.questions.length-1 ? "Prikaži rezultat ✓" : "Sledeće pitanje →";
+  options.innerHTML="";
+  Q.o.forEach((txt,idx)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.innerHTML=`<span class="letter">${String.fromCharCode(65+idx)}</span><span>${txt}</span>`;
+    b.onclick=()=>chooseAnswer(idx,b);
+    options.appendChild(b);
+  });
+  miniScore.textContent=`TAČNO ${score} • ${qIndex+1}/${L.questions.length}`;
+}
+
+function chooseAnswer(idx, btn){
+  if(answered) return;
+  answered=true;
+  const Q=lessons[lessonIndex].questions[qIndex];
+  const all=[...document.querySelectorAll(".option")];
+  all.forEach(b=>b.disabled=true);
+  all[Q.a].classList.add("correct");
+  if(idx===Q.a){
+    score++;
+    btn.classList.add("correct");
+    feedback.className="feedback show good";
+    feedback.innerHTML=`<b>✓ Tačno!</b>${Q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    feedback.className="feedback show bad";
+    feedback.innerHTML=`<b>✕ Nije tačno. Tačan odgovor: ${Q.o[Q.a]}</b>${Q.e}`;
+  }
+  nextBtn.className="next show";
+  progressBar.style.width=`${((qIndex+1)/lessons[lessonIndex].questions.length)*100}%`;
+  miniScore.textContent=`TAČNO ${score} • ${qIndex+1}/${lessons[lessonIndex].questions.length}`;
+}
+
+function nextQuestion(){
+  const L=lessons[lessonIndex];
+  if(qIndex<L.questions.length-1){
+    qIndex++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  const L=lessons[lessonIndex];
+  const pct=Math.round(score/L.questions.length*100);
+  questionCard.style.display="none";
+  resultBox.style.display="block";
+  counter.textContent=`${L.questions.length}/${L.questions.length}`;
+  progressBar.style.width="100%";
+  resultLesson.textContent=`${L.title} • ${score}/${L.questions.length} tačnih odgovora`;
+  bigScore.textContent=`${pct}%`;
+  let msg="Nastavi sa vežbanjem i ponovi delove koji su bili teži.";
+  if(pct>=90) msg="Odlično savladano gradivo. Rezultat je veoma visok.";
+  else if(pct>=75) msg="Vrlo dobro. Još malo ponavljanja i rezultat može biti odličan.";
+  else if(pct>=60) msg="Dobro. Preporuka je da ponoviš pitanja na kojima si pogrešio/la.";
+  resultText.textContent=msg;
+  miniScore.textContent=`REZULTAT ${pct}%`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function restartQuiz(){ startQuiz(lessonIndex); }
+
+function goHome(){
+  restartQuiz();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  startQuiz(0);
+});
+</script>
+</body>
+</html>
