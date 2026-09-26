@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b6d35">
+<title>De-Max A1 • Lekcija 4 • Wie geht's?</title>
+<style>
+:root{
+  --g:#159447;--g2:#0b6d35;--g3:#eaf8ef;--g4:#f7fff9;
+  --ink:#173426;--muted:#6b7d72;--line:#d7eadc;--white:#fff;
+  --good:#098745;--bad:#c43a3a;--shadow:0 12px 32px rgba(11,109,53,.11)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#f8fffa,#edf8f1);color:var(--ink)
+}
+button{font:inherit}
+.app{
+  width:min(100%,820px);margin:0 auto;min-height:100vh;
+  background:rgba(255,255,255,.84);box-shadow:0 0 60px rgba(7,93,45,.07)
+}
+.hero{
+  padding:20px 16px 15px;background:linear-gradient(135deg,var(--g2),var(--g));
+  color:#fff;position:sticky;top:0;z-index:20;box-shadow:0 6px 20px rgba(8,91,45,.18)
+}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+  width:46px;height:46px;border-radius:14px;background:#fff;color:var(--g2);
+  display:grid;place-items:center;font-weight:950;letter-spacing:-1px
+}
+.hero h1{font-size:1.16rem;margin:0}
+.hero p{margin:4px 0 0;opacity:.93;font-size:.88rem}
+.progress-wrap{margin-top:13px}
+.progress-row{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:6px}
+.bar{height:8px;background:rgba(255,255,255,.24);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:.25s}
+
+main{padding:16px 12px 30px}
+.card,.q{
+  background:#fff;border:1px solid var(--line);border-radius:19px;padding:15px;
+  margin-bottom:13px;box-shadow:var(--shadow)
+}
+.card h2{margin:0 0 8px;font-size:1.04rem}
+.sub{margin:0;color:var(--muted);font-size:.87rem;line-height:1.5}
+.lead{
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  background:linear-gradient(135deg,#effcf3,#fff);border:1px solid #cfe8d6;
+  border-radius:17px;padding:14px;margin-top:12px
+}
+.lead .big{font-size:1.55rem;font-weight:950;color:var(--g2)}
+.lead .tr{color:var(--muted);font-weight:800;margin-top:2px}
+.face{font-size:3rem;line-height:1}
+
+.scorebox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--g3);border-radius:13px;text-align:center;padding:9px 5px}
+.stat b{display:block;color:var(--g2);font-size:1.12rem}
+.stat span{font-size:.7rem;color:var(--muted)}
+
+.sectiontitle{
+  display:flex;align-items:center;gap:9px;margin:18px 2px 10px;
+  font-weight:950;color:var(--g2);font-size:1.02rem
+}
+.sectiontitle .num{
+  min-width:32px;height:32px;border-radius:10px;background:var(--g);color:white;
+  display:grid;place-items:center;font-weight:950
+}
+.qnum{font-size:.73rem;font-weight:900;color:var(--g2);text-transform:uppercase;letter-spacing:.05em}
+.prompt{font-weight:900;font-size:1.05rem;line-height:1.48;margin:6px 0}
+.translation{
+  color:var(--muted);font-size:.85rem;margin:4px 0 10px;padding-left:10px;
+  border-left:3px solid #bfe2cb
+}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{
+  border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;
+  font-size:.88rem;transition:.15s
+}
+.btn:active,.choice:active,.token:active{transform:scale(.98)}
+.primary{background:var(--g);color:#fff}
+.ghost{background:var(--g3);color:var(--g2)}
+.small{padding:8px 10px;font-size:.8rem}
+
+.choices{display:grid;gap:8px;margin-top:9px}
+.choice{
+  width:100%;border:1.5px solid #cde5d4;background:#fff;color:var(--ink);
+  border-radius:13px;padding:11px 12px;font-weight:850;cursor:pointer;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.choice .de{font-weight:950}
+.choice .sr{font-size:.78rem;color:var(--muted);font-weight:700}
+.choice.correct{background:#effcf4;border-color:#83cca0;color:#08763b}
+.choice.wrong{background:#fff3f3;border-color:#e9a6a6;color:#a72b2b}
+
+.feedback{font-size:.85rem;font-weight:900;margin-top:9px}
+.ok{color:var(--good)} .no{color:var(--bad)}
+.moodbox{
+  display:flex;align-items:center;gap:13px;padding:12px;border-radius:14px;
+  background:var(--g4);border:1px solid var(--line);margin:8px 0
+}
+.moodemoji{font-size:2.7rem}
+.moodtxt b{display:block;color:var(--g2)}
+.moodtxt span{font-size:.82rem;color:var(--muted)}
+
+.answerline{
+  min-height:50px;border:2px dashed #b9d9c3;background:#fbfffc;border-radius:13px;
+  padding:8px;display:flex;gap:7px;align-items:center;flex-wrap:wrap
+}
+.wordbank{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.token{
+  border:1px solid #cde5d4;background:#fff;color:var(--ink);border-radius:11px;
+  padding:8px 10px;font-weight:850;cursor:pointer
+}
+.answerline .token{background:var(--g);color:#fff;border-color:var(--g)}
+
+.dialogue{
+  background:#f8fffa;border:1px solid #d4eadb;border-radius:14px;padding:12px;
+  display:grid;gap:7px
+}
+.bubble{
+  max-width:88%;padding:10px 12px;border-radius:14px;font-weight:850;line-height:1.4
+}
+.left{background:#edf8f1;border-bottom-left-radius:4px}
+.right{background:#dff3e6;margin-left:auto;border-bottom-right-radius:4px}
+.bubble small{display:block;color:var(--muted);font-weight:700;margin-top:3px}
+
+.listenbox{
+  text-align:center;background:linear-gradient(135deg,#effcf3,#fff);
+  border:1px solid #cfe8d6;border-radius:15px;padding:14px;margin-bottom:10px
+}
+.listenbig{font-size:2rem;margin-bottom:6px}
+.footer{text-align:center;color:var(--muted);font-size:.74rem;padding:4px 0 18px}
+
+@media(max-width:520px){
+  .hero{padding:16px 12px 12px}.hero h1{font-size:1.03rem}
+  main{padding:12px 9px 24px}.card,.q{border-radius:16px;padding:12px}
+  .lead .big{font-size:1.32rem}.face{font-size:2.5rem}
+  .btn{flex:1}.choice{padding:10px}.bubble{max-width:95%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+  <div class="brand">
+    <div class="logo">DM</div>
+    <div>
+      <h1>De-Max A1 • Lekcija 4</h1>
+      <p>Wie geht’s? • Kako si? — odgovori, prevod i izgovor</p>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-row"><span>Napredak</span><strong id="barText">0%</strong></div>
+    <div class="bar"><span id="barFill"></span></div>
+  </div>
+</header>
+
+<main>
+<section class="card">
+  <h2>Wie geht’s? – Kako si?</h2>
+  <p class="sub">Poslušaj pitanje, nauči odgovore i uradi vežbe. Svaka nemačka rečenica ima prevod.</p>
+  <div class="lead">
+    <div>
+      <div class="big">Wie geht’s?</div>
+      <div class="tr">Kako si?</div>
+      <div class="btnrow">
+        <button class="btn ghost small" type="button" onclick="speak(&quot;Wie geht's?&quot;, .78)">🔊 Izgovor</button>
+      </div>
+    </div>
+    <div class="face">🙂</div>
+  </div>
+  <div class="scorebox">
+    <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+    <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+    <div class="stat"><b id="percent">0%</b><span>tačnost</span></div>
+  </div>
+</section>
+
+<div class="sectiontitle"><span class="num">1</span> Izaberi odgovarajući odgovor</div>
+
+<div class="q mcq" data-answer="Super!">
+  <div class="qnum">Vežba 1</div>
+  <div class="moodbox"><div class="moodemoji">🤩</div><div class="moodtxt"><b>Odlično se osećaš.</b><span>Izaberi odgovarajući odgovor na „Wie geht’s?“</span></div></div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Super!')"><span><span class="de">Super!</span><span class="sr">Super!</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Na ja, es geht.')"><span><span class="de">Na ja, es geht.</span><span class="sr">Pa onako, ide.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Ach, nicht so gut.')"><span><span class="de">Ach, nicht so gut.</span><span class="sr">Ah, ne tako dobro.</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q mcq" data-answer="Danke, sehr gut.">
+  <div class="qnum">Vežba 2</div>
+  <div class="moodbox"><div class="moodemoji">😊</div><div class="moodtxt"><b>Osećaš se veoma dobro.</b><span>Kako odgovaraš?</span></div></div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Gut, danke.')"><span><span class="de">Gut, danke.</span><span class="sr">Dobro, hvala.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Danke, sehr gut.')"><span><span class="de">Danke, sehr gut.</span><span class="sr">Hvala, veoma dobro.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Ach, nicht so gut.')"><span><span class="de">Ach, nicht so gut.</span><span class="sr">Ah, ne tako dobro.</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q mcq" data-answer="Gut, danke.">
+  <div class="qnum">Vežba 3</div>
+  <div class="moodbox"><div class="moodemoji">🙂</div><div class="moodtxt"><b>Dobro si.</b><span>Odaberi prirodan odgovor.</span></div></div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Na ja, es geht.')"><span><span class="de">Na ja, es geht.</span><span class="sr">Pa onako, ide.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Gut, danke.')"><span><span class="de">Gut, danke.</span><span class="sr">Dobro, hvala.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Super!')"><span><span class="de">Super!</span><span class="sr">Super!</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q mcq" data-answer="Na ja, es geht.">
+  <div class="qnum">Vežba 4</div>
+  <div class="moodbox"><div class="moodemoji">😐</div><div class="moodtxt"><b>Nisi ni dobro ni loše.</b><span>Koji odgovor odgovara?</span></div></div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Danke, sehr gut.')"><span><span class="de">Danke, sehr gut.</span><span class="sr">Hvala, veoma dobro.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Na ja, es geht.')"><span><span class="de">Na ja, es geht.</span><span class="sr">Pa onako, ide.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Gut, danke.')"><span><span class="de">Gut, danke.</span><span class="sr">Dobro, hvala.</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q mcq" data-answer="Ach, nicht so gut.">
+  <div class="qnum">Vežba 5</div>
+  <div class="moodbox"><div class="moodemoji">😞</div><div class="moodtxt"><b>Ne osećaš se baš dobro.</b><span>Odaberi odgovor.</span></div></div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Super!')"><span><span class="de">Super!</span><span class="sr">Super!</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Ach, nicht so gut.')"><span><span class="de">Ach, nicht so gut.</span><span class="sr">Ah, ne tako dobro.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Gut, danke.')"><span><span class="de">Gut, danke.</span><span class="sr">Dobro, hvala.</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="sectiontitle"><span class="num">2</span> Sastavi pitanje i odgovor</div>
+
+<div class="q buildq" data-answer="Wie geht es dir?">
+  <div class="qnum">Vežba 6</div>
+  <div class="prompt">Sastavi pitanje:</div>
+  <div class="translation">Kako si? / Kako ti ide?</div>
+  <div class="answerline"></div>
+  <div class="wordbank"></div>
+  <div class="btnrow">
+    <button class="btn primary" onclick="checkBuild(this)">✓ Proveri</button>
+    <button class="btn ghost" onclick="resetBuild(this)">↺ Ponovo</button>
+    <button class="btn ghost" onclick="speak('Wie geht es dir?')">🔊 Izgovor</button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q buildq" data-answer="Mir geht es sehr gut.">
+  <div class="qnum">Vežba 7</div>
+  <div class="prompt">Sastavi odgovor:</div>
+  <div class="translation">Veoma sam dobro.</div>
+  <div class="answerline"></div>
+  <div class="wordbank"></div>
+  <div class="btnrow">
+    <button class="btn primary" onclick="checkBuild(this)">✓ Proveri</button>
+    <button class="btn ghost" onclick="resetBuild(this)">↺ Ponovo</button>
+    <button class="btn ghost" onclick="speak('Mir geht es sehr gut.')">🔊 Izgovor</button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="sectiontitle"><span class="num">3</span> Poslušaj pitanje i izaberi odgovor</div>
+
+<div class="q listenq" data-answer="Gut, danke.">
+  <div class="listenbox">
+    <div class="listenbig">🎧</div>
+    <button class="btn primary" onclick="speak('Wie geht es dir?')">▶ Poslušaj pitanje</button>
+    <div class="translation" style="margin-top:10px">Poslušaj bez čitanja, pa izaberi odgovor.</div>
+  </div>
+  <div class="choices">
+    <button class="choice" onclick="pick(this,'Gut, danke.')"><span><span class="de">Gut, danke.</span><span class="sr">Dobro, hvala.</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Guten Morgen!')"><span><span class="de">Guten Morgen!</span><span class="sr">Dobro jutro!</span></span><span>🔊</span></button>
+    <button class="choice" onclick="pick(this,'Ich heiße Sara.')"><span><span class="de">Ich heiße Sara.</span><span class="sr">Zovem se Sara.</span></span><span>🔊</span></button>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="sectiontitle"><span class="num">4</span> Mini dijalog</div>
+
+<section class="q">
+  <div class="qnum">Primer</div>
+  <div class="dialogue">
+    <div class="bubble left">Hallo! Wie geht’s?<small>Zdravo! Kako si?</small></div>
+    <div class="bubble right">Danke, sehr gut. Und dir?<small>Hvala, veoma dobro. A ti?</small></div>
+    <div class="bubble left">Gut, danke.<small>Dobro, hvala.</small></div>
+  </div>
+  <div class="btnrow">
+    <button class="btn ghost" onclick="speakDialogue()">🔊 Poslušaj dijalog</button>
+  </div>
+</section>
+
+<div class="footer">De-Max • A1 nemački jezik • Lekcija 4</div>
+</main>
+</div>
+
+<script>
+function norm(s){
+  return (s||'').trim().toLowerCase()
+    .replace(/ß/g,'ss').replace(/[.,!?;:]+$/,'').replace(/\s+/g,' ');
+}
+function getGermanVoice(){
+  const vs = speechSynthesis.getVoices();
+  return vs.find(v=>/^de(-|_)/i.test(v.lang) && /google|microsoft|anna|katja|conrad|vicki/i.test(v.name))
+      || vs.find(v=>/^de(-|_)/i.test(v.lang))
+      || vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+function speak(text, rate=.86){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='de-DE'; u.rate=rate; u.pitch=1;
+  const v=getGermanVoice(); if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>getGermanVoice();
+
+const trackable=[...document.querySelectorAll('.mcq,.buildq,.listenq')];
+
+function markState(q, ok){
+  q.dataset.state=ok?'1':'0';
+  refresh();
+}
+function refresh(){
+  const st=trackable.map(q=>q.dataset.state).filter(Boolean);
+  const c=st.filter(x=>x==='1').length;
+  const d=st.length;
+  document.getElementById('correct').textContent=c;
+  document.getElementById('done').textContent=d;
+  document.getElementById('percent').textContent=(d?Math.round(c/d*100):0)+'%';
+  const p=trackable.length?Math.round(d/trackable.length*100):0;
+  document.getElementById('barFill').style.width=p+'%';
+  document.getElementById('barText').textContent=p+'%';
+}
+
+function pick(btn, value){
+  const q=btn.closest('.q');
+  q.querySelectorAll('.choice').forEach(b=>b.classList.remove('correct','wrong'));
+  const ok=norm(value)===norm(q.dataset.answer);
+  btn.classList.add(ok?'correct':'wrong');
+  const f=q.querySelector('.feedback');
+  f.className='feedback '+(ok?'ok':'no');
+  f.textContent=ok?'✓ Tačno!':'✗ Pokušaj ponovo.';
+  markState(q,ok);
+  speak(value);
+}
+
+function shuffle(a){
+  const x=[...a];
+  for(let i=x.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [x[i],x[j]]=[x[j],x[i]];
+  }
+  return x;
+}
+
+function initBuild(q){
+  const answer=q.dataset.answer;
+  const words=answer.replace(/[?!.]$/,'').split(/\s+/);
+  const punct=(answer.match(/[?!.]$/)||[''])[0];
+  q.dataset.punct=punct;
+  const bank=q.querySelector('.wordbank');
+  const line=q.querySelector('.answerline');
+  line.innerHTML=''; bank.innerHTML='';
+  shuffle(words).forEach(w=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='token'; b.textContent=w;
+    b.onclick=()=>{ line.appendChild(b); };
+    bank.appendChild(b);
+  });
+  const f=q.querySelector('.feedback'); f.textContent=''; f.className='feedback';
+  delete q.dataset.state;
+  refresh();
+}
+document.querySelectorAll('.buildq').forEach(initBuild);
+
+function currentBuild(q){
+  const words=[...q.querySelector('.answerline').querySelectorAll('.token')].map(x=>x.textContent);
+  return words.join(' ')+(q.dataset.punct||'');
+}
+function checkBuild(btn){
+  const q=btn.closest('.buildq');
+  const ok=norm(currentBuild(q))===norm(q.dataset.answer);
+  const f=q.querySelector('.feedback');
+  f.className='feedback '+(ok?'ok':'no');
+  f.textContent=ok?'✓ Tačno!':'✗ Redosled još nije tačan.';
+  markState(q,ok);
+  if(ok)speak(q.dataset.answer);
+}
+function resetBuild(btn){
+  initBuild(btn.closest('.buildq'));
+}
+
+function speakDialogue(){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const lines=["Hallo! Wie geht's?",'Danke, sehr gut. Und dir?','Gut, danke.'];
+  let i=0;
+  function next(){
+    if(i>=lines.length)return;
+    const u=new SpeechSynthesisUtterance(lines[i++]);
+    u.lang='de-DE';u.rate=.84;
+    const v=getGermanVoice();if(v)u.voice=v;
+    u.onend=()=>setTimeout(next,250);
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+refresh();
+</script>
+</body>
+</html>
