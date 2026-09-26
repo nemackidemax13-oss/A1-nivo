@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4c2295">
+<title>De-Max A1 • Wie viel kostet?</title>
+<style>
+:root{
+ --purple:#52219b;--purple2:#35106f;--green:#078536;--red:#c80000;--blue:#164fa3;
+ --ink:#172039;--muted:#667186;--line:#d8e0ec;--ok:#0f864b;--bad:#cc3148;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{width:min(100%,980px);margin:auto;padding:10px}
+.hero{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}
+.heroTop{background:linear-gradient(135deg,var(--purple2),var(--purple));color:#fff;border-radius:18px;padding:14px;text-align:center}
+.heroTop h1{margin:0;font-size:clamp(1.8rem,5vw,3.2rem);font-weight:1000}
+.heroTop p{margin:5px 0 0;font-weight:850}
+.examples{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ex{border-radius:14px;padding:10px 13px;color:#fff;font-weight:900;line-height:1.45}
+.ex.purple{background:var(--purple)} .ex.green{background:var(--green)}
+.ex b{font-size:1.02rem}
+.shop{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0}
+.productMini{border:1px solid #dfe4ec;border-radius:12px;padding:7px;text-align:center;background:#fff}
+.productMini .e{font-size:2.1rem} .productMini .n{font-size:.77rem;font-weight:900} .productMini .p{display:inline-block;margin-top:3px;background:#e21919;color:#fff;border-radius:7px;padding:3px 6px;font-weight:1000;font-size:.75rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:#f6f8fb;border:1px solid #e0e6ef;border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;color:var(--purple);font-size:1.3rem} .stat span{font-size:.72rem;color:var(--muted)}
+.progressWrap{height:9px;background:#e6ebf2;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--green));transition:.25s}
+.quiz{margin-top:14px;border:2px solid #d3ddea;border-radius:20px;overflow:hidden}
+.quizHead{background:var(--purple);color:#fff;padding:9px 14px;display:flex;justify-content:space-between;font-weight:1000}
+.quizBody{padding:15px;display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:center}
+.productCard{border:2px solid #e2e6ed;border-radius:18px;padding:14px;text-align:center;background:#fff}
+.productCard .emoji{font-size:6rem;line-height:1}
+.productCard .name{font-size:1.35rem;font-weight:1000;margin-top:8px}
+.productCard .amount{font-size:.85rem;color:var(--muted);margin-top:3px}
+.question{font-size:clamp(1.35rem,3vw,2rem);font-weight:1000;color:var(--purple2);margin-bottom:10px}
+.answers{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.answer{border:2px solid #d8e0ec;border-radius:13px;background:#fff;padding:13px;font-size:1.05rem;font-weight:1000;cursor:pointer}
+.answer.correct{border-color:#79ca9b;background:#effaf3;color:var(--ok)} .answer.wrong{border-color:#e59dac;background:#fff1f4;color:var(--bad)}
+.answer:disabled{opacity:.96}
+.feedback{font-weight:900;min-height:24px;margin-top:8px}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+.result{display:none;margin-top:9px;padding:11px 12px;border-radius:12px;background:#eef6ff;border:1px solid #c7dcf4;line-height:1.5}
+.result.show{display:block}
+.result .de{font-size:1.08rem;font-weight:1000;color:var(--blue)} .result .sr{font-size:.86rem;color:var(--muted);margin-top:3px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;color:#fff;background:var(--purple)}
+.btn.green{background:var(--green)} .btn.ghost{background:#edf2f9;color:var(--purple)}
+.complete{display:none;margin-top:14px;padding:20px;text-align:center;border:2px solid #8fcda8;background:#effaf3;border-radius:18px}
+.complete.show{display:block}
+.footer{text-align:center;color:#7b8392;font-size:.74rem;padding:15px 0}
+@media(max-width:700px){
+ .app{padding:7px} .examples{grid-template-columns:1fr}
+ .shop{grid-template-columns:repeat(3,1fr)} .quizBody{grid-template-columns:1fr}
+ .productCard{max-width:230px;margin:auto;width:100%} .answers{grid-template-columns:1fr 1fr}
+ .stats{grid-template-columns:repeat(2,1fr)} .productCard .emoji{font-size:5rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="heroTop">
+      <h1>WIE VIEL KOSTET?</h1>
+      <p>Preise • Lebensmittel • Frage und Antwort • kompletan izgovor</p>
+    </div>
+    <div class="examples">
+      <div class="ex purple"><b>Frage:</b><br>Wie viel kostet ein Kilo Äpfel?</div>
+      <div class="ex green"><b>Antwort:</b><br>Ein Kilo Äpfel kostet 1 Euro 79.</div>
+    </div>
+  </section>
+
+  <section class="shop" id="shop"></section>
+
+  <section class="stats">
+    <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+    <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+    <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+    <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+  </section>
+  <div class="progressWrap"><div class="progress" id="progress"></div></div>
+
+  <section class="quiz" id="quiz">
+    <div class="quizHead"><span>VEŽBA • CENA</span><span id="counter">1 / 15</span></div>
+    <div class="quizBody">
+      <div class="productCard">
+        <div class="emoji" id="emoji">🍞</div>
+        <div class="name" id="name">Brot</div>
+        <div class="amount" id="amount">750 g</div>
+      </div>
+      <div>
+        <div class="question" id="question">Wie viel kostet das Brot?</div>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        <div id="speechStatus" style="display:none;margin-top:6px;font-size:.82rem;font-weight:900;color:var(--purple)">🔊 Odgovor se izgovara do kraja…</div>
+        <div class="result" id="result">
+          <div class="de" id="germanAnswer"></div>
+          <div class="autoLabel">Automatski prevod</div><div class="sr" id="serbianAnswer"></div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="repeatQ" type="button">🔊 Ponovi pitanje</button>
+          <button class="btn green" id="hearA" type="button">🎧 Poslušaj odgovor</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="complete" id="complete">
+    <div style="font-size:2.5rem">✅</div>
+    <h2>Vežba završena!</h2>
+    <p id="finalScore"></p>
+  </section>
+
+  <div class="footer">De-Max • A1 nemački jezik • Wie viel kostet?</div>
+</div>
+
+<script>
+const products=[{"name": "Brot", "amount": "750 g", "price": "1,49 €", "emoji": "🍞", "q": "Wie viel kostet das Brot?", "answer": "750 Gramm Brot kosten 1 Euro 49.", "sr": "750 grama hleba košta 1 evro i 49 centi.", "options": ["1,49 €", "4,49 €", "1,79 €", "0,99 €"]}, {"name": "Käse", "amount": "200 g", "price": "2,39 €", "emoji": "🧀", "q": "Wie viel kostet der Käse?", "answer": "200 Gramm Käse kosten 2 Euro 39.", "sr": "200 grama sira košta 2 evra i 39 centi.", "options": ["2,39 €", "1,29 €", "1,49 €", "0,39 €"]}, {"name": "Schinken", "amount": "150 g", "price": "2,29 €", "emoji": "🥩", "q": "Wie viel kostet der Schinken?", "answer": "150 Gramm Schinken kosten 2 Euro 29.", "sr": "150 grama šunke košta 2 evra i 29 centi.", "options": ["2,29 €", "1,79 €", "0,99 €", "0,65 €"]}, {"name": "Kaffee", "amount": "500 g", "price": "4,49 €", "emoji": "☕", "q": "Wie viel kostet der Kaffee?", "answer": "500 Gramm Kaffee kosten 4 Euro 49.", "sr": "500 grama kafe košta 4 evra i 49 centi.", "options": ["4,49 €", "1,49 €", "0,39 €", "0,79 €"]}, {"name": "Saft", "amount": "1 l", "price": "1,29 €", "emoji": "🧃", "q": "Wie viel kostet der Saft?", "answer": "Ein Liter Saft kostet 1 Euro 29.", "sr": "Jedan litar soka košta 1 evro i 29 centi.", "options": ["1,29 €", "0,99 €", "0,65 €", "0,89 €"]}, {"name": "Äpfel", "amount": "1 kg", "price": "1,79 €", "emoji": "🍎", "q": "Wie viel kostet ein Kilo Äpfel?", "answer": "Ein Kilo Äpfel kostet 1 Euro 79.", "sr": "Jedan kilogram jabuka košta 1 evro i 79 centi.", "options": ["1,79 €", "0,39 €", "0,79 €", "2,19 €"]}, {"name": "Bananen", "amount": "1 kg", "price": "1,49 €", "emoji": "🍌", "q": "Wie viel kostet ein Kilo Bananen?", "answer": "Ein Kilo Bananen kostet 1 Euro 49.", "sr": "Jedan kilogram banana košta 1 evro i 49 centi.", "options": ["1,49 €", "0,65 €", "0,89 €", "1,79 €"]}, {"name": "Milch", "amount": "1 l", "price": "0,99 €", "emoji": "🥛", "q": "Wie viel kostet ein Liter Milch?", "answer": "Ein Liter Milch kostet 99 Cent.", "sr": "Jedan litar mleka košta 99 centi.", "options": ["0,99 €", "0,79 €", "2,19 €", "0,85 €"]}, {"name": "Joghurt", "amount": "150 g", "price": "0,39 €", "emoji": "🥣", "q": "Wie viel kostet ein Becher Joghurt?", "answer": "Ein Becher Joghurt kostet 39 Cent.", "sr": "Jedna čaša jogurta košta 39 centi.", "options": ["0,39 €", "0,89 €", "1,79 €", "1,49 €"]}, {"name": "Schokolade", "amount": "100 g", "price": "0,65 €", "emoji": "🍫", "q": "Wie viel kostet die Schokolade?", "answer": "100 Gramm Schokolade kosten 65 Cent.", "sr": "100 grama čokolade košta 65 centi.", "options": ["0,65 €", "2,19 €", "0,85 €", "2,39 €"]}, {"name": "Zucker", "amount": "1 kg", "price": "0,79 €", "emoji": "🧂", "q": "Wie viel kostet ein Kilo Zucker?", "answer": "Ein Kilo Zucker kostet 79 Cent.", "sr": "Jedan kilogram šećera košta 79 centi.", "options": ["0,79 €", "1,79 €", "1,49 €", "2,29 €"]}, {"name": "Nudeln", "amount": "500 g", "price": "0,89 €", "emoji": "🍝", "q": "Wie viel kostet eine Packung Nudeln?", "answer": "Eine Packung Nudeln kostet 89 Cent.", "sr": "Jedno pakovanje testenine košta 89 centi.", "options": ["0,89 €", "0,85 €", "2,39 €", "4,49 €"]}, {"name": "Eier", "amount": "10 Stück", "price": "2,19 €", "emoji": "🥚", "q": "Wie viel kosten zehn Eier?", "answer": "Zehn Eier kosten 2 Euro 19.", "sr": "Deset jaja košta 2 evra i 19 centi.", "options": ["2,19 €", "1,49 €", "2,29 €", "1,29 €"]}, {"name": "Butter", "amount": "250 g", "price": "1,79 €", "emoji": "🧈", "q": "Wie viel kostet die Butter?", "answer": "250 Gramm Butter kosten 1 Euro 79.", "sr": "250 grama putera košta 1 evro i 79 centi.", "options": ["1,79 €", "2,39 €", "4,49 €", "0,99 €"]}, {"name": "Tomaten", "amount": "1 Dose", "price": "0,85 €", "emoji": "🥫", "q": "Wie viel kostet eine Dose Tomaten?", "answer": "Eine Dose Tomaten kostet 85 Cent.", "sr": "Jedna konzerva paradajza košta 85 centi.", "options": ["0,85 €", "2,29 €", "1,29 €", "1,49 €"]}];
+let order=[...products.keys()];
+for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+let pos=0,correct=0,wrong=0,locked=false;
+
+function voice(){
+ const vs=speechSynthesis.getVoices();
+ return vs.find(v=>/^de(-|_)/i.test(v.lang)&&/Google|Microsoft|Katja|Anna|Conrad|Vicki/i.test(v.name))
+   ||vs.find(v=>/^de(-|_)/i.test(v.lang))
+   ||vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+
+function speechFriendlyGerman(text){
+  return String(text)
+    .replace(/\b1 Euro\b/g, "ein Euro")
+    .replace(/\b1 Cent\b/g, "ein Cent");
+}
+
+function speak(text,rate=.8,onEnd=null){
+ if(!("speechSynthesis" in window)){
+   if(typeof onEnd==="function") onEnd();
+   return;
+ }
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(speechFriendlyGerman(text));
+ u.lang="de-DE";
+ u.rate=rate;
+ u.pitch=1;
+ const v=voice();
+ if(v)u.voice=v;
+
+ let finished=false;
+ const finish=()=>{
+   if(finished)return;
+   finished=true;
+   if(typeof onEnd==="function")onEnd();
+ };
+ u.onend=finish;
+ u.onerror=finish;
+ speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>voice();
+
+function shuffle(a){const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function current(){return products[order[pos]]}
+
+const shop=document.getElementById("shop");
+products.forEach(p=>{
+ const c=document.createElement("div");c.className="productMini";
+ c.innerHTML=`<div class="e">${p.emoji}</div><div class="n">${p.name} ${p.amount}</div><div class="p">${p.price}</div>`;
+ shop.appendChild(c);
+});
+
+function render(){
+ locked=false;
+ const p=current();
+ document.getElementById("counter").textContent=`${pos+1} / ${products.length}`;
+ document.getElementById("emoji").textContent=p.emoji;
+ document.getElementById("name").textContent=p.name;
+ document.getElementById("amount").textContent=p.amount;
+ document.getElementById("question").textContent=p.q;
+ const fb=document.getElementById("feedback");fb.textContent="";fb.className="feedback";
+ document.getElementById("result").classList.remove("show");
+ const root=document.getElementById("answers");root.innerHTML="";
+ shuffle(p.options).forEach(price=>{
+   const b=document.createElement("button");b.type="button";b.className="answer";b.textContent=price;
+   b.addEventListener("click",()=>choose(price,b));root.appendChild(b);
+ });
+ updateStats();
+ setTimeout(()=>speak(p.q,.8),500);
+}
+
+function choose(price,btn){
+ if(locked)return;locked=true;
+ const p=current(),ok=price===p.price;
+ [...document.getElementById("answers").children].forEach(b=>{
+   b.disabled=true;
+   if(b.textContent===p.price)b.classList.add("correct");
+ });
+ if(!ok)btn.classList.add("wrong");
+ const fb=document.getElementById("feedback");
+ if(ok){correct++;fb.className="feedback ok";fb.textContent="✓ Tačno!";}
+ else{wrong++;fb.className="feedback bad";fb.textContent="✗ Nije tačno. Tačna cena je označena.";}
+ document.getElementById("germanAnswer").textContent=p.answer;
+ document.getElementById("serbianAnswer").textContent=p.sr;
+ document.getElementById("result").classList.add("show");
+ updateStats();
+
+ const speechStatus=document.getElementById("speechStatus");
+ speechStatus.style.display="block";
+
+ // Ne prelazi na sledeći zadatak dok se ceo odgovor ne izgovori.
+ speak(p.answer,.77,()=>{
+   speechStatus.style.display="none";
+   setTimeout(next,650);
+ });
+}
+
+function next(){
+ if(pos<products.length-1){pos++;render()}
+ else{
+   document.getElementById("quiz").style.display="none";
+   const c=document.getElementById("complete");c.classList.add("show");
+   const total=correct+wrong;
+   document.getElementById("finalScore").textContent=`Tačnost: ${total?Math.round(correct/total*100):0}% • Tačno: ${correct} • Greške: ${wrong}`;
+ }
+}
+function updateStats(){
+ const done=correct+wrong;
+ document.getElementById("done").textContent=done;
+ document.getElementById("correct").textContent=correct;
+ document.getElementById("wrong").textContent=wrong;
+ document.getElementById("accuracy").textContent=(done?Math.round(correct/done*100):0)+"%";
+ document.getElementById("progress").style.width=Math.round(done/products.length*100)+"%";
+}
+document.getElementById("repeatQ").addEventListener("click",()=>speak(current().q,.8));
+document.getElementById("hearA").addEventListener("click",()=>speak(current().answer,.77));
+render();
+</script>
+</body>
+</html>
