@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e4da8">
+<title>De-Max A1 • Ein / Eine • Kein / Keine</title>
+<style>
+:root{
+  --blue:#0e4da8;--blue2:#083475;--blueSoft:#eef6ff;
+  --red:#df0715;--red2:#b80010;--redSoft:#fff1f3;
+  --green:#13864b;--ink:#0b1f4d;--muted:#69758b;--line:#d5e2f2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{width:min(100%,980px);margin:auto;padding:10px}
+.hero{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-radius:20px;padding:16px;text-align:center}
+.hero h1{margin:0;font-size:clamp(1.65rem,5vw,3.2rem);font-weight:1000}
+.hero p{margin:5px 0 0;font-weight:850}
+.rule{margin-top:12px;border:2px solid #bcd5f4;background:#f4f9ff;border-radius:17px;padding:12px;text-align:center;line-height:1.55}
+.rule b{color:var(--red)}
+.rule .pair{display:inline-block;background:#fff;border:1px solid #d8e4f3;border-radius:10px;padding:5px 9px;margin:3px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stat{border:1px solid #dde6f1;border-radius:12px;background:#f8fafc;padding:8px;text-align:center}
+.stat b{display:block;color:var(--blue);font-size:1.3rem}
+.stat span{font-size:.72rem;color:var(--muted)}
+.progressWrap{height:9px;background:#e7edf5;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--red));transition:.25s}
+
+.exercise{margin-top:14px;border:2px solid #c8daf0;border-radius:20px;overflow:hidden}
+.head{background:var(--blue);color:#fff;padding:9px 14px;font-weight:1000;display:flex;justify-content:space-between;gap:10px}
+.card{padding:16px;display:grid;grid-template-columns:210px 1fr;gap:18px;align-items:center}
+.visual{border:2px solid #d8e4f2;border-radius:18px;background:#fff;text-align:center;padding:14px}
+.emoji{font-size:6rem;line-height:1}
+.noun{font-size:1.45rem;font-weight:1000;color:var(--blue2);margin-top:8px}
+.sr{font-size:.83rem;color:var(--muted);margin-top:3px}
+.prompt{font-size:1.05rem;font-weight:900;margin-bottom:10px}
+.block{border:2px solid #d9e4f2;border-radius:15px;padding:12px;margin-bottom:10px}
+.block.red{border-color:#f0b7be;background:#fff8f9}
+.sentence{font-size:clamp(1.15rem,2.8vw,1.55rem);font-weight:1000;margin-bottom:9px}
+.blank{display:inline-block;min-width:90px;border-bottom:3px solid var(--blue);color:var(--red);text-align:center}
+.red .blank{border-bottom-color:var(--red)}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{border:2px solid #cbdaf0;border-radius:12px;background:#fff;padding:12px;font-weight:1000;font-size:1rem;cursor:pointer}
+.opt:hover{border-color:#86afe9}
+.opt.correct{border-color:#7bc99b;background:#effaf3;color:var(--green)}
+.opt.wrong{border-color:#e69ca9;background:#fff0f3;color:var(--red)}
+.opt:disabled{cursor:default;opacity:.96}
+.feedback{font-weight:900;min-height:23px;margin-top:7px}
+.ok{color:var(--green)} .bad{color:var(--red)}
+.translation{display:none;margin-top:8px;padding:9px 11px;background:#fff8df;border:1px solid #ebd58c;border-radius:11px;font-size:.88rem}
+.translation.show{display:block}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;background:var(--blue);color:#fff}
+.btn.red{background:var(--red)} .btn.ghost{background:#edf3fb;color:var(--blue)}
+.complete{display:none;margin-top:15px;padding:20px;text-align:center;border:2px solid #9ed4b5;background:#f0faf4;border-radius:16px}
+.complete.show{display:block}
+.footer{text-align:center;color:#7a8493;font-size:.74rem;padding:15px 0}
+@media(max-width:650px){
+ .app{padding:7px} .card{grid-template-columns:1fr}
+ .visual{max-width:240px;margin:auto;width:100%} .emoji{font-size:5rem}
+ .stats{grid-template-columns:repeat(2,1fr)} .options{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <h1>EIN / EINE • KEIN / KEINE</h1>
+    <p>Ergänzen Sie! • Popunite i pogodite tačan oblik.</p>
+  </section>
+
+  <section class="rule">
+    <span class="pair"><b>der</b> → ein / kein</span>
+    <span class="pair"><b>das</b> → ein / kein</span>
+    <span class="pair"><b>die</b> → eine / keine</span>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+    <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+    <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+    <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+  </section>
+  <div class="progressWrap"><div class="progress" id="progress"></div></div>
+
+  <section class="exercise">
+    <div class="head"><span>VEŽBA</span><span id="counter">1 / 36</span></div>
+    <div class="card">
+      <div class="visual">
+        <div class="emoji" id="emoji">🍎</div>
+        <div class="noun" id="noun">Apfel</div>
+        <div class="sr" id="sr">jabuka</div>
+      </div>
+      <div>
+        <div class="prompt">Izaberi pravilan oblik za obe rečenice.</div>
+
+        <div class="block">
+          <div class="sentence">Das ist <span class="blank" id="articleBlank">_____</span> <span id="noun1">Apfel</span>.</div>
+          <div class="options" id="articleOptions"></div>
+          <div class="feedback" id="articleFeedback"></div>
+        </div>
+
+        <div class="block red">
+          <div class="sentence">Das ist <span class="blank" id="negativeBlank">_____</span> <span id="noun2">Apfel</span>.</div>
+          <div class="options" id="negativeOptions"></div>
+          <div class="feedback" id="negativeFeedback"></div>
+        </div>
+
+        <div class="translation" id="translation"></div>
+
+        <div class="controls">
+          <button class="btn" id="hearPositive" type="button">🔊 Poslušaj potvrdnu</button>
+          <button class="btn red" id="hearNegative" type="button">🔊 Poslušaj negaciju</button>
+          <button class="btn ghost" id="repeatWord" type="button">🎧 Izgovor reči</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="complete" id="complete">
+    <div style="font-size:2.4rem">✅</div>
+    <h2>Vežba završena!</h2>
+    <p id="finalScore"></p>
+  </section>
+
+  <div class="footer">De-Max • A1 nemački jezik • Artikel und Negation</div>
+</div>
+
+<script>
+const tasks=[{"noun": "Apfel", "sr": "jabuka", "gender": "m", "emoji": "🍎", "article": "ein", "negative": "kein", "positive": "Das ist ein Apfel.", "negativeSentence": "Das ist kein Apfel."}, {"noun": "Banane", "sr": "banana", "gender": "f", "emoji": "🍌", "article": "eine", "negative": "keine", "positive": "Das ist eine Banane.", "negativeSentence": "Das ist keine Banane."}, {"noun": "Ei", "sr": "jaje", "gender": "n", "emoji": "🥚", "article": "ein", "negative": "kein", "positive": "Das ist ein Ei.", "negativeSentence": "Das ist kein Ei."}, {"noun": "Brot", "sr": "hleb", "gender": "n", "emoji": "🍞", "article": "ein", "negative": "kein", "positive": "Das ist ein Brot.", "negativeSentence": "Das ist kein Brot."}, {"noun": "Birne", "sr": "kruška", "gender": "f", "emoji": "🍐", "article": "eine", "negative": "keine", "positive": "Das ist eine Birne.", "negativeSentence": "Das ist keine Birne."}, {"noun": "Orange", "sr": "narandža", "gender": "f", "emoji": "🍊", "article": "eine", "negative": "keine", "positive": "Das ist eine Orange.", "negativeSentence": "Das ist keine Orange."}, {"noun": "Tomate", "sr": "paradajz", "gender": "f", "emoji": "🍅", "article": "eine", "negative": "keine", "positive": "Das ist eine Tomate.", "negativeSentence": "Das ist keine Tomate."}, {"noun": "Käse", "sr": "sir", "gender": "m", "emoji": "🧀", "article": "ein", "negative": "kein", "positive": "Das ist ein Käse.", "negativeSentence": "Das ist kein Käse."}, {"noun": "Wasser", "sr": "voda", "gender": "n", "emoji": "💧", "article": "ein", "negative": "kein", "positive": "Das ist ein Wasser.", "negativeSentence": "Das ist kein Wasser."}, {"noun": "Milch", "sr": "mleko", "gender": "f", "emoji": "🥛", "article": "eine", "negative": "keine", "positive": "Das ist eine Milch.", "negativeSentence": "Das ist keine Milch."}, {"noun": "Kaffee", "sr": "kafa", "gender": "m", "emoji": "☕", "article": "ein", "negative": "kein", "positive": "Das ist ein Kaffee.", "negativeSentence": "Das ist kein Kaffee."}, {"noun": "Tee", "sr": "čaj", "gender": "m", "emoji": "🍵", "article": "ein", "negative": "kein", "positive": "Das ist ein Tee.", "negativeSentence": "Das ist kein Tee."}, {"noun": "Hund", "sr": "pas", "gender": "m", "emoji": "🐶", "article": "ein", "negative": "kein", "positive": "Das ist ein Hund.", "negativeSentence": "Das ist kein Hund."}, {"noun": "Katze", "sr": "mačka", "gender": "f", "emoji": "🐱", "article": "eine", "negative": "keine", "positive": "Das ist eine Katze.", "negativeSentence": "Das ist keine Katze."}, {"noun": "Vogel", "sr": "ptica", "gender": "m", "emoji": "🐦", "article": "ein", "negative": "kein", "positive": "Das ist ein Vogel.", "negativeSentence": "Das ist kein Vogel."}, {"noun": "Fisch", "sr": "riba", "gender": "m", "emoji": "🐟", "article": "ein", "negative": "kein", "positive": "Das ist ein Fisch.", "negativeSentence": "Das ist kein Fisch."}, {"noun": "Auto", "sr": "auto", "gender": "n", "emoji": "🚗", "article": "ein", "negative": "kein", "positive": "Das ist ein Auto.", "negativeSentence": "Das ist kein Auto."}, {"noun": "Fahrrad", "sr": "bicikl", "gender": "n", "emoji": "🚲", "article": "ein", "negative": "kein", "positive": "Das ist ein Fahrrad.", "negativeSentence": "Das ist kein Fahrrad."}, {"noun": "Bus", "sr": "autobus", "gender": "m", "emoji": "🚌", "article": "ein", "negative": "kein", "positive": "Das ist ein Bus.", "negativeSentence": "Das ist kein Bus."}, {"noun": "Uhr", "sr": "sat", "gender": "f", "emoji": "⌚", "article": "eine", "negative": "keine", "positive": "Das ist eine Uhr.", "negativeSentence": "Das ist keine Uhr."}, {"noun": "Buch", "sr": "knjiga", "gender": "n", "emoji": "📘", "article": "ein", "negative": "kein", "positive": "Das ist ein Buch.", "negativeSentence": "Das ist kein Buch."}, {"noun": "Heft", "sr": "sveska", "gender": "n", "emoji": "📓", "article": "ein", "negative": "kein", "positive": "Das ist ein Heft.", "negativeSentence": "Das ist kein Heft."}, {"noun": "Stift", "sr": "olovka", "gender": "m", "emoji": "✏️", "article": "ein", "negative": "kein", "positive": "Das ist ein Stift.", "negativeSentence": "Das ist kein Stift."}, {"noun": "Tasche", "sr": "torba", "gender": "f", "emoji": "👜", "article": "eine", "negative": "keine", "positive": "Das ist eine Tasche.", "negativeSentence": "Das ist keine Tasche."}, {"noun": "Handy", "sr": "mobilni telefon", "gender": "n", "emoji": "📱", "article": "ein", "negative": "kein", "positive": "Das ist ein Handy.", "negativeSentence": "Das ist kein Handy."}, {"noun": "Computer", "sr": "računar", "gender": "m", "emoji": "💻", "article": "ein", "negative": "kein", "positive": "Das ist ein Computer.", "negativeSentence": "Das ist kein Computer."}, {"noun": "Lampe", "sr": "lampa", "gender": "f", "emoji": "💡", "article": "eine", "negative": "keine", "positive": "Das ist eine Lampe.", "negativeSentence": "Das ist keine Lampe."}, {"noun": "Tisch", "sr": "sto", "gender": "m", "emoji": "🪑", "article": "ein", "negative": "kein", "positive": "Das ist ein Tisch.", "negativeSentence": "Das ist kein Tisch."}, {"noun": "Tür", "sr": "vrata", "gender": "f", "emoji": "🚪", "article": "eine", "negative": "keine", "positive": "Das ist eine Tür.", "negativeSentence": "Das ist keine Tür."}, {"noun": "Haus", "sr": "kuća", "gender": "n", "emoji": "🏠", "article": "ein", "negative": "kein", "positive": "Das ist ein Haus.", "negativeSentence": "Das ist kein Haus."}, {"noun": "Wohnung", "sr": "stan", "gender": "f", "emoji": "🏢", "article": "eine", "negative": "keine", "positive": "Das ist eine Wohnung.", "negativeSentence": "Das ist keine Wohnung."}, {"noun": "Schule", "sr": "škola", "gender": "f", "emoji": "🏫", "article": "eine", "negative": "keine", "positive": "Das ist eine Schule.", "negativeSentence": "Das ist keine Schule."}, {"noun": "Ball", "sr": "lopta", "gender": "m", "emoji": "⚽", "article": "ein", "negative": "kein", "positive": "Das ist ein Ball.", "negativeSentence": "Das ist kein Ball."}, {"noun": "Jacke", "sr": "jakna", "gender": "f", "emoji": "🧥", "article": "eine", "negative": "keine", "positive": "Das ist eine Jacke.", "negativeSentence": "Das ist keine Jacke."}, {"noun": "Schuh", "sr": "cipela", "gender": "m", "emoji": "👟", "article": "ein", "negative": "kein", "positive": "Das ist ein Schuh.", "negativeSentence": "Das ist kein Schuh."}, {"noun": "Kind", "sr": "dete", "gender": "n", "emoji": "🧒", "article": "ein", "negative": "kein", "positive": "Das ist ein Kind.", "negativeSentence": "Das ist kein Kind."}];
+let order=[...tasks.keys()];
+for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+let pos=0,correct=0,wrong=0;
+let articleDone=false,negativeDone=false;
+
+function germanVoice(){
+ const vs=speechSynthesis.getVoices();
+ return vs.find(v=>/^de(-|_)/i.test(v.lang)&&/Google|Microsoft|Katja|Anna|Conrad|Vicki/i.test(v.name))
+   ||vs.find(v=>/^de(-|_)/i.test(v.lang))
+   ||vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+function speak(text,rate=.8){
+ if(!("speechSynthesis" in window))return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text);u.lang="de-DE";u.rate=rate;u.pitch=1;
+ const v=germanVoice();if(v)u.voice=v;speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>germanVoice();
+
+function current(){return tasks[order[pos]]}
+function shuffle(a){const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+
+function makeButton(text,type){
+ const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=text;
+ b.addEventListener("click",()=>choose(type,text,b));return b;
+}
+
+function render(){
+ articleDone=false;negativeDone=false;
+ const t=current();
+ document.getElementById("counter").textContent=`${pos+1} / ${tasks.length}`;
+ document.getElementById("emoji").textContent=t.emoji;
+ document.getElementById("noun").textContent=t.noun;
+ document.getElementById("sr").textContent=t.sr;
+ document.getElementById("noun1").textContent=t.noun;
+ document.getElementById("noun2").textContent=t.noun;
+ document.getElementById("articleBlank").textContent="_____";
+ document.getElementById("negativeBlank").textContent="_____";
+ document.getElementById("articleFeedback").textContent="";
+ document.getElementById("negativeFeedback").textContent="";
+ document.getElementById("articleFeedback").className="feedback";
+ document.getElementById("negativeFeedback").className="feedback";
+ const tr=document.getElementById("translation");tr.classList.remove("show");tr.innerHTML="";
+
+ const aroot=document.getElementById("articleOptions");aroot.innerHTML="";
+ shuffle(["ein","eine"]).forEach(x=>aroot.appendChild(makeButton(x,"article")));
+ const nroot=document.getElementById("negativeOptions");nroot.innerHTML="";
+ shuffle(["kein","keine"]).forEach(x=>nroot.appendChild(makeButton(x,"negative")));
+
+ setTimeout(()=>speak(t.noun,.78),400);
+ updateStats();
+}
+
+function choose(type,value,btn){
+ const t=current();
+ const expected=type==="article"?t.article:t.negative;
+ const ok=value===expected;
+ const root=document.getElementById(type==="article"?"articleOptions":"negativeOptions");
+ [...root.children].forEach(b=>{
+   b.disabled=true;
+   if(b.textContent===expected)b.classList.add("correct");
+ });
+ if(!ok)btn.classList.add("wrong");
+
+ const fb=document.getElementById(type==="article"?"articleFeedback":"negativeFeedback");
+ fb.className="feedback "+(ok?"ok":"bad");
+ fb.textContent=ok?"✓ Tačno!":"✗ Nije tačno. Tačan odgovor je označen.";
+
+ if(type==="article"){
+   articleDone=true;document.getElementById("articleBlank").textContent=expected;
+   speak(t.positive,.78);
+ }else{
+   negativeDone=true;document.getElementById("negativeBlank").textContent=expected;
+   speak(t.negativeSentence,.78);
+ }
+ if(ok)correct++;else wrong++;
+ updateStats();
+
+ if(articleDone&&negativeDone){
+   const tr=document.getElementById("translation");
+   tr.innerHTML=`<b>Prevod:</b><br>${t.positive} = To je ${t.sr}.<br>${t.negativeSentence} = To nije ${t.sr}.`;
+   tr.classList.add("show");
+   setTimeout(nextTask,2300);
+ }
+}
+
+function nextTask(){
+ if(pos<tasks.length-1){pos++;render()}
+ else{
+   document.querySelector(".exercise").style.display="none";
+   const done=document.getElementById("complete");done.classList.add("show");
+   const total=correct+wrong;
+   document.getElementById("finalScore").textContent=`Tačnost: ${total?Math.round(correct/total*100):0}% • Tačno: ${correct} • Greške: ${wrong}`;
+ }
+}
+
+function updateStats(){
+ const done=correct+wrong;
+ document.getElementById("done").textContent=done;
+ document.getElementById("correct").textContent=correct;
+ document.getElementById("wrong").textContent=wrong;
+ document.getElementById("accuracy").textContent=(done?Math.round(correct/done*100):0)+"%";
+ const totalAnswers=tasks.length*2;
+ document.getElementById("progress").style.width=Math.min(100,Math.round(done/totalAnswers*100))+"%";
+}
+
+document.getElementById("hearPositive").addEventListener("click",()=>speak(current().positive,.78));
+document.getElementById("hearNegative").addEventListener("click",()=>speak(current().negativeSentence,.78));
+document.getElementById("repeatWord").addEventListener("click",()=>speak(current().noun,.78));
+render();
+</script>
+</body>
+</html>
