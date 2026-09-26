@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d94153">
+<title>De-Max A1 • Telefonnummer</title>
+<style>
+:root{
+  --red:#db4457;--red2:#c93649;--blue:#3c73b9;--blue2:#1f4f92;
+  --ink:#16243d;--muted:#647289;--line:#d4dfec;
+  --ok:#0c824b;--bad:#c23248;--shadow:0 10px 28px rgba(24,46,82,.10)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:linear-gradient(180deg,#f8f9fc,#edf2f8);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+}
+.app{width:min(100%,900px);min-height:100vh;margin:auto;padding:12px}
+.hero{
+  background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;
+  border-radius:22px;padding:18px;box-shadow:var(--shadow)
+}
+.hero-grid{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;align-items:center}
+.circle{
+  width:64px;height:64px;border-radius:50%;background:#fff;color:var(--blue2);
+  display:grid;place-items:center;font-size:1.7rem;font-weight:1000
+}
+.hero h1{margin:0;text-align:center;font-size:clamp(1.65rem,4vw,2.9rem);line-height:1.05}
+.hero p{text-align:center;margin:7px 0 0;opacity:.96}
+.info{
+  margin-top:14px;background:#dfe9f5;border:2px solid #bfd0e7;border-radius:20px;
+  padding:14px 16px;box-shadow:var(--shadow);line-height:1.52
+}
+.info b{color:var(--blue2)}
+.sample{
+  margin-top:10px;background:#fff;border:1px solid #c8d8ea;border-radius:13px;
+  padding:10px 12px;font-weight:900;color:var(--blue2)
+}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+.stat{
+  background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center;
+  padding:9px;box-shadow:var(--shadow)
+}
+.stat b{display:block;color:var(--blue2);font-size:1.3rem}
+.stat span{font-size:.75rem;color:var(--muted)}
+.progress{height:9px;background:#dce5f0;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--red));transition:.25s}
+
+.section{
+  margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:14px;box-shadow:var(--shadow)
+}
+.section h2{margin:0 0 4px;color:var(--blue2);font-size:1.18rem}
+.section.red h2{color:var(--red2)}
+.sub{margin:0 0 12px;color:var(--muted);font-size:.88rem;line-height:1.45}
+
+.exercise{display:none;border:1px solid #d9e3ef;border-radius:18px;padding:14px;background:#fbfdff}
+.exercise.active{display:block}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{
+  display:inline-block;background:var(--blue);color:#fff;border-radius:999px;
+  padding:5px 10px;font-size:.73rem;font-weight:900
+}
+.red .tag{background:var(--red)}
+.num{font-size:.8rem;color:var(--muted);font-weight:900}
+.listenbox{
+  text-align:center;background:#f6f9fd;border:1px solid #d6e1ef;
+  border-radius:16px;padding:16px 10px;margin-top:10px
+}
+.ear{font-size:3rem}
+.listen-title{font-weight:1000;color:var(--blue2);margin:6px 0 3px}
+.listen-help{font-size:.84rem;color:var(--muted)}
+.btnrow{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer}
+.primary{background:var(--blue);color:#fff}
+.redbtn{background:var(--red);color:#fff}
+.ghost{background:#e8eff8;color:var(--blue2)}
+.prompt{text-align:center;font-size:1.08rem;font-weight:1000;margin:13px 0 9px}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.opt{
+  border:1.5px solid #cad8e8;background:#fff;color:var(--ink);border-radius:14px;
+  padding:14px 8px;font-size:1rem;font-weight:1000;cursor:pointer
+}
+.opt.correct{background:#edf9f2;border-color:#84cca0;color:var(--ok)}
+.opt.wrong{background:#fff0f2;border-color:#e6a5af;color:var(--bad)}
+.opt:disabled{cursor:default;opacity:.95}
+.feedback{text-align:center;font-size:.9rem;font-weight:900;margin-top:10px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.solution{
+  display:none;margin-top:9px;padding:11px;border:1px solid #cadbee;
+  background:#eef5fd;border-radius:13px;text-align:center;line-height:1.5
+}
+.solution.show{display:block}
+.solution b{color:var(--blue2)}
+.solution .de{display:block;font-weight:900;color:var(--red2);margin-top:2px}
+
+.build{
+  border:1px solid #d9e3ef;border-radius:18px;padding:14px;background:#fbfdff;margin-bottom:12px
+}
+.build .label{
+  display:inline-block;background:var(--red);color:#fff;border-radius:999px;
+  padding:5px 10px;font-size:.73rem;font-weight:900
+}
+.translation{font-size:.86rem;color:var(--muted);margin:8px 0}
+.answer{
+  min-height:54px;border:2px dashed #bdcde0;border-radius:13px;background:#fff;
+  padding:8px;display:flex;flex-wrap:wrap;gap:7px;align-items:center
+}
+.wordbank{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.word{
+  border:1px solid #ccd9e8;background:#fff;color:var(--ink);border-radius:11px;
+  padding:9px 11px;font-weight:850;cursor:pointer
+}
+.answer .word{background:var(--red);color:#fff;border-color:var(--red)}
+.punct{font-size:1.25rem;font-weight:1000}
+.footer{text-align:center;color:var(--muted);font-size:.75rem;padding:13px 0 20px}
+.finished{display:none;text-align:center;padding:18px 8px}
+.finished.show{display:block}
+.finished .icon{font-size:3rem}
+.finished h3{margin:5px 0;color:var(--blue2)}
+@media(max-width:600px){
+  .app{padding:8px}.hero{padding:14px 9px}.hero-grid{grid-template-columns:52px 1fr 52px}
+  .circle{width:52px;height:52px;font-size:1.35rem}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .options{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="circle">☎</div>
+    <div>
+      <h1>TELEFONNUMMER</h1>
+      <p>Brojevi telefona • slušanje i govor</p>
+    </div>
+    <div class="circle">🔊</div>
+  </div>
+</section>
+
+<section class="info">
+  U telefonskim brojevima cifre se mogu izgovarati <b>jedna po jedna</b>. Aplikacija će ih izgovarati polako, sa kratkom pauzom između cifara.
+  <div class="sample">Meine Telefonnummer ist 063 245 781. → Moj broj telefona je 063 245 781.</div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+  <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+  <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+  <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+</div>
+<div class="progress"><span id="progress"></span></div>
+
+<section class="section">
+  <h2>1. Poslušaj broj telefona</h2>
+  <p class="sub">Broj se automatski izgovara cifru po cifru. Učenik samo označi broj koji je čuo.</p>
+  <div id="phoneQuiz"></div>
+  <div id="phoneFinished" class="finished">
+    <div class="icon">✅</div>
+    <h3>Slušanje završeno!</h3>
+    <p>Pređi na „Meine Telefonnummer ist …“.</p>
+  </div>
+</section>
+
+<section class="section red">
+  <h2>2. Meine Telefonnummer ist …</h2>
+  <p class="sub">Sastavi rečenicu, proveri redosled i poslušaj kako cela rečenica zvuči.</p>
+  <div id="sentencePractice"></div>
+</section>
+
+<div class="footer">De-Max • A1 nemački jezik • Telefonnummer</div>
+</div>
+
+<script>
+const digitWords={
+  "0":"null","1":"eins","2":"zwei","3":"drei","4":"vier",
+  "5":"fünf","6":"sechs","7":"sieben","8":"acht","9":"neun"
+};
+
+const phones=[
+  "063 245 781",
+  "064 318 526",
+  "062 491 735",
+  "065 247 893",
+  "061 538 274",
+  "066 412 759",
+  "069 285 413",
+  "063 719 462",
+  "064 257 831",
+  "062 684 195",
+  "065 391 728",
+  "061 742 536"
+];
+
+function getGermanVoice(){
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/^de(-|_)/i.test(v.lang) && /Google|Microsoft|Katja|Anna|Conrad|Vicki/i.test(v.name))
+      || vs.find(v=>/^de(-|_)/i.test(v.lang))
+      || vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+function speakText(text,rate=.80){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="de-DE";u.rate=rate;u.pitch=1;
+  const v=getGermanVoice();if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>getGermanVoice();
+
+function cleanPhone(phone){return phone.replace(/\D/g,"")}
+function speakPhone(phone,withSentence=false){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const digits=cleanPhone(phone).split("");
+  const queue=[];
+  if(withSentence) queue.push({text:"Meine Telefonnummer ist",rate:.82,pause:260});
+  digits.forEach((d,i)=>queue.push({
+    text:digitWords[d],
+    rate:.72,
+    pause:(i===2||i===5)?420:210
+  }));
+  let idx=0;
+  function next(){
+    if(idx>=queue.length)return;
+    const item=queue[idx++];
+    const u=new SpeechSynthesisUtterance(item.text);
+    u.lang="de-DE";u.rate=item.rate;u.pitch=1;
+    const v=getGermanVoice();if(v)u.voice=v;
+    u.onend=()=>setTimeout(next,item.pause);
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function phoneDistractors(phone){
+  const base=cleanPhone(phone);
+  const out=[];
+  const swaps=[[3,4],[4,5],[6,7],[7,8]];
+  swaps.forEach(([a,b])=>{
+    const chars=base.split("");
+    [chars[a],chars[b]]=[chars[b],chars[a]];
+    const s=chars.join("");
+    if(s!==base&&!out.includes(s))out.push(s);
+  });
+  const changed=base.split("");
+  changed[changed.length-1]=String((Number(changed[changed.length-1])+3)%10);
+  if(changed.join("")!==base&&!out.includes(changed.join("")))out.push(changed.join(""));
+  return shuffle(out).slice(0,3).map(formatPhone);
+}
+function formatPhone(raw){
+  const s=cleanPhone(raw);
+  return s.slice(0,3)+" "+s.slice(3,6)+" "+s.slice(6);
+}
+function makeOptions(phone){
+  return shuffle([phone,...phoneDistractors(phone)]);
+}
+
+phones.forEach((phone,i)=>{
+  const ex=document.createElement("div");
+  ex.className="exercise track "+(i===0?"active":"");
+  ex.dataset.answer=phone;
+  ex.dataset.index=String(i);
+  const opts=makeOptions(phone);
+  ex.innerHTML=`
+    <div class="top">
+      <span class="tag">SLUŠANJE</span>
+      <span class="num">${i+1}/${phones.length}</span>
+    </div>
+    <div class="listenbox">
+      <div class="ear">🎧</div>
+      <div class="listen-title">Poslušaj broj telefona</div>
+      <div class="listen-help">Cifre se izgovaraju jedna po jedna.</div>
+      <div class="btnrow">
+        <button class="btn ghost" onclick="repeatPhone(this)">🔁 Ponovi izgovor</button>
+      </div>
+    </div>
+    <div class="prompt">Koji broj telefona čuješ?</div>
+    <div class="options">
+      ${opts.map(x=>`<button class="opt" onclick="choosePhone(this,'${x}')">${x}</button>`).join("")}
+    </div>
+    <div class="feedback"></div>
+    <div class="solution">
+      <b>Tačno rešenje:</b> ${phone}
+      <span class="de">Meine Telefonnummer ist ${phone}.</span>
+    </div>`;
+  document.getElementById("phoneQuiz").appendChild(ex);
+});
+
+function currentPhoneExercise(){
+  return document.querySelector("#phoneQuiz .exercise.active");
+}
+function playCurrentPhone(){
+  const ex=currentPhoneExercise();
+  if(ex)setTimeout(()=>speakPhone(ex.dataset.answer,false),350);
+}
+function repeatPhone(btn){
+  const ex=btn.closest(".exercise");
+  speakPhone(ex.dataset.answer,false);
+}
+function choosePhone(btn,value){
+  const ex=btn.closest(".exercise");
+  if(ex.dataset.locked==="1")return;
+  ex.dataset.locked="1";
+
+  const ok=value===ex.dataset.answer;
+  ex.querySelectorAll(".opt").forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===ex.dataset.answer)b.classList.add("correct");
+  });
+  if(!ok)btn.classList.add("wrong");
+
+  const fb=ex.querySelector(".feedback");
+  fb.className="feedback "+(ok?"ok":"bad");
+  if(ok){
+    fb.textContent="✓ Tačno!";
+  }else{
+    fb.textContent="✗ Nije tačno. Prikazano je tačno rešenje.";
+    ex.querySelector(".solution").classList.add("show");
+  }
+  ex.dataset.state=ok?"1":"0";
+  refresh();
+
+  setTimeout(()=>nextPhone(ex),1400);
+}
+function nextPhone(ex){
+  const idx=Number(ex.dataset.index);
+  ex.classList.remove("active");
+  if(idx<phones.length-1){
+    const next=document.querySelector(`#phoneQuiz .exercise[data-index="${idx+1}"]`);
+    next.classList.add("active");
+    next.scrollIntoView({behavior:"smooth",block:"center"});
+    playCurrentPhone();
+  }else{
+    const f=document.getElementById("phoneFinished");
+    f.classList.add("show");
+    f.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+}
+
+const sentencePhones=[
+  "063 245 781",
+  "064 318 526",
+  "062 491 735",
+  "065 247 893",
+  "061 538 274"
+];
+
+sentencePhones.forEach((phone,i)=>{
+  const sentence=`Meine Telefonnummer ist ${phone}.`;
+  const ex=document.createElement("div");
+  ex.className="build track";
+  ex.dataset.answer=sentence;
+  ex.dataset.phone=phone;
+  ex.innerHTML=`
+    <span class="label">VEŽBA ${i+1}</span>
+    <div class="prompt" style="text-align:left">Sastavi rečenicu:</div>
+    <div class="translation">Moj broj telefona je ${phone}.</div>
+    <div class="answer"></div>
+    <div class="wordbank"></div>
+    <div class="btnrow">
+      <button class="btn redbtn" onclick="checkBuild(this)">✓ Proveri</button>
+      <button class="btn ghost" onclick="resetBuild(this)">↺ Ponovo</button>
+      <button class="btn ghost" onclick="speakPhone('${phone}',true)">🔊 Poslušaj</button>
+    </div>
+    <div class="feedback"></div>
+    <div class="solution">
+      <b>Rešenje:</b>
+      <span class="de">${sentence}</span>
+      <span style="display:block;color:var(--muted)">Moj broj telefona je ${phone}.</span>
+    </div>`;
+  document.getElementById("sentencePractice").appendChild(ex);
+  initBuild(ex);
+});
+
+function normalize(s){
+  return (s||"").trim().toLowerCase().replace(/\s+/g," ").replace(/[.]$/,"")
+}
+function initBuild(ex){
+  const answer=ex.dataset.answer;
+  const line=ex.querySelector(".answer");
+  const bank=ex.querySelector(".wordbank");
+  line.innerHTML="";bank.innerHTML="";
+  const punct=document.createElement("span");
+  punct.className="punct";punct.textContent=".";
+  line.appendChild(punct);
+
+  const words=["Meine","Telefonnummer","ist",ex.dataset.phone];
+  shuffle(words).forEach(w=>{
+    const b=document.createElement("button");
+    b.type="button";b.className="word";b.textContent=w;
+    b.onclick=()=>line.insertBefore(b,punct);
+    bank.appendChild(b);
+  });
+  ex.querySelector(".feedback").textContent="";
+  ex.querySelector(".feedback").className="feedback";
+  ex.querySelector(".solution").classList.remove("show");
+  delete ex.dataset.state;
+  refresh();
+}
+function currentSentence(ex){
+  const words=[...ex.querySelector(".answer").querySelectorAll(".word")].map(x=>x.textContent);
+  return words.join(" ")+".";
+}
+function checkBuild(btn){
+  const ex=btn.closest(".build");
+  const ok=normalize(currentSentence(ex))===normalize(ex.dataset.answer);
+  const fb=ex.querySelector(".feedback");
+  fb.className="feedback "+(ok?"ok":"bad");
+  if(ok){
+    fb.textContent="✓ Tačno! Poslušaj rečenicu.";
+    ex.querySelector(".solution").classList.remove("show");
+    speakPhone(ex.dataset.phone,true);
+  }else{
+    fb.textContent="✗ Nije tačno. Rešenje je automatski prikazano.";
+    ex.querySelector(".solution").classList.add("show");
+  }
+  ex.dataset.state=ok?"1":"0";
+  refresh();
+}
+function resetBuild(btn){initBuild(btn.closest(".build"))}
+
+function refresh(){
+  const all=[...document.querySelectorAll(".track")];
+  const states=all.map(x=>x.dataset.state).filter(Boolean);
+  const done=states.length;
+  const correct=states.filter(x=>x==="1").length;
+  const wrong=states.filter(x=>x==="0").length;
+  document.getElementById("done").textContent=done;
+  document.getElementById("correct").textContent=correct;
+  document.getElementById("wrong").textContent=wrong;
+  document.getElementById("accuracy").textContent=(done?Math.round(correct/done*100):0)+"%";
+  document.getElementById("progress").style.width=(all.length?Math.round(done/all.length*100):0)+"%";
+}
+refresh();
+window.addEventListener("load",()=>setTimeout(playCurrentPhone,800));
+</script>
+</body>
+</html>
