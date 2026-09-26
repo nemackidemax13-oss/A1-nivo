@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>De-Max A1 – Ispitne reči</title>
+<style>
+:root{--blue:#0b63ce;--blue2:#084c9e;--sky:#eaf4ff;--white:#fff;--ink:#10243e;--muted:#6d7f94;--good:#18864b;--bad:#c44a3d;--line:#d7e7f7;--shadow:0 18px 45px rgba(9,76,158,.16)}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#e8f3ff 0%,#f8fbff 45%,#eef6ff 100%);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);min-height:100vh}
+.app{width:min(100%,470px);min-height:100vh;margin:0 auto;background:rgba(255,255,255,.94);box-shadow:0 0 70px rgba(13,90,170,.12);padding-bottom:24px}
+header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;padding:16px 16px 14px;border-radius:0 0 24px 24px;box-shadow:0 9px 26px rgba(5,70,140,.24)}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-weight:900;letter-spacing:.6px;font-size:20px}.badge{font-size:12px;font-weight:800;background:rgba(255,255,255,.17);padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.28)}.subtitle{font-size:13px;opacity:.9;margin-top:4px}
+.progress-wrap{margin-top:12px}.progress-line{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-bottom:6px}.bar{height:9px;background:rgba(255,255,255,.23);border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:.25s}
+main{padding:14px}.controls{display:grid;grid-template-columns:1fr auto;gap:9px;margin-bottom:10px}select,input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px;font-size:14px;color:var(--ink);outline:none}.icon-btn{border:0;background:#fff;color:var(--blue);border-radius:14px;padding:0 14px;font-weight:900;box-shadow:0 3px 14px rgba(8,76,158,.08);cursor:pointer}
+.search-row{display:grid;grid-template-columns:1fr auto;gap:9px;margin-bottom:14px}.toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);white-space:nowrap;background:#fff;border:1px solid var(--line);padding:0 10px;border-radius:14px}.toggle input{width:auto}
+.topic-title{font-size:13px;color:var(--muted);font-weight:800;margin:8px 2px 10px}.flashcard{perspective:1200px;height:310px;cursor:pointer;user-select:none}.inner{position:relative;width:100%;height:100%;transition:transform .52s;transform-style:preserve-3d}.flashcard.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:28px;padding:26px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:var(--shadow);border:1px solid #d4e6fa}.front{background:linear-gradient(145deg,#fff,#f6fbff)}.back{background:linear-gradient(145deg,#0d66cd,#084c9e);color:#fff;transform:rotateY(180deg)}
+.lang{position:absolute;top:18px;left:18px;font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;opacity:.62}.counter{position:absolute;top:18px;right:18px;font-size:11px;font-weight:800;opacity:.62}.word{font-size:clamp(27px,7vw,38px);font-weight:900;line-height:1.14;max-width:100%;overflow-wrap:anywhere}.translation{font-size:clamp(24px,6.5vw,34px);font-weight:850;line-height:1.17;max-width:100%;overflow-wrap:anywhere}.hint{position:absolute;bottom:17px;font-size:12px;opacity:.58}
+.speak{margin-top:18px;border:0;border-radius:999px;background:var(--sky);color:var(--blue);font-size:15px;font-weight:850;padding:11px 16px;cursor:pointer}.back .speak{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.action{border:0;border-radius:16px;padding:13px;font-size:14px;font-weight:900;cursor:pointer}.again{background:#fff0ee;color:var(--bad);border:1px solid #ffd2cc}.know{background:#e9f8ef;color:var(--good);border:1px solid #c9edd7}
+.nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px}.nav button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 8px;color:var(--ink);font-weight:800;cursor:pointer}
+.stats{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px}.stats-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.stats-title{font-size:14px;font-weight:900}.reset{border:0;background:transparent;color:#a14c43;font-size:12px;font-weight:800;cursor:pointer}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stat{background:#f5f9fe;border-radius:14px;padding:10px 8px;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:11px;color:var(--muted)}
+.topic-progress{margin-top:12px;max-height:190px;overflow:auto;padding-right:3px}.tp{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 2px;border-bottom:1px dashed #e5edf6;font-size:12px}.tp:last-child{border-bottom:0}.tp b{font-size:11px;color:var(--blue)}.empty{padding:28px;text-align:center;color:var(--muted)}
+footer{padding:5px 16px 18px;color:var(--muted);font-size:11px;text-align:center}@media (min-width:700px){body{padding:24px}.app{min-height:calc(100vh - 48px);border-radius:28px;overflow:hidden}header{border-radius:0 0 24px 24px}}
+
+.topic-picker-wrap{margin-bottom:12px}
+.topic-picker-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 2px 8px;font-size:13px;font-weight:900;color:var(--ink)}
+.shuffle-inline{height:38px;min-width:42px;padding:0 12px}
+.topic-buttons{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,44px);grid-auto-columns:max-content;gap:9px;overflow-x:auto;padding:5px 3px 12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+
+
+.topic-buttons::-webkit-scrollbar{height:5px}.topic-buttons::-webkit-scrollbar-thumb{background:#c9dff7;border-radius:99px}
+.topic-btn{flex:0 0 auto;scroll-snap-align:start;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 14px;font-size:12px;font-weight:850;cursor:pointer;transition:.2s;white-space:nowrap;line-height:1.2;text-align:center;min-height:40px}
+.topic-btn:hover{border-color:#8dbdec;background:#f2f8ff}
+.topic-btn.active{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-color:transparent;box-shadow:0 7px 18px rgba(8,76,158,.24)}
+
+
+
+
+
+
+
+.topic-btn[data-topic="__all"]{font-weight:900;padding-left:16px;padding-right:16px}
+.topic-btn.active{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-color:transparent;box-shadow:0 7px 18px rgba(8,76,158,.24)}
+@media (max-width:520px){
+  body{padding:0}
+  .app{width:100%;max-width:none;min-height:100svh}
+  header{padding:14px 14px 12px;border-radius:0 0 22px 22px}
+  .logo{font-size:18px}
+  .subtitle{font-size:12px}
+  main{padding:12px}
+  .topic-picker-wrap{margin-bottom:10px}
+  .topic-buttons{grid-template-rows:repeat(2,42px);gap:8px;padding:5px 2px 10px}
+  .topic-btn{font-size:11.5px;padding:9px 12px;min-height:38px}
+  select,input{font-size:16px}
+  .flashcard{height:min(44vh,330px);min-height:270px}
+  .word{font-size:clamp(25px,8vw,34px)}
+  .translation{font-size:clamp(23px,7vw,31px)}
+  .actions{gap:8px}
+  .nav{gap:7px}
+  .nav button,.action{padding:12px 7px;font-size:13px}
+  .stats{padding:12px}
+}
+
+
+/* Lep prikaz kada učenik označi da zna karticu */
+.success-overlay{
+  position:fixed; inset:0; z-index:9999; pointer-events:none;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .18s ease;
+}
+.success-overlay.show{opacity:1}
+.success-burst{
+  width:min(78vw,340px); padding:24px 20px 20px;
+  border-radius:28px; text-align:center; color:#0d6038;
+  background:rgba(240,255,246,.96);
+  border:2px solid #bfe9ce;
+  box-shadow:0 24px 70px rgba(19,120,72,.26);
+  transform:scale(.78) translateY(10px);
+  opacity:0;
+}
+.success-overlay.show .success-burst{
+  animation:successPop .62s cubic-bezier(.2,.9,.2,1.2) forwards;
+}
+.success-check{
+  width:82px;height:82px;margin:0 auto 10px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#18a45b,#0d7e43);
+  box-shadow:0 12px 30px rgba(20,146,80,.32);
+}
+.success-title{font-size:23px;font-weight:950;letter-spacing:.2px}
+.success-sub{margin-top:5px;font-size:13px;font-weight:750;color:#4f7d64}
+.flashcard.success-card .face.front{
+  animation:cardSuccess .7s ease;
+  border-color:#8bd0a8;
+  box-shadow:0 20px 50px rgba(27,151,82,.22);
+}
+.know.success-pulse{
+  animation:knowPulse .65s ease;
+}
+.progress-wrap.success-progress .bar>i{
+  box-shadow:0 0 0 3px rgba(255,255,255,.18),0 0 18px rgba(255,255,255,.9);
+}
+.confetti-piece{
+  position:fixed; z-index:10000; width:9px; height:14px;
+  border-radius:3px; pointer-events:none; top:42%; left:50%;
+  animation:confettiFly 900ms ease-out forwards;
+}
+@keyframes successPop{
+  0%{transform:scale(.72) translateY(14px);opacity:0}
+  55%{transform:scale(1.06) translateY(-4px);opacity:1}
+  100%{transform:scale(1) translateY(0);opacity:1}
+}
+@keyframes cardSuccess{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.025)}
+  100%{transform:scale(1)}
+}
+@keyframes knowPulse{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.06)}
+  100%{transform:scale(1)}
+}
+@keyframes confettiFly{
+  0%{transform:translate(0,0) rotate(0deg);opacity:1}
+  100%{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}
+}
+
+
+.topic-picker-wrap{
+  margin:0 -4px 15px;
+  padding:13px 10px 9px;
+  background:linear-gradient(145deg,#f9fcff,#edf6ff);
+  border:1px solid #d6e8fa;
+  border-radius:22px;
+  box-shadow:0 10px 26px rgba(8,76,158,.09);
+}
+.topic-picker-head{
+  margin:0 2px 10px;
+  font-size:14px;
+  font-weight:950;
+}
+.topic-btn{
+  min-height:44px !important;
+  padding:10px 15px !important;
+  border-radius:15px !important;
+  font-size:12px !important;
+  letter-spacing:.1px;
+}
+.topic-btn[data-topic="__all"]{
+  font-weight:950;
+  background:#eaf4ff;
+  border-color:#b9d8f7;
+}
+.topic-btn.active{
+  background:linear-gradient(135deg,#0a55ae,#0b6fdd) !important;
+  color:#fff !important;
+  border-color:transparent !important;
+  box-shadow:0 8px 20px rgba(8,76,158,.28) !important;
+  transform:translateY(-1px);
+}
+
+/* Još lepši prikaz kada učenik označi TAČNO */
+.success-burst{
+  border:1px solid rgba(111,205,151,.75) !important;
+  background:linear-gradient(155deg,rgba(248,255,251,.98),rgba(229,250,238,.98)) !important;
+  box-shadow:0 28px 80px rgba(20,126,71,.30) !important;
+}
+.success-check{
+  position:relative;
+  width:88px !important;
+  height:88px !important;
+  font-size:48px !important;
+  border:5px solid rgba(255,255,255,.9);
+}
+.success-check:before,.success-check:after{
+  content:"✦";
+  position:absolute;
+  color:#f1b72d;
+  font-size:24px;
+  animation:sparkle 700ms ease both;
+}
+.success-check:before{left:-40px;top:4px}
+.success-check:after{right:-40px;bottom:4px}
+.success-title{font-size:25px !important}
+.success-sub{font-size:13px !important}
+@keyframes sparkle{
+  0%{opacity:0;transform:scale(.3) rotate(0)}
+  55%{opacity:1;transform:scale(1.2) rotate(25deg)}
+  100%{opacity:.9;transform:scale(1) rotate(0)}
+}
+
+@media (max-width:520px){
+  .topic-picker-wrap{margin:0 -2px 13px;padding:11px 8px 8px;border-radius:20px}
+  .topic-picker-head{font-size:13px;margin-bottom:8px}
+  .topic-btn{min-height:42px !important;padding:9px 13px !important;font-size:11.5px !important}
+  .flashcard{height:min(45vh,330px)}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand"><div><div class="logo">DE-MAX · A1 ISPITNE REČI</div><div class="subtitle">Fleš kartice · nemački izgovor · prevod · napredak</div></div><div class="badge" id="knownBadge">0 poznato</div></div>
+<div class="progress-wrap"><div class="progress-line"><span>Ukupan napredak</span><span id="progressText">0%</span></div><div class="bar"><i id="progressBar"></i></div></div>
+</header>
+<main>
+<div class="topic-picker-wrap">
+  <div class="topic-picker-head">
+    <span>Izaberi temu</span>
+    <button class="icon-btn shuffle-inline" id="shuffleBtn" title="Nasumično">⤨</button>
+  </div>
+  <div class="topic-buttons" id="topicButtons"></div>
+</div>
+<input id="search" type="hidden" value=""><input id="autoSpeak" type="checkbox" hidden checked>
+<div id="content">
+<div class="topic-title" id="topicTitle"></div>
+<div class="flashcard" id="card"><div class="inner">
+<div class="face front"><div class="lang">Deutsch</div><div class="counter" id="counter"></div><div class="word" id="deWord"></div><button class="speak" id="speakBtn" type="button">🔊 Izgovori</button><div class="hint">Dodirni karticu za prevod</div></div>
+<div class="face back"><div class="lang">Srpski</div><div class="counter" id="counterBack"></div><div class="translation" id="srWord"></div><div class="hint">Dodirni karticu da se vratiš</div></div>
+</div></div>
+<div class="actions"><button class="action again" id="againBtn">× Ponovi</button><button class="action know" id="knowBtn">✓ Znam</button></div>
+<div class="nav"><button id="prevBtn">← Prethodna</button><button id="flipBtn">↻ Prevod</button><button id="nextBtn">Sledeća →</button></div>
+</div>
+<div class="stats"><div class="stats-head"><div class="stats-title">Napredak</div><button class="reset" id="resetBtn">Resetuj napredak</button></div>
+<div class="stats-grid"><div class="stat"><b id="knownCount">0</b><span>Znam</span></div><div class="stat"><b id="repeatCount">0</b><span>Za ponavljanje</span></div><div class="stat"><b id="totalCount">0</b><span>Ukupno kartica</span></div></div><div class="topic-progress" id="topicProgress"></div></div>
+</main>
+<footer>Napredak se čuva na ovom uređaju. Automatski izgovor je samo na nemačkom jeziku.</footer>
+</div>
+<script>
+const ALL_CARDS = [        {"topic": "1. Priroda", "de": "die Natur", "sr": "priroda"}, {"topic": "1. Priroda", "de": "der Baum", "sr": "drvo"}, {"topic": "1. Priroda", "de": "die Blume", "sr": "cvet"}, {"topic": "1. Priroda", "de": "das Gras", "sr": "trava"}, {"topic": "1. Priroda", "de": "der Berg", "sr": "planina"}, {"topic": "1. Priroda", "de": "der Himmel", "sr": "nebo"}, {"topic": "1. Priroda", "de": "der Weg", "sr": "put"}, {"topic": "2. Pekara", "de": "die Bäckerei", "sr": "pekara"}, {"topic": "2. Pekara", "de": "das Brot", "sr": "hleb"}, {"topic": "2. Pekara", "de": "das Brötchen", "sr": "zemička"}, {"topic": "2. Pekara", "de": "der Kuchen", "sr": "kolač"}, {"topic": "2. Pekara", "de": "die Brezel", "sr": "pereca"}, {"topic": "2. Pekara", "de": "der Bäcker / die Bäckerin", "sr": "pekar / pekarka"}, {"topic": "2. Pekara", "de": "kaufen", "sr": "kupiti"}, {"topic": "3. Radionica", "de": "die Werkstatt", "sr": "radionica"}, {"topic": "3. Radionica", "de": "das Werkzeug", "sr": "alat"}, {"topic": "3. Radionica", "de": "der Mechaniker", "sr": "mehaničar"}, {"topic": "3. Radionica", "de": "reparieren", "sr": "popraviti"}, {"topic": "3. Radionica", "de": "kaputt", "sr": "pokvaren"}, {"topic": "3. Radionica", "de": "der Reifen", "sr": "guma"}, {"topic": "3. Radionica", "de": "das Auto", "sr": "automobil"}, {"topic": "4. Stan", "de": "die Wohnung", "sr": "stan"}, {"topic": "4. Stan", "de": "das Wohnzimmer", "sr": "dnevna soba"}, {"topic": "4. Stan", "de": "das Schlafzimmer", "sr": "spavaća soba"}, {"topic": "4. Stan", "de": "das Badezimmer", "sr": "kupatilo"}, {"topic": "4. Stan", "de": "der Balkon", "sr": "balkon"}, {"topic": "4. Stan", "de": "die Tür", "sr": "vrata"}, {"topic": "4. Stan", "de": "das Fenster", "sr": "prozor"}, {"topic": "5. Kuhinja", "de": "die Küche", "sr": "kuhinja"}, {"topic": "5. Kuhinja", "de": "der Kühlschrank", "sr": "frižider"}, {"topic": "5. Kuhinja", "de": "der Herd", "sr": "šporet"}, {"topic": "5. Kuhinja", "de": "der Tisch", "sr": "sto"}, {"topic": "5. Kuhinja", "de": "der Teller", "sr": "tanjir"}, {"topic": "5. Kuhinja", "de": "die Tasse", "sr": "šolja"}, {"topic": "5. Kuhinja", "de": "kochen", "sr": "kuvati"}, {"topic": "6. Butik", "de": "die Boutique", "sr": "butik"}, {"topic": "6. Butik", "de": "das Kleid", "sr": "haljina"}, {"topic": "6. Butik", "de": "die Hose", "sr": "pantalone"}, {"topic": "6. Butik", "de": "die Jacke", "sr": "jakna"}, {"topic": "6. Butik", "de": "die Größe", "sr": "veličina"}, {"topic": "6. Butik", "de": "anprobieren", "sr": "probati odeću"}, {"topic": "6. Butik", "de": "kaufen", "sr": "kupiti"}, {"topic": "7. Apoteka", "de": "die Apotheke", "sr": "apoteka"}, {"topic": "7. Apoteka", "de": "das Medikament", "sr": "lek"}, {"topic": "7. Apoteka", "de": "die Tablette", "sr": "tableta"}, {"topic": "7. Apoteka", "de": "der Husten", "sr": "kašalj"}, {"topic": "7. Apoteka", "de": "die Kopfschmerzen", "sr": "glavobolja"}, {"topic": "7. Apoteka", "de": "das Rezept", "sr": "recept"}, {"topic": "7. Apoteka", "de": "brauchen", "sr": "trebati"}, {"topic": "8. Mesara", "de": "die Metzgerei", "sr": "mesara"}, {"topic": "8. Mesara", "de": "das Fleisch", "sr": "meso"}, {"topic": "8. Mesara", "de": "die Wurst", "sr": "kobasica"}, {"topic": "8. Mesara", "de": "der Schinken", "sr": "šunka"}, {"topic": "8. Mesara", "de": "das Hähnchen", "sr": "piletina"}, {"topic": "8. Mesara", "de": "das Kilo", "sr": "kilogram"}, {"topic": "8. Mesara", "de": "kaufen", "sr": "kupiti"}, {"topic": "9. Biblioteka", "de": "die Bibliothek", "sr": "biblioteka"}, {"topic": "9. Biblioteka", "de": "das Buch", "sr": "knjiga"}, {"topic": "9. Biblioteka", "de": "die Zeitung", "sr": "novine"}, {"topic": "9. Biblioteka", "de": "lesen", "sr": "čitati"}, {"topic": "9. Biblioteka", "de": "ausleihen", "sr": "pozajmiti"}, {"topic": "9. Biblioteka", "de": "ruhig", "sr": "tiho / mirno"}, {"topic": "9. Biblioteka", "de": "das Regal", "sr": "polica"}, {"topic": "10. Škola", "de": "die Schule", "sr": "škola"}, {"topic": "10. Škola", "de": "der Schüler / die Schülerin", "sr": "učenik / učenica"}, {"topic": "10. Škola", "de": "der Lehrer / die Lehrerin", "sr": "nastavnik / nastavnica"}, {"topic": "10. Škola", "de": "das Heft", "sr": "sveska"}, {"topic": "10. Škola", "de": "lernen", "sr": "učiti"}, {"topic": "10. Škola", "de": "schreiben", "sr": "pisati"}, {"topic": "10. Škola", "de": "die Aufgabe", "sr": "zadatak"}, {"topic": "11. Kafić", "de": "das Café", "sr": "kafić"}, {"topic": "11. Kafić", "de": "der Kaffee", "sr": "kafa"}, {"topic": "11. Kafić", "de": "der Tee", "sr": "čaj"}, {"topic": "11. Kafić", "de": "der Kuchen", "sr": "kolač"}, {"topic": "11. Kafić", "de": "bestellen", "sr": "naručiti"}, {"topic": "11. Kafić", "de": "zahlen", "sr": "platiti"}, {"topic": "11. Kafić", "de": "der Kellner / die Kellnerin", "sr": "konobar / konobarica"}, {"topic": "12. Bašta", "de": "der Garten", "sr": "bašta"}, {"topic": "12. Bašta", "de": "die Blume", "sr": "cvet"}, {"topic": "12. Bašta", "de": "der Baum", "sr": "drvo"}, {"topic": "12. Bašta", "de": "das Gemüse", "sr": "povrće"}, {"topic": "12. Bašta", "de": "pflanzen", "sr": "saditi"}, {"topic": "12. Bašta", "de": "gießen", "sr": "zalivati"}, {"topic": "12. Bašta", "de": "der Gartenstuhl", "sr": "baštenska stolica"}, {"topic": "13. Supermarket", "de": "der Supermarkt", "sr": "supermarket"}, {"topic": "13. Supermarket", "de": "die Milch", "sr": "mleko"}, {"topic": "13. Supermarket", "de": "das Brot", "sr": "hleb"}, {"topic": "13. Supermarket", "de": "der Käse", "sr": "sir"}, {"topic": "13. Supermarket", "de": "der Einkaufswagen", "sr": "kolica za kupovinu"}, {"topic": "13. Supermarket", "de": "die Kasse", "sr": "kasa"}, {"topic": "13. Supermarket", "de": "bezahlen", "sr": "platiti"}, {"topic": "14. Šuma", "de": "der Wald", "sr": "šuma"}, {"topic": "14. Šuma", "de": "der Baum", "sr": "drvo"}, {"topic": "14. Šuma", "de": "der Pilz", "sr": "pečurka"}, {"topic": "14. Šuma", "de": "der Vogel", "sr": "ptica"}, {"topic": "14. Šuma", "de": "spazieren", "sr": "šetati"}, {"topic": "14. Šuma", "de": "der Weg", "sr": "put"}, {"topic": "14. Šuma", "de": "die Natur", "sr": "priroda"}, {"topic": "15. Hotel", "de": "das Hotel", "sr": "hotel"}, {"topic": "15. Hotel", "de": "das Zimmer", "sr": "soba"}, {"topic": "15. Hotel", "de": "der Schlüssel", "sr": "ključ"}, {"topic": "15. Hotel", "de": "die Rezeption", "sr": "recepcija"}, {"topic": "15. Hotel", "de": "reservieren", "sr": "rezervisati"}, {"topic": "15. Hotel", "de": "übernachten", "sr": "prenoćiti"}, {"topic": "15. Hotel", "de": "das Frühstück", "sr": "doručak"}, {"topic": "16. Knjižara", "de": "der Buchladen", "sr": "knjižara"}, {"topic": "16. Knjižara", "de": "das Buch", "sr": "knjiga"}, {"topic": "16. Knjižara", "de": "der Roman", "sr": "roman"}, {"topic": "16. Knjižara", "de": "das Wörterbuch", "sr": "rečnik"}, {"topic": "16. Knjižara", "de": "der Autor / die Autorin", "sr": "autor / autorka"}, {"topic": "16. Knjižara", "de": "kaufen", "sr": "kupiti"}, {"topic": "16. Knjižara", "de": "die Kasse", "sr": "kasa"}, {"topic": "17. Cvećara", "de": "der Blumenladen", "sr": "cvećara"}, {"topic": "17. Cvećara", "de": "die Blume", "sr": "cvet"}, {"topic": "17. Cvećara", "de": "die Rose", "sr": "ruža"}, {"topic": "17. Cvećara", "de": "die Tulpe", "sr": "lala"}, {"topic": "17. Cvećara", "de": "der Blumenstrauß", "sr": "buket cveća"}, {"topic": "17. Cvećara", "de": "das Geschenk", "sr": "poklon"}, {"topic": "17. Cvećara", "de": "kaufen", "sr": "kupiti"}, {"topic": "18. Voz", "de": "der Zug", "sr": "voz"}, {"topic": "18. Voz", "de": "der Bahnhof", "sr": "železnička stanica"}, {"topic": "18. Voz", "de": "die Fahrkarte", "sr": "karta"}, {"topic": "18. Voz", "de": "das Gleis", "sr": "kolosek"}, {"topic": "18. Voz", "de": "einsteigen", "sr": "ući u prevoz"}, {"topic": "18. Voz", "de": "aussteigen", "sr": "izaći iz prevoza"}, {"topic": "18. Voz", "de": "fahren", "sr": "voziti / ići"}, {"topic": "19. Čekaonica", "de": "das Wartezimmer", "sr": "čekaonica"}, {"topic": "19. Čekaonica", "de": "der Arzt / die Ärztin", "sr": "lekar / lekarka"}, {"topic": "19. Čekaonica", "de": "der Patient / die Patientin", "sr": "pacijent / pacijentkinja"}, {"topic": "19. Čekaonica", "de": "der Termin", "sr": "termin"}, {"topic": "19. Čekaonica", "de": "warten", "sr": "čekati"}, {"topic": "19. Čekaonica", "de": "krank", "sr": "bolestan"}, {"topic": "19. Čekaonica", "de": "die Zeitschrift", "sr": "časopis"}, {"topic": "20. Soba", "de": "das Zimmer", "sr": "soba"}, {"topic": "20. Soba", "de": "das Bett", "sr": "krevet"}, {"topic": "20. Soba", "de": "der Schrank", "sr": "orman"}, {"topic": "20. Soba", "de": "die Lampe", "sr": "lampa"}, {"topic": "20. Soba", "de": "der Tisch", "sr": "sto"}, {"topic": "20. Soba", "de": "der Stuhl", "sr": "stolica"}, {"topic": "20. Soba", "de": "das Fenster", "sr": "prozor"}, {"topic": "21. Teretana", "de": "das Fitnessstudio", "sr": "teretana"}, {"topic": "21. Teretana", "de": "der Sport", "sr": "sport"}, {"topic": "21. Teretana", "de": "der Trainer / die Trainerin", "sr": "trener / trenerka"}, {"topic": "21. Teretana", "de": "trainieren", "sr": "trenirati"}, {"topic": "21. Teretana", "de": "das Gerät", "sr": "sprava"}, {"topic": "21. Teretana", "de": "die Hantel", "sr": "teg"}, {"topic": "21. Teretana", "de": "die Dusche", "sr": "tuš"}, {"topic": "22. Biro / kancelarija", "de": "das Büro", "sr": "kancelarija"}, {"topic": "22. Biro / kancelarija", "de": "der Computer", "sr": "računar"}, {"topic": "22. Biro / kancelarija", "de": "der Drucker", "sr": "štampač"}, {"topic": "22. Biro / kancelarija", "de": "das Telefon", "sr": "telefon"}, {"topic": "22. Biro / kancelarija", "de": "arbeiten", "sr": "raditi"}, {"topic": "22. Biro / kancelarija", "de": "der Schreibtisch", "sr": "radni sto"}, {"topic": "22. Biro / kancelarija", "de": "die E-Mail", "sr": "imejl"}, {"topic": "23. Bolnica", "de": "das Krankenhaus", "sr": "bolnica"}, {"topic": "23. Bolnica", "de": "der Arzt / die Ärztin", "sr": "lekar / lekarka"}, {"topic": "23. Bolnica", "de": "die Krankenschwester", "sr": "medicinska sestra"}, {"topic": "23. Bolnica", "de": "der Patient / die Patientin", "sr": "pacijent / pacijentkinja"}, {"topic": "23. Bolnica", "de": "das Bett", "sr": "krevet"}, {"topic": "23. Bolnica", "de": "krank", "sr": "bolestan"}, {"topic": "23. Bolnica", "de": "die Untersuchung", "sr": "pregled"}, {"topic": "24. Bazen", "de": "das Schwimmbad", "sr": "bazen"}, {"topic": "24. Bazen", "de": "das Wasser", "sr": "voda"}, {"topic": "24. Bazen", "de": "schwimmen", "sr": "plivati"}, {"topic": "24. Bazen", "de": "der Badeanzug", "sr": "kupaći kostim"}, {"topic": "24. Bazen", "de": "das Handtuch", "sr": "peškir"}, {"topic": "24. Bazen", "de": "die Dusche", "sr": "tuš"}, {"topic": "24. Bazen", "de": "die Eintrittskarte", "sr": "ulaznica"}, {"topic": "25. Park", "de": "der Park", "sr": "park"}, {"topic": "25. Park", "de": "die Bank", "sr": "klupa"}, {"topic": "25. Park", "de": "der Baum", "sr": "drvo"}, {"topic": "25. Park", "de": "spazieren", "sr": "šetati"}, {"topic": "25. Park", "de": "der Hund", "sr": "pas"}, {"topic": "25. Park", "de": "der Spielplatz", "sr": "igralište"}, {"topic": "25. Park", "de": "spielen", "sr": "igrati se"}, {"topic": "26. Prodavnica obuće", "de": "der Schuhladen", "sr": "prodavnica obuće"}, {"topic": "26. Prodavnica obuće", "de": "der Schuh", "sr": "cipela"}, {"topic": "26. Prodavnica obuće", "de": "der Stiefel", "sr": "čizma"}, {"topic": "26. Prodavnica obuće", "de": "die Sandale", "sr": "sandala"}, {"topic": "26. Prodavnica obuće", "de": "die Größe", "sr": "veličina"}, {"topic": "26. Prodavnica obuće", "de": "anprobieren", "sr": "probati"}, {"topic": "26. Prodavnica obuće", "de": "passen", "sr": "odgovarati / pristajati"}, {"topic": "27. Automobil", "de": "das Auto", "sr": "automobil"}, {"topic": "27. Automobil", "de": "der Fahrer / die Fahrerin", "sr": "vozač / vozačica"}, {"topic": "27. Automobil", "de": "das Lenkrad", "sr": "volan"}, {"topic": "27. Automobil", "de": "der Sitz", "sr": "sedište"}, {"topic": "27. Automobil", "de": "die Tür", "sr": "vrata"}, {"topic": "27. Automobil", "de": "fahren", "sr": "voziti"}, {"topic": "27. Automobil", "de": "der Parkplatz", "sr": "parking"}, {"topic": "28. Autobus", "de": "der Bus", "sr": "autobus"}, {"topic": "28. Autobus", "de": "die Haltestelle", "sr": "stanica"}, {"topic": "28. Autobus", "de": "der Busfahrer / die Busfahrerin", "sr": "vozač autobusa / vozačica"}, {"topic": "28. Autobus", "de": "die Fahrkarte", "sr": "karta"}, {"topic": "28. Autobus", "de": "einsteigen", "sr": "ući"}, {"topic": "28. Autobus", "de": "aussteigen", "sr": "izaći"}, {"topic": "28. Autobus", "de": "warten", "sr": "čekati"}, {"topic": "29. Bioskop", "de": "das Kino", "sr": "bioskop"}, {"topic": "29. Bioskop", "de": "der Film", "sr": "film"}, {"topic": "29. Bioskop", "de": "die Eintrittskarte", "sr": "ulaznica"}, {"topic": "29. Bioskop", "de": "das Popcorn", "sr": "kokice"}, {"topic": "29. Bioskop", "de": "der Sitzplatz", "sr": "sedište"}, {"topic": "29. Bioskop", "de": "anschauen", "sr": "gledati"}, {"topic": "29. Bioskop", "de": "beginnen", "sr": "početi"}, {"topic": "30. Kod kuće", "de": "zu Hause", "sr": "kod kuće"}, {"topic": "30. Kod kuće", "de": "die Familie", "sr": "porodica"}, {"topic": "30. Kod kuće", "de": "das Sofa", "sr": "sofa"}, {"topic": "30. Kod kuće", "de": "fernsehen", "sr": "gledati televiziju"}, {"topic": "30. Kod kuće", "de": "essen", "sr": "jesti"}, {"topic": "30. Kod kuće", "de": "schlafen", "sr": "spavati"}, {"topic": "30. Kod kuće", "de": "aufräumen", "sr": "spremati / pospremati"}, {"topic": "31. Pored reke", "de": "der Fluss", "sr": "reka"}, {"topic": "31. Pored reke", "de": "die Brücke", "sr": "most"}, {"topic": "31. Pored reke", "de": "das Wasser", "sr": "voda"}, {"topic": "31. Pored reke", "de": "das Ufer", "sr": "obala"}, {"topic": "31. Pored reke", "de": "das Boot", "sr": "čamac"}, {"topic": "31. Pored reke", "de": "spazieren", "sr": "šetati"}, {"topic": "31. Pored reke", "de": "neben", "sr": "pored"}, {"topic": "32. Železnička stanica", "de": "der Bahnhof", "sr": "železnička stanica"}, {"topic": "32. Železnička stanica", "de": "der Zug", "sr": "voz"}, {"topic": "32. Železnička stanica", "de": "das Gleis", "sr": "kolosek"}, {"topic": "32. Železnička stanica", "de": "die Fahrkarte", "sr": "karta"}, {"topic": "32. Železnička stanica", "de": "die Abfahrt", "sr": "polazak"}, {"topic": "32. Železnička stanica", "de": "die Ankunft", "sr": "dolazak"}, {"topic": "32. Železnička stanica", "de": "warten", "sr": "čekati"}, {"topic": "33. Plaža", "de": "der Strand", "sr": "plaža"}, {"topic": "33. Plaža", "de": "der Sand", "sr": "pesak"}, {"topic": "33. Plaža", "de": "die Sonne", "sr": "sunce"}, {"topic": "33. Plaža", "de": "der Sonnenschirm", "sr": "suncobran"}, {"topic": "33. Plaža", "de": "das Handtuch", "sr": "peškir"}, {"topic": "33. Plaža", "de": "schwimmen", "sr": "plivati"}, {"topic": "33. Plaža", "de": "liegen", "sr": "ležati"}, {"topic": "34. Aerodrom", "de": "der Flughafen", "sr": "aerodrom"}, {"topic": "34. Aerodrom", "de": "das Flugzeug", "sr": "avion"}, {"topic": "34. Aerodrom", "de": "das Ticket", "sr": "karta"}, {"topic": "34. Aerodrom", "de": "der Pass", "sr": "pasoš"}, {"topic": "34. Aerodrom", "de": "der Koffer", "sr": "kofer"}, {"topic": "34. Aerodrom", "de": "fliegen", "sr": "leteti"}, {"topic": "34. Aerodrom", "de": "der Abflug", "sr": "polazak aviona"}, {"topic": "35. More", "de": "das Meer", "sr": "more"}, {"topic": "35. More", "de": "das Wasser", "sr": "voda"}, {"topic": "35. More", "de": "die Welle", "sr": "talas"}, {"topic": "35. More", "de": "das Schiff", "sr": "brod"}, {"topic": "35. More", "de": "schwimmen", "sr": "plivati"}, {"topic": "35. More", "de": "der Urlaub", "sr": "odmor"}, {"topic": "35. More", "de": "der Strand", "sr": "plaža"}, {"topic": "36. Jezero", "de": "der See", "sr": "jezero"}, {"topic": "36. Jezero", "de": "das Wasser", "sr": "voda"}, {"topic": "36. Jezero", "de": "das Boot", "sr": "čamac"}, {"topic": "36. Jezero", "de": "schwimmen", "sr": "plivati"}, {"topic": "36. Jezero", "de": "angeln", "sr": "pecati"}, {"topic": "36. Jezero", "de": "das Ufer", "sr": "obala"}, {"topic": "36. Jezero", "de": "ruhig", "sr": "mirno"}, {"topic": "37. Pijaca", "de": "der Markt", "sr": "pijaca"}, {"topic": "37. Pijaca", "de": "das Obst", "sr": "voće"}, {"topic": "37. Pijaca", "de": "das Gemüse", "sr": "povrće"}, {"topic": "37. Pijaca", "de": "der Verkäufer / die Verkäuferin", "sr": "prodavac / prodavačica"}, {"topic": "37. Pijaca", "de": "der Preis", "sr": "cena"}, {"topic": "37. Pijaca", "de": "das Kilo", "sr": "kilogram"}, {"topic": "37. Pijaca", "de": "kaufen", "sr": "kupiti"}, {"topic": "38. Ulica", "de": "die Straße", "sr": "ulica"}, {"topic": "38. Ulica", "de": "das Auto", "sr": "automobil"}, {"topic": "38. Ulica", "de": "die Ampel", "sr": "semafor"}, {"topic": "38. Ulica", "de": "der Fußgänger / die Fußgängerin", "sr": "pešak / pešakinja"}, {"topic": "38. Ulica", "de": "das Fahrrad", "sr": "bicikl"}, {"topic": "38. Ulica", "de": "gehen", "sr": "ići peške"}, {"topic": "38. Ulica", "de": "die Kreuzung", "sr": "raskrsnica"}, {"topic": "39. Recepcija", "de": "die Rezeption", "sr": "recepcija"}, {"topic": "39. Recepcija", "de": "der Rezeptionist / die Rezeptionistin", "sr": "recepcioner / recepcionerka"}, {"topic": "39. Recepcija", "de": "der Gast", "sr": "gost"}, {"topic": "39. Recepcija", "de": "der Schlüssel", "sr": "ključ"}, {"topic": "39. Recepcija", "de": "das Zimmer", "sr": "soba"}, {"topic": "39. Recepcija", "de": "reservieren", "sr": "rezervisati"}, {"topic": "39. Recepcija", "de": "fragen", "sr": "pitati"}, {"topic": "40. Kasa", "de": "die Kasse", "sr": "kasa"}, {"topic": "40. Kasa", "de": "der Kassierer / die Kassiererin", "sr": "kasir / kasirka"}, {"topic": "40. Kasa", "de": "das Geld", "sr": "novac"}, {"topic": "40. Kasa", "de": "die Karte", "sr": "kartica"}, {"topic": "40. Kasa", "de": "bar", "sr": "gotovinom"}, {"topic": "40. Kasa", "de": "zahlen", "sr": "platiti"}, {"topic": "40. Kasa", "de": "der Kassenbon", "sr": "račun"}].map((c,i)=>({...c,id:"c"+i}));
+const topicButtons=document.getElementById("topicButtons"),searchInput=document.getElementById("search"),cardEl=document.getElementById("card"),deWord=document.getElementById("deWord"),srWord=document.getElementById("srWord"),counter=document.getElementById("counter"),counterBack=document.getElementById("counterBack"),topicTitle=document.getElementById("topicTitle"),autoSpeak=document.getElementById("autoSpeak");
+let currentIndex=0,current=[],selectedTopic="__all",progress=JSON.parse(localStorage.getItem("demaxA1FlashProgress")||"{}"),settings=JSON.parse(localStorage.getItem("demaxA1FlashSettings")||"{}");
+autoSpeak.checked=true; settings.autoSpeak=true; localStorage.setItem("demaxA1FlashSettings",JSON.stringify(settings));
+const topics=[...new Set(ALL_CARDS.map(c=>c.topic))];
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function renderTopicButtons(){
+  topicButtons.innerHTML =
+    `<button class="topic-btn ${selectedTopic==="__all"?"active":""}" data-topic="__all">Sve teme (${ALL_CARDS.length})</button>` +
+    topics.map(t=>`<button class="topic-btn ${selectedTopic===t?"active":""}" data-topic="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("");
+  topicButtons.querySelectorAll(".topic-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      selectedTopic=btn.dataset.topic;
+      currentIndex=0;
+      renderTopicButtons();
+      render();
+    });
+  });
+}
+renderTopicButtons();
+function getFiltered(){const q=searchInput.value.trim().toLowerCase(),topic=selectedTopic;return ALL_CARDS.filter(c=>(topic==="__all"||c.topic===topic)&&(!q||c.de.toLowerCase().includes(q)||c.sr.toLowerCase().includes(q)||c.topic.toLowerCase().includes(q)))}
+function speak(text,lang="de-DE"){
+  if(!("speechSynthesis" in window)){alert("Ovaj pregledač nema podršku za izgovor.");return}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang;
+  u.rate=lang.startsWith("sr") ? .90 : .88;
+  const voices=speechSynthesis.getVoices();
+  let v=null;
+  if(lang.startsWith("de")){
+    v=voices.find(x=>/^de(-|_)/i.test(x.lang))||voices.find(x=>/german|deutsch/i.test(x.name));
+  }else if(lang.startsWith("sr")){
+    v=voices.find(x=>/^sr(-|_)/i.test(x.lang))||
+      voices.find(x=>/serbian|srpski/i.test(x.name))||
+      voices.find(x=>/^hr(-|_)/i.test(x.lang))||
+      voices.find(x=>/^bs(-|_)/i.test(x.lang));
+  }
+  if(v)u.voice=v;
+  speechSynthesis.speak(u)
+}
+function currentCard(){return current[currentIndex]}
+function render(){current=getFiltered();if(!current.length){document.getElementById("content").innerHTML='<div class="empty">Nema kartica u ovoj temi.</div>';updateStats();return}if(currentIndex>=current.length)currentIndex=0;const c=current[currentIndex];cardEl.classList.remove("flipped");deWord.textContent=c.de;srWord.textContent=c.sr;counter.textContent=`${currentIndex+1} / ${current.length}`;counterBack.textContent=`${currentIndex+1} / ${current.length}`;topicTitle.textContent=c.topic;updateStats();if(autoSpeak.checked)setTimeout(()=>speak(c.de,"de-DE"),160)}
+function next(){if(!current.length)return;currentIndex=(currentIndex+1)%current.length;render()}
+function prev(){if(!current.length)return;currentIndex=(currentIndex-1+current.length)%current.length;render()}
+function flip(){
+  if(!currentCard())return;
+  cardEl.classList.toggle("flipped");
+  if(autoSpeak.checked && !cardEl.classList.contains("flipped")){
+    setTimeout(()=>speak(currentCard().de,"de-DE"),180);
+  }
+}
+
+function launchConfetti(){
+  const pieces=18;
+  for(let i=0;i<pieces;i++){
+    const p=document.createElement("i");
+    p.className="confetti-piece";
+    const angle=(Math.PI*2*i/pieces)+(Math.random()*.35);
+    const dist=110+Math.random()*120;
+    p.style.setProperty("--x",(Math.cos(angle)*dist)+"px");
+    p.style.setProperty("--y",(Math.sin(angle)*dist-55)+"px");
+    p.style.setProperty("--r",((Math.random()*540)-270)+"deg");
+    const palette=["#18a45b","#0b63ce","#f5b942","#20b8a9","#7b61ff"];
+    p.style.background=palette[i%palette.length];
+    p.style.left=(48+Math.random()*4)+"%";
+    p.style.top=(44+Math.random()*3)+"%";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),950);
+  }
+}
+function showSuccess(){
+  const overlay=document.getElementById("successOverlay");
+  const knowBtn=document.getElementById("knowBtn");
+  const pWrap=document.querySelector(".progress-wrap");
+  cardEl.classList.add("success-card");
+  knowBtn.classList.add("success-pulse");
+  pWrap.classList.add("success-progress");
+  overlay.classList.add("show");
+  launchConfetti();
+  if(navigator.vibrate) navigator.vibrate(35);
+  setTimeout(()=>{
+    overlay.classList.remove("show");
+    cardEl.classList.remove("success-card");
+    knowBtn.classList.remove("success-pulse");
+    pWrap.classList.remove("success-progress");
+  },720);
+}
+
+function mark(status){
+  const c=currentCard();
+  if(!c)return;
+  progress[c.id]=status;
+  localStorage.setItem("demaxA1FlashProgress",JSON.stringify(progress));
+  updateStats();
+  if(status==="known"){
+    showSuccess();
+    setTimeout(next,650);
+  }else{
+    next();
+  }
+}
+function updateStats(){const known=ALL_CARDS.filter(c=>progress[c.id]==="known").length,repeat=ALL_CARDS.filter(c=>progress[c.id]==="repeat").length,pct=Math.round(known/ALL_CARDS.length*100);knownCount.textContent=known;repeatCount.textContent=repeat;totalCount.textContent=ALL_CARDS.length;progressText.textContent=pct+"%";progressBar.style.width=pct+"%";knownBadge.textContent=known+" poznato";topicProgress.innerHTML=topics.map(t=>{const cs=ALL_CARDS.filter(c=>c.topic===t),k=cs.filter(c=>progress[c.id]==="known").length,p=Math.round(k/cs.length*100);return `<div class="tp"><span>${escapeHtml(t)}</span><b>${k}/${cs.length} · ${p}%</b></div>`}).join("")}
+searchInput.addEventListener("input",()=>{currentIndex=0;render()});
+shuffleBtn.addEventListener("click",()=>{current=getFiltered();if(!current.length)return;currentIndex=Math.floor(Math.random()*current.length);render()});
+speakBtn.addEventListener("click",e=>{e.stopPropagation();speak(currentCard().de,"de-DE")});
+knowBtn.addEventListener("click",()=>mark("known"));againBtn.addEventListener("click",()=>mark("repeat"));nextBtn.addEventListener("click",next);prevBtn.addEventListener("click",prev);flipBtn.addEventListener("click",flip);cardEl.addEventListener("click",flip);
+autoSpeak.addEventListener("change",()=>{settings.autoSpeak=autoSpeak.checked;localStorage.setItem("demaxA1FlashSettings",JSON.stringify(settings));if(autoSpeak.checked&&currentCard()&&!cardEl.classList.contains("flipped")){speak(currentCard().de,"de-DE")}});
+resetBtn.addEventListener("click",()=>{if(confirm("Da li želite da resetujete ceo napredak?")){progress={};localStorage.setItem("demaxA1FlashProgress","{}");updateStats()}});
+if("speechSynthesis" in window)speechSynthesis.getVoices();render();
+</script>
+
+<div class="success-overlay" id="successOverlay">
+  <div class="success-burst">
+    <div class="success-check">✓</div>
+    <div class="success-title">Tačno!</div>
+    <div class="success-sub">Odlično — ova reč je označena kao naučena.</div>
+  </div>
+</div>
+
+</body></html>
