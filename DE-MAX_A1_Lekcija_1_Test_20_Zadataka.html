@@ -1,0 +1,85 @@
+<!doctype html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b56c7"><title>A1 • Lekcija 1 • Test</title><style>
+:root{--blue:#0b56c7;--blue2:#0a3f97;--ink:#0f1f3d;--bg:#eef5ff;--ok:#0c9b65;--bad:#df3d4f;--muted:#66748f}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#e9f3ff 0%,#f8fbff 55%,#edf5ff 100%);color:var(--ink)}
+body{display:flex;justify-content:center}.app{width:min(100%,640px);min-height:100vh;padding:16px 14px 28px}
+.header{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border-radius:24px;padding:18px 18px 16px;box-shadow:0 14px 34px rgba(11,86,199,.22);position:sticky;top:8px;z-index:5}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-weight:900;letter-spacing:.5px;font-size:18px}.badge{font-size:12px;font-weight:800;padding:7px 10px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:999px}
+h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow{display:flex;align-items:center;gap:10px;margin-top:14px}.bar{height:9px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden;flex:1}.bar>div{height:100%;background:#fff;width:0%;transition:.3s}.count{font-weight:800;font-size:12px;min-width:54px;text-align:right}
+.card{margin-top:16px;background:#fff;border:1px solid #dce9fb;border-radius:24px;padding:20px;box-shadow:0 12px 32px rgba(28,65,115,.10)}
+.kicker{font-size:12px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.8px}.q{font-size:20px;line-height:1.35;font-weight:850;margin:8px 0 16px}
+.options{display:grid;gap:10px}.opt{width:100%;border:1.5px solid #cfe0f7;background:#f8fbff;border-radius:16px;padding:14px 15px;text-align:left;font-size:16px;font-weight:750;color:var(--ink);cursor:pointer;transition:.16s;touch-action:manipulation}.opt:hover{transform:translateY(-1px);border-color:#8cb9f3}.opt.correct{background:#e8fff5;border-color:#56c99b;color:#08724d}.opt.wrong{background:#fff0f2;border-color:#f094a0;color:#a72235}.opt.dim{opacity:.58}
+.wordbank,.assembled{display:flex;flex-wrap:wrap;gap:9px;min-height:52px;padding:11px;border-radius:16px}.wordbank{background:#f3f8ff;border:1px dashed #9fc1ee}.assembled{background:#fff;border:2px solid #d9e7f8;margin-bottom:12px}.word{border:0;background:#e7f1ff;color:#0a4baa;font-weight:850;border-radius:12px;padding:10px 12px;font-size:16px;cursor:pointer}.assembled .word{background:#0b56c7;color:#fff}.placeholder{color:#8a99b3;font-size:14px;padding:5px}
+.feedback{margin-top:14px;border-radius:14px;padding:12px 13px;font-weight:750;display:none}.feedback.ok{display:block;background:#eafff6;color:#08724d;border:1px solid #a8e7ce}.feedback.bad{display:block;background:#fff1f3;color:#a72235;border:1px solid #f3b5be}
+.actions{display:flex;gap:10px;margin-top:16px}.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:900;font-size:15px;cursor:pointer;flex:1}.primary{background:var(--blue);color:#fff}.secondary{background:#eaf2ff;color:#0a4baa}.btn:disabled{opacity:.45;cursor:not-allowed}
+.footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
+.result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
+@media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+</style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 1 • Test</h1><div class="sub">Časovi 1–3 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
+const questions = [{"type": "mcq", "q": "Koliko slova ima nemačka abeceda prema gradivu?", "options": ["26", "28", "30", "32"], "answer": "30", "hint": "U gradivu su zajedno obuhvaćena osnovna slova i posebna nemačka slova."}, {"type": "mcq", "q": "Koja grupa sadrži samoglasnike iz prve lekcije?", "options": ["a, e, i, o, u, y", "a, b, c, d, e, f", "ä, ö, ü, ß", "m, n, r, s, t, z"], "answer": "a, e, i, o, u, y"}, {"type": "mcq", "q": "Koji su nemački umlauti?", "options": ["ä, ö, ü", "ai, ei, eu", "ch, sch, tsch", "ß, x, z"], "answer": "ä, ö, ü"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „eu“?", "options": ["aj", "oj", "i", "au"], "answer": "oj"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „ei“?", "options": ["aj", "oj", "ej", "i"], "answer": "aj"}, {"type": "mcq", "q": "Kako se izgovara „ie“ u reči „Liebe“?", "options": ["kao dugo i", "kao aj", "kao oj", "kao e"], "answer": "kao dugo i"}, {"type": "mcq", "q": "Koji primer sadrži glasovnu kombinaciju „sch“?", "options": ["Schule", "Katze", "Deutsch", "Weg"], "answer": "Schule"}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wie heißen Sie?“", "options": ["Ich heiße Amira.", "Ich komme aus Serbien.", "Ich wohne in Tutin.", "Ich spreche Deutsch."], "answer": "Ich heiße Amira."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wer sind Sie?“", "options": ["Ich bin Emir.", "Ich heiße aus Emir.", "Ich komme Emir.", "Ich spreche Emir."], "answer": "Ich bin Emir."}, {"type": "order", "q": "Sastavi odgovor na pitanje „Wie ist Ihr Name?“", "words": ["ist", "Name", "Mein", "Amela", "."], "answer": ["Mein", "Name", "ist", "Amela", "."]}, {"type": "mcq", "q": "Šta znači W-pitanje „Wo?“", "options": ["gde", "ko", "kada", "zašto"], "answer": "gde"}, {"type": "mcq", "q": "Koja lična zamenica znači „ja“?", "options": ["ich", "du", "wir", "ihr"], "answer": "ich"}, {"type": "mcq", "q": "Koju zamenicu koristimo za formalno „Vi“?", "options": ["Sie", "du", "er", "ihr"], "answer": "Sie"}, {"type": "mcq", "q": "Koja rečenica je pravilno napisana?", "options": ["Deutschland ist ein schönes Land.", "deutschland ist ein schönes land.", "Deutschland ist ein schönes land.", "deutschland ist ein schönes Land."], "answer": "Deutschland ist ein schönes Land."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Woher kommen Sie?“", "options": ["Ich komme aus Serbien.", "Ich wohne Serbien.", "Ich heiße Serbien.", "Ich spreche aus Serbien."], "answer": "Ich komme aus Serbien."}, {"type": "order", "q": "Sastavi neformalni odgovor: „Dolazim iz Tutina.“", "words": ["komme", "Ich", "Tutin", "aus", "."], "answer": ["Ich", "komme", "aus", "Tutin", "."]}, {"type": "mcq", "q": "Kako kažeš „Govorim srpski“?", "options": ["Ich spreche Serbisch.", "Ich komme Serbisch.", "Ich heiße Serbisch.", "Ich wohne Serbisch."], "answer": "Ich spreche Serbisch."}, {"type": "order", "q": "Sastavi rečenicu „Učim nemački.“", "words": ["Deutsch", "Ich", "lerne", "."], "answer": ["Ich", "lerne", "Deutsch", "."]}, {"type": "mcq", "q": "Šta znači „Familienname“ u prijavnom formularu?", "options": ["prezime", "ime", "adresa", "država"], "answer": "prezime"}, {"type": "order", "q": "Sastavi potpuno predstavljanje.", "words": ["Name", "ist", "Mein", "Naida", "."], "answer": ["Mein", "Name", "ist", "Naida", "."]}];
+let idx=0, score=0;
+const answered = Array(questions.length).fill(false);
+const results = Array(questions.length).fill(null);
+let assembled=[];
+const el = id => document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function render(){
+  const q=questions[idx]; assembled=[];
+  el('num').textContent=`${idx+1} / ${questions.length}`;
+  el('barFill').style.width=`${((idx)/questions.length)*100}%`;
+  el('scoreNow').textContent=`Tačno: ${score}`;
+  el('type').textContent=q.type==='order'?'Sastavi rečenicu':'Odaberi odgovor';
+  el('question').innerHTML=esc(q.q);
+  el('content').innerHTML=''; el('feedback').className='feedback'; el('feedback').textContent='';
+  el('check').style.display=q.type==='order'?'block':'none';
+  el('next').disabled=!answered[idx];
+  if(q.type==='mcq') renderMCQ(q); else renderOrder(q);
+}
+function renderMCQ(q){
+  const wrap=document.createElement('div'); wrap.className='options';
+  q.options.forEach(o=>{const b=document.createElement('button'); b.className='opt'; b.textContent=o; b.onclick=()=>chooseMCQ(b,o,q); wrap.appendChild(b);});
+  el('content').appendChild(wrap);
+  if(answered[idx]) restoreMCQ(q,wrap);
+}
+function chooseMCQ(btn,val,q){
+  if(answered[idx]) return;
+  answered[idx]=true; results[idx]=(val===q.answer); if(results[idx]) score++;
+  [...btn.parentElement.children].forEach(b=>{if(b.textContent===q.answer)b.classList.add('correct'); else if(b===btn)b.classList.add('wrong'); else b.classList.add('dim');});
+  showFeedback(results[idx], q.answer); el('next').disabled=false; el('scoreNow').textContent=`Tačno: ${score}`;
+}
+function restoreMCQ(q,wrap){
+  [...wrap.children].forEach(b=>{if(b.textContent===q.answer)b.classList.add('correct'); else b.classList.add('dim');});
+  showFeedback(results[idx], q.answer);
+}
+function renderOrder(q){
+  const a=document.createElement('div');a.className='assembled';a.id='assembled';
+  const bank=document.createElement('div');bank.className='wordbank';bank.id='bank';
+  el('content').appendChild(a);el('content').appendChild(bank);
+  if(answered[idx]){ assembled=[...q.answer]; drawOrder(q,true); showFeedback(results[idx],q.answer.join(' ')); el('check').disabled=true; el('next').disabled=false; }
+  else { drawOrder(q,false); el('check').disabled=false; }
+}
+function drawOrder(q,locked=false){
+  const a=el('assembled'), bank=el('bank'); a.innerHTML=''; bank.innerHTML='';
+  if(!assembled.length){const p=document.createElement('span');p.className='placeholder';p.textContent='Dodirni reči redom…';a.appendChild(p);} 
+  assembled.forEach((w,i)=>{const b=document.createElement('button');b.className='word';b.textContent=w;if(!locked)b.onclick=()=>{assembled.splice(i,1);drawOrder(q,false)};a.appendChild(b);});
+  if(!locked){
+    const used={}; assembled.forEach(w=>used[w]=(used[w]||0)+1);
+    q.words.forEach(w=>{ const total=q.words.filter(x=>x===w).length, u=used[w]||0; if(u<total){used[w]=u+1; const b=document.createElement('button');b.className='word';b.textContent=w;b.onclick=()=>{assembled.push(w);drawOrder(q,false)};bank.appendChild(b);} });
+  }
+}
+function checkOrder(){
+  if(answered[idx]) return; const q=questions[idx]; const ok=assembled.join('\u0001')===q.answer.join('\u0001');
+  answered[idx]=true; results[idx]=ok; if(ok)score++; showFeedback(ok,q.answer.join(' '));
+  if(!ok){assembled=[...q.answer]; drawOrder(q,true);} else drawOrder(q,true);
+  el('check').disabled=true; el('next').disabled=false; el('scoreNow').textContent=`Tačno: ${score}`;
+}
+function showFeedback(ok,ans){const f=el('feedback');f.className='feedback '+(ok?'ok':'bad');f.textContent=ok?'✓ Tačno!':'✗ Tačan odgovor: '+ans;}
+function next(){ if(idx<questions.length-1){idx++;render();} else finish(); }
+function prev(){ if(idx>0){idx--;render();} }
+function finish(){
+  const pct=Math.round(score/questions.length*100); el('barFill').style.width='100%';
+  el('mainCard').innerHTML=`<div class="result"><div class="kicker">Rezultat</div><div class="scoreCircle" style="--pct:${pct}%"><div class="scoreText">${pct}%</div></div><h2>${score} / ${questions.length} tačno</h2><p>${pct>=90?'Odlično!':pct>=70?'Vrlo dobro!':pct>=50?'Dobro — ponovi još malo gradivo.':'Ponovi gradivo i pokušaj ponovo.'}</p><button class="btn primary" onclick="restart()">Uradi test ponovo</button></div>`;
+  el('footerStat').style.display='none';
+}
+function restart(){location.reload();}
+el('check').onclick=checkOrder; el('next').onclick=next; el('prev').onclick=prev; render();
+</script></body></html>
