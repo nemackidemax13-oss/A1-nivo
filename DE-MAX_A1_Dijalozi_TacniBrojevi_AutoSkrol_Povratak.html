@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b63ce">
+<title>DE-MAX A1 Dijalozi</title>
+<style>
+:root{
+  --blue:#0b63ce; --blue2:#0a4fa4; --bg:#f4f8fd; --line:#dce8f7; --text:#14304d; --muted:#6e8299; --white:#fff;
+  --shadow:0 12px 28px rgba(11,99,206,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+body{min-height:100dvh}
+button,select{font:inherit}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;background:linear-gradient(180deg,#eef6ff 0,#f9fbff 45%,#f3f8ff 100%);padding-bottom:28px}
+.hero{position:sticky;top:0;z-index:20;padding:14px 16px 12px;background:linear-gradient(135deg,#0b63ce,#0a4c9d);color:#fff;box-shadow:0 8px 28px rgba(10,75,155,.22)}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:46px;height:46px;border-radius:14px;background:#fff;color:#0b63ce;font-weight:950;display:grid;place-items:center;letter-spacing:-1px}
+.brand h1{font-size:19px;line-height:1.05;margin:0;font-weight:900}
+.brand p{font-size:12px;margin:5px 0 0;opacity:.88}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:9px 8px;text-align:center}
+.stat b{display:block;font-size:14px} .stat span{font-size:10px;opacity:.84}
+.content{padding:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:14px;margin-bottom:13px}
+.kicker{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+h2{font-size:21px;margin:4px 0 2px;letter-spacing:-.03em}
+.sub{font-size:12px;color:var(--muted);margin:0}
+.topic-label,.speedtitle{font-size:10px;font-weight:950;letter-spacing:.08em;color:#58708c;margin:13px 0 7px 2px}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:305px;overflow:auto;padding-right:2px;scrollbar-width:thin}
+.topic-btn{border:1px solid #d7e6f6;background:#fbfdff;color:#24415f;border-radius:13px;padding:10px 9px;text-align:left;font-weight:800;font-size:12px;line-height:1.25;cursor:pointer}
+.topic-btn small{display:block;color:#7b8da2;font-weight:700;margin-top:3px;font-size:10px}
+.topic-btn.active{background:linear-gradient(135deg,#0b63ce,#0a4fa4);color:#fff;border-color:#0b63ce;box-shadow:0 8px 18px rgba(11,99,206,.18)}
+.topic-btn.active small{color:#dcecff}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:0;border-radius:13px;padding:10px 12px;font-weight:850;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 8px 18px rgba(11,99,206,.19)}
+.btn.soft{background:#eaf3ff;color:#0a58b3}
+.btn.ghost{background:#fff;border:1px solid #cfe0f3;color:#31506f}
+.small{padding:8px 10px;font-size:12px}
+.voicebox{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.voicebox label{font-size:10px;font-weight:900;color:#58708c;display:block;margin:0 0 5px 3px}
+.voicebox select{width:100%;border:1px solid #d5e3f2;border-radius:12px;background:#fbfdff;padding:9px;font-size:11px}
+.speed{display:flex;gap:6px;justify-content:flex-start;flex-wrap:wrap;margin-top:6px}
+.speed button.active{background:#0b63ce;color:#fff}
+.note{margin-top:10px;padding:10px 11px;background:#fff9e7;border:1px solid #f4e4ab;border-radius:13px;color:#725c16;font-size:11px;line-height:1.45}
+.pill{display:inline-flex;align-items:center;gap:6px;background:#edf5ff;color:#0a58b3;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:850}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.placeholder-card{font-size:14px;line-height:1.5;text-align:center;color:#5f738d;background:#f8fbff;border-style:dashed}
+.hidden{display:none!important}
+.dialogue{display:grid;gap:9px;margin-top:12px}
+.line{border:1px solid #dfebf7;border-radius:16px;padding:11px 12px;background:#fbfdff}
+.line.a{border-left:4px solid #0b63ce} .line.b{border-left:4px solid #6c8fb8}
+.linehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.speaker{font-size:11px;font-weight:950;color:#0b63ce;text-transform:uppercase;letter-spacing:.06em}
+.de{font-size:15px;line-height:1.36;font-weight:800}
+.sr{font-size:13px;line-height:1.35;color:#63758c;margin-top:6px;padding-top:6px;border-top:1px dashed #d7e4f1}
+.iconbtn{border:0;background:#eaf3ff;color:#0b5fc7;width:34px;height:34px;border-radius:11px;cursor:pointer;font-size:16px}
+.footer{font-size:10px;color:#7b8ca1;text-align:center;padding:5px 14px 10px}
+@media (max-width:420px){
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .controls .btn:first-child{grid-column:1/-1}
+  .voicebox{grid-template-columns:1fr}
+  .card{padding:13px}
+  .btn{padding:11px 12px}
+  .de{font-size:14px}
+  .sr{font-size:12px}
+  .topic-grid{grid-template-columns:1fr 1fr;max-height:265px}
+  .topic-btn{font-size:11px;padding:9px 8px}
+}
+@media (min-width:700px){
+  .app{margin-top:16px;margin-bottom:16px;min-height:calc(100dvh - 32px);border-radius:30px;overflow:hidden;box-shadow:0 25px 70px rgba(27,72,120,.16)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="brand">
+      <div class="logo">D<br>M</div>
+      <div>
+        <h1>DE-MAX · A1 Dijalozi</h1>
+        <p>Dijalozi · izgovor i razgovor</p>
+      </div>
+    </div>
+    <div class="statrow">
+      <div class="stat"><b>40</b><span>dijaloga</span></div>
+      <div class="stat"><b>16</b><span>rečenica</span></div>
+      <div class="stat"><b>640</b><span>replika</span></div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="dialogView">
+      <div class="card">
+        <div class="topline">
+          <div>
+            <div class="kicker">Dijalozi A1</div>
+            <h2 id="dialogTitle">Izaberi dijalog</h2>
+            <p class="sub">Dodirni temu da se otvori dijalog i pokrene zvuk</p>
+          </div>
+          <span class="pill" id="dialogCount">0 / 40</span>
+        </div>
+
+        <div class="topic-label">IZABERI DIJALOG</div>
+        <div class="topic-grid" id="dialogGrid"></div>
+
+        <div class="controls">
+          <button class="btn primary" id="playAll">▶ Pusti ceo dijalog</button>
+          <button class="btn soft" id="toggleTranslations">🌐 Sakrij prevod</button>
+          <button class="btn ghost" id="stopSpeech">■ Stop</button>
+        </div>
+
+        <div class="voicebox">
+          <div><label>GLAS A</label><select id="voiceA"></select></div>
+          <div><label>GLAS B</label><select id="voiceB"></select></div>
+        </div>
+
+        <div class="speedtitle">BRZINA DIJALOGA</div>
+        <div class="speed speed-dialog">
+          <button class="btn ghost small dialog-rate" data-rate=".72">Sporo</button>
+          <button class="btn primary small active dialog-rate" data-rate=".90">Normalno</button>
+          <button class="btn ghost small dialog-rate" data-rate="1.08">Brzo</button>
+        </div>
+
+        <div class="note">Kada učenik izabere temu, dijalog se automatski pušta i stranica se polako pomera kroz rečenice. Brojevi se čitaju kao nemački brojevi (npr. 50 = fünfzig). Na kraju stranica dolazi do poslednje rečenice i polako se vraća na izbor tema. Ponovni dodir iste teme pušta dijalog ispočetka. Stop zaustavlja i zvuk i pomeranje.</div>
+      </div>
+
+      <div id="dialogPlaceholder" class="card placeholder-card">Izaberi temu iznad. Kada učenik dodirne temu, tema će biti obojena plavom bojom, dijalog će se prikazati i automatski pustiti.</div>
+      <div class="dialogue hidden" id="dialogueList"></div>
+    </section>
+
+    <div class="footer">DE-MAX · A1 Dijalozi · 40 tema · nemački TTS iz pregledača</div>
+  </main>
+</div>
+
+<script>
+const THEMES = [{"id": 1, "de": "In der Natur", "sr": "U prirodi", "type": "leisure", "place": "in der Natur", "place_sr": "u prirodi", "activity": "spazieren und Fotos machen", "activity_sr": "šetamo i fotografišemo", "object": "Bäume, Blumen und einen kleinen Weg", "object_sr": "drveće, cveće i malu stazu"}, {"id": 2, "de": "In der Bäckerei", "sr": "U pekari", "type": "shop", "place": "in der Bäckerei", "place_sr": "u pekari", "item": "ein Brot", "item_sr": "jedan hleb", "extra": "zwei Brötchen", "extra_sr": "dve zemičke", "price": "4,20"}, {"id": 3, "de": "In der Werkstatt", "sr": "U radionici", "type": "repair", "place": "in der Werkstatt", "place_sr": "u radionici", "problem": "Mein Auto macht ein komisches Geräusch.", "problem_sr": "Moj auto proizvodi čudan zvuk.", "service": "das Auto prüfen", "service_sr": "pregledati auto"}, {"id": 4, "de": "In der Wohnung", "sr": "U stanu", "type": "home", "place": "in der Wohnung", "place_sr": "u stanu", "thing": "die Heizung", "thing_sr": "grejanje", "task": "das Wohnzimmer aufräumen", "task_sr": "sredimo dnevnu sobu"}, {"id": 5, "de": "In der Küche", "sr": "U kuhinji", "type": "home", "place": "in der Küche", "place_sr": "u kuhinji", "thing": "das Abendessen", "thing_sr": "večeru", "task": "Nudeln und Salat machen", "task_sr": "napravimo testeninu i salatu"}, {"id": 6, "de": "In der Boutique", "sr": "U butiku", "type": "shop", "place": "in der Boutique", "place_sr": "u butiku", "item": "eine blaue Jacke", "item_sr": "plavu jaknu", "extra": "ein weißes T-Shirt", "extra_sr": "belu majicu", "price": "49,90"}, {"id": 7, "de": "In der Apotheke", "sr": "U apoteci", "type": "healthshop", "place": "in der Apotheke", "place_sr": "u apoteci", "item": "Hustenbonbons", "item_sr": "pastile za kašalj", "extra": "ein Nasenspray", "extra_sr": "sprej za nos", "price": "12,50"}, {"id": 8, "de": "In der Metzgerei", "sr": "U mesari", "type": "shop", "place": "in der Metzgerei", "place_sr": "u mesari", "item": "500 Gramm Hähnchenfleisch", "item_sr": "500 grama pilećeg mesa", "extra": "200 Gramm Wurst", "extra_sr": "200 grama kobasice", "price": "9,80"}, {"id": 9, "de": "In der Bibliothek", "sr": "U biblioteci", "type": "library", "place": "in der Bibliothek", "place_sr": "u biblioteci", "item": "ein deutsches Buch", "item_sr": "knjigu na nemačkom", "extra": "ein Wörterbuch", "extra_sr": "rečnik"}, {"id": 10, "de": "In der Schule", "sr": "U školi", "type": "school", "place": "in der Schule", "place_sr": "u školi", "subject": "Deutsch", "subject_sr": "nemački", "task": "die Hausaufgaben machen", "task_sr": "uradim domaći zadatak"}, {"id": 11, "de": "Im Café", "sr": "U kafiću", "type": "food", "place": "im Café", "place_sr": "u kafiću", "item": "einen Kaffee", "item_sr": "kafu", "extra": "ein Stück Kuchen", "extra_sr": "parče kolača", "price": "6,50"}, {"id": 12, "de": "Im Garten", "sr": "U bašti", "type": "leisure", "place": "im Garten", "place_sr": "u bašti", "activity": "Blumen pflanzen und den Tisch decken", "activity_sr": "sadimo cveće i postavljamo sto", "object": "viele Blumen und einen großen Tisch", "object_sr": "mnogo cveća i veliki sto"}, {"id": 13, "de": "Im Supermarkt", "sr": "U supermarketu", "type": "shop", "place": "im Supermarkt", "place_sr": "u supermarketu", "item": "Milch und Brot", "item_sr": "mleko i hleb", "extra": "Äpfel und Wasser", "extra_sr": "jabuke i vodu", "price": "11,30"}, {"id": 14, "de": "Im Wald", "sr": "U šumi", "type": "leisure", "place": "im Wald", "place_sr": "u šumi", "activity": "wandern und Pilze fotografieren", "activity_sr": "pešačimo i fotografišemo pečurke", "object": "hohe Bäume und viele Vögel", "object_sr": "visoko drveće i mnogo ptica"}, {"id": 15, "de": "Im Hotel", "sr": "U hotelu", "type": "hotel", "place": "im Hotel", "place_sr": "u hotelu", "room": "ein Doppelzimmer", "room_sr": "dvokrevetnu sobu", "days": "zwei Nächte", "days_sr": "dve noći", "price": "120"}, {"id": 16, "de": "Im Buchladen", "sr": "U knjižari", "type": "shop", "place": "im Buchladen", "place_sr": "u knjižari", "item": "ein A1-Deutschkursbuch", "item_sr": "udžbenik nemačkog A1", "extra": "ein kleines Wörterbuch", "extra_sr": "mali rečnik", "price": "28,00"}, {"id": 17, "de": "Im Blumenladen", "sr": "U cvećari", "type": "shop", "place": "im Blumenladen", "place_sr": "u cvećari", "item": "einen Blumenstrauß", "item_sr": "buket cveća", "extra": "eine kleine Karte", "extra_sr": "malu čestitku", "price": "18,00"}, {"id": 18, "de": "Im Zug", "sr": "U vozu", "type": "travel", "place": "im Zug", "place_sr": "u vozu", "destination": "Berlin", "destination_sr": "Berlin", "time": "14:30", "platform": "Gleis 5", "platform_sr": "kolosek 5"}, {"id": 19, "de": "Im Wartezimmer", "sr": "U čekaonici", "type": "health", "place": "im Wartezimmer", "place_sr": "u čekaonici", "problem": "Ich habe seit gestern Kopfschmerzen.", "problem_sr": "Od juče imam glavobolju.", "time": "zehn Uhr", "time_sr": "deset sati"}, {"id": 20, "de": "Im Zimmer", "sr": "U sobi", "type": "home", "place": "im Zimmer", "place_sr": "u sobi", "thing": "den Schreibtisch", "thing_sr": "radni sto", "task": "das Zimmer aufräumen", "task_sr": "sredimo sobu"}, {"id": 21, "de": "Im Fitnessstudio", "sr": "U teretani", "type": "service", "place": "im Fitnessstudio", "place_sr": "u teretani", "service": "ein Probetraining", "service_sr": "probni trening", "time": "18 Uhr", "time_sr": "18 sati"}, {"id": 22, "de": "Im Büro", "sr": "U kancelariji", "type": "work", "place": "im Büro", "place_sr": "u kancelariji", "task": "einen Termin besprechen", "task_sr": "dogovorimo termin", "time": "morgen um neun Uhr", "time_sr": "sutra u devet sati"}, {"id": 23, "de": "Im Krankenhaus", "sr": "U bolnici", "type": "health", "place": "im Krankenhaus", "place_sr": "u bolnici", "problem": "Mein Arm tut weh.", "problem_sr": "Boli me ruka.", "time": "jetzt", "time_sr": "sada"}, {"id": 24, "de": "Im Schwimmbad", "sr": "Na bazenu", "type": "service", "place": "im Schwimmbad", "place_sr": "na bazenu", "service": "eine Tageskarte", "service_sr": "dnevnu kartu", "time": "bis 20 Uhr", "time_sr": "do 20 sati"}, {"id": 25, "de": "Im Park", "sr": "U parku", "type": "leisure", "place": "im Park", "place_sr": "u parku", "activity": "spazieren und Eis essen", "activity_sr": "šetamo i jedemo sladoled", "object": "Kinder, Fahrräder und viele Bäume", "object_sr": "decu, bicikle i mnogo drveća"}, {"id": 26, "de": "Im Schuhladen", "sr": "U prodavnici obuće", "type": "shop", "place": "im Schuhladen", "place_sr": "u prodavnici obuće", "item": "schwarze Schuhe in Größe 44", "item_sr": "crne cipele broj 44", "extra": "weiße Sportschuhe", "extra_sr": "bele patike", "price": "69,90"}, {"id": 27, "de": "Im Auto", "sr": "U automobilu", "type": "directions", "place": "im Auto", "place_sr": "u automobilu", "destination": "das Stadtzentrum", "destination_sr": "centar grada", "time": "zwanzig Minuten", "time_sr": "dvadeset minuta"}, {"id": 28, "de": "Im Bus", "sr": "U autobusu", "type": "travel", "place": "im Bus", "place_sr": "u autobusu", "destination": "das Stadtzentrum", "destination_sr": "centar grada", "time": "08:15", "platform": "Haltestelle 3", "platform_sr": "stanica 3"}, {"id": 29, "de": "Im Kino", "sr": "U bioskopu", "type": "service", "place": "im Kino", "place_sr": "u bioskopu", "service": "zwei Kinokarten", "service_sr": "dve bioskopske karte", "time": "19:30", "time_sr": "19:30"}, {"id": 30, "de": "Zu Hause", "sr": "Kod kuće", "type": "home", "place": "zu Hause", "place_sr": "kod kuće", "thing": "das Frühstück", "thing_sr": "doručak", "task": "das Frühstück vorbereiten", "task_sr": "pripremimo doručak"}, {"id": 31, "de": "Neben dem Fluss", "sr": "Pored reke", "type": "leisure", "place": "neben dem Fluss", "place_sr": "pored reke", "activity": "spazieren und ein Picknick machen", "activity_sr": "šetamo i pravimo piknik", "object": "Wasser, eine Brücke und viele Bäume", "object_sr": "vodu, most i mnogo drveća"}, {"id": 32, "de": "Am Bahnhof", "sr": "Na železničkoj stanici", "type": "travel", "place": "am Bahnhof", "place_sr": "na železničkoj stanici", "destination": "München", "destination_sr": "Minhen", "time": "10:45", "platform": "Gleis 7", "platform_sr": "kolosek 7"}, {"id": 33, "de": "Am Strand", "sr": "Na plaži", "type": "leisure", "place": "am Strand", "place_sr": "na plaži", "activity": "schwimmen und Volleyball spielen", "activity_sr": "plivamo i igramo odbojku", "object": "das Meer, Sonnenschirme und viele Menschen", "object_sr": "more, suncobrane i mnogo ljudi"}, {"id": 34, "de": "Am Flughafen", "sr": "Na aerodromu", "type": "travel", "place": "am Flughafen", "place_sr": "na aerodromu", "destination": "Wien", "destination_sr": "Beč", "time": "16:20", "platform": "Gate B12", "platform_sr": "izlaz B12"}, {"id": 35, "de": "Am Meer", "sr": "Na moru", "type": "leisure", "place": "am Meer", "place_sr": "na moru", "activity": "schwimmen und am Wasser spazieren", "activity_sr": "plivamo i šetamo pored vode", "object": "blaues Wasser und kleine Boote", "object_sr": "plavu vodu i male čamce"}, {"id": 36, "de": "Am See", "sr": "Na jezeru", "type": "leisure", "place": "am See", "place_sr": "na jezeru", "activity": "ein Picknick machen und fotografieren", "activity_sr": "pravimo piknik i fotografišemo", "object": "einen See, Enten und viele Bäume", "object_sr": "jezero, patke i mnogo drveća"}, {"id": 37, "de": "Auf dem Markt", "sr": "Na pijaci", "type": "shop", "place": "auf dem Markt", "place_sr": "na pijaci", "item": "ein Kilo Tomaten", "item_sr": "kilogram paradajza", "extra": "zwei Kilo Äpfel", "extra_sr": "dva kilograma jabuka", "price": "7,00"}, {"id": 38, "de": "Auf der Straße", "sr": "Na ulici", "type": "directions", "place": "auf der Straße", "place_sr": "na ulici", "destination": "den Bahnhof", "destination_sr": "železničku stanicu", "time": "zehn Minuten", "time_sr": "deset minuta"}, {"id": 39, "de": "An der Rezeption", "sr": "Na recepciji", "type": "hotel", "place": "an der Rezeption", "place_sr": "na recepciji", "room": "ein Einzelzimmer", "room_sr": "jednokrevetnu sobu", "days": "eine Nacht", "days_sr": "jednu noć", "price": "65"}, {"id": 40, "de": "An der Kasse", "sr": "Na kasi", "type": "shop", "place": "an der Kasse", "place_sr": "na kasi", "item": "diese Sachen", "item_sr": "ove stvari", "extra": "eine Tüte", "extra_sr": "kesu", "price": "23,40"}];
+const tr = (speaker,de,sr)=>({speaker,de,sr});
+function dialogueFor(t){
+
+  if(t.type==="shop"){
+    return [
+      tr("A","Guten Tag!","Dobar dan!"),
+      tr("B","Guten Tag! Wie kann ich Ihnen helfen?","Dobar dan! Kako mogu da vam pomognem?"),
+      tr("A",`Ich möchte bitte ${t.item}.`,`Želeo/želela bih ${t.item_sr}.`),
+      tr("B","Gern. Möchten Sie noch etwas?","Naravno. Želite li još nešto?"),
+      tr("A",`Ja, bitte ${t.extra}.`,`Da, molim ${t.extra_sr}.`),
+      tr("B","Natürlich. Ist das alles?","Naravno. Da li je to sve?"),
+      tr("A","Ja, das ist alles.","Da, to je sve."),
+      tr("B",`Das kostet zusammen ${t.price} Euro.`,`Sve zajedno košta ${t.price} evra.`),
+      tr("A","Kann ich mit Karte bezahlen?","Mogu li da platim karticom?"),
+      tr("B","Ja, natürlich.","Da, naravno."),
+      tr("A","Hier ist meine Karte.","Evo moje kartice."),
+      tr("B","Danke. Einen Moment, bitte.","Hvala. Samo trenutak, molim."),
+      tr("A","Ist alles in Ordnung?","Da li je sve u redu?"),
+      tr("B","Ja. Hier ist Ihr Kassenbon.","Da. Evo vašeg računa."),
+      tr("A","Vielen Dank. Auf Wiedersehen!","Hvala puno. Doviđenja!"),
+      tr("B","Auf Wiedersehen und einen schönen Tag!","Doviđenja i prijatan dan!")
+    ];
+  }
+  if(t.type==="healthshop"){
+    return [
+      tr("A","Guten Tag!","Dobar dan!"),
+      tr("B","Guten Tag! Was brauchen Sie?","Dobar dan! Šta vam je potrebno?"),
+      tr("A","Ich habe Husten und meine Nase ist zu.","Kašljem i nos mi je zapušen."),
+      tr("B","Seit wann haben Sie die Beschwerden?","Od kada imate tegobe?"),
+      tr("A","Seit zwei Tagen.","Već dva dana."),
+      tr("B",`Ich empfehle Ihnen ${t.item}.`,`Preporučujem vam ${t.item_sr}.`),
+      tr("A","Gut. Wie oft nehme ich sie?","Dobro. Koliko često ih uzimam?"),
+      tr("B","Dreimal am Tag.","Tri puta dnevno."),
+      tr("A",`Ich brauche auch ${t.extra}.`,`Treba mi i ${t.extra_sr}.`),
+      tr("B","Natürlich. Hier ist es.","Naravno. Izvolite."),
+      tr("A","Wie viel kostet alles?","Koliko sve košta?"),
+      tr("B",`Zusammen ${t.price} Euro.`,`Ukupno ${t.price} evra.`),
+      tr("A","Kann ich mit Karte bezahlen?","Mogu li da platim karticom?"),
+      tr("B","Ja, kein Problem.","Da, nema problema."),
+      tr("A","Danke für Ihre Hilfe.","Hvala na pomoći."),
+      tr("B","Gern. Gute Besserung!","Nema na čemu. Brz oporavak!")
+    ];
+  }
+  if(t.type==="food"){
+    return [
+      tr("A","Guten Tag! Ist dieser Tisch frei?","Dobar dan! Da li je ovaj sto slobodan?"),
+      tr("B","Ja, natürlich. Bitte nehmen Sie Platz.","Da, naravno. Izvolite, sedite."),
+      tr("A","Kann ich die Karte bekommen?","Mogu li dobiti meni?"),
+      tr("B","Ja, hier bitte.","Da, izvolite."),
+      tr("A",`Ich möchte ${t.item}.`,`Želim ${t.item_sr}.`),
+      tr("B","Mit Milch oder ohne Milch?","Sa mlekom ili bez mleka?"),
+      tr("A","Mit Milch, bitte.","Sa mlekom, molim."),
+      tr("B","Möchten Sie auch etwas essen?","Želite li i nešto da pojedete?"),
+      tr("A",`Ja, bitte ${t.extra}.`,`Da, molim ${t.extra_sr}.`),
+      tr("B","Sehr gern. Sonst noch etwas?","Naravno. Još nešto?"),
+      tr("A","Nein, danke. Das ist alles.","Ne, hvala. To je sve."),
+      tr("B","Kommt sofort.","Odmah stiže."),
+      tr("A","Die Rechnung, bitte.","Račun, molim."),
+      tr("B",`Das macht ${t.price} Euro.`,`To je ${t.price} evra.`),
+      tr("A","Danke. Auf Wiedersehen!","Hvala. Doviđenja!"),
+      tr("B","Auf Wiedersehen!","Doviđenja!")
+    ];
+  }
+  if(t.type==="repair"){
+    return [
+      tr("A","Guten Tag. Ich brauche Hilfe.","Dobar dan. Potrebna mi je pomoć."),
+      tr("B","Guten Tag. Was ist das Problem?","Dobar dan. U čemu je problem?"),
+      tr("A",t.problem,t.problem_sr),
+      tr("B","Seit wann ist das so?","Od kada je tako?"),
+      tr("A","Seit gestern Abend.","Od sinoć."),
+      tr("B","Fährt das Auto noch?","Da li auto još uvek može da vozi?"),
+      tr("A","Ja, aber ich bin nicht sicher.","Da, ali nisam siguran/sigurna."),
+      tr("B",`Wir können ${t.service}.`,`Možemo da ${t.service_sr}.`),
+      tr("A","Wann haben Sie Zeit?","Kada imate vremena?"),
+      tr("B","Heute Nachmittag.","Danas popodne."),
+      tr("A","Wie lange dauert das?","Koliko to traje?"),
+      tr("B","Etwa eine Stunde.","Oko sat vremena."),
+      tr("A","Was kostet die Kontrolle?","Koliko košta pregled?"),
+      tr("B","Die Kontrolle kostet 30 Euro.","Pregled košta 30 evra."),
+      tr("A","Gut, vielen Dank.","Dobro, hvala puno."),
+      tr("B","Gern. Wir rufen Sie später an.","Nema na čemu. Pozvaćemo vas kasnije.")
+    ];
+  }
+  if(t.type==="home"){
+    return [
+      tr("A",`Hallo! Wir sind ${t.place}.`,`Zdravo! Mi smo ${t.place_sr}.`),
+      tr("B","Ja. Was machen wir zuerst?","Da. Šta prvo radimo?"),
+      tr("A",`Zuerst müssen wir ${t.task}.`,`Prvo moramo da ${t.task_sr}.`),
+      tr("B","Gut. Ich helfe dir.","Dobro. Pomoći ću ti."),
+      tr("A",`Wo ist ${t.thing}?`,`Gde je ${t.thing_sr}?`),
+      tr("B","Dort, neben dem Fenster.","Tamo, pored prozora."),
+      tr("A","Kannst du bitte das Fenster öffnen?","Možeš li, molim te, da otvoriš prozor?"),
+      tr("B","Ja, natürlich.","Da, naravno."),
+      tr("A","Danach trinken wir einen Tee.","Posle toga pijemo čaj."),
+      tr("B","Gute Idee. Ich mache den Tee.","Dobra ideja. Ja ću napraviti čaj."),
+      tr("A","Haben wir auch Wasser?","Imamo li i vodu?"),
+      tr("B","Ja, im Kühlschrank.","Da, u frižideru."),
+      tr("A","Prima. Dann sind wir schnell fertig.","Odlično. Onda ćemo brzo završiti."),
+      tr("B","Ja, zusammen geht es leichter.","Da, zajedno je lakše."),
+      tr("A","Danke für deine Hilfe.","Hvala na pomoći."),
+      tr("B","Gern. Kein Problem!","Nema na čemu. Nema problema!")
+    ];
+  }
+  if(t.type==="library"){
+    return [
+      tr("A","Guten Tag. Ich suche ein Buch.","Dobar dan. Tražim jednu knjigu."),
+      tr("B","Guten Tag. Was für ein Buch suchen Sie?","Dobar dan. Kakvu knjigu tražite?"),
+      tr("A",`Ich suche ${t.item}.`,`Tražim ${t.item_sr}.`),
+      tr("B","Für Anfänger?","Za početnike?"),
+      tr("A","Ja, für Niveau A1.","Da, za nivo A1."),
+      tr("B","Das Buch steht dort im Regal.","Knjiga je tamo na polici."),
+      tr("A","Kann ich es ausleihen?","Mogu li da je pozajmim?"),
+      tr("B","Ja, für drei Wochen.","Da, na tri nedelje."),
+      tr("A",`Haben Sie auch ${t.extra}?`,`Imate li i ${t.extra_sr}?`),
+      tr("B","Ja, natürlich.","Da, naravno."),
+      tr("A","Brauche ich eine Bibliothekskarte?","Da li mi treba članska karta biblioteke?"),
+      tr("B","Ja. Haben Sie einen Ausweis?","Da. Imate li ličnu kartu?"),
+      tr("A","Ja, hier bitte.","Da, izvolite."),
+      tr("B","Danke. Ich mache die Karte sofort.","Hvala. Napraviću kartu odmah."),
+      tr("A","Vielen Dank für die Hilfe.","Hvala puno na pomoći."),
+      tr("B","Sehr gern. Viel Spaß beim Lesen!","Nema na čemu. Uživajte u čitanju!")
+    ];
+  }
+  if(t.type==="school"){
+    return [
+      tr("A","Guten Morgen!","Dobro jutro!"),
+      tr("B","Guten Morgen! Hast du eine Frage?","Dobro jutro! Imaš li pitanje?"),
+      tr("A",`Ja, ich verstehe die Aufgabe in ${t.subject} nicht.`,`Da, ne razumem zadatak iz ${t.subject_sr}.`),
+      tr("B","Welche Aufgabe meinst du?","Na koji zadatak misliš?"),
+      tr("A","Aufgabe fünf auf Seite zwölf.","Zadatak pet na strani dvanaest."),
+      tr("B","Lies zuerst den Text.","Prvo pročitaj tekst."),
+      tr("A","Und was mache ich danach?","A šta radim posle toga?"),
+      tr("B","Dann beantwortest du die Fragen.","Onda odgovaraš na pitanja."),
+      tr("A","Muss ich alles heute machen?","Moram li sve danas da uradim?"),
+      tr("B","Ja, bitte bis morgen.","Da, molim, do sutra."),
+      tr("A",`Dann kann ich ${t.task}.`,`Onda mogu da ${t.task_sr}.`),
+      tr("B","Genau. Wenn du Hilfe brauchst, frag mich.","Tako je. Ako ti treba pomoć, pitaj me."),
+      tr("A","Darf ich mit einem Partner arbeiten?","Smem li da radim sa partnerom?"),
+      tr("B","Ja, das ist möglich.","Da, to je moguće."),
+      tr("A","Danke, jetzt ist alles klar.","Hvala, sada je sve jasno."),
+      tr("B","Gern. Viel Erfolg!","Nema na čemu. Srećno!")
+    ];
+  }
+  if(t.type==="hotel"){
+    return [
+      tr("A","Guten Tag. Ich habe eine Frage.","Dobar dan. Imam jedno pitanje."),
+      tr("B","Guten Tag. Wie kann ich Ihnen helfen?","Dobar dan. Kako mogu da vam pomognem?"),
+      tr("A",`Ich brauche ${t.room}.`,`Potrebna mi je ${t.room_sr}.`),
+      tr("B","Für wie viele Personen?","Za koliko osoba?"),
+      tr("A","Für zwei Personen.","Za dve osobe."),
+      tr("B","Wie lange möchten Sie bleiben?","Koliko dugo želite da ostanete?"),
+      tr("A",`Für ${t.days}.`,`Za ${t.days_sr}.`),
+      tr("B",`Das Zimmer kostet ${t.price} Euro.`,`Soba košta ${t.price} evra.`),
+      tr("A","Ist Frühstück dabei?","Da li je doručak uključen?"),
+      tr("B","Ja, von sieben bis zehn Uhr.","Da, od sedam do deset sati."),
+      tr("A","Hat das Zimmer WLAN?","Da li soba ima Wi‑Fi?"),
+      tr("B","Ja, WLAN ist kostenlos.","Da, Wi‑Fi je besplatan."),
+      tr("A","Gut. Ich nehme das Zimmer.","Dobro. Uzimam sobu."),
+      tr("B","Darf ich Ihren Ausweis sehen?","Mogu li videti vašu ličnu kartu?"),
+      tr("A","Natürlich. Hier bitte.","Naravno. Izvolite."),
+      tr("B","Danke. Hier ist Ihre Zimmerkarte.","Hvala. Evo vaše kartice za sobu.")
+    ];
+  }
+  if(t.type==="travel"){
+    return [
+      tr("A","Entschuldigung, ich habe eine Frage.","Izvinite, imam jedno pitanje."),
+      tr("B","Ja, bitte. Wie kann ich helfen?","Da, izvolite. Kako mogu da pomognem?"),
+      tr("A",`Ich möchte nach ${t.destination}.`,`Želim da idem za ${t.destination_sr}.`),
+      tr("B","Heute?","Danas?"),
+      tr("A","Ja, heute.","Da, danas."),
+      tr("B",`Die nächste Verbindung ist um ${t.time}.`,`Sledeći polazak je u ${t.time}.`),
+      tr("A","Wo muss ich warten?","Gde treba da čekam?"),
+      tr("B",`Bei ${t.platform}.`,`Kod ${t.platform_sr}.`),
+      tr("A","Wie lange dauert die Fahrt?","Koliko traje putovanje?"),
+      tr("B","Ungefähr eine Stunde.","Otprilike jedan sat."),
+      tr("A","Was kostet die Fahrkarte?","Koliko košta karta?"),
+      tr("B","Sie kostet 18 Euro.","Košta 18 evra."),
+      tr("A","Kann ich hier bezahlen?","Mogu li ovde da platim?"),
+      tr("B","Ja, bar oder mit Karte.","Da, gotovinom ili karticom."),
+      tr("A","Danke für die Information.","Hvala na informacijama."),
+      tr("B","Gern. Gute Reise!","Nema na čemu. Srećan put!")
+    ];
+  }
+  if(t.type==="health"){
+    return [
+      tr("A","Guten Tag.","Dobar dan."),
+      tr("B","Guten Tag. Was fehlt Ihnen?","Dobar dan. Šta vam je?"),
+      tr("A",t.problem,t.problem_sr),
+      tr("B","Seit wann haben Sie das?","Od kada to imate?"),
+      tr("A","Seit gestern.","Od juče."),
+      tr("B","Haben Sie auch Fieber?","Imate li i temperaturu?"),
+      tr("A","Nein, ich glaube nicht.","Ne, mislim da nemam."),
+      tr("B","Gut. Setzen Sie sich bitte.","Dobro. Sedite, molim."),
+      tr("A","Muss ich lange warten?","Moram li dugo da čekam?"),
+      tr("B","Nein, etwa zehn Minuten.","Ne, oko deset minuta."),
+      tr("A","Brauchen Sie meine Versicherungskarte?","Da li vam treba moja zdravstvena kartica?"),
+      tr("B","Ja, bitte.","Da, molim."),
+      tr("A","Hier ist sie.","Evo je."),
+      tr("B","Danke. Der Arzt kommt gleich.","Hvala. Doktor će uskoro doći."),
+      tr("A","Vielen Dank.","Hvala puno."),
+      tr("B","Gern. Gute Besserung!","Nema na čemu. Brz oporavak!")
+    ];
+  }
+  if(t.type==="service"){
+    return [
+      tr("A","Guten Tag!","Dobar dan!"),
+      tr("B","Guten Tag! Wie kann ich Ihnen helfen?","Dobar dan! Kako mogu da vam pomognem?"),
+      tr("A",`Ich möchte ${t.service}.`,`Želim ${t.service_sr}.`),
+      tr("B","Natürlich. Für heute?","Naravno. Za danas?"),
+      tr("A","Ja, wenn es möglich ist.","Da, ako je moguće."),
+      tr("B",`Ja. Das geht ${t.time}.`,`Da. Može ${t.time_sr}.`),
+      tr("A","Was kostet das?","Koliko to košta?"),
+      tr("B","Es kostet 12 Euro.","Košta 12 evra."),
+      tr("A","Kann ich mit Karte bezahlen?","Mogu li da platim karticom?"),
+      tr("B","Ja, natürlich.","Da, naravno."),
+      tr("A","Brauche ich noch etwas?","Da li mi treba još nešto?"),
+      tr("B","Nein, nur Ihren Ausweis.","Ne, samo vaša lična karta."),
+      tr("A","Gut. Hier bitte.","Dobro. Izvolite."),
+      tr("B","Danke. Alles ist fertig.","Hvala. Sve je spremno."),
+      tr("A","Vielen Dank für die Hilfe.","Hvala puno na pomoći."),
+      tr("B","Sehr gern. Viel Spaß!","Nema na čemu. Uživajte!")
+    ];
+  }
+  if(t.type==="work"){
+    return [
+      tr("A","Guten Morgen! Haben Sie kurz Zeit?","Dobro jutro! Imate li malo vremena?"),
+      tr("B","Ja, natürlich. Was gibt es?","Da, naravno. Šta se dešava?"),
+      tr("A",`Ich möchte ${t.task}.`,`Želim da ${t.task_sr}.`),
+      tr("B","Gern. Wann passt es Ihnen?","Naravno. Kada vam odgovara?"),
+      tr("A",`Am besten ${t.time}.`,`Najbolje ${t.time_sr}.`),
+      tr("B","Das passt gut.","To mi odgovara."),
+      tr("A","Wie lange dauert das Gespräch?","Koliko traje razgovor?"),
+      tr("B","Etwa dreißig Minuten.","Oko trideset minuta."),
+      tr("A","Soll ich etwas mitbringen?","Da li treba nešto da donesem?"),
+      tr("B","Ja, bitte Ihre Unterlagen.","Da, molim, vaša dokumenta."),
+      tr("A","Gut, ich bringe alles mit.","Dobro, doneću sve."),
+      tr("B","Perfekt. Haben Sie noch eine Frage?","Odlično. Imate li još neko pitanje?"),
+      tr("A","Nein, das ist alles.","Ne, to je sve."),
+      tr("B","Dann sehen wir uns morgen.","Onda se vidimo sutra."),
+      tr("A","Vielen Dank. Bis morgen!","Hvala puno. Vidimo se sutra!"),
+      tr("B","Bis morgen!","Vidimo se sutra!")
+    ];
+  }
+  if(t.type==="directions"){
+    return [
+      tr("A","Entschuldigung, können Sie mir helfen?","Izvinite, možete li da mi pomognete?"),
+      tr("B","Ja, natürlich.","Da, naravno."),
+      tr("A",`Wie komme ich zu ${t.destination}?`,`Kako da stignem do ${t.destination_sr}?`),
+      tr("B","Gehen Sie zuerst geradeaus.","Prvo idite pravo."),
+      tr("A","Bis zur Ampel?","Do semafora?"),
+      tr("B","Ja, genau. Dann links.","Da, tačno. Onda levo."),
+      tr("A","Muss ich weit gehen?","Da li moram daleko da idem?"),
+      tr("B",`Nein, nur ungefähr ${t.time}.`,`Ne, samo oko ${t.time_sr}.`),
+      tr("A","Gibt es dort eine Bushaltestelle?","Ima li tamo autobuska stanica?"),
+      tr("B","Ja, direkt vor dem Gebäude.","Da, direktno ispred zgrade."),
+      tr("A","Kann ich auch mit dem Bus fahren?","Mogu li i autobusom?"),
+      tr("B","Ja, nehmen Sie den Bus Nummer fünf.","Da, uzmite autobus broj pet."),
+      tr("A","Wo kaufe ich die Fahrkarte?","Gde kupujem kartu?"),
+      tr("B","Beim Fahrer oder am Automaten.","Kod vozača ili na automatu."),
+      tr("A","Vielen Dank für Ihre Hilfe.","Hvala puno na pomoći."),
+      tr("B","Gern. Einen schönen Tag!","Nema na čemu. Prijatan dan!")
+    ];
+  }
+  // leisure
+  return [
+    tr("A",`Schön, dass wir heute ${t.place} sind.`,`Lepo je što smo danas ${t.place_sr}.`),
+    tr("B","Ja, das Wetter ist wirklich schön.","Da, vreme je zaista lepo."),
+    tr("A",`Was wollen wir machen?`,`Šta želimo da radimo?`),
+    tr("B",`Wir können ${t.activity}.`,`Možemo da ${t.activity_sr}.`),
+    tr("A","Das ist eine gute Idee.","To je dobra ideja."),
+    tr("B","Hast du Wasser dabei?","Imaš li vodu sa sobom?"),
+    tr("A","Ja, ich habe zwei Flaschen.","Da, imam dve flaše."),
+    tr("B","Super. Hast du auch etwas zu essen?","Super. Imaš li i nešto za jelo?"),
+    tr("A","Ja, ich habe Sandwiches.","Da, imam sendviče."),
+    tr("B",`Schau mal! Ich sehe ${t.object}.`,`Pogledaj! Vidim ${t.object_sr}.`),
+    tr("A","Ja, das ist sehr schön.","Da, veoma je lepo."),
+    tr("B","Machen wir ein Foto?","Hoćemo li da napravimo fotografiju?"),
+    tr("A","Ja, gern. Stell dich hier hin.","Da, rado. Stani ovde."),
+    tr("B","Danach machen wir eine kurze Pause.","Posle toga pravimo kratku pauzu."),
+    tr("A","Gut. Ich bin ein bisschen müde.","Dobro. Malo sam umoran/umorna."),
+    tr("B","Kein Problem. Wir haben genug Zeit.","Nema problema. Imamo dovoljno vremena.")
+  ];
+}
+
+let currentDialog=0, dialogRate=.90, showTranslations=true, selectedDialog=false;
+let voices=[];
+let autoPlayTimer=null;
+let returnTopTimer=null;
+let playSession=0;
+let scrollSession=0;
+let audioUnlocked=false;
+
+function stopAllSpeech(){
+  playSession++;
+  scrollSession++;
+  if(autoPlayTimer){ clearTimeout(autoPlayTimer); autoPlayTimer=null; }
+  if(returnTopTimer){ clearTimeout(returnTopTimer); returnTopTimer=null; }
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+}
+
+function loadVoices(){
+  voices = speechSynthesis.getVoices().filter(v=>/^de/i.test(v.lang));
+  if(!voices.length) voices=speechSynthesis.getVoices();
+  const sels=[document.getElementById("voiceA"),document.getElementById("voiceB")];
+  sels.forEach((s,si)=>{
+    s.innerHTML="";
+    voices.forEach((v,i)=>s.add(new Option(`${v.name} · ${v.lang}`,i)));
+    if(voices.length) s.value = si===0 ? 0 : Math.min(1,voices.length-1);
+  });
+}
+if("speechSynthesis" in window){
+  loadVoices();
+  speechSynthesis.onvoiceschanged=loadVoices;
+}
+
+
+function easeInOutCubic(t){
+  return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+}
+
+function slowScrollToY(targetY, duration=1700, sessionId=null){
+  if(sessionId===null) sessionId=scrollSession;
+  const startY=window.scrollY;
+  const maxY=Math.max(0, document.documentElement.scrollHeight-window.innerHeight);
+  const endY=Math.max(0, Math.min(targetY, maxY));
+  const delta=endY-startY;
+  const start=performance.now();
+
+  function step(now){
+    if(sessionId!==scrollSession) return;
+    const p=Math.min(1,(now-start)/duration);
+    window.scrollTo(0,startY + delta*easeInOutCubic(p));
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function slowScrollToLine(index, sessionId){
+  const line=document.querySelector(`[data-dialog-line="${index}"]`);
+  if(!line) return;
+  const rect=line.getBoundingClientRect();
+  const target=window.scrollY + rect.top - Math.max(90, window.innerHeight*0.28);
+  slowScrollToY(target, 1500, sessionId);
+}
+
+function slowScrollToDialogueEnd(sessionId){
+  const wrap=document.getElementById("dialogueList");
+  if(!wrap) return;
+  const rect=wrap.getBoundingClientRect();
+  const target=window.scrollY + rect.bottom - window.innerHeight + 28;
+  slowScrollToY(target, 2100, sessionId);
+}
+
+function slowReturnToTopics(sessionId){
+  if(sessionId!==scrollSession) return;
+  const grid=document.getElementById("dialogGrid");
+  if(!grid) return;
+  const rect=grid.getBoundingClientRect();
+  const target=window.scrollY + rect.top - 95;
+  slowScrollToY(target, 2300, sessionId);
+}
+
+
+const DE_ONES = ["null","eins","zwei","drei","vier","fünf","sechs","sieben","acht","neun","zehn","elf","zwölf","dreizehn","vierzehn","fünfzehn","sechzehn","siebzehn","achtzehn","neunzehn"];
+const DE_TENS = {20:"zwanzig",30:"dreißig",40:"vierzig",50:"fünfzig",60:"sechzig",70:"siebzig",80:"achtzig",90:"neunzig"};
+
+function germanNumber(n){
+  n = Math.trunc(Number(n));
+  if(!Number.isFinite(n)) return "";
+  if(n < 0) return "minus " + germanNumber(Math.abs(n));
+  if(n < 20) return DE_ONES[n];
+  if(n < 100){
+    const tens = Math.floor(n/10)*10, one = n%10;
+    if(one===0) return DE_TENS[tens];
+    return (one===1 ? "ein" : DE_ONES[one]) + "und" + DE_TENS[tens];
+  }
+  if(n < 1000){
+    const h = Math.floor(n/100), rest=n%100;
+    const head = (h===1 ? "einhundert" : DE_ONES[h] + "hundert");
+    return head + (rest ? germanNumber(rest) : "");
+  }
+  if(n < 1000000){
+    const th = Math.floor(n/1000), rest=n%1000;
+    const head = th===1 ? "eintausend" : germanNumber(th) + "tausend";
+    return head + (rest ? germanNumber(rest) : "");
+  }
+  return String(n).split("").map(d=>DE_ONES[Number(d)]).join(" ");
+}
+
+function speechTextGerman(text){
+  let s = text;
+
+  // Prices such as 49,90 Euro -> "neunundvierzig Euro neunzig Cent"
+  s = s.replace(/\b(\d+),(\d{2})\s*Euro\b/g, (_,eu,ct)=>{
+    const e = Number(eu), c = Number(ct);
+    return germanNumber(e) + " Euro" + (c ? " " + germanNumber(c) + " Cent" : "");
+  });
+
+  // Clock times such as 14:30 -> "vierzehn Uhr dreißig"
+  s = s.replace(/\b(\d{1,2}):(\d{2})\b/g, (_,h,m)=>{
+    const hh=Number(h), mm=Number(m);
+    return germanNumber(hh) + " Uhr" + (mm ? " " + germanNumber(mm) : "");
+  });
+
+  // Remaining standalone numbers, e.g. 50 -> "fünfzig", 500 -> "fünfhundert"
+  s = s.replace(/\b\d+\b/g, m=>germanNumber(Number(m)));
+
+  // Numbers attached to a letter, e.g. A1 / B12
+  s = s.replace(/([A-Za-zÄÖÜäöüß])(\d+)/g, (_,letter,num)=>letter + " " + germanNumber(Number(num)));
+
+  return s;
+}
+
+function speak(text, who="A", rate=.92, onend=null){
+  if(!("speechSynthesis" in window)) return;
+  stopAllSpeech();
+  const u=new SpeechSynthesisUtterance(speechTextGerman(text));
+  u.lang="de-DE"; u.rate=rate; u.pitch=1;
+  const sel=document.getElementById(who==="B"?"voiceB":"voiceA");
+  if(voices.length && sel && voices[Number(sel.value)]) u.voice=voices[Number(sel.value)];
+  if(onend) u.onend=onend;
+  speechSynthesis.speak(u);
+}
+
+function speakSequence(lines, i=0, sessionId=null){
+  if(!("speechSynthesis" in window)) return;
+  if(sessionId===null) sessionId = ++playSession;
+  if(sessionId !== playSession || i>=lines.length) return;
+
+  slowScrollToLine(i, sessionId);
+
+  const x=lines[i];
+  const u=new SpeechSynthesisUtterance(speechTextGerman(x.de));
+  u.lang="de-DE";
+  u.rate=dialogRate;
+  u.pitch=1;
+  const sel=document.getElementById(x.speaker==="B"?"voiceB":"voiceA");
+  if(voices.length && sel && voices[Number(sel.value)]) u.voice=voices[Number(sel.value)];
+
+  u.onend=()=>{
+    if(sessionId !== playSession) return;
+    if(i===lines.length-1){
+      slowScrollToDialogueEnd(sessionId);
+      returnTopTimer = setTimeout(()=>{
+        if(sessionId!==playSession || sessionId!==scrollSession) return;
+        slowReturnToTopics(sessionId);
+      },2900);
+      return;
+    }
+    autoPlayTimer = setTimeout(()=>speakSequence(lines,i+1,sessionId),220);
+  };
+  speechSynthesis.speak(u);
+}
+
+function autoPlayCurrentDialogue(force=false){
+  if(!selectedDialog) return;
+  if(!("speechSynthesis" in window)) return;
+  if(!force && (speechSynthesis.speaking || speechSynthesis.pending)) return;
+  stopAllSpeech();
+  const sessionId = playSession;
+  scrollSession = sessionId;
+  autoPlayTimer = setTimeout(()=>speakSequence(dialogueFor(THEMES[currentDialog]),0,sessionId),220);
+}
+
+function unlockAndAutoPlay(){
+  audioUnlocked=true;
+  if(!selectedDialog) return;
+  if(!("speechSynthesis" in window)) return;
+  if(!(speechSynthesis.speaking || speechSynthesis.pending)) autoPlayCurrentDialogue(true);
+}
+
+function renderDialog(){
+  document.querySelectorAll(".topic-btn").forEach((b,i)=>b.classList.toggle("active", selectedDialog && i===currentDialog));
+  const activeBtn=document.querySelector(`.topic-btn[data-index="${currentDialog}"]`);
+  if(activeBtn && selectedDialog) activeBtn.scrollIntoView({block:"nearest",behavior:"smooth"});
+  const wrap=document.getElementById("dialogueList");
+  const placeholder=document.getElementById("dialogPlaceholder");
+
+  if(!selectedDialog){
+    document.getElementById("dialogTitle").textContent="Izaberi dijalog";
+    document.getElementById("dialogCount").textContent="0 / 40";
+    wrap.innerHTML="";
+    wrap.classList.add("hidden");
+    placeholder.classList.remove("hidden");
+    return;
+  }
+
+  const t=THEMES[currentDialog], lines=dialogueFor(t);
+  document.getElementById("dialogTitle").textContent=`${t.de} · ${t.sr}`;
+  document.getElementById("dialogCount").textContent=`${currentDialog+1} / 40`;
+  wrap.innerHTML="";
+  wrap.classList.remove("hidden");
+  placeholder.classList.add("hidden");
+
+  lines.forEach((x,i)=>{
+    const div=document.createElement("div");
+    div.className=`line ${x.speaker.toLowerCase()}`;
+    div.dataset.dialogLine=i;
+    div.innerHTML=`
+      <div class="linehead"><span class="speaker">${i+1}. Osoba ${x.speaker}</span><button class="iconbtn" title="Pusti izgovor">🔊</button></div>
+      <div class="de">${x.de}</div>
+      <div class="sr ${showTranslations?"":"hidden"}">${x.sr}</div>`;
+    div.querySelector("button").onclick=()=>speak(x.de,x.speaker,dialogRate);
+    wrap.appendChild(div);
+  });
+}
+
+const dialogGrid=document.getElementById("dialogGrid");
+THEMES.forEach((t,i)=>{
+  const b=document.createElement("button");
+  b.className="topic-btn";
+  b.dataset.index=i;
+  b.innerHTML=`<b>${String(i+1).padStart(2,"0")}. ${t.de}</b><small>${t.sr}</small>`;
+  b.onclick=()=>{
+    stopAllSpeech();
+    selectedDialog=true;
+    currentDialog=i;
+    renderDialog();
+    autoPlayCurrentDialogue(true);
+    setTimeout(()=>{
+      const wrap=document.getElementById("dialogueList");
+      const rect=wrap.getBoundingClientRect();
+      slowScrollToY(window.scrollY + rect.top - 92, 1300, scrollSession);
+    },100);
+  };
+  dialogGrid.appendChild(b);
+});
+
+document.getElementById("playAll").onclick=()=>autoPlayCurrentDialogue(true);
+document.getElementById("stopSpeech").onclick=()=>stopAllSpeech();
+document.getElementById("toggleTranslations").onclick=()=>{
+  showTranslations=!showTranslations;
+  document.getElementById("toggleTranslations").textContent=showTranslations?"🌐 Sakrij prevod":"🌐 Prikaži prevod";
+  renderDialog();
+};
+document.querySelectorAll(".dialog-rate").forEach(b=>{
+  b.onclick=()=>{
+    dialogRate=Number(b.dataset.rate);
+    document.querySelectorAll(".dialog-rate").forEach(x=>{x.classList.remove("active","primary");x.classList.add("ghost")});
+    b.classList.remove("ghost"); b.classList.add("active","primary");
+    if(selectedDialog) autoPlayCurrentDialogue(true);
+  };
+});
+
+renderDialog();
+["pointerdown","touchstart","keydown"].forEach(ev=>document.addEventListener(ev,unlockAndAutoPlay,{passive:true}));
+</script>
+</body>
+</html>
