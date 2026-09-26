@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>De-Max B1 • Lekcija 5</title>
+<style>
+  :root{
+    --yellow:#ffd800;
+    --yellow2:#fff5b3;
+    --ink:#171717;
+    --muted:#6f6f6f;
+    --line:#eadb7f;
+    --white:#ffffff;
+    --green:#168a45;
+    --greenbg:#e9f8ef;
+    --red:#c92d2d;
+    --redbg:#fff0f0;
+    --shadow:0 14px 40px rgba(34,27,0,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(255,216,0,.20), transparent 26rem),
+      linear-gradient(180deg,#fffdf2 0%,#fff 36%,#fffaf0 100%);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  button{font:inherit}
+  .app{
+    width:min(100%, 760px);
+    margin:0 auto;
+    min-height:100vh;
+    padding:18px 16px 40px;
+  }
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    margin:-18px -16px 16px;
+    padding:12px 16px;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .topline{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    max-width:760px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px; min-width:0;
+  }
+  .brandmark{
+    width:48px;height:48px;border-radius:15px;
+    background:var(--yellow); color:#111;
+    display:grid;place-items:center;
+    font-weight:1000; letter-spacing:-1px;
+    border:2px solid #111;
+    box-shadow:4px 4px 0 #111;
+    flex:0 0 auto;
+  }
+  .brandtext{min-width:0}
+  .brandtext b{display:block;font-size:17px;line-height:1}
+  .brandtext span{font-size:12px;color:var(--muted)}
+  .mini-score{
+    border-radius:14px;
+    padding:9px 11px;
+    background:#111;color:#fff;
+    font-weight:800;font-size:12px;
+    white-space:nowrap;
+  }
+  .quiz-head{
+    display:flex;align-items:center;gap:12px;margin:4px 0 12px;
+  }
+  .back{
+    width:43px;height:43px;border:0;border-radius:14px;background:#111;color:#fff;
+    cursor:pointer;font-size:20px;font-weight:900;box-shadow:0 6px 16px #0002;
+  }
+  .quiz-title{flex:1;min-width:0}
+  .quiz-title h2{margin:0 0 2px;font-size:20px}
+  .quiz-title div{font-size:12px;color:var(--muted)}
+  .counter{
+    border-radius:999px;background:var(--yellow);padding:8px 11px;
+    font-size:12px;font-weight:1000;border:1px solid #c9ad00;
+  }
+  .progress{
+    height:10px;background:#f2f0e8;border-radius:99px;overflow:hidden;
+    border:1px solid #e4e0d3;margin-bottom:14px;
+  }
+  .progress > div{
+    height:100%;width:0;background:linear-gradient(90deg,#111,var(--yellow));
+    transition:.25s width;
+  }
+  .question-card{
+    background:#fff;border:1px solid #eee1a7;border-radius:25px;
+    padding:20px;box-shadow:var(--shadow);
+  }
+  .q-label{
+    display:inline-flex;align-items:center;gap:7px;
+    background:#fff8c5;border:1px solid #ead04a;
+    color:#514700;border-radius:999px;padding:6px 10px;
+    font-size:11px;font-weight:900;margin-bottom:12px;
+  }
+  .q-text{
+    font-size:21px;line-height:1.35;font-weight:900;
+    margin:0 0 17px;letter-spacing:-.25px;
+  }
+  .options{display:grid;gap:10px}
+  .option{
+    width:100%;display:flex;align-items:center;gap:11px;text-align:left;
+    border:1.5px solid #e5e0cc;border-radius:17px;background:#fff;
+    padding:13px 14px;cursor:pointer;font-weight:750;
+    transition:.15s background,.15s border-color,.15s transform;
+  }
+  .option:hover:not(:disabled){transform:translateY(-1px);border-color:#c8ab00;background:#fffdf2}
+  .option:disabled{cursor:default}
+  .letter{
+    width:30px;height:30px;border-radius:10px;background:#111;color:#fff;
+    display:grid;place-items:center;font-size:12px;font-weight:1000;flex:0 0 auto;
+  }
+  .option.correct{background:var(--greenbg);border-color:#72c491;color:#0c5f2d}
+  .option.correct .letter{background:var(--green)}
+  .option.wrong{background:var(--redbg);border-color:#e49a9a;color:#8f1e1e}
+  .option.wrong .letter{background:var(--red)}
+  .feedback{
+    display:none;margin-top:14px;border-radius:17px;padding:13px 14px;
+    line-height:1.45;font-size:13px;border:1px solid;
+  }
+  .feedback.show{display:block}
+  .feedback.good{background:var(--greenbg);border-color:#9ed6b2;color:#0b5e2c}
+  .feedback.bad{background:var(--redbg);border-color:#efbbbb;color:#8b2020}
+  .feedback b{display:block;margin-bottom:3px}
+  .next{
+    display:none;width:100%;border:0;border-radius:16px;background:#111;color:#fff;
+    padding:14px 16px;margin-top:14px;font-weight:950;cursor:pointer;
+    box-shadow:0 7px 0 var(--yellow);
+  }
+  .next.show{display:block}
+  .next:active{transform:translateY(3px);box-shadow:0 4px 0 var(--yellow)}
+  .result{
+    text-align:center;background:#fff;border:1px solid #ebdd8b;border-radius:27px;
+    padding:28px 20px;box-shadow:var(--shadow);
+  }
+  .result .medal{
+    width:86px;height:86px;border-radius:28px;background:var(--yellow);
+    border:3px solid #111;display:grid;place-items:center;margin:0 auto 14px;
+    font-size:35px;box-shadow:7px 7px 0 #111;
+  }
+  .result h2{margin:0 0 6px;font-size:29px}
+  .result p{margin:0;color:var(--muted);font-size:14px}
+  .big-score{font-size:54px;font-weight:1000;letter-spacing:-2px;margin:12px 0 1px}
+  .result-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+  .result-actions button{
+    border-radius:15px;padding:13px 10px;font-weight:900;cursor:pointer;
+  }
+  .again{background:var(--yellow);border:2px solid #111;color:#111}
+  .homebtn{background:#111;border:2px solid #111;color:#fff}
+  .footer{
+    text-align:center;color:#948d6d;font-size:11px;padding:22px 5px 4px;
+  }
+  @media(min-width:640px){
+    .question-card{padding:25px}
+    .q-text{font-size:24px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topline">
+      <div class="brand">
+        <div class="brandmark">DM</div>
+        <div class="brandtext">
+          <b>DE-MAX B1</b>
+          <span>Interaktivni test</span>
+        </div>
+      </div>
+      <div class="mini-score" id="miniScore">20 PITANJA</div>
+    </div>
+  </div>
+
+  <section class="screen active" id="quizScreen">
+    <div class="quiz-head">
+      <button class="back" onclick="restartQuiz()" aria-label="Ponovi test">↺</button>
+      <div class="quiz-title">
+        <h2 id="lessonTitle"></h2>
+        <div id="lessonTopics"></div>
+      </div>
+      <div class="counter" id="counter">1/20</div>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+
+    <div class="question-card" id="questionCard">
+      <div class="q-label" id="qLabel">PITANJE</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="nextBtn" onclick="nextQuestion()">Sledeće pitanje →</button>
+    </div>
+
+    <div class="result" id="resultBox" style="display:none">
+      <div class="medal">✓</div>
+      <h2>Test završen!</h2>
+      <p id="resultLesson"></p>
+      <div class="big-score" id="bigScore">0%</div>
+      <p id="resultText"></p>
+      <div class="result-actions">
+        <button class="again" onclick="restartQuiz()">Ponovi test</button>
+        <button class="homebtn" onclick="restartQuiz()">Ponovi</button>
+      </div>
+    </div>
+    <div class="footer">DE-MAX • B1 nemački jezik • direktno otvaranje testa</div>
+  </section>
+</div>
+
+<script>
+const lesson = {"num": 5, "title": "Lekcija 5", "topics": "12–14. čas • Infinitiv sa/bez „zu“ • brauchen + zu • trotz + Genitiv / obwohl", "questions": [{"tag": "INFINITIV ZU", "q": "Infinitiv sa „zu“ najčešće ima oblik:", "o": ["zu + Partizip II", "zu + infinitiv", "zu + perfekt", "zu + imenica"], "a": 1, "e": "Osnovna formula je „zu + infinitiv“."}, {"tag": "INFINITIV ZU", "q": "Koja rečenica je pravilna?", "o": ["Ich habe vergessen, dich anzurufen.", "Ich habe vergessen, dich zu anrufen.", "Ich habe vergessen, anrufen dich.", "Ich habe vergessen, rufe dich an."], "a": 0, "e": "Kod razdvojivih glagola „zu“ stoji ispred osnove: „anzurufen“."}, {"tag": "INFINITIV ZU", "q": "Dopuni: „Er findet es schwer, mit ihr ___.“", "o": ["reden", "zu reden", "redet", "geredet"], "a": 1, "e": "Posle prideva često ide infinitiv sa „zu“."}, {"tag": "INFINITIV ZU", "q": "Dopuni: „Wir sind froh, die Tür ___.“", "o": ["schließen", "geschlossen", "zu schließen", "schließt"], "a": 2, "e": "Posle mnogih izraza ide „zu + infinitiv“."}, {"tag": "INFINITIV ZU", "q": "Koja rečenica je pravilna?", "o": ["Tom hatte Recht, ihr die Wahrheit zu sagen.", "Tom hatte Recht, ihr die Wahrheit sagen.", "Tom hatte Recht, zu sagen ihr die Wahrheit.", "Tom hatte Recht, sagte die Wahrheit."], "a": 0, "e": "Uz imenice i prideve često dolazi infinitiv sa „zu“."}, {"tag": "INFINITIV BEZ ZU", "q": "Posle modalnih glagola koristi se:", "o": ["infinitiv sa „zu“", "infinitiv bez „zu“", "Partizip II", "Konjunktiv II"], "a": 1, "e": "Npr. „Ich kann kommen.“ — bez „zu“."}, {"tag": "BRAUCHEN + ZU", "q": "Koja rečenica je pravilna?", "o": ["Du brauchst nicht zu kommen.", "Du brauchst nicht kommen zu.", "Du nicht brauchst zu kommen.", "Du brauchst zu nicht kommen."], "a": 0, "e": "Obrazac: brauchen + nicht + zu + infinitiv."}, {"tag": "BRAUCHEN + ZU", "q": "Dopuni: „Sie ___ nur Deutsch zu reden.“", "o": ["braucht", "brauchen", "brauchte zu", "hat gebraucht"], "a": 0, "e": "Sa „sie“ (jednina) ide „braucht“."}, {"tag": "BRAUCHEN + ZU", "q": "Dopuni: „EU-Bürger ___ an der Grenze nicht warten.“", "o": ["müssen", "brauchen", "brauchen zu", "brauchen nicht zu"], "a": 3, "e": "Prema primeru iz materijala: „brauchen nicht zu warten“."}, {"tag": "BRAUCHEN + ZU", "q": "Šta znači: „Ihr braucht das Buch nicht mitzubringen.“?", "o": ["Morate poneti knjigu.", "Ne morate poneti knjigu.", "Želite poneti knjigu.", "Poneli ste knjigu."], "a": 1, "e": "„nicht brauchen zu“ = ne morati."}, {"tag": "TROTZ + GENITIV", "q": "Predlog „trotz“ traži:", "o": ["Akkusativ", "Dativ", "Genitiv", "Nominativ"], "a": 2, "e": "U lekciji je obrađen „trotz + Genitiv“."}, {"tag": "TROTZ + GENITIV", "q": "Šta znači „trotz“?", "o": ["zbog", "dok", "uprkos", "ako"], "a": 2, "e": "„trotz“ znači „uprkos“."}, {"tag": "TROTZ + GENITIV", "q": "Dopuni: „Trotz ___ Regens gehen wir spazieren.“", "o": ["der", "des", "dem", "den"], "a": 0, "e": "Primer iz materijala: „Trotz des Regens …“"}, {"tag": "TROTZ + GENITIV", "q": "Koja rečenica je pravilna?", "o": ["Trotz der Kälte spielen wir draußen.", "Trotz die Kälte spielen wir draußen.", "Trotz dem Kälte spielen wir draußen.", "Trotz den Kälte spielen wir draußen."], "a": 0, "e": "„die Kälte“ u genitivu glasi „der Kälte“."}, {"tag": "OBWOHL", "q": "Veznik „obwohl“ znači:", "o": ["iako", "zbog", "pošto", "da bi"], "a": 0, "e": "„obwohl“ = iako."}, {"tag": "OBWOHL", "q": "Koja rečenica je pravilna?", "o": ["Obwohl er krank ist, arbeitet er.", "Obwohl er ist krank, arbeitet er.", "Obwohl krank er ist, arbeitet er.", "Obwohl er krank ist, er arbeitet."], "a": 0, "e": "U zavisnoj rečenici sa „obwohl“ glagol ide na kraj."}, {"tag": "OBWOHL", "q": "Koji par ima isto značenje?", "o": ["Wegen des Regens / obwohl es regnet", "Trotz des Regens / obwohl es regnet", "Da es regnet / trotzdem es regnet", "Falls es regnet / obwohl es regnet"], "a": 1, "e": "„Trotz des Regens“ i „obwohl es regnet“ oba izražavaju uprkos nečemu."}, {"tag": "OBWOHL", "q": "Dopuni: „Obwohl ich müde bin, ___ ich weiter.“", "o": ["lerne", "ich lerne", "lernen", "würde"], "a": 0, "e": "Posle uvodne zavisne rečenice u glavnoj dolazi glagol: „lerne ich“; u prazninu ide „lerne“."}, {"tag": "OBWOHL", "q": "Šta je pravilno?", "o": ["Trotz des Problems machen wir weiter.", "Trotz das Problem machen wir weiter.", "Trotz dem Problem machen wir weiter.", "Trotz den Problem machen wir weiter."], "a": 0, "e": "„das Problem“ u genitivu je „des Problems“."}, {"tag": "MIX", "q": "Izaberi pravilnu rečenicu.", "o": ["Es ist gesund, viel Wasser zu trinken.", "Es ist gesund, viel Wasser trinken.", "Es ist gesund, zu viel Wasser trinken.", "Es gesund ist, viel Wasser zu trinken."], "a": 0, "e": "Posle „es ist + pridjev“ ide „zu + infinitiv“."}]};
+
+let qIndex=0, score=0, answered=false;
+
+const lessonTitle=document.getElementById("lessonTitle");
+const lessonTopics=document.getElementById("lessonTopics");
+const counter=document.getElementById("counter");
+const progressBar=document.getElementById("progressBar");
+const qLabel=document.getElementById("qLabel");
+const qText=document.getElementById("qText");
+const options=document.getElementById("options");
+const feedback=document.getElementById("feedback");
+const nextBtn=document.getElementById("nextBtn");
+const questionCard=document.getElementById("questionCard");
+const resultBox=document.getElementById("resultBox");
+const bigScore=document.getElementById("bigScore");
+const resultText=document.getElementById("resultText");
+const resultLesson=document.getElementById("resultLesson");
+const miniScore=document.getElementById("miniScore");
+
+function renderQuestion(){
+  const Q=lesson.questions[qIndex];
+  answered=false;
+  lessonTitle.textContent=lesson.title;
+  lessonTopics.textContent=lesson.topics;
+  counter.textContent=`${qIndex+1}/${lesson.questions.length}`;
+  progressBar.style.width=`${(qIndex/lesson.questions.length)*100}%`;
+  qLabel.textContent=Q.tag;
+  qText.textContent=Q.q;
+  feedback.className="feedback";
+  feedback.innerHTML="";
+  nextBtn.className="next";
+  nextBtn.textContent=qIndex===lesson.questions.length-1 ? "Prikaži rezultat ✓" : "Sledeće pitanje →";
+  options.innerHTML="";
+  Q.o.forEach((txt,idx)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.innerHTML=`<span class="letter">${String.fromCharCode(65+idx)}</span><span>${txt}</span>`;
+    b.onclick=()=>chooseAnswer(idx,b);
+    options.appendChild(b);
+  });
+  miniScore.textContent=`TAČNO ${score} • ${qIndex+1}/${lesson.questions.length}`;
+}
+
+function chooseAnswer(idx, btn){
+  if(answered) return;
+  answered=true;
+  const Q=lesson.questions[qIndex];
+  const all=[...document.querySelectorAll(".option")];
+  all.forEach(b=>b.disabled=true);
+  all[Q.a].classList.add("correct");
+  if(idx===Q.a){
+    score++;
+    btn.classList.add("correct");
+    feedback.className="feedback show good";
+    feedback.innerHTML=`<b>✓ Tačno!</b>${Q.e}`;
+  } else {
+    btn.classList.add("wrong");
+    feedback.className="feedback show bad";
+    feedback.innerHTML=`<b>✕ Nije tačno. Tačan odgovor: ${Q.o[Q.a]}</b>${Q.e}`;
+  }
+  nextBtn.className="next show";
+  progressBar.style.width=`${((qIndex+1)/lesson.questions.length)*100}%`;
+  miniScore.textContent=`TAČNO ${score} • ${qIndex+1}/${lesson.questions.length}`;
+}
+
+function nextQuestion(){
+  if(qIndex<lesson.questions.length-1){
+    qIndex++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  const pct=Math.round(score/lesson.questions.length*100);
+  questionCard.style.display="none";
+  resultBox.style.display="block";
+  counter.textContent=`${lesson.questions.length}/${lesson.questions.length}`;
+  progressBar.style.width="100%";
+  resultLesson.textContent=`${lesson.title} • ${score}/${lesson.questions.length} tačnih odgovora`;
+  bigScore.textContent=`${pct}%`;
+  let msg="Nastavi sa vežbanjem i ponovi delove koji su bili teži.";
+  if(pct>=90) msg="Odlično savladano gradivo. Rezultat je veoma visok.";
+  else if(pct>=75) msg="Vrlo dobro. Još malo ponavljanja i rezultat može biti odličan.";
+  else if(pct>=60) msg="Dobro. Preporuka je da ponoviš pitanja na kojima si pogrešio/la.";
+  resultText.textContent=msg;
+  miniScore.textContent=`REZULTAT ${pct}%`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function restartQuiz(){
+  qIndex=0; score=0; answered=false;
+  questionCard.style.display="block";
+  resultBox.style.display="none";
+  renderQuestion();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  restartQuiz();
+});
+</script>
+</body>
+</html>
