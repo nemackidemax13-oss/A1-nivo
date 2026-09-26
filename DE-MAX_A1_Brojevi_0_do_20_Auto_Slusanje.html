@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d94153">
+<title>De-Max A1 • Brojevi 0–20</title>
+<style>
+:root{
+  --red:#db4457;--red2:#c93649;--blue:#3c73b9;--blue2:#1f4f92;
+  --ink:#15243d;--muted:#617087;--line:#d5dfec;--bg:#f3f6fb;
+  --ok:#0d824b;--bad:#c23248;--shadow:0 10px 28px rgba(24,46,82,.10)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#f8f9fc,#edf2f8);color:var(--ink);
+font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{width:min(100%,920px);min-height:100vh;margin:auto;padding:12px}
+.hero{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;border-radius:22px;
+padding:17px;box-shadow:var(--shadow)}
+.hero-grid{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;align-items:center}
+.circle{width:64px;height:64px;border-radius:50%;background:#fff;color:var(--blue2);
+display:grid;place-items:center;font-weight:1000;font-size:1.65rem}
+.hero h1{margin:0;text-align:center;font-size:clamp(1.7rem,4vw,3rem);line-height:1.05}
+.hero p{text-align:center;margin:6px 0 0;opacity:.95}
+
+.info{margin-top:14px;background:#dfe9f5;border:2px solid #bfd0e7;border-radius:20px;
+padding:14px 16px;box-shadow:var(--shadow);line-height:1.5}
+.info b{color:var(--blue2)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center;padding:9px;
+box-shadow:var(--shadow)}
+.stat b{display:block;color:var(--blue2);font-size:1.32rem}
+.stat span{font-size:.75rem;color:var(--muted)}
+.progress{height:9px;background:#dce5f0;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--red));transition:.25s}
+
+.section{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--shadow)}
+.section h2{margin:0 0 4px;color:var(--blue2);font-size:1.18rem}
+.section .sub{margin:0 0 12px;color:var(--muted);font-size:.88rem;line-height:1.45}
+
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.number-card{border:1px solid #cad8e9;border-radius:15px;background:#fbfdff;padding:9px 5px;text-align:center;
+cursor:pointer;min-height:88px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.number-card:hover{background:#f0f5fc}
+.number-card .n{font-size:1.65rem;font-weight:1000;color:var(--red2);line-height:1}
+.number-card .w{font-size:.83rem;font-weight:900;color:var(--blue2);margin-top:5px}
+.number-card .s{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+.exercise{border:1px solid #d9e3ef;border-radius:17px;padding:13px;background:#fbfdff;margin-bottom:11px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tag{display:inline-block;background:var(--blue);color:#fff;border-radius:999px;padding:5px 10px;font-size:.73rem;font-weight:900}
+.listen .tag{background:var(--red)}
+.num{font-size:.78rem;color:var(--muted);font-weight:800}
+.prompt{margin:9px 0 4px;font-size:1.06rem;font-weight:900}
+.translation{font-size:.86rem;color:var(--muted);margin-bottom:9px}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{border:1.5px solid #ccd8e8;background:#fff;color:var(--ink);border-radius:12px;padding:11px 7px;
+font-weight:900;cursor:pointer;min-height:44px}
+.opt.correct{background:#effaf3;border-color:#89cfa5;color:var(--ok)}
+.opt.wrong{background:#fff1f3;border-color:#e7a6b0;color:var(--bad)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.btn{border:0;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer}
+.primary{background:var(--blue);color:#fff}
+.redbtn{background:var(--red);color:#fff}
+.ghost{background:#eaf0f8;color:var(--blue2)}
+.feedback{font-size:.88rem;font-weight:900;margin-top:8px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.solution{display:none;margin-top:8px;padding:10px 11px;border-radius:12px;background:#f0f6ff;border:1px solid #cbdcef;line-height:1.45}
+.solution.show{display:block}
+.solution b{color:var(--blue2)}
+.inputrow{display:flex;gap:8px;align-items:center}
+.inp{flex:1;border:1.5px solid #cbd8e8;border-radius:12px;padding:11px 12px;font:inherit;font-weight:800;outline:none}
+.inp:focus{border-color:var(--blue)}
+
+.listen-card{display:none}
+.listen-card.active{display:block}
+.listen-status{
+  text-align:center;
+  font-weight:900;
+  color:var(--blue2);
+  margin:6px 0 10px;
+}
+
+.listenbox{text-align:center;padding:10px;background:#f7faff;border:1px solid #d7e2ef;border-radius:14px;margin-bottom:9px}
+.listenicon{font-size:2rem;margin-bottom:5px}
+.footer{text-align:center;color:var(--muted);font-size:.75rem;padding:13px 0 20px}
+
+@media(max-width:620px){
+  .app{padding:8px}.hero{padding:14px 9px}.hero-grid{grid-template-columns:52px 1fr 52px}
+  .circle{width:52px;height:52px;font-size:1.35rem}.stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(3,1fr)}.options{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero">
+  <div class="hero-grid">
+    <div class="circle">1 2</div>
+    <div><h1>ZAHLEN 0–20</h1><p>Brojevi do 20 • izgovor i vežbanje</p></div>
+    <div class="circle">🔊</div>
+  </div>
+</section>
+
+<section class="info">
+  Klikni na bilo koji broj da čuješ <b>pravilan nemački izgovor</b>. U vežbama se nakon odgovora <b>automatski pušta izgovor tačnog broja</b>.
+</section>
+
+<div class="stats">
+  <div class="stat"><b id="done">0</b><span>urađeno</span></div>
+  <div class="stat"><b id="correct">0</b><span>tačno</span></div>
+  <div class="stat"><b id="wrong">0</b><span>greške</span></div>
+  <div class="stat"><b id="accuracy">0%</b><span>tačnost</span></div>
+</div>
+<div class="progress"><span id="progress"></span></div>
+
+<section class="section">
+  <h2>🔊 Brojevi 0–20</h2>
+  <p class="sub">Klikni na karticu. Aplikacija izgovara nemačku reč za broj.</p>
+  <div class="grid" id="numberGrid"></div>
+</section>
+
+<section class="section">
+  <h2>1. Broj → nemačka reč</h2>
+  <p class="sub">Izaberi pravilno napisanu nemačku reč.</p>
+  <div id="numberToWord"></div>
+</section>
+
+<section class="section">
+  <h2>2. Poslušaj → izaberi broj</h2>
+  <p class="sub">Broj se automatski izgovara. Samo označi broj koji si čuo.</p>
+  <div id="listenQuiz"></div>
+</section>
+
+<div class="footer">De-Max • A1 nemački jezik • Zahlen 0–20</div>
+</div>
+
+<script>
+const numbers=[
+  {n:0,w:"null"},{n:1,w:"eins"},{n:2,w:"zwei"},{n:3,w:"drei"},{n:4,w:"vier"},
+  {n:5,w:"fünf"},{n:6,w:"sechs"},{n:7,w:"sieben"},{n:8,w:"acht"},{n:9,w:"neun"},
+  {n:10,w:"zehn"},{n:11,w:"elf"},{n:12,w:"zwölf"},{n:13,w:"dreizehn"},{n:14,w:"vierzehn"},
+  {n:15,w:"fünfzehn"},{n:16,w:"sechzehn"},{n:17,w:"siebzehn"},{n:18,w:"achtzehn"},
+  {n:19,w:"neunzehn"},{n:20,w:"zwanzig"}
+];
+
+function getGermanVoice(){
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/^de(-|_)/i.test(v.lang) && /Google|Microsoft|Katja|Anna|Conrad|Vicki/i.test(v.name))
+      || vs.find(v=>/^de(-|_)/i.test(v.lang))
+      || vs.find(v=>/German|Deutsch/i.test(v.name));
+}
+function speakWord(word){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);
+  u.lang="de-DE";u.rate=.80;u.pitch=1;
+  const v=getGermanVoice();if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+speechSynthesis.onvoiceschanged=()=>getGermanVoice();
+
+function shuffle(a){
+  const x=[...a];
+  for(let i=x.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]
+  }
+  return x;
+}
+function norm(s){return(s||"").trim().toLowerCase().replace(/\s+/g," ")}
+
+function germanWordFor(value){
+  const s=String(value);
+  const byNumber=numbers.find(x=>String(x.n)===s);
+  if(byNumber) return byNumber.w;
+  const byWord=numbers.find(x=>norm(x.w)===norm(s));
+  return byWord ? byWord.w : s;
+}
+
+function makeChoices(correct, pool, count=3){
+  const others=shuffle(pool.filter(x=>x!==correct)).slice(0,count-1);
+  return shuffle([correct,...others]);
+}
+
+const numberGrid=document.getElementById("numberGrid");
+numbers.forEach(x=>{
+  const b=document.createElement("button");
+  b.className="number-card";b.type="button";
+  b.innerHTML=`<span class="n">${x.n}</span><span class="w">${x.w}</span><span class="s">🔊 izgovor</span>`;
+  b.onclick=()=>speakWord(x.w);
+  numberGrid.appendChild(b);
+});
+
+const n2w=[1,2,3,5,7,9,10,11,12,14,16,17,18,20];
+const wordPool=numbers.map(x=>x.w);
+n2w.forEach((n,i)=>{
+  const x=numbers.find(z=>z.n===n);
+  const opts=makeChoices(x.w,wordPool);
+  const ex=document.createElement("div");
+  ex.className="exercise track";ex.dataset.answer=x.w;
+  ex.innerHTML=`
+    <div class="top"><span class="tag">BROJ → REČ</span><span class="num">${i+1}/${n2w.length}</span></div>
+    <div class="prompt">Kako se na nemačkom piše broj <b>${x.n}</b>?</div>
+    <div class="translation">Izaberi tačan odgovor.</div>
+    <div class="options">${opts.map(o=>`<button class="opt" onclick="choose(this,'${o}')">${o}</button>`).join("")}</div>
+    <div class="feedback"></div>
+    <div class="solution"><b>Rešenje:</b> ${x.n} = ${x.w}</div>`;
+  document.getElementById("numberToWord").appendChild(ex);
+});
+
+const listenNums=[2,4,6,8,10,11,13,15,17,19,20];
+let currentListenIndex=0;
+
+listenNums.forEach((n,i)=>{
+  const x=numbers.find(z=>z.n===n);
+  const pool=numbers.map(z=>z.n);
+  const opts=makeChoices(n,pool);
+  const ex=document.createElement("div");
+  ex.className="exercise listen track listen-card"+(i===0?" active":"");
+  ex.dataset.answer=String(n);
+  ex.dataset.word=x.w;
+  ex.dataset.listenIndex=String(i);
+  ex.innerHTML=`
+    <div class="top"><span class="tag">SLUŠANJE</span><span class="num">${i+1}/${listenNums.length}</span></div>
+    <div class="listenbox">
+      <div class="listenicon">🎧</div>
+      <div class="listen-status">Poslušaj broj i označi odgovor.</div>
+      <button class="btn ghost" onclick="repeatCurrentListen(this)">🔁 Ponovi izgovor</button>
+    </div>
+    <div class="prompt">Koji broj čuješ?</div>
+    <div class="options">${opts.map(o=>`<button class="opt" onclick="chooseListen(this,'${o}')">${o}</button>`).join("")}</div>
+    <div class="feedback"></div>
+    <div class="solution"><b>Rešenje:</b> ${x.n} = ${x.w}</div>`;
+  document.getElementById("listenQuiz").appendChild(ex);
+});
+
+
+function currentListenCard(){
+  return document.querySelector('.listen-card.active');
+}
+function playCurrentListen(){
+  const ex=currentListenCard();
+  if(!ex) return;
+  setTimeout(()=>speakWord(ex.dataset.word), 350);
+}
+function repeatCurrentListen(btn){
+  const ex=btn.closest('.listen-card');
+  speakWord(ex.dataset.word);
+}
+function chooseListen(btn,value){
+  const ex=btn.closest(".listen-card");
+  const ok=norm(value)===norm(ex.dataset.answer);
+  ex.querySelectorAll(".opt").forEach(b=>{
+    b.classList.remove("correct","wrong");
+    b.disabled=true;
+  });
+  btn.classList.add(ok?"correct":"wrong");
+  const fb=ex.querySelector(".feedback");
+  fb.className="feedback "+(ok?"ok":"bad");
+
+  if(ok){
+    fb.textContent="✓ Tačno!";
+    ex.querySelector(".solution").classList.remove("show");
+  }else{
+    fb.textContent="✗ Nije tačno. Rešenje je prikazano ispod.";
+    ex.querySelector(".solution").classList.add("show");
+  }
+
+  ex.dataset.state=ok?"1":"0";
+  refresh();
+
+  // Posle kratke pauze automatski pređi na sledeći broj i izgovori ga.
+  setTimeout(()=>{
+    const idx=Number(ex.dataset.listenIndex);
+    if(idx < listenNums.length-1){
+      ex.classList.remove("active");
+      const next=document.querySelector(`.listen-card[data-listen-index="${idx+1}"]`);
+      next.classList.add("active");
+      currentListenIndex=idx+1;
+      next.scrollIntoView({behavior:"smooth",block:"center"});
+      playCurrentListen();
+    }else{
+      fb.textContent += " Završio/la si slušanje.";
+    }
+  }, 1200);
+}
+
+function choose(btn,value){
+  const ex=btn.closest(".exercise");
+  const ok=norm(value)===norm(ex.dataset.answer);
+  ex.querySelectorAll(".opt").forEach(b=>b.classList.remove("correct","wrong"));
+  btn.classList.add(ok?"correct":"wrong");
+  const fb=ex.querySelector(".feedback");
+  fb.className="feedback "+(ok?"ok":"bad");
+  if(ok){
+    fb.textContent="✓ Tačno! Poslušaj izgovor.";
+    ex.querySelector(".solution").classList.remove("show");
+  }else{
+    fb.textContent="✗ Nije tačno. Rešenje je prikazano ispod. Poslušaj tačan izgovor.";
+    ex.querySelector(".solution").classList.add("show");
+  }
+
+  // Automatski uvek izgovori tačan nemački broj/reč.
+  speakWord(germanWordFor(ex.dataset.answer));
+
+  ex.dataset.state=ok?"1":"0";
+  refresh();
+}
+
+function refresh(){
+  const all=[...document.querySelectorAll(".track")];
+  const states=all.map(x=>x.dataset.state).filter(Boolean);
+  const done=states.length, correct=states.filter(x=>x==="1").length, wrong=states.filter(x=>x==="0").length;
+  document.getElementById("done").textContent=done;
+  document.getElementById("correct").textContent=correct;
+  document.getElementById("wrong").textContent=wrong;
+  document.getElementById("accuracy").textContent=(done?Math.round(correct/done*100):0)+"%";
+  document.getElementById("progress").style.width=(all.length?Math.round(done/all.length*100):0)+"%";
+}
+refresh();
+window.addEventListener('load',()=>{setTimeout(playCurrentListen,700)});
+</script>
+</body>
+</html>
