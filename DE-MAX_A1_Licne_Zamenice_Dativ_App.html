@@ -1,1 +1,894 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DE-MAX A1 – Lične zamenice u dativu</title>
+  <style>
+    :root{
+      --bg1:#eef4ff;
+      --bg2:#f9fbff;
+      --panel:#ffffff;
+      --card:#f7f9ff;
+      --text:#101828;
+      --muted:#667085;
+      --border:#d9e3ff;
+      --blue:#1348d3;
+      --blue2:#0a2f9c;
+      --blueSoft:#e9f0ff;
+      --red:#ef1b1b;
+      --green:#18a45a;
+      --gold:#ffcc33;
+      --shadow:0 14px 38px rgba(18,55,145,.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    }
+
+    .app{
+      width:min(1100px,100%);
+      margin:0 auto;
+      padding:16px;
+    }
+
+    .hero{
+      border:1px solid var(--border);
+      border-radius:28px;
+      background:linear-gradient(135deg,#ffffff 0%,#eef3ff 55%,#f9fbff 100%);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+    }
+
+    .logo-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border-radius:999px;
+      padding:8px 14px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .title{
+      margin:10px 0 0;
+      font-size:clamp(28px,4.8vw,54px);
+      line-height:1.03;
+      color:var(--blue2);
+      font-weight:1000;
+      letter-spacing:-.02em;
+    }
+
+    .subtitle{
+      margin-top:8px;
+      font-size:clamp(16px,2.3vw,24px);
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .score-box{
+      min-width:130px;
+      text-align:center;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:14px 18px;
+    }
+
+    .score-box .label{
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.08em;
+    }
+
+    .score-box .value{
+      margin-top:4px;
+      color:var(--blue);
+      font-size:30px;
+      font-weight:1000;
+    }
+
+    .progress-meta{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      font-weight:900;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .progress{
+      margin-top:8px;
+      height:13px;
+      background:#dfe8ff;
+      border:1px solid #cfdbff;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--blue),#4d76f0);
+      transition:width .3s ease;
+    }
+
+    .rules{
+      margin-top:16px;
+      border:1px solid var(--border);
+      border-radius:28px;
+      background:#fff;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .rules h2{
+      margin:0 0 14px;
+      color:var(--blue2);
+      font-size:28px;
+      line-height:1.1;
+    }
+
+    .rule-note{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .table-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .table-card{
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#fff;
+    }
+
+    .table-head{
+      background:linear-gradient(180deg,var(--blue),var(--blue2));
+      color:#fff;
+      padding:14px 16px;
+      text-align:center;
+    }
+
+    .table-head .big{
+      font-size:28px;
+      font-weight:1000;
+      line-height:1;
+    }
+
+    .table-head .small{
+      font-size:16px;
+      opacity:.95;
+      font-weight:800;
+      margin-top:4px;
+      font-style:italic;
+    }
+
+    .table-body{
+      padding:16px;
+      background:linear-gradient(180deg,#ffffff,#fbfcff);
+    }
+
+    .pronoun-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size:20px;
+      padding:8px 0;
+      font-weight:900;
+      border-bottom:1px dashed #e7edff;
+    }
+
+    .pronoun-row:last-child{border-bottom:0}
+
+    .badge{
+      min-width:38px;
+      height:38px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      color:#fff;
+      background:linear-gradient(180deg,var(--blue),var(--blue2));
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);
+      font-size:18px;
+    }
+
+    .de{color:#111827}
+    .sr{color:var(--red)}
+
+    .explain{
+      margin-top:16px;
+      border-radius:22px;
+      background:linear-gradient(180deg,var(--blue),var(--blue2));
+      color:#fff;
+      padding:16px 18px;
+      font-size:18px;
+      font-weight:800;
+      line-height:1.45;
+    }
+
+    .explain span{
+      color:#ffd76a;
+    }
+
+    .quiz{
+      margin-top:16px;
+      border:1px solid var(--border);
+      border-radius:28px;
+      background:#fff;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .quiz-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .quiz-title{
+      color:var(--blue2);
+      font-size:28px;
+      line-height:1.1;
+      font-weight:1000;
+      margin:0;
+    }
+
+    .quiz-sub{
+      margin-top:4px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .audio-status{
+      display:none;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:8px 12px;
+      background:#eef4ff;
+      border:1px solid var(--border);
+      color:var(--blue2);
+      font-weight:900;
+      font-size:14px;
+    }
+
+    .audio-status.show{display:inline-flex}
+
+    .question-card{
+      border-radius:24px;
+      border:1px solid var(--border);
+      background:linear-gradient(135deg,#f8fbff,#eef3ff);
+      padding:20px;
+    }
+
+    .question-number{
+      font-size:14px;
+      color:var(--muted);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .scene{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+    }
+
+    .visual{
+      border-radius:24px;
+      border:2px solid #2746cc;
+      background:#fff;
+      padding:16px;
+      min-height:260px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .visual .emoji{
+      font-size:80px;
+      line-height:1;
+    }
+
+    .visual .desc{
+      font-size:22px;
+      line-height:1.35;
+      font-weight:900;
+      color:#1b2b6d;
+    }
+
+    .speech{
+      border-radius:24px;
+      border:2px solid #2746cc;
+      background:#fff;
+      padding:22px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height:260px;
+      position:relative;
+    }
+
+    .speech:before{
+      content:"";
+      position:absolute;
+      left:-14px;
+      top:42%;
+      width:0;
+      height:0;
+      border-top:14px solid transparent;
+      border-bottom:14px solid transparent;
+      border-right:14px solid #2746cc;
+    }
+
+    .speech:after{
+      content:"";
+      position:absolute;
+      left:-10px;
+      top:42.7%;
+      width:0;
+      height:0;
+      border-top:12px solid transparent;
+      border-bottom:12px solid transparent;
+      border-right:12px solid #fff;
+    }
+
+    .sentence{
+      font-size:clamp(26px,3vw,40px);
+      font-weight:1000;
+      line-height:1.3;
+      color:#111827;
+    }
+
+    .blank{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:110px;
+      margin:0 5px;
+      padding:4px 12px;
+      border-radius:14px;
+      border:2px solid var(--blue);
+      background:var(--blueSoft);
+      color:var(--blue2);
+    }
+
+    .translation{
+      margin-top:10px;
+      font-size:16px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .choices{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    .choice{
+      min-height:58px;
+      border-radius:18px;
+      border:2px solid var(--border);
+      background:#fff;
+      color:var(--blue2);
+      font-size:24px;
+      font-weight:1000;
+      cursor:pointer;
+      transition:all .16s ease;
+      box-shadow:0 2px 0 rgba(19,72,211,.03);
+    }
+
+    .choice:hover{
+      transform:translateY(-1px);
+      border-color:#9ab2ff;
+    }
+
+    .choice:active{transform:scale(.98)}
+
+    .choice.correct{
+      background:var(--blueSoft);
+      border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(19,72,211,.12);
+    }
+
+    .choice.wrong{
+      opacity:.48;
+      text-decoration:line-through;
+    }
+
+    .feedback{
+      margin-top:16px;
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:#fbfcff;
+      padding:16px;
+      display:none;
+    }
+
+    .feedback.show{display:block}
+
+    .result-line{
+      font-size:20px;
+      font-weight:1000;
+    }
+
+    .good{color:var(--green)}
+    .bad{color:var(--red)}
+
+    .full-sentence{
+      margin-top:8px;
+      font-size:22px;
+      font-weight:900;
+      line-height:1.35;
+    }
+
+    .rule-line{
+      margin-top:10px;
+      border-top:1px solid var(--border);
+      padding-top:10px;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .control-row{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      min-height:46px;
+      padding:0 18px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--blue2);
+      font-weight:900;
+      cursor:pointer;
+      font-size:15px;
+    }
+
+    .btn.primary{
+      width:100%;
+      min-height:58px;
+      border:0;
+      border-radius:18px;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:#fff;
+      font-size:18px;
+      box-shadow:0 10px 22px rgba(19,72,211,.22);
+    }
+
+    .btn:disabled{
+      opacity:.35;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    .final{
+      display:none;
+      margin-top:16px;
+      border-radius:28px;
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow:var(--shadow);
+      text-align:center;
+      padding:28px 20px;
+    }
+
+    .final.show{display:block}
+
+    .final .cup{
+      font-size:60px;
+      line-height:1;
+    }
+
+    .final h3{
+      margin:10px 0 0;
+      font-size:30px;
+      color:var(--blue2);
+    }
+
+    .final .res{
+      margin-top:8px;
+      font-size:22px;
+      font-weight:1000;
+      color:#111827;
+    }
+
+    .final .pct{
+      margin-top:6px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:16px;
+    }
+
+    @media (max-width:850px){
+      .scene{grid-template-columns:1fr}
+      .speech:before,.speech:after{display:none}
+      .choices{grid-template-columns:repeat(2,1fr)}
+      .table-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width:560px){
+      .app{padding:12px}
+      .hero,.rules,.quiz,.final{border-radius:22px}
+      .question-card,.visual,.speech{border-radius:20px}
+      .choice{font-size:21px}
+      .sentence{font-size:28px}
+      .visual .emoji{font-size:66px}
+      .visual .desc{font-size:19px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="logo-pill">DE-MAX • A1 • DATIV</div>
+          <h1 class="title">Personalpronomen im Dativ</h1>
+          <div class="subtitle">Lične zamenice u dativu</div>
+        </div>
+        <div class="score-box">
+          <div class="label">Rezultat</div>
+          <div id="scoreTop" class="value">0 / 20</div>
+        </div>
+      </div>
+      <div class="progress-meta">
+        <span id="progressText">Pitanje 1 od 20</span>
+        <span id="percentText">5%</span>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </section>
+
+    <section class="rules">
+      <h2>Brzo pravilo</h2>
+      <p class="rule-note">Lične zamenice u dativu odgovaraju na pitanje <b>Wem?</b> (kome?).</p>
+
+      <div class="table-grid">
+        <div class="table-card">
+          <div class="table-head">
+            <div class="big">Singular</div>
+            <div class="small">jednina</div>
+          </div>
+          <div class="table-body">
+            <div class="pronoun-row"><span class="badge">1</span><span class="de">mir</span> – <span class="sr">meni</span></div>
+            <div class="pronoun-row"><span class="badge">2</span><span class="de">dir</span> – <span class="sr">tebi</span></div>
+            <div class="pronoun-row"><span class="badge">3</span><span class="de">ihm</span> – <span class="sr">njemu</span></div>
+            <div class="pronoun-row"><span class="badge">4</span><span class="de">ihr</span> – <span class="sr">njoj</span></div>
+            <div class="pronoun-row"><span class="badge">5</span><span class="de">ihm</span> – <span class="sr">njemu / tome</span></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <div class="big">Plural</div>
+            <div class="small">množina</div>
+          </div>
+          <div class="table-body">
+            <div class="pronoun-row"><span class="badge">1</span><span class="de">uns</span> – <span class="sr">nama</span></div>
+            <div class="pronoun-row"><span class="badge">2</span><span class="de">euch</span> – <span class="sr">vama</span></div>
+            <div class="pronoun-row"><span class="badge">3</span><span class="de">ihnen</span> – <span class="sr">njima</span></div>
+            <div class="pronoun-row"><span class="badge">4</span><span class="de">Ihnen</span> – <span class="sr">Vama</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explain">
+        Primer: <span>„Du gibst mir einen Keks.“</span><br>
+        Pitanje: <b>Wem gibst du einen Keks?</b> → <span>mir</span>
+      </div>
+    </section>
+
+    <section id="quizBox" class="quiz">
+      <div class="quiz-head">
+        <div>
+          <h2 class="quiz-title">Übung – Personalpronomen im Dativ</h2>
+          <div class="quiz-sub">Izaberi pravilnu ličnu zamenicu u dativu.</div>
+        </div>
+        <div id="audioStatus" class="audio-status">🔊 Automatsko slušanje...</div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number" id="questionNumber">Pitanje 1</div>
+
+        <div class="scene">
+          <div class="visual">
+            <div id="visualEmoji" class="emoji">🎁</div>
+            <div id="visualDesc" class="desc">Dečak poklanja devojčici poklon.</div>
+          </div>
+
+          <div class="speech">
+            <div>
+              <div id="sentence" class="sentence"></div>
+              <div id="translation" class="translation"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="choices" class="choices"></div>
+
+        <div id="feedback" class="feedback">
+          <div id="resultLine" class="result-line"></div>
+          <div id="fullSentence" class="full-sentence"></div>
+          <div id="ruleLine" class="rule-line"></div>
+          <div class="control-row">
+            <button id="replayBtn" class="btn" type="button" style="display:none;">🔊 Ponovo poslušaj</button>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <button id="nextBtn" class="btn primary" type="button" disabled>Sledeće pitanje →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="finalBox" class="final">
+      <div class="cup">🏆</div>
+      <h3>Vežba završena!</h3>
+      <div id="finalResult" class="res"></div>
+      <div id="finalPercent" class="pct"></div>
+      <button id="againBtn" class="btn primary" type="button" style="margin-top:18px;">Ponovi vežbu</button>
+    </section>
+  </div>
+
+<script>
+(() => {
+  const questions = [
+    { emoji:'🎁', desc:'Dečak poklanja devojčici poklon.', sentence:'Ich schenke ___ das Geschenk.', answer:'dir', translation:'Poklanjam ti poklon.', rule:'„dir“ koristimo za 2. lice jednine u dativu – tebi.' },
+    { emoji:'🗣️', desc:'Devojčica priča dečaku o svom hobiju.', sentence:'Ich erzähle ___ von meinem Hobby.', answer:'ihr', translation:'Pričam joj o svom hobiju.', rule:'„ihr“ koristimo za 3. lice jednine ženskog roda u dativu – njoj.' },
+    { emoji:'🛍️', desc:'Dečak pomaže starijem čoveku u kupovini.', sentence:'Er hilft ___ beim Einkaufen.', answer:'ihm', translation:'On mu pomaže u kupovini.', rule:'„ihm“ koristimo za 3. lice jednine muškog/srednjeg roda u dativu – njemu.' },
+    { emoji:'💻', desc:'Devojka piše formalno pismo starijoj gospođi.', sentence:'Ich schreibe ___ das Brief.', answer:'Ihnen', translation:'Pišem Vam pismo.', rule:'„Ihnen“ je učtivi oblik u dativu – Vama.' },
+
+    { emoji:'🍪', desc:'Ti daješ meni keks.', sentence:'Du gibst ___ einen Keks.', answer:'mir', translation:'Daješ mi jedan keks.', rule:'„mir“ koristimo za 1. lice jednine u dativu – meni.' },
+    { emoji:'📞', desc:'Mi telefoniramo baki.', sentence:'Wir telefonieren ___ heute Abend.', answer:'ihr', translation:'Mi joj telefoniramo večeras.', rule:'Ako telefoniramo jednoj ženskoj osobi, koristimo „ihr“.' },
+    { emoji:'📚', desc:'Nastavnik objašnjava lekciju nama.', sentence:'Der Lehrer erklärt ___ die Lektion.', answer:'uns', translation:'Nastavnik nam objašnjava lekciju.', rule:'„uns“ koristimo za 1. lice množine – nama.' },
+    { emoji:'⚽', desc:'Trener pokazuje vama novu vežbu.', sentence:'Der Trainer zeigt ___ eine neue Übung.', answer:'euch', translation:'Trener vam pokazuje novu vežbu.', rule:'„euch“ koristimo za 2. lice množine – vama.' },
+
+    { emoji:'🎵', desc:'Ja šaljem njemu pesmu.', sentence:'Ich schicke ___ das Lied.', answer:'ihm', translation:'Šaljem mu pesmu.', rule:'Za „njemu“ u dativu koristimo „ihm“.' },
+    { emoji:'💌', desc:'Mi pišemo njima poruku.', sentence:'Wir schreiben ___ eine Nachricht.', answer:'ihnen', translation:'Pišemo im poruku.', rule:'„ihnen“ koristimo za 3. lice množine – njima.' },
+    { emoji:'📖', desc:'Ti čitaš meni priču.', sentence:'Du liest ___ eine Geschichte vor.', answer:'mir', translation:'Čitaš mi priču.', rule:'Za „meni“ koristimo „mir“.' },
+    { emoji:'🍎', desc:'Majka daje tebi jabuku.', sentence:'Die Mutter gibt ___ einen Apfel.', answer:'dir', translation:'Majka ti daje jabuku.', rule:'Za „tebi“ koristimo „dir“.' },
+
+    { emoji:'🧒👧', desc:'Mi pokazujemo njoj sliku.', sentence:'Wir zeigen ___ das Bild.', answer:'ihr', translation:'Pokazujemo joj sliku.', rule:'Za „njoj“ koristimo „ihr“.' },
+    { emoji:'👨‍🏫', desc:'Profesor odgovara Vama.', sentence:'Der Professor antwortet ___.', answer:'Ihnen', translation:'Profesor Vam odgovara.', rule:'U formalnom obraćanju koristimo „Ihnen“.' },
+    { emoji:'🏠', desc:'Deca pomažu nama kod kuće.', sentence:'Die Kinder helfen ___ zu Hause.', answer:'uns', translation:'Deca nam pomažu kod kuće.', rule:'Za „nama“ koristimo „uns“.' },
+    { emoji:'🎮', desc:'Ja objašnjavam vama igru.', sentence:'Ich erkläre ___ das Spiel.', answer:'euch', translation:'Objašnjavam vam igru.', rule:'Za „vama“ (vi) koristimo „euch“.' },
+
+    { emoji:'📷', desc:'Oni pokazuju meni fotografije.', sentence:'Sie zeigen ___ die Fotos.', answer:'mir', translation:'Oni mi pokazuju fotografije.', rule:'Za „meni“ koristimo „mir“.' },
+    { emoji:'🚲', desc:'Ja pozajmljujem njemu bicikl.', sentence:'Ich leihe ___ mein Fahrrad.', answer:'ihm', translation:'Pozajmljujem mu svoj bicikl.', rule:'Za „njemu“ koristimo „ihm“.' },
+    { emoji:'🎓', desc:'Vi govorite nama o školi.', sentence:'Ihr erzählt ___ von der Schule.', answer:'uns', translation:'Vi nam pričate o školi.', rule:'Za „nama“ koristimo „uns“.' },
+    { emoji:'📦', desc:'Ja dajem njima paket.', sentence:'Ich gebe ___ das Paket.', answer:'ihnen', translation:'Dajem im paket.', rule:'Za „njima“ koristimo „ihnen“.' }
+  ];
+
+  const optionPool = ['mir','dir','ihm','ihr','uns','euch','ihnen','Ihnen'];
+
+  let currentIndex = 0;
+  let score = 0;
+  let currentOrder = [];
+  let answered = false;
+  let lastSpokenSentence = '';
+
+  const byId = (id) => document.getElementById(id);
+
+  const scoreTop = byId('scoreTop');
+  const progressText = byId('progressText');
+  const percentText = byId('percentText');
+  const progressBar = byId('progressBar');
+  const questionNumber = byId('questionNumber');
+  const visualEmoji = byId('visualEmoji');
+  const visualDesc = byId('visualDesc');
+  const sentence = byId('sentence');
+  const translation = byId('translation');
+  const choices = byId('choices');
+  const feedback = byId('feedback');
+  const resultLine = byId('resultLine');
+  const fullSentence = byId('fullSentence');
+  const ruleLine = byId('ruleLine');
+  const nextBtn = byId('nextBtn');
+  const replayBtn = byId('replayBtn');
+  const audioStatus = byId('audioStatus');
+  const quizBox = byId('quizBox');
+  const finalBox = byId('finalBox');
+  const finalResult = byId('finalResult');
+  const finalPercent = byId('finalPercent');
+  const againBtn = byId('againBtn');
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getOptions(correct){
+    const others = optionPool.filter(x => x !== correct);
+    const picked = shuffle(others).slice(0, 3);
+    return shuffle([correct, ...picked]);
+  }
+
+  function speakGerman(text){
+    lastSpokenSentence = text;
+    if(!('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'de-DE';
+    u.rate = 0.9;
+    u.pitch = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const germanVoice =
+      voices.find(v => /^de(-|_)/i.test(v.lang)) ||
+      voices.find(v => /Deutsch|German/i.test(v.name));
+    if(germanVoice) u.voice = germanVoice;
+
+    audioStatus.classList.add('show');
+    u.onend = () => audioStatus.classList.remove('show');
+    u.onerror = () => audioStatus.classList.remove('show');
+
+    window.speechSynthesis.speak(u);
+  }
+
+  function renderQuestion(){
+    answered = false;
+    const q = currentOrder[currentIndex];
+
+    questionNumber.textContent = 'Pitanje ' + (currentIndex + 1);
+    visualEmoji.textContent = q.emoji;
+    visualDesc.textContent = q.desc;
+    sentence.innerHTML = q.sentence.replace('___', '<span class="blank">?</span>');
+    translation.textContent = q.translation;
+
+    feedback.classList.remove('show');
+    replayBtn.style.display = 'none';
+    nextBtn.disabled = true;
+
+    const pct = Math.round(((currentIndex + 1) / currentOrder.length) * 100);
+    progressText.textContent = `Pitanje ${currentIndex + 1} od ${currentOrder.length}`;
+    percentText.textContent = pct + '%';
+    progressBar.style.width = pct + '%';
+    scoreTop.textContent = `${score} / ${currentOrder.length}`;
+
+    choices.innerHTML = '';
+    const opts = getOptions(q.answer);
+
+    opts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'choice';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => handleAnswer(opt, btn));
+      choices.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(selected, clickedBtn){
+    if(answered) return;
+    answered = true;
+
+    const q = currentOrder[currentIndex];
+    const correct = selected === q.answer;
+    const completeSentence = q.sentence.replace('___', q.answer);
+
+    if(correct) score++;
+
+    Array.from(choices.children).forEach(btn => {
+      btn.disabled = true;
+      if(btn.textContent === q.answer){
+        btn.classList.add('correct');
+      }
+    });
+
+    if(!correct){
+      clickedBtn.classList.add('wrong');
+    }
+
+    sentence.innerHTML = q.sentence.replace('___', `<span class="blank">${q.answer}</span>`);
+    feedback.classList.add('show');
+
+    if(correct){
+      resultLine.textContent = '✅ Bravo! Tačan odgovor.';
+      resultLine.className = 'result-line good';
+      replayBtn.style.display = 'inline-flex';
+      setTimeout(() => speakGerman(completeSentence), 250);
+    }else{
+      resultLine.textContent = '❌ Nije tačno. Pogledaj pravilno rešenje.';
+      resultLine.className = 'result-line bad';
+    }
+
+    fullSentence.textContent = completeSentence;
+    ruleLine.textContent = q.rule;
+    scoreTop.textContent = `${score} / ${currentOrder.length}`;
+    nextBtn.disabled = false;
+  }
+
+  function nextQuestion(){
+    if(!answered) return;
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    audioStatus.classList.remove('show');
+
+    if(currentIndex < currentOrder.length - 1){
+      currentIndex++;
+      renderQuestion();
+    }else{
+      showFinal();
+    }
+  }
+
+  function showFinal(){
+    quizBox.style.display = 'none';
+    finalBox.classList.add('show');
+    const pct = Math.round((score / currentOrder.length) * 100);
+    finalResult.textContent = `${score} od ${currentOrder.length} tačnih odgovora`;
+    finalPercent.textContent = `Tačnost: ${pct}%`;
+  }
+
+  function restart(){
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    currentOrder = shuffle(questions);
+    currentIndex = 0;
+    score = 0;
+    answered = false;
+    finalBox.classList.remove('show');
+    quizBox.style.display = 'block';
+    renderQuestion();
+  }
+
+  nextBtn.addEventListener('click', nextQuestion);
+  replayBtn.addEventListener('click', () => {
+    if(lastSpokenSentence) speakGerman(lastSpokenSentence);
+  });
+  againBtn.addEventListener('click', restart);
+
+  restart();
+})();
+</script>
+</body>
+</html>
