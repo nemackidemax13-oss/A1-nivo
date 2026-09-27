@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DE-MAX A1 – Predlozi</title>
+  <style>
+    :root{
+      --bg:#eef4ff;
+      --panel:#ffffff;
+      --card:#f7f9ff;
+      --text:#101828;
+      --muted:#667085;
+      --border:#dbe4ff;
+      --blue:#1546d8;
+      --blue2:#0d2fa5;
+      --blueSoft:#eaf0ff;
+      --green:#179c52;
+      --red:#d92d20;
+      --shadow:0 14px 38px rgba(34,65,150,.13);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#eaf2ff 0%,#f9fbff 100%);
+      color:var(--text);
+    }
+    .app{
+      width:min(980px,100%);
+      margin:0 auto;
+      padding:18px;
+    }
+    .hero{
+      background:linear-gradient(135deg,#ffffff 0%,#eef3ff 100%);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    .top{
+      display:flex;
+      gap:16px;
+      justify-content:space-between;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+    h1{
+      margin:12px 0 4px;
+      font-size:clamp(28px,5vw,44px);
+      line-height:1.05;
+      color:#0f2f9d;
+    }
+    .subtitle{color:var(--muted);font-weight:700}
+    .score{
+      min-width:120px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:12px 16px;
+      text-align:center;
+    }
+    .score small{
+      display:block;
+      color:var(--muted);
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .score strong{
+      display:block;
+      margin-top:4px;
+      font-size:28px;
+      color:#163dbd;
+    }
+    .progress-meta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin:20px 0 8px;
+      font-size:14px;
+      font-weight:800;
+    }
+    .progress{
+      height:12px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#dfe7ff;
+      border:1px solid #cfdbff;
+    }
+    .progress > div{
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,var(--blue),#4d73f0);
+      transition:width .3s ease;
+    }
+    .quiz{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    .section-label{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.11em;
+      font-weight:900;
+      color:var(--muted);
+    }
+    .hint{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .sentence-box{
+      margin-top:16px;
+      background:linear-gradient(135deg,#f8faff,#eef3ff);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:28px 18px;
+      text-align:center;
+      min-height:135px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .sentence{
+      font-size:clamp(25px,4.2vw,38px);
+      line-height:1.28;
+      font-weight:900;
+    }
+    .blank{
+      display:inline-flex;
+      min-width:92px;
+      justify-content:center;
+      padding:4px 12px;
+      margin:0 3px;
+      border-radius:13px;
+      border:2px solid var(--blue);
+      background:var(--blueSoft);
+      color:var(--blue2);
+    }
+    .choices{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+    .choice{
+      min-height:58px;
+      border-radius:17px;
+      border:2px solid var(--border);
+      background:#fff;
+      color:#15328a;
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .choice:hover{transform:translateY(-1px);border-color:#9bb3ff}
+    .choice:active{transform:scale(.98)}
+    .choice.correct{
+      border-color:var(--blue);
+      background:var(--blueSoft);
+      box-shadow:0 0 0 3px rgba(21,70,216,.12);
+    }
+    .choice.wrong{
+      opacity:.45;
+      text-decoration:line-through;
+    }
+    .feedback{
+      margin-top:18px;
+      background:#f9fbff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:18px;
+      display:none;
+    }
+    .feedback.show{display:block}
+    .feedback-title{
+      font-size:19px;
+      font-weight:900;
+    }
+    .feedback-title.good{color:var(--green)}
+    .feedback-title.bad{color:var(--red)}
+    .full{
+      margin-top:8px;
+      font-size:20px;
+      font-weight:800;
+    }
+    .translation{
+      margin-top:5px;
+      color:var(--muted);
+      font-weight:650;
+    }
+    .rule{
+      margin-top:12px;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .audio-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:13px;
+    }
+    .audio-status{
+      display:none;
+      color:var(--blue2);
+      font-weight:900;
+    }
+    .audio-status.show{display:inline-flex;align-items:center;gap:7px}
+    .replay{
+      border:1px solid var(--border);
+      background:#fff;
+      color:#163dbd;
+      font-weight:900;
+      border-radius:13px;
+      min-height:44px;
+      padding:0 15px;
+      cursor:pointer;
+      display:none;
+    }
+    .replay.show{display:inline-block}
+    .next{
+      width:100%;
+      margin-top:18px;
+      min-height:56px;
+      border:0;
+      border-radius:18px;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(21,70,216,.22);
+    }
+    .next:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+    .rules{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:18px;
+    }
+    .rules h2{margin:0 0 12px;font-size:18px}
+    .rule-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+    .rule-card{
+      background:#f7f9ff;
+      border:1px solid var(--border);
+      border-radius:15px;
+      padding:12px;
+    }
+    .rule-card strong{
+      color:#143ebd;
+      font-size:18px;
+    }
+    .rule-card div{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:3px;
+      line-height:1.35;
+    }
+    .final{
+      display:none;
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:32px 22px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+    .final.show{display:block}
+    .final .cup{font-size:56px}
+    .final h2{font-size:28px;margin:8px 0}
+    .again{
+      margin-top:16px;
+      min-height:50px;
+      padding:0 22px;
+      border:0;
+      border-radius:15px;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:white;
+      font-weight:900;
+      font-size:17px;
+      cursor:pointer;
+    }
+    @media(max-width:700px){
+      .app{padding:12px}
+      .hero,.quiz,.rules,.final{border-radius:22px}
+      .choices{grid-template-columns:repeat(2,1fr)}
+      .rule-grid{grid-template-columns:repeat(2,1fr)}
+      .sentence-box{padding:22px 12px;min-height:120px}
+      .sentence{font-size:27px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="top">
+      <div>
+        <div class="pill">DE-MAX • A1 GRAMATIKA</div>
+        <h1>Predlozi u nemačkom</h1>
+        <div class="subtitle">am · um · im · in · zum · zur · nach · bei</div>
+      </div>
+      <div class="score">
+        <small>Rezultat</small>
+        <strong id="scoreTop">0 / 24</strong>
+      </div>
+    </div>
+    <div class="progress-meta">
+      <span id="progressText">Pitanje 1 od 24</span>
+      <span id="percentText">4%</span>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </section>
+
+  <section id="quiz" class="quiz">
+    <div class="section-label">Izaberi tačan predlog</div>
+    <div class="hint">Klikni na jedan odgovor. Kada pogodiš, rečenica se automatski izgovara na nemačkom.</div>
+
+    <div class="sentence-box">
+      <div id="sentence" class="sentence"></div>
+    </div>
+
+    <div id="choices" class="choices"></div>
+
+    <div id="feedback" class="feedback">
+      <div id="resultLine" class="feedback-title"></div>
+      <div id="fullSentence" class="full"></div>
+      <div id="translation" class="translation"></div>
+      <div id="rule" class="rule"></div>
+      <div class="audio-row">
+        <span id="audioStatus" class="audio-status">🔊 Automatsko slušanje...</span>
+        <button id="replayBtn" class="replay" type="button">🔊 Ponovo poslušaj</button>
+      </div>
+    </div>
+
+    <button id="nextBtn" class="next" type="button" disabled>Sledeće pitanje →</button>
+  </section>
+
+  <section id="finalBox" class="final">
+    <div class="cup">🏆</div>
+    <h2>Vežba završena!</h2>
+    <div id="finalScore" style="font-size:21px;font-weight:900"></div>
+    <div id="finalPercent" style="margin-top:5px;color:var(--muted);font-weight:700"></div>
+    <button id="againBtn" class="again" type="button">Ponovi vežbu</button>
+  </section>
+
+  <section class="rules">
+    <h2>Brzo pravilo</h2>
+    <div class="rule-grid">
+      <div class="rule-card"><strong>am</strong><div>dan, datum, doba dana</div></div>
+      <div class="rule-card"><strong>um</strong><div>tačno vreme</div></div>
+      <div class="rule-card"><strong>im</strong><div>mesec, godišnje doba</div></div>
+      <div class="rule-card"><strong>in</strong><div>grad / država</div></div>
+      <div class="rule-card"><strong>zum</strong><div>zu + dem</div></div>
+      <div class="rule-card"><strong>zur</strong><div>zu + der</div></div>
+      <div class="rule-card"><strong>nach</strong><div>grad / država bez člana</div></div>
+      <div class="rule-card"><strong>bei</strong><div>kod osobe</div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const options=['am','um','im','in','zum','zur','nach','bei'];
+  const rules={
+    am:'„am“ koristimo za dane, datume i doba dana.',
+    um:'„um“ koristimo za tačno vreme.',
+    im:'„im“ koristimo za mesece i godišnja doba.',
+    in:'„in“ koristimo kada govorimo gde se neko nalazi ili živi.',
+    zum:'„zum“ = zu + dem, uz imenice muškog ili srednjeg roda.',
+    zur:'„zur“ = zu + der, uz imenice ženskog roda.',
+    nach:'„nach“ koristimo uz gradove i države bez člana.',
+    bei:'„bei“ koristimo u značenju „kod“ neke osobe.'
+  };
+
+  const questions=[
+    {s:'Ich komme ___ Montag.',a:'am',t:'Dolazim u ponedeljak.'},
+    {s:'Der Kurs ist ___ Abend.',a:'am',t:'Kurs je uveče.'},
+    {s:'Wir treffen uns ___ Freitag.',a:'am',t:'Nalazimo se u petak.'},
+    {s:'Der Unterricht beginnt ___ 18 Uhr.',a:'um',t:'Nastava počinje u 18 sati.'},
+    {s:'Ich stehe ___ 7 Uhr auf.',a:'um',t:'Ustajem u 7 sati.'},
+    {s:'Der Zug fährt ___ 10:30 Uhr ab.',a:'um',t:'Voz polazi u 10:30.'},
+    {s:'Ich lerne Deutsch ___ Sommer.',a:'im',t:'Učim nemački leti.'},
+    {s:'Wir fahren ___ Januar in den Urlaub.',a:'im',t:'U januaru idemo na odmor.'},
+    {s:'Es ist sehr kalt ___ Winter.',a:'im',t:'Zimi je veoma hladno.'},
+    {s:'Ich wohne ___ Deutschland.',a:'in',t:'Živim u Nemačkoj.'},
+    {s:'Meine Schwester lebt ___ Berlin.',a:'in',t:'Moja sestra živi u Berlinu.'},
+    {s:'Er arbeitet ___ München.',a:'in',t:'On radi u Minhenu.'},
+    {s:'Ich gehe ___ Bäcker.',a:'zum',t:'Idem kod pekara.'},
+    {s:'Wir gehen ___ Arzt.',a:'zum',t:'Idemo kod lekara.'},
+    {s:'Er fährt ___ Bahnhof.',a:'zum',t:'On ide do železničke stanice.'},
+    {s:'Ich gehe ___ Schule.',a:'zur',t:'Idem u školu.'},
+    {s:'Sie fährt ___ Arbeit.',a:'zur',t:'Ona ide na posao.'},
+    {s:'Wir gehen ___ Apotheke.',a:'zur',t:'Idemo u apoteku.'},
+    {s:'Ich fahre morgen ___ Berlin.',a:'nach',t:'Sutra idem u Berlin.'},
+    {s:'Wir fliegen ___ Deutschland.',a:'nach',t:'Letimo za Nemačku.'},
+    {s:'Im Sommer fahre ich ___ Wien.',a:'nach',t:'Leti idem u Beč.'},
+    {s:'Ich bin ___ meinem Freund.',a:'bei',t:'Kod svog sam prijatelja.'},
+    {s:'Anna ist ___ ihrer Freundin.',a:'bei',t:'Ana je kod svoje prijateljice.'},
+    {s:'Wir sind heute ___ unseren Großeltern.',a:'bei',t:'Danas smo kod bake i deke.'}
+  ];
+
+  let order=[],index=0,score=0,answered=false,currentSpoken='';
+
+  const byId=id=>document.getElementById(id);
+  const sentence=byId('sentence'),choices=byId('choices'),feedback=byId('feedback'),
+        resultLine=byId('resultLine'),fullSentence=byId('fullSentence'),
+        translation=byId('translation'),rule=byId('rule'),nextBtn=byId('nextBtn'),
+        progressText=byId('progressText'),progressBar=byId('progressBar'),
+        percentText=byId('percentText'),scoreTop=byId('scoreTop'),
+        finalBox=byId('finalBox'),quiz=byId('quiz'),finalScore=byId('finalScore'),
+        finalPercent=byId('finalPercent'),audioStatus=byId('audioStatus'),
+        replayBtn=byId('replayBtn');
+
+  function shuffle(arr){
+    const a=arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function speakGerman(text){
+    currentSpoken=text;
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='de-DE';
+    u.rate=.88;
+    u.pitch=1;
+    const voices=window.speechSynthesis.getVoices();
+    const de=voices.find(v=>/^de(-|_)/i.test(v.lang)) || voices.find(v=>/German|Deutsch/i.test(v.name));
+    if(de) u.voice=de;
+    audioStatus.classList.add('show');
+    u.onend=()=>audioStatus.classList.remove('show');
+    u.onerror=()=>audioStatus.classList.remove('show');
+    window.speechSynthesis.speak(u);
+  }
+
+  function start(){
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    order=shuffle(questions);
+    index=0;
+    score=0;
+    answered=false;
+    finalBox.classList.remove('show');
+    quiz.style.display='block';
+    render();
+  }
+
+  function render(){
+    answered=false;
+    const q=order[index];
+    sentence.innerHTML=q.s.replace('___','<span class="blank">?</span>');
+    choices.innerHTML='';
+    feedback.classList.remove('show');
+    replayBtn.classList.remove('show');
+    audioStatus.classList.remove('show');
+    nextBtn.disabled=true;
+
+    shuffle(options).forEach(opt=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.textContent=opt;
+      b.className='choice';
+      b.addEventListener('click',()=>answer(opt,b));
+      choices.appendChild(b);
+    });
+
+    const pct=Math.round(((index+1)/order.length)*100);
+    progressText.textContent=`Pitanje ${index+1} od ${order.length}`;
+    percentText.textContent=pct+'%';
+    progressBar.style.width=pct+'%';
+    scoreTop.textContent=`${score} / ${order.length}`;
+    nextBtn.textContent=index===order.length-1?'Prikaži rezultat':'Sledeće pitanje →';
+  }
+
+  function answer(opt,button){
+    if(answered) return;
+    answered=true;
+
+    const q=order[index];
+    const correct=opt===q.a;
+    const complete=q.s.replace('___',q.a);
+
+    if(correct) score++;
+
+    Array.from(choices.children).forEach(btn=>{
+      btn.disabled=true;
+      if(btn.textContent===q.a) btn.classList.add('correct');
+    });
+
+    if(!correct) button.classList.add('wrong');
+
+    sentence.innerHTML=q.s.replace('___',`<span class="blank">${q.a}</span>`);
+    feedback.classList.add('show');
+
+    if(correct){
+      resultLine.textContent='✅ Bravo! Tačan odgovor.';
+      resultLine.className='feedback-title good';
+    }else{
+      resultLine.textContent='❌ Nije tačno. Pogledaj ispravno rešenje.';
+      resultLine.className='feedback-title bad';
+    }
+
+    fullSentence.textContent=complete;
+    translation.textContent='→ '+q.t;
+    rule.textContent=rules[q.a];
+    scoreTop.textContent=`${score} / ${order.length}`;
+    nextBtn.disabled=false;
+
+    if(correct){
+      replayBtn.classList.add('show');
+      setTimeout(()=>speakGerman(complete),250);
+    }
+  }
+
+  function next(){
+    if(!answered) return;
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+    if(index<order.length-1){
+      index++;
+      render();
+    }else{
+      quiz.style.display='none';
+      finalBox.classList.add('show');
+      const pct=Math.round((score/order.length)*100);
+      finalScore.textContent=`${score} od ${order.length} tačnih odgovora`;
+      finalPercent.textContent=`Tačnost: ${pct}%`;
+    }
+  }
+
+  nextBtn.addEventListener('click',next);
+  byId('againBtn').addEventListener('click',start);
+  replayBtn.addEventListener('click',()=>{if(currentSpoken) speakGerman(currentSpoken);});
+
+  start();
+})();
+</script>
+</body>
+</html>
