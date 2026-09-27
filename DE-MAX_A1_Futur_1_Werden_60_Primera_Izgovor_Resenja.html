@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DE-MAX A1 – Futur I</title>
+<style>
+:root{
+  --blue:#0a3a88; --blue2:#1475d5; --red:#e21d2d; --green:#15945b;
+  --bg:#eef6ff; --card:#fff; --text:#11213e; --muted:#70819b;
+  --line:#d9e8f7; --shadow:0 15px 38px rgba(10,58,136,.14);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#eaf4ff 0%,#f9fbff 52%,#edf6ff 100%);
+  color:var(--text);
+}
+.app{
+  width:min(100%,570px);
+  min-height:100vh;
+  margin:auto;
+  padding:14px 13px 34px;
+}
+.hero{
+  border-radius:28px;
+  padding:18px 18px 16px;
+  background:linear-gradient(135deg,#082f72,#126bca);
+  color:white;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"🇩🇪";
+  position:absolute;
+  right:16px;
+  top:12px;
+  font-size:42px;
+}
+.brand{font-size:12px;font-weight:900;letter-spacing:.14em;opacity:.9}
+h1{font-size:32px;line-height:1;margin:6px 0 5px}
+.sub{font-size:14px;line-height:1.4;opacity:.93;max-width:82%}
+.rulebox{
+  margin:12px 0;
+  padding:12px 14px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(10,58,136,.07);
+  font-size:13px;
+  line-height:1.55;
+}
+.rulebox b{color:var(--blue)}
+.red{color:var(--red);font-weight:900}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:12px 0;
+}
+.stat{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  text-align:center;
+  padding:9px 5px;
+}
+.stat b{display:block;color:var(--blue);font-size:18px}
+.stat span{font-size:10px;color:var(--muted);font-weight:800}
+.progressWrap{height:9px;background:#e4edf8;border-radius:99px;overflow:hidden;margin:10px 0 12px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#0a3a88,#3a9df4);transition:.25s}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:12px;
+}
+.tab{
+  border:0;
+  border-radius:14px;
+  background:#e5f0ff;
+  color:var(--blue);
+  padding:11px 7px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+  line-height:1.2;
+}
+.tab.active{
+  background:var(--blue);
+  color:white;
+  box-shadow:0 7px 17px rgba(10,58,136,.22);
+}
+.card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+.topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+.pill{
+  display:inline-block;
+  padding:7px 10px;
+  border-radius:999px;
+  background:#edf5ff;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:900;
+}
+.counter{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
+.visual{text-align:center;font-size:52px;line-height:1;margin:8px 0}
+.question{
+  text-align:center;
+  font-size:21px;
+  font-weight:900;
+  line-height:1.35;
+  margin:8px 0 15px;
+}
+.example{
+  color:var(--blue);
+  background:#eef6ff;
+  border-radius:12px;
+  padding:7px 9px;
+  display:inline-block;
+  margin-top:6px;
+}
+.options{display:grid;gap:9px}
+.option{
+  border:2px solid var(--line);
+  border-radius:16px;
+  padding:13px;
+  background:#fff;
+  color:var(--text);
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+}
+.option.good{background:#e9faf1;border-color:#7bd0a5;color:#087743}
+.option.bad{background:#fff0f2;border-color:#ee9aa5;color:#ab2234}
+.option:disabled{cursor:default}
+.build{
+  background:#f8fbff;
+  border:2px dashed #c8dcf4;
+  border-radius:17px;
+  min-height:64px;
+  padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  align-items:center;
+  margin-bottom:11px;
+}
+.placeholder{
+  color:#8a99ad;
+  font-size:13px;
+  width:100%;
+  text-align:center;
+}
+.words{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+}
+.word{
+  border:1px solid #bcd5ef;
+  background:#eef6ff;
+  color:var(--blue);
+  border-radius:13px;
+  padding:10px 12px;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+}
+.word.used{opacity:.3;pointer-events:none}
+.word.placed{
+  background:white;
+  border:1px solid #9fc5eb;
+}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.btn{
+  border:0;border-radius:15px;padding:13px 12px;font-weight:900;cursor:pointer
+}
+.reset{background:#edf3fa;color:#52657d}
+.check{background:var(--blue);color:white}
+.listen{
+  width:100%;
+  margin-top:10px;
+  background:#eaf4ff;
+  color:var(--blue);
+  font-size:15px;
+}
+.feedback{
+  display:none;
+  border-radius:15px;
+  padding:11px 12px;
+  margin-top:11px;
+  font-weight:800;
+  line-height:1.4;
+}
+.feedback.ok{display:block;background:#e9faf1;color:#087743}
+.feedback.no{display:block;background:#fff0f2;color:#ad2435}
+.next{
+  width:100%;
+  margin-top:10px;
+  background:linear-gradient(135deg,#0a3a88,#1976d2);
+  color:white;
+  font-size:16px;
+}
+.next:disabled{opacity:.4}
+.conj{
+  margin-top:13px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+}
+.conj div{
+  background:#f8fbff;
+  border:1px solid #dce9f8;
+  border-radius:13px;
+  padding:8px 9px;
+  font-size:12px;
+}
+.conj b{color:var(--blue)}
+.footer{text-align:center;color:#8190a6;font-size:10px;margin-top:13px}
+.hidden{display:none!important}
+@media(min-width:700px){
+  .app{margin:18px auto;min-height:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <section class="hero">
+    <div class="brand">DE-MAX • A1 NEMAČKI</div>
+    <h1>Futur I</h1>
+    <div class="sub">werden + Infinitiv • promene po licima • potvrdne i upitne rečenice</div>
+  </section>
+
+  <div class="rulebox">
+    <b>Pravilo:</b> Futur I gradimo pomoću glagola <span class="red">werden</span> na 2. mestu,
+    a glavni glagol u <b>infinitivu ide na kraj rečenice</b>.<br>
+    Primer: <b>Ich werde morgen arbeiten.</b>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="done">0</b><span>URAĐENO</span></div>
+    <div class="stat"><b id="right">0</b><span>TAČNO</span></div>
+    <div class="stat"><b id="accuracy">0%</b><span>TAČNOST</span></div>
+  </div>
+  <div class="progressWrap"><div class="progress" id="progress"></div></div>
+
+  <div class="tabs">
+    <button class="tab active" data-mode="werden">1. WERDEN<br>PO LICIMA</button>
+    <button class="tab" data-mode="affirmative">2. POTVRDNE<br>REČENICE</button>
+    <button class="tab" data-mode="questions">3. UPITNE<br>REČENICE</button>
+  </div>
+
+  <section class="card">
+    <div class="topline">
+      <div class="pill" id="title">Werden po licima</div>
+      <div class="counter" id="counter">1 / 20</div>
+    </div>
+
+    <div class="visual" id="visual">🧩</div>
+    <div class="question" id="question"></div>
+
+    <div id="choiceArea" class="options"></div>
+
+    <div id="sentenceArea" class="hidden">
+      <div class="build" id="build"><div class="placeholder">Dodirni reči redom da složiš rečenicu.</div></div>
+      <div class="words" id="words"></div>
+
+      <div class="actions">
+        <button class="btn reset" id="resetBtn">↺ Ponovo</button>
+        <button class="btn check" id="checkBtn">✓ Proveri</button>
+      </div>
+    </div>
+
+    <button class="btn listen hidden" id="listenBtn">🔊 Poslušaj tačnu rečenicu</button>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="btn next" id="nextBtn" disabled>Sledeći primer →</button>
+
+    <div class="conj">
+      <div><b>ich</b> werde</div>
+      <div><b>wir</b> werden</div>
+      <div><b>du</b> wirst</div>
+      <div><b>ihr</b> werdet</div>
+      <div><b>er/sie/es</b> wird</div>
+      <div><b>sie/Sie</b> werden</div>
+    </div>
+  </section>
+
+  <div class="footer">DE-MAX • Futur I A1 • 60 primera</div>
+</div>
+
+<script>
+const werdenExercises = [
+  {s:"Ich ___ morgen Deutsch lernen.", a:"werde", b:"wirst"},
+  {s:"Du ___ am Samstag arbeiten.", a:"wirst", b:"wird"},
+  {s:"Er ___ heute Abend fernsehen.", a:"wird", b:"werdet"},
+  {s:"Sie ___ morgen ihre Mutter besuchen.", a:"wird", b:"werde"},
+  {s:"Es ___ morgen regnen.", a:"wird", b:"werden"},
+  {s:"Wir ___ nächste Woche nach Berlin fahren.", a:"werden", b:"werdet"},
+  {s:"Ihr ___ später Fußball spielen.", a:"werdet", b:"werden"},
+  {s:"Sie ___ morgen einkaufen.", a:"werden", b:"wird"},
+  {s:"Ich ___ heute eine Pizza machen.", a:"werde", b:"wird"},
+  {s:"Du ___ morgen früh aufstehen.", a:"wirst", b:"werdet"},
+  {s:"Mein Vater ___ am Montag arbeiten.", a:"wird", b:"werde"},
+  {s:"Meine Schwester ___ später anrufen.", a:"wird", b:"wirst"},
+  {s:"Wir ___ am Sonntag zu Hause bleiben.", a:"werden", b:"werdet"},
+  {s:"Ihr ___ morgen einen Test schreiben.", a:"werdet", b:"wirst"},
+  {s:"Die Kinder ___ draußen spielen.", a:"werden", b:"wird"},
+  {s:"Ich ___ im Sommer Urlaub machen.", a:"werde", b:"werden"},
+  {s:"Du ___ heute Abend lernen.", a:"wirst", b:"werde"},
+  {s:"Herr Müller ___ morgen kommen.", a:"wird", b:"werdet"},
+  {s:"Anna und Paul ___ später kochen.", a:"werden", b:"wird"},
+  {s:"Sie ___ nächste Woche Deutsch sprechen.", a:"werden", b:"wirst"}
+];
+
+const affirmative = [
+  "Ich werde morgen Deutsch lernen.",
+  "Du wirst am Samstag arbeiten.",
+  "Er wird heute Abend fernsehen.",
+  "Sie wird morgen ihre Oma besuchen.",
+  "Wir werden nächste Woche nach Berlin fahren.",
+  "Ihr werdet am Sonntag Fußball spielen.",
+  "Die Kinder werden draußen spielen.",
+  "Ich werde heute eine Pizza machen.",
+  "Du wirst morgen früh aufstehen.",
+  "Mein Vater wird am Montag arbeiten.",
+  "Meine Schwester wird später anrufen.",
+  "Wir werden heute zu Hause bleiben.",
+  "Ihr werdet morgen einen Test schreiben.",
+  "Anna wird am Abend Musik hören.",
+  "Paul wird später ein Buch lesen.",
+  "Ich werde im Sommer Urlaub machen.",
+  "Du wirst heute Abend lernen.",
+  "Herr Müller wird morgen kommen.",
+  "Anna und Paul werden später kochen.",
+  "Wir werden am Wochenende Freunde besuchen."
+];
+
+const questions = [
+  "Wirst du morgen Deutsch lernen?",
+  "Wird er heute Abend fernsehen?",
+  "Wird sie morgen ihre Oma besuchen?",
+  "Werden wir nächste Woche nach Berlin fahren?",
+  "Werdet ihr am Sonntag Fußball spielen?",
+  "Werden die Kinder draußen spielen?",
+  "Werde ich heute eine Pizza machen?",
+  "Wirst du morgen früh aufstehen?",
+  "Wird dein Vater am Montag arbeiten?",
+  "Wird deine Schwester später anrufen?",
+  "Werden wir heute zu Hause bleiben?",
+  "Werdet ihr morgen einen Test schreiben?",
+  "Wird Anna am Abend Musik hören?",
+  "Wird Paul später ein Buch lesen?",
+  "Werde ich im Sommer Urlaub machen?",
+  "Wirst du heute Abend lernen?",
+  "Wird Herr Müller morgen kommen?",
+  "Werden Anna und Paul später kochen?",
+  "Wann wirst du nach Hause kommen?",
+  "Was werdet ihr am Wochenende machen?"
+];
+
+let mode = "werden";
+let index = 0;
+let locked = false;
+let stats = {done:0, right:0};
+let currentAnswer = "";
+let currentTokens = [];
+let selected = [];
+
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){
+  return [...arr].sort(()=>Math.random()-.5);
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "de-DE";
+  u.rate = .86;
+  speechSynthesis.speak(u);
+}
+function normalize(s){
+  return s
+    .toLowerCase()
+    .replace(/[?.!,]/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function updateStats(){
+  $("done").textContent = stats.done;
+  $("right").textContent = stats.right;
+  $("accuracy").textContent = stats.done ? Math.round(stats.right/stats.done*100)+"%" : "0%";
+  $("progress").style.width = Math.min(100,(stats.done%20)/20*100)+"%";
+}
+function feedback(ok, html){
+  $("feedback").className = "feedback " + (ok ? "ok" : "no");
+  $("feedback").innerHTML = html;
+}
+function finish(ok, answer){
+  if(locked) return;
+  locked = true;
+  stats.done++;
+  if(ok) stats.right++;
+  updateStats();
+  $("nextBtn").disabled = false;
+  $("listenBtn").classList.remove("hidden");
+  currentAnswer = answer;
+  if(ok){
+    feedback(true, "✅ Tačno! <b>"+answer+"</b>");
+    speak(answer);
+  } else {
+    feedback(false, "❌ Nije tačno.<br>Tačno: <b>"+answer+"</b>");
+  }
+}
+function cleanState(){
+  locked = false;
+  selected = [];
+  currentTokens = [];
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  $("nextBtn").disabled = true;
+  $("listenBtn").classList.add("hidden");
+  $("choiceArea").innerHTML = "";
+  $("words").innerHTML = "";
+  $("build").innerHTML = '<div class="placeholder">Dodirni reči redom da složiš rečenicu.</div>';
+}
+function sentenceToTokens(sentence){
+  return sentence.replace(/[?]/g," ?").replace(/[.]/g," .").split(/\s+/).filter(Boolean);
+}
+function renderBuild(){
+  const build = $("build");
+  build.innerHTML = "";
+  if(selected.length === 0){
+    build.innerHTML = '<div class="placeholder">Dodirni reči redom da složiš rečenicu.</div>';
+    return;
+  }
+  selected.forEach((obj,i)=>{
+    const b=document.createElement("button");
+    b.className="word placed";
+    b.textContent=obj.text;
+    b.onclick=()=>{
+      if(locked)return;
+      const original = currentTokens.find(x=>x.id===obj.id);
+      if(original) original.used=false;
+      selected.splice(i,1);
+      renderWords();
+      renderBuild();
+    };
+    build.appendChild(b);
+  });
+}
+function renderWords(){
+  $("words").innerHTML="";
+  currentTokens.forEach(obj=>{
+    const b=document.createElement("button");
+    b.className="word"+(obj.used?" used":"");
+    b.textContent=obj.text;
+    b.onclick=()=>{
+      if(locked || obj.used)return;
+      obj.used=true;
+      selected.push({id:obj.id,text:obj.text});
+      renderWords();
+      renderBuild();
+    };
+    $("words").appendChild(b);
+  });
+}
+function startSentenceExercise(sentence, questionText, icon){
+  currentAnswer = sentence;
+  $("visual").textContent=icon;
+  $("question").innerHTML=questionText;
+  $("choiceArea").classList.add("hidden");
+  $("sentenceArea").classList.remove("hidden");
+
+  const tokens = sentenceToTokens(sentence);
+  currentTokens = shuffle(tokens.map((text,i)=>({id:i,text,used:false})));
+  renderWords();
+  renderBuild();
+}
+function render(){
+  cleanState();
+  $("counter").textContent=(index+1)+" / 20";
+
+  if(mode==="werden"){
+    $("title").textContent="1. Werden po licima";
+    $("visual").textContent="👤";
+    $("choiceArea").classList.remove("hidden");
+    $("sentenceArea").classList.add("hidden");
+
+    const ex=werdenExercises[index];
+    $("question").innerHTML='Izaberi tačan oblik glagola <b>werden</b>:<br><span class="example">'+ex.s+"</span>";
+
+    shuffle([ex.a,ex.b]).forEach(val=>{
+      const b=document.createElement("button");
+      b.className="option";
+      b.textContent=val;
+      b.onclick=()=>{
+        if(locked)return;
+        const ok=val===ex.a;
+        b.classList.add(ok?"good":"bad");
+        [...$("choiceArea").children].forEach(x=>{
+          if(x.textContent===ex.a)x.classList.add("good");
+          x.disabled=true;
+        });
+        const sentence=ex.s.replace("___",ex.a);
+        finish(ok,sentence);
+      };
+      $("choiceArea").appendChild(b);
+    });
+  }
+
+  if(mode==="affirmative"){
+    $("title").textContent="2. Potvrdne rečenice";
+    startSentenceExercise(
+      affirmative[index],
+      'Složi <b>potvrdnu rečenicu</b> u Futuru I.',
+      "✅"
+    );
+  }
+
+  if(mode==="questions"){
+    $("title").textContent="3. Upitne rečenice";
+    startSentenceExercise(
+      questions[index],
+      'Složi <b>upitnu rečenicu</b> u Futuru I.',
+      "❓"
+    );
+  }
+}
+
+$("resetBtn").onclick=()=>{
+  if(locked)return;
+  selected=[];
+  currentTokens.forEach(x=>x.used=false);
+  renderWords();
+  renderBuild();
+};
+
+$("checkBtn").onclick=()=>{
+  if(locked)return;
+  if(selected.length===0){
+    feedback(false,"Izaberi reči i složi rečenicu.");
+    return;
+  }
+  let built=selected.map(x=>x.text).join(" ")
+    .replace(/\s+([?.!,])/g,"$1");
+  const ok=normalize(built)===normalize(currentAnswer);
+
+  // Ako je rečenica tačna, pročitaj složenu rečenicu.
+  // Ako je pogrešna, prikaži i pročitaj tačno rešenje.
+  finish(ok,currentAnswer);
+  if(!ok){
+    setTimeout(()=>speak(currentAnswer),250);
+  }
+};
+
+$("listenBtn").onclick=()=>speak(currentAnswer);
+
+$("nextBtn").onclick=()=>{
+  index=(index+1)%20;
+  render();
+};
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.onclick=()=>{
+    mode=tab.dataset.mode;
+    index=0;
+    document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t===tab));
+    render();
+  };
+});
+
+render();
+</script>
+</body>
+</html>
