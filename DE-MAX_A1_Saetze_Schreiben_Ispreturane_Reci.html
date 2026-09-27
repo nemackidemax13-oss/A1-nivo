@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DE-MAX A1 • Sätze schreiben – Složi od ispreturanih reči</title>
+<style>
+:root{
+  --navy:#071d49;
+  --navy2:#0b3478;
+  --blue:#1766d0;
+  --red:#e21a1a;
+  --bg:#edf4fb;
+  --card:#ffffff;
+  --line:#d8e3f0;
+  --text:#10213d;
+  --muted:#6b778c;
+  --good:#118547;
+  --bad:#c82b2b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#061943;color:var(--text)}
+body{
+  background:
+    radial-gradient(circle at 20% 0%,#2e9fea 0,transparent 24%),
+    radial-gradient(circle at 85% 0%,#f8d570 0,transparent 19%),
+    linear-gradient(180deg,#061943 0 190px,#edf4fb 190px);
+}
+.app{
+  width:min(100%,760px);
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--bg);
+  box-shadow:0 0 34px rgba(0,0,0,.22);
+}
+header{
+  position:sticky;top:0;z-index:10;
+  padding:18px 16px 14px;
+  color:#fff;
+  background:linear-gradient(135deg,#061943,#0b3478);
+  box-shadow:0 5px 18px rgba(0,0,0,.2);
+}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:1000;letter-spacing:.4px}
+.logo{
+  width:50px;height:50px;border-radius:15px;background:#fff;color:#e31616;
+  display:grid;place-items:center;font-weight:1000;font-style:italic;
+  box-shadow:0 4px 12px rgba(0,0,0,.24)
+}
+.reset{
+  border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.09);
+  color:#fff;border-radius:12px;padding:9px 11px;font-weight:900;cursor:pointer
+}
+h1{font-size:clamp(27px,6.5vw,44px);line-height:1;margin:13px 0 2px;letter-spacing:.5px}
+.subtitle{font-weight:800;opacity:.9}
+.progress-shell{height:10px;background:rgba(255,255,255,.17);border-radius:999px;overflow:hidden;margin-top:13px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#ffc20e,#fff);transition:.3s}
+.stats{display:flex;justify-content:space-between;margin-top:6px;font-size:13px;font-weight:900}
+main{padding:14px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:21px;padding:16px;margin-bottom:14px;
+  box-shadow:0 8px 22px rgba(12,42,86,.08)
+}
+.rule{
+  background:linear-gradient(180deg,#f9fbff,#f2f7fd);
+  border-left:5px solid var(--red);
+  border-radius:14px;padding:13px;font-size:15px;line-height:1.45
+}
+.rule b{color:var(--red)}
+.rule .formula{
+  display:block;margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff;
+  font-weight:1000;color:var(--navy);border:1px solid var(--line)
+}
+.task{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:13px;
+  box-shadow:0 6px 18px rgba(12,42,86,.07)
+}
+.topline{display:flex;align-items:flex-start;gap:11px}
+.num{
+  flex:0 0 38px;width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(145deg,#0b3478,#1264cc);color:#fff;display:grid;place-items:center;
+  font-size:18px;font-weight:1000;box-shadow:0 4px 9px rgba(12,51,116,.23)
+}
+.sentence-wrap{flex:1;min-width:0}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:#6d7b90;font-weight:900;margin-bottom:4px}
+.sentence{font-size:19px;line-height:1.35;font-weight:1000;color:#142646}
+.time{color:var(--red)}
+.speak{
+  float:right;margin-left:8px;border:0;background:#eaf2ff;color:#0f58b8;border-radius:11px;
+  padding:8px 10px;font-weight:900;cursor:pointer
+}
+.translation{
+  margin-top:8px;color:var(--muted);font-style:italic;font-size:14px
+}
+.input-label{margin:13px 0 8px;font-size:13px;font-weight:900;color:#536278}
+.build{
+  min-height:62px;border:2px dashed #b8c9dd;border-radius:15px;background:#f8fbff;
+  padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start
+}
+.words{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.word{
+  border:1px solid #cbd9e8;background:#fff;border-radius:12px;padding:10px 12px;font-weight:900;
+  cursor:pointer;color:#132440;box-shadow:0 2px 8px rgba(12,42,86,.05)
+}
+.word.used{display:none}
+.feedback{min-height:27px;margin-top:10px;font-weight:900;font-size:14px}
+.good{color:var(--good)} .bad{color:var(--bad)}
+.solution{
+  display:none;margin-top:7px;padding:10px 11px;border-radius:12px;background:#eef9f2;
+  border:1px solid #bce3ca;font-weight:900;color:#17683b
+}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.btn{
+  border:0;border-radius:14px;padding:12px 14px;font-weight:1000;cursor:pointer
+}
+.primary{background:linear-gradient(135deg,#e51b1b,#b90808);color:#fff}
+.secondary{background:#6f7d92;color:#fff}
+.done .build{border-color:#64ba83;background:#f5fff8}
+.footer-actions{
+  position:sticky;bottom:0;background:rgba(237,244,251,.96);backdrop-filter:blur(7px);
+  padding:10px 14px 14px;border-top:1px solid #d9e3ef
+}
+.allbtn{
+  width:100%;border:0;border-radius:15px;padding:14px;background:linear-gradient(135deg,#071d49,#1566cc);
+  color:#fff;font-size:16px;font-weight:1000;cursor:pointer;box-shadow:0 6px 15px rgba(10,45,108,.2)
+}
+footer{text-align:center;color:#66768b;font-size:12px;padding:4px 15px 22px}
+@media(max-width:520px){
+  header{padding-top:max(14px,env(safe-area-inset-top))}
+  main{padding:11px}
+  .task{padding:13px;border-radius:17px}
+  .sentence{font-size:17px}
+  .actions{grid-template-columns:1fr}
+  h1{font-size:29px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brandrow">
+    <div class="brand"><div class="logo">DM</div><div>DE-MAX <span style="opacity:.72">TUTIN</span></div></div>
+    <button class="reset" onclick="resetAll()">↻ Reset</button>
+  </div>
+  <h1>Sätze schreiben</h1>
+  <div class="subtitle">Inverzija • Složi od ispreturanih reči</div>
+  <div class="progress-shell"><div id="progress" class="progress"></div></div>
+  <div class="stats"><span id="score">Tačno: 0 / 6</span><span id="percent">0%</span></div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="rule">
+      <b>Zadatak:</b> Data rečenica je ispravna. Sada složi istu rečenicu u obliku <b>inverzije</b> od ispreturanih reči.
+      <span class="formula">Larsen hört <b>am Morgen</b> Musik. → <b>Am Morgen</b> hört Larsen Musik.</span>
+      Klikni na reči redom. Ako pogrešiš, klikni na dugme <b>Ponovo</b>.
+    </div>
+  </section>
+
+  <div id="tasks"></div>
+</main>
+
+<div class="footer-actions">
+  <button class="allbtn" onclick="checkAll()">Proveri sve zadatke</button>
+</div>
+<footer>DE-MAX • A1 nemački jezik • Satzstellung / Inversion</footer>
+</div>
+
+<script>
+const items = [
+  {
+    src:"Larsen hört am Morgen Musik.",
+    html:"Larsen hört <span class='time'>am Morgen</span> Musik.",
+    answer:"Am Morgen hört Larsen Musik.",
+    words:["Am","Morgen","hört","Larsen","Musik."]
+  },
+  {
+    src:"Larsen sieht am Vormittag fern.",
+    html:"Larsen sieht <span class='time'>am Vormittag</span> fern.",
+    answer:"Am Vormittag sieht Larsen fern.",
+    words:["Am","Vormittag","sieht","Larsen","fern."]
+  },
+  {
+    src:"Larsen isst am Mittag Pizza.",
+    html:"Larsen isst <span class='time'>am Mittag</span> Pizza.",
+    answer:"Am Mittag isst Larsen Pizza.",
+    words:["Am","Mittag","isst","Larsen","Pizza."]
+  },
+  {
+    src:"Larsen ruft am Nachmittag Sofia an.",
+    html:"Larsen ruft <span class='time'>am Nachmittag</span> Sofia an.",
+    answer:"Am Nachmittag ruft Larsen Sofia an.",
+    words:["Am","Nachmittag","ruft","Larsen","Sofia","an."]
+  },
+  {
+    src:"Larsen geht am Abend ins Kino.",
+    html:"Larsen geht <span class='time'>am Abend</span> ins Kino.",
+    answer:"Am Abend geht Larsen ins Kino.",
+    words:["Am","Abend","geht","Larsen","ins","Kino."]
+  },
+  {
+    src:"Larsen geht in der Nacht spazieren.",
+    html:"Larsen geht <span class='time'>in der Nacht</span> spazieren.",
+    answer:"In der Nacht geht Larsen spazieren.",
+    words:["In","der","Nacht","geht","Larsen","spazieren."]
+  }
+];
+
+let chosen = items.map(() => []);
+let correct = Array(items.length).fill(false);
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function normalize(s){
+  return s.toLowerCase().trim().replace(/\s+/g,' ').replace(/\s+([.,!?])/g,'$1').replace(/[.]+$/,'');
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "de-DE";
+  u.rate = .88;
+  const voices = speechSynthesis.getVoices();
+  const de = voices.find(v => (v.lang||"").toLowerCase().startsWith("de"));
+  if(de) u.voice = de;
+  speechSynthesis.speak(u);
+}
+function render(){
+  const root=document.getElementById("tasks");
+  root.innerHTML="";
+  items.forEach((it,i)=>{
+    const shuffled=shuffle(it.words);
+    const div=document.createElement("section");
+    div.className="task";
+    div.id="task-"+i;
+    div.innerHTML=`
+      <div class="topline">
+        <div class="num">${i+1}</div>
+        <div class="sentence-wrap">
+          <div class="label">Ispravna rečenica</div>
+          <button class="speak" onclick="speak(${JSON.stringify(it.src)})">🔊</button>
+          <div class="sentence">${it.html}</div>
+          <div class="translation"></div>
+        </div>
+      </div>
+
+      <div class="input-label">Složi inverziju od ispreturanih reči:</div>
+      <div id="build-${i}" class="build"></div>
+      <div id="bank-${i}" class="words"></div>
+      <div class="actions">
+        <button class="btn primary" onclick="checkOne(${i})">Proveri</button>
+        <button class="btn secondary" onclick="resetTask(${i})">Ponovo</button>
+      </div>
+      <div id="fb-${i}" class="feedback"></div>
+      <div id="sol-${i}" class="solution"></div>
+    `;
+    root.appendChild(div);
+
+    renderBank(i, shuffled);
+    renderChosen(i);
+  });
+  updateProgress();
+}
+function renderBank(i, currentWords){
+  const bank=document.getElementById("bank-"+i);
+  bank.innerHTML="";
+  currentWords.forEach((w,idx)=>{
+    const b=document.createElement("button");
+    b.className="word";
+    b.textContent=w;
+    b.onclick=()=>{
+      chosen[i].push(w);
+      currentWords.splice(idx,1);
+      renderBank(i, currentWords);
+      renderChosen(i);
+    };
+    bank.appendChild(b);
+  });
+  bank.dataset.remaining=JSON.stringify(currentWords);
+}
+function renderChosen(i){
+  const area=document.getElementById("build-"+i);
+  area.innerHTML="";
+  chosen[i].forEach((w,idx)=>{
+    const b=document.createElement("button");
+    b.className="word";
+    b.textContent=w;
+    b.onclick=()=>{
+      const remaining = JSON.parse(document.getElementById("bank-"+i).dataset.remaining || "[]");
+      remaining.push(w);
+      chosen[i].splice(idx,1);
+      renderBank(i, remaining);
+      renderChosen(i);
+    };
+    area.appendChild(b);
+  });
+}
+function checkOne(i){
+  const user = chosen[i].join(" ").replace(/\s+([.,!?])/g,'$1');
+  const ok = normalize(user) === normalize(items[i].answer);
+  correct[i]=ok;
+
+  const fb=document.getElementById("fb-"+i);
+  const sol=document.getElementById("sol-"+i);
+  const task=document.getElementById("task-"+i);
+
+  if(ok){
+    fb.innerHTML='<span class="good">✓ Tačno! Odlično složena rečenica.</span>';
+    sol.style.display="none";
+    task.classList.add("done");
+    speak(items[i].answer);
+  } else {
+    fb.innerHTML='<span class="bad">✗ Nije tačno. Pokušaj ponovo ili pogledaj rešenje.</span>';
+    sol.style.display="block";
+    sol.textContent="Tačno: " + items[i].answer;
+    task.classList.remove("done");
+  }
+  updateProgress();
+}
+function resetTask(i){
+  correct[i]=false;
+  chosen[i]=[];
+  const remaining=shuffle(items[i].words);
+  renderBank(i, remaining);
+  renderChosen(i);
+  document.getElementById("fb-"+i).textContent="";
+  document.getElementById("sol-"+i).style.display="none";
+  document.getElementById("task-"+i).classList.remove("done");
+  updateProgress();
+}
+function checkAll(){
+  items.forEach((_,i)=>checkOne(i));
+}
+function updateProgress(){
+  const solved=correct.filter(Boolean).length;
+  const p=Math.round(solved/items.length*100);
+  document.getElementById("score").textContent=`Tačno: ${solved} / ${items.length}`;
+  document.getElementById("percent").textContent=p+"%";
+  document.getElementById("progress").style.width=p+"%";
+}
+function resetAll(){
+  chosen = items.map(() => []);
+  correct = Array(items.length).fill(false);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>
