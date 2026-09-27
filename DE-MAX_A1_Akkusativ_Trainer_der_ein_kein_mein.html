@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DE-MAX A1 • Akkusativ Trainer</title>
+<style>
+:root{
+  --navy:#071f55;
+  --navy2:#0b3a8d;
+  --red:#df1010;
+  --blue:#154cc7;
+  --green:#087c35;
+  --purple:#6322a5;
+  --bg:#eef4fb;
+  --card:#fff;
+  --line:#d7e2ef;
+  --text:#12213a;
+  --muted:#69758a;
+  --good:#118447;
+  --bad:#c92c2c;
+  --gold:#ffbf12;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#061941}
+body{
+  background:
+    radial-gradient(circle at 16% 0%,#4db8f2 0,transparent 22%),
+    radial-gradient(circle at 88% 0%,#ffd66a 0,transparent 18%),
+    linear-gradient(180deg,#061941 0 170px,#eef4fb 170px);
+}
+.app{
+  width:min(100%,780px);
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--bg);
+  box-shadow:0 0 36px rgba(0,0,0,.2);
+}
+header{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(135deg,#061a48,#0c3c8e);
+  color:#fff;padding:16px 15px 13px;
+  box-shadow:0 4px 18px rgba(0,0,0,.2)
+}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:1000}
+.logo{
+  width:48px;height:48px;border-radius:14px;background:#fff;color:var(--red);
+  display:grid;place-items:center;font-weight:1000;font-style:italic;box-shadow:0 4px 12px rgba(0,0,0,.23)
+}
+.reset{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.09);color:#fff;border-radius:11px;padding:9px 11px;font-weight:900;cursor:pointer}
+h1{margin:11px 0 2px;font-size:clamp(27px,6.5vw,43px);line-height:1}
+.subtitle{font-weight:800;opacity:.9}
+.progress-shell{height:10px;background:rgba(255,255,255,.17);border-radius:999px;overflow:hidden;margin-top:12px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#ffc118,#fff);transition:.3s}
+.stats{display:flex;justify-content:space-between;margin-top:6px;font-size:13px;font-weight:900}
+
+main{padding:13px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:13px;
+  box-shadow:0 7px 20px rgba(14,43,86,.08)
+}
+.title{font-size:20px;font-weight:1000;color:var(--navy);margin:0 0 10px}
+.rulegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rule{
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fbfdff
+}
+.rule h3{margin:0;padding:9px;text-align:center;background:var(--navy);color:#fff;font-size:14px}
+.rule .body{padding:10px;font-weight:900;line-height:1.55}
+.mas{color:var(--blue)} .fem{color:var(--red)} .neu{color:var(--green)} .plu{color:var(--purple)}
+.notice{
+  margin-top:10px;border-left:5px solid var(--red);background:#fff8ef;border-radius:12px;padding:11px;
+  font-weight:800
+}
+.notice b{color:var(--red)}
+
+.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:13px}
+.tab{
+  border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:14px;padding:11px 8px;
+  font-weight:1000;cursor:pointer;box-shadow:0 4px 11px rgba(12,42,86,.06)
+}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel{display:none}.panel.active{display:block}
+
+.exercise-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:10px
+}
+.badge{
+  flex:0 0 38px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#0a327b,#1564d0);color:#fff;font-weight:1000
+}
+.ex-title{font-size:19px;font-weight:1000}
+.hint{color:var(--muted);font-size:13px;font-weight:700;margin-top:2px}
+.prompt{
+  background:linear-gradient(180deg,#f8fbff,#f2f7fd);border:1px solid var(--line);
+  border-radius:16px;padding:14px;margin:10px 0
+}
+.nominativ{font-size:13px;color:#718096;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+.sentence{font-size:21px;font-weight:1000;line-height:1.35;margin-top:4px}
+.sr{font-size:14px;color:var(--muted);font-style:italic;margin-top:5px}
+.speak{
+  float:right;border:0;border-radius:10px;background:#eaf2ff;color:#0e56b6;padding:7px 10px;font-weight:900;cursor:pointer;margin-left:8px
+}
+.answer-title{font-size:13px;font-weight:900;color:#59677d;margin:10px 0 7px}
+
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.option{
+  border:2px solid #d7e2ef;background:#fff;border-radius:14px;padding:12px 10px;
+  font-size:16px;font-weight:1000;color:#152643;cursor:pointer;transition:.15s
+}
+.option:hover{border-color:#8bb5eb}
+.option.correct{border-color:#48a86e;background:#ebfff2;color:#0b6c37}
+.option.wrong{border-color:#e07171;background:#fff0f0;color:#a62121}
+
+.feedback{min-height:29px;margin-top:10px;font-weight:1000}
+.good{color:var(--good)}.bad{color:var(--bad)}
+.solution{
+  display:none;margin-top:7px;border-radius:12px;padding:10px 11px;background:#effaf3;border:1px solid #bee3ca;
+  color:#17683b;font-weight:900
+}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.btn{
+  border:0;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:1000;cursor:pointer
+}
+.primary{background:linear-gradient(135deg,#071f55,#1764cb);color:#fff}
+.secondary{background:#707e93;color:#fff}
+
+.gender-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.gbox{border-radius:11px;padding:8px 5px;text-align:center;background:#f4f7fb;font-size:12px;font-weight:1000}
+.gbox span{display:block;font-size:15px;margin-top:3px}
+
+.summary{
+  text-align:center;padding:14px;border-radius:16px;background:linear-gradient(135deg,#071f55,#154fb2);color:#fff
+}
+.summary strong{font-size:30px}
+.footer-note{text-align:center;color:#67758a;font-size:12px;padding:4px 14px 24px}
+
+@media(max-width:540px){
+  header{padding-top:max(14px,env(safe-area-inset-top))}
+  main{padding:10px}
+  .card{padding:13px;border-radius:17px}
+  .rulegrid{grid-template-columns:1fr}
+  .sentence{font-size:18px}
+  .options{grid-template-columns:1fr 1fr}
+  h1{font-size:29px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brandrow">
+    <div class="brand"><div class="logo">DM</div><div>DE-MAX <span style="opacity:.72">TUTIN</span></div></div>
+    <button class="reset" onclick="resetAll()">↻ Reset</button>
+  </div>
+  <h1>Akkusativ Trainer</h1>
+  <div class="subtitle">der / ein / kein / mein • A1</div>
+  <div class="progress-shell"><div id="progress" class="progress"></div></div>
+  <div class="stats"><span id="score">Tačno: 0 / 0</span><span id="percent">0%</span></div>
+</header>
+
+<main>
+<section class="card">
+  <div class="title">Pravilo: Nominativ → Akkusativ</div>
+  <div class="rulegrid">
+    <div class="rule">
+      <h3>ODREĐENI ČLAN</h3>
+      <div class="body">
+        <span class="mas">der → den</span><br>
+        <span class="fem">die → die</span><br>
+        <span class="neu">das → das</span><br>
+        <span class="plu">die → die</span>
+      </div>
+    </div>
+    <div class="rule">
+      <h3>NEODREĐENI ČLAN</h3>
+      <div class="body">
+        <span class="mas">ein → einen</span><br>
+        <span class="fem">eine → eine</span><br>
+        <span class="neu">ein → ein</span><br>
+        <span class="plu">— → —</span>
+      </div>
+    </div>
+    <div class="rule">
+      <h3>NEGACIJA</h3>
+      <div class="body">
+        <span class="mas">kein → keinen</span><br>
+        <span class="fem">keine → keine</span><br>
+        <span class="neu">kein → kein</span><br>
+        <span class="plu">keine → keine</span>
+      </div>
+    </div>
+    <div class="rule">
+      <h3>MEIN / MEINE</h3>
+      <div class="body">
+        <span class="mas">mein → meinen</span><br>
+        <span class="fem">meine → meine</span><br>
+        <span class="neu">mein → mein</span><br>
+        <span class="plu">meine → meine</span>
+      </div>
+    </div>
+  </div>
+  <div class="notice"><b>Važno:</b> U akuzativu se kod ovih oblika menja samo <b>muški rod</b>.</div>
+</section>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab(0)">1. der → den</button>
+  <button class="tab" onclick="showTab(1)">2. ein → einen</button>
+  <button class="tab" onclick="showTab(2)">3. kein → keinen</button>
+  <button class="tab" onclick="showTab(3)">4. mein → meinen</button>
+</div>
+
+<section class="panel active"><div class="card" id="box0"></div></section>
+<section class="panel"><div class="card" id="box1"></div></section>
+<section class="panel"><div class="card" id="box2"></div></section>
+<section class="panel"><div class="card" id="box3"></div></section>
+
+<section class="card">
+  <div class="title">Brzi pregled</div>
+  <div class="gender-strip">
+    <div class="gbox mas">Muški<span>der → den</span></div>
+    <div class="gbox fem">Ženski<span>die → die</span></div>
+    <div class="gbox neu">Srednji<span>das → das</span></div>
+    <div class="gbox plu">Množina<span>die → die</span></div>
+  </div>
+</section>
+</main>
+
+<div class="footer-note">DE-MAX • A1 nemački jezik • Akkusativ</div>
+</div>
+
+<script>
+const data = [
+{
+  title:"Određeni član",
+  hint:"Izaberi pravilan član u akuzativu.",
+  items:[
+    {nom:"Der Mann.", q:"Ich sehe ___ Mann.", ans:"den", opts:["der","den","die","das"], full:"Ich sehe den Mann.", sr:"Ja vidim ovog čoveka."},
+    {nom:"Die Frau.", q:"Ich sehe ___ Frau.", ans:"die", opts:["der","den","die","das"], full:"Ich sehe die Frau.", sr:"Ja vidim ovu ženu."},
+    {nom:"Das Kind.", q:"Ich sehe ___ Kind.", ans:"das", opts:["der","den","die","das"], full:"Ich sehe das Kind.", sr:"Ja vidim ovo dete."},
+    {nom:"Die Kinder.", q:"Ich sehe ___ Kinder.", ans:"die", opts:["der","den","die","das"], full:"Ich sehe die Kinder.", sr:"Ja vidim ovu decu."},
+    {nom:"Der Hund.", q:"Ich sehe ___ Hund.", ans:"den", opts:["der","den","die","das"], full:"Ich sehe den Hund.", sr:"Ja vidim psa."},
+    {nom:"Die Tasche.", q:"Ich kaufe ___ Tasche.", ans:"die", opts:["der","den","die","das"], full:"Ich kaufe die Tasche.", sr:"Kupujem torbu."},
+    {nom:"Das Auto.", q:"Ich kaufe ___ Auto.", ans:"das", opts:["der","den","die","das"], full:"Ich kaufe das Auto.", sr:"Kupujem automobil."},
+    {nom:"Der Kaffee.", q:"Ich trinke ___ Kaffee.", ans:"den", opts:["der","den","die","das"], full:"Ich trinke den Kaffee.", sr:"Pijem kafu."}
+  ]
+},
+{
+  title:"Neodređeni član",
+  hint:"Pretvori ein/eine u pravilan oblik akuzativa.",
+  items:[
+    {nom:"Ein Mann.", q:"Ich sehe ___ Mann.", ans:"einen", opts:["ein","eine","einen","einem"], full:"Ich sehe einen Mann.", sr:"Ja vidim jednog čoveka."},
+    {nom:"Eine Frau.", q:"Ich sehe ___ Frau.", ans:"eine", opts:["ein","eine","einen","einem"], full:"Ich sehe eine Frau.", sr:"Ja vidim jednu ženu."},
+    {nom:"Ein Kind.", q:"Ich sehe ___ Kind.", ans:"ein", opts:["ein","eine","einen","einem"], full:"Ich sehe ein Kind.", sr:"Ja vidim jedno dete."},
+    {nom:"Ein Hund.", q:"Ich habe ___ Hund.", ans:"einen", opts:["ein","eine","einen","einem"], full:"Ich habe einen Hund.", sr:"Imam jednog psa."},
+    {nom:"Eine Katze.", q:"Ich habe ___ Katze.", ans:"eine", opts:["ein","eine","einen","einem"], full:"Ich habe eine Katze.", sr:"Imam jednu mačku."},
+    {nom:"Ein Handy.", q:"Ich brauche ___ Handy.", ans:"ein", opts:["ein","eine","einen","einem"], full:"Ich brauche ein Handy.", sr:"Treba mi jedan telefon."},
+    {nom:"Ein Apfel.", q:"Ich esse ___ Apfel.", ans:"einen", opts:["ein","eine","einen","einem"], full:"Ich esse einen Apfel.", sr:"Jedem jednu jabuku."},
+    {nom:"Eine Banane.", q:"Ich esse ___ Banane.", ans:"eine", opts:["ein","eine","einen","einem"], full:"Ich esse eine Banane.", sr:"Jedem jednu bananu."}
+  ]
+},
+{
+  title:"Negacija kein / keine",
+  hint:"Izaberi pravilan oblik negacije u akuzativu.",
+  items:[
+    {nom:"Kein Mann.", q:"Ich sehe ___ Mann.", ans:"keinen", opts:["kein","keine","keinen","keinem"], full:"Ich sehe keinen Mann.", sr:"Ja ne vidim nijednog čoveka."},
+    {nom:"Keine Frau.", q:"Ich sehe ___ Frau.", ans:"keine", opts:["kein","keine","keinen","keinem"], full:"Ich sehe keine Frau.", sr:"Ja ne vidim nijednu ženu."},
+    {nom:"Kein Kind.", q:"Ich sehe ___ Kind.", ans:"kein", opts:["kein","keine","keinen","keinem"], full:"Ich sehe kein Kind.", sr:"Ja ne vidim nijedno dete."},
+    {nom:"Keine Kinder.", q:"Ich sehe ___ Kinder.", ans:"keine", opts:["kein","keine","keinen","keinem"], full:"Ich sehe keine Kinder.", sr:"Ja ne vidim decu."},
+    {nom:"Kein Hund.", q:"Ich habe ___ Hund.", ans:"keinen", opts:["kein","keine","keinen","keinem"], full:"Ich habe keinen Hund.", sr:"Nemam psa."},
+    {nom:"Keine Zeit.", q:"Ich habe ___ Zeit.", ans:"keine", opts:["kein","keine","keinen","keinem"], full:"Ich habe keine Zeit.", sr:"Nemam vremena."},
+    {nom:"Kein Auto.", q:"Ich habe ___ Auto.", ans:"kein", opts:["kein","keine","keinen","keinem"], full:"Ich habe kein Auto.", sr:"Nemam automobil."},
+    {nom:"Keine Bücher.", q:"Ich kaufe ___ Bücher.", ans:"keine", opts:["kein","keine","keinen","keinem"], full:"Ich kaufe keine Bücher.", sr:"Ne kupujem knjige."}
+  ]
+},
+{
+  title:"Prisvojna zamenica mein / meine",
+  hint:"Izaberi pravilan oblik mein/meine u akuzativu.",
+  items:[
+    {nom:"Mein Mann.", q:"Ich sehe ___ Mann.", ans:"meinen", opts:["mein","meine","meinen","meinem"], full:"Ich sehe meinen Mann.", sr:"Ja vidim svog muža."},
+    {nom:"Meine Frau.", q:"Ich sehe ___ Frau.", ans:"meine", opts:["mein","meine","meinen","meinem"], full:"Ich sehe meine Frau.", sr:"Ja vidim svoju ženu."},
+    {nom:"Mein Kind.", q:"Ich sehe ___ Kind.", ans:"mein", opts:["mein","meine","meinen","meinem"], full:"Ich sehe mein Kind.", sr:"Ja vidim svoje dete."},
+    {nom:"Meine Kinder.", q:"Ich sehe ___ Kinder.", ans:"meine", opts:["mein","meine","meinen","meinem"], full:"Ich sehe meine Kinder.", sr:"Ja vidim svoju decu."},
+    {nom:"Mein Bruder.", q:"Ich besuche ___ Bruder.", ans:"meinen", opts:["mein","meine","meinen","meinem"], full:"Ich besuche meinen Bruder.", sr:"Posećujem svog brata."},
+    {nom:"Meine Schwester.", q:"Ich besuche ___ Schwester.", ans:"meine", opts:["mein","meine","meinen","meinem"], full:"Ich besuche meine Schwester.", sr:"Posećujem svoju sestru."},
+    {nom:"Mein Handy.", q:"Ich suche ___ Handy.", ans:"mein", opts:["mein","meine","meinen","meinem"], full:"Ich suche mein Handy.", sr:"Tražim svoj telefon."},
+    {nom:"Mein Freund.", q:"Ich treffe ___ Freund.", ans:"meinen", opts:["mein","meine","meinen","meinem"], full:"Ich treffe meinen Freund.", sr:"Srećem svog prijatelja."}
+  ]
+}
+];
+
+let index=[0,0,0,0];
+let locked=[false,false,false,false];
+let score=0, attempts=0;
+
+function showTab(n){
+  document.querySelectorAll('.tab').forEach((x,i)=>x.classList.toggle('active',i===n));
+  document.querySelectorAll('.panel').forEach((x,i)=>x.classList.toggle('active',i===n));
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='de-DE';u.rate=.88;
+  const voices=speechSynthesis.getVoices();
+  const de=voices.find(v=>(v.lang||'').toLowerCase().startsWith('de'));
+  if(de)u.voice=de;
+  speechSynthesis.speak(u);
+}
+function updateScore(ok){
+  attempts++;
+  if(ok) score++;
+  const p=attempts?Math.round(score/attempts*100):0;
+  document.getElementById('score').textContent=`Tačno: ${score} / ${attempts}`;
+  document.getElementById('percent').textContent=p+'%';
+  document.getElementById('progress').style.width=p+'%';
+}
+function render(section){
+  locked[section]=false;
+  const d=data[section];
+  const item=d.items[index[section]%d.items.length];
+  const box=document.getElementById('box'+section);
+  box.innerHTML=`
+    <div class="exercise-head">
+      <div class="badge">${section+1}</div>
+      <div><div class="ex-title">${d.title}</div><div class="hint">${d.hint}</div></div>
+    </div>
+    <div class="prompt">
+      <button class="speak" onclick='speak(${JSON.stringify(item.nom)})'>🔊</button>
+      <div class="nominativ">Nominativ</div>
+      <div class="sentence">${item.nom}</div>
+      <div class="answer-title">Prebaci u akuzativ:</div>
+      <div class="sentence">${item.q}</div>
+      <div class="sr">${item.sr}</div>
+    </div>
+    <div class="options" id="opts${section}"></div>
+    <div class="feedback" id="fb${section}"></div>
+    <div class="solution" id="sol${section}"></div>
+    <div class="actions">
+      <button class="btn secondary" onclick="showSolution(${section})">Prikaži rešenje</button>
+      <button class="btn primary" onclick="nextItem(${section})">Sledeći primer →</button>
+    </div>
+  `;
+  const opts=document.getElementById('opts'+section);
+  item.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='option';
+    b.textContent=o;
+    b.onclick=()=>choose(section,o,b);
+    opts.appendChild(b);
+  });
+}
+function choose(section,choice,button){
+  if(locked[section]) return;
+  locked[section]=true;
+  const item=data[section].items[index[section]%data[section].items.length];
+  const ok=choice===item.ans;
+  [...document.getElementById('opts'+section).children].forEach(b=>{
+    if(b.textContent===item.ans)b.classList.add('correct');
+  });
+  if(!ok)button.classList.add('wrong');
+  document.getElementById('fb'+section).innerHTML=ok
+    ? '<span class="good">✓ Tačno!</span>'
+    : '<span class="bad">✗ Nije tačno. Tačan oblik je označen zeleno.</span>';
+  updateScore(ok);
+  if(ok) speak(item.full);
+}
+function showSolution(section){
+  const item=data[section].items[index[section]%data[section].items.length];
+  const sol=document.getElementById('sol'+section);
+  sol.style.display='block';
+  sol.textContent='Tačno: '+item.full;
+  speak(item.full);
+}
+function nextItem(section){
+  index[section]=(index[section]+1)%data[section].items.length;
+  render(section);
+}
+function resetAll(){
+  score=0;attempts=0;index=[0,0,0,0];locked=[false,false,false,false];
+  document.getElementById('score').textContent='Tačno: 0 / 0';
+  document.getElementById('percent').textContent='0%';
+  document.getElementById('progress').style.width='0%';
+  for(let i=0;i<4;i++)render(i);
+  showTab(0);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+for(let i=0;i<4;i++)render(i);
+</script>
+</body>
+</html>
