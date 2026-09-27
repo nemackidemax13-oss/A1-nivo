@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DE-MAX • Temporale Präpositionen</title>
+<style>
+  :root{
+    --navy:#071c46;
+    --navy2:#0a2d67;
+    --blue:#1559b7;
+    --red:#e31919;
+    --white:#fff;
+    --bg:#eef4fb;
+    --line:#dbe5f1;
+    --text:#10213d;
+    --muted:#66758c;
+    --good:#148a4b;
+    --bad:#c92c2c;
+    --yellow:#ffbf14;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,#061a40 0 150px,#edf4fb 150px);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text);
+  }
+  .app{
+    width:min(100%,760px);
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    box-shadow:0 0 30px rgba(0,0,0,.18);
+  }
+  header{
+    color:#fff;
+    background:
+      radial-gradient(circle at 90% 15%,rgba(255,255,255,.12),transparent 24%),
+      linear-gradient(135deg,#071b45,#0b3275);
+    padding:20px 16px 16px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    box-shadow:0 4px 16px rgba(0,0,0,.18);
+  }
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.4px;
+  }
+  .brandmark{
+    width:46px;height:46px;border-radius:14px;background:#fff;
+    display:grid;place-items:center;color:var(--red);font-weight:1000;font-style:italic;
+    box-shadow:0 4px 12px rgba(0,0,0,.2);
+  }
+  h1{margin:12px 0 2px;font-size:clamp(24px,6vw,40px);line-height:1}
+  .sub{opacity:.88;font-weight:700}
+  .progress-wrap{
+    margin-top:14px;background:rgba(255,255,255,.18);height:10px;border-radius:999px;overflow:hidden;
+  }
+  .progress{height:100%;width:0;background:linear-gradient(90deg,#ffbe0b,#fff);transition:.3s}
+  .stats{display:flex;justify-content:space-between;margin-top:6px;font-size:13px;font-weight:800}
+  main{padding:16px}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:16px;margin-bottom:14px;box-shadow:0 7px 20px rgba(14,43,86,.08);
+  }
+  .section-title{
+    display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;margin:0 0 12px;
+  }
+  .num{
+    width:34px;height:34px;border-radius:11px;background:var(--navy);color:#fff;display:grid;place-items:center;
+    font-size:15px;box-shadow:inset 0 -2px 0 rgba(255,255,255,.12);
+  }
+  .rule{
+    border-left:5px solid var(--red);
+    background:#f8fbff;border-radius:12px;padding:12px 12px;margin:10px 0;
+  }
+  .rule b{color:var(--red)}
+  .examples{display:grid;gap:10px}
+  .example{
+    border:1px solid var(--line);border-radius:15px;padding:12px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+  }
+  .de{font-size:19px;font-weight:900;line-height:1.25}
+  .de .hot{color:var(--red)}
+  .sr{color:var(--muted);font-style:italic;margin-top:4px}
+  .speak{
+    border:0;background:#eef4ff;color:#0b4a9f;border-radius:11px;padding:8px 11px;
+    font-weight:900;cursor:pointer;float:right;margin-left:8px;
+  }
+  .tabs{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;
+  }
+  .tab{
+    border:0;padding:12px 8px;border-radius:14px;font-weight:900;background:#fff;color:var(--navy);
+    box-shadow:0 4px 12px rgba(14,43,86,.08);cursor:pointer;border:1px solid var(--line);
+  }
+  .tab.active{background:var(--navy);color:#fff}
+  .panel{display:none}.panel.active{display:block}
+  .q{
+    font-size:18px;font-weight:900;margin-bottom:10px;line-height:1.35;
+  }
+  .answers{display:grid;gap:9px}
+  .ans{
+    width:100%;text-align:left;border:2px solid #d9e4f1;background:#fff;border-radius:14px;
+    padding:13px;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;transition:.15s;
+  }
+  .ans:hover{border-color:#91b7eb}
+  .ans.correct{border-color:#42a66a;background:#eafff0;color:#0b6c36}
+  .ans.wrong{border-color:#e27272;background:#fff0f0;color:#a82020}
+  .feedback{
+    min-height:25px;margin-top:10px;font-weight:900;
+  }
+  .good{color:var(--good)} .bad{color:var(--bad)}
+  .next{
+    width:100%;margin-top:10px;border:0;border-radius:14px;padding:13px;
+    background:linear-gradient(135deg,#0a2e6f,#135ec0);color:#fff;font-weight:900;font-size:16px;cursor:pointer;
+  }
+  .fillrow{display:flex;gap:8px;flex-wrap:wrap}
+  input{
+    flex:1;min-width:140px;border:2px solid #ccd9e8;border-radius:13px;padding:13px;font-size:17px;
+    outline:none;font-weight:800;
+  }
+  input:focus{border-color:#4e8edc}
+  .check{
+    border:0;border-radius:13px;padding:12px 16px;background:var(--red);color:#fff;font-weight:900;cursor:pointer;
+  }
+  .words{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .word{
+    border:1px solid #cbd9e9;background:#fff;border-radius:11px;padding:9px 11px;font-weight:800;cursor:pointer;
+  }
+  .build{
+    min-height:55px;border:2px dashed #b7c8dc;border-radius:14px;background:#f8fbff;padding:10px;display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .small{font-size:13px;color:var(--muted)}
+  .reset{
+    background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.5);padding:8px 10px;border-radius:10px;font-weight:900;
+    cursor:pointer;
+  }
+  footer{text-align:center;color:#65758a;font-size:12px;padding:8px 16px 28px}
+  @media(max-width:520px){
+    header{padding-top:max(14px,env(safe-area-inset-top))}
+    main{padding:12px}
+    .card{padding:14px;border-radius:17px}
+    .de{font-size:17px}
+    .tabs{grid-template-columns:1fr 1fr}
+    h1{font-size:28px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div class="brand">
+      <div class="brandmark">DM</div>
+      <div>DE‑MAX <span style="opacity:.75">TUTIN</span></div>
+    </div>
+    <button class="reset" onclick="resetAll()">↻ Reset</button>
+  </div>
+  <h1>Temporale Präpositionen</h1>
+  <div class="sub">Vremenski predlozi • A1</div>
+  <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+  <div class="stats"><span id="scoreText">Tačno: 0 / 0</span><span id="percentText">0%</span></div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="section-title"><span class="num">i</span> Pravilo i primeri</div>
+    <div class="rule">Na pitanje <b>Wann?</b> odgovaramo vremenskim predlozima <b>am</b>, <b>um</b> ili konstrukcijom <b>von … bis</b>.</div>
+    <div class="rule"><b>am</b> koristimo uz <b>dane</b> i <b>doba dana</b>. &nbsp; <b>um</b> koristimo uz <b>sat / vreme</b>.</div>
+    <div class="rule"><b>von</b> označava početak, a <b>bis</b> kraj vremenskog perioda.</div>
+    <div class="examples">
+      <div class="example"><button class="speak" onclick="speak('Wann haben Sie Deutschkurs?')">🔊</button><div class="de"><span class="hot">Wann</span> haben Sie Deutschkurs?</div><div class="sr">Kada imate Vi kurs nemačkog jezika?</div></div>
+      <div class="example"><button class="speak" onclick="speak('Ich habe am Montag.')">🔊</button><div class="de">Ich habe <span class="hot">am Montag</span>.</div><div class="sr">Ja imam kurs u ponedeljak.</div></div>
+      <div class="example"><button class="speak" onclick="speak('Ich habe um achtzehn Uhr.')">🔊</button><div class="de">Ich habe <span class="hot">um 18 Uhr</span>.</div><div class="sr">Ja imam kurs u 18 sati.</div></div>
+      <div class="example"><button class="speak" onclick="speak('Ich habe von Montag bis Freitag.')">🔊</button><div class="de">Ich habe <span class="hot">von Montag bis Freitag</span>.</div><div class="sr">Ja imam kurs od ponedeljka do petka.</div></div>
+      <div class="example"><button class="speak" onclick="speak('Ich habe von neun bis zwölf Uhr.')">🔊</button><div class="de">Ich habe <span class="hot">von 9 bis 12 Uhr</span>.</div><div class="sr">Ja imam kurs od 9 do 12 sati.</div></div>
+    </div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab(0)">1. Izaberi</button>
+    <button class="tab" onclick="showTab(1)">2. Dopuni</button>
+    <button class="tab" onclick="showTab(2)">3. Složi</button>
+    <button class="tab" onclick="showTab(3)">4. Prevod</button>
+  </div>
+
+  <section class="panel active">
+    <div class="card">
+      <div class="section-title"><span class="num">1</span> Izaberi tačan predlog</div>
+      <div id="mcqQ" class="q"></div>
+      <div id="mcqA" class="answers"></div>
+      <div id="mcqF" class="feedback"></div>
+      <button class="next" onclick="nextMCQ()">Sledeći primer →</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="card">
+      <div class="section-title"><span class="num">2</span> Dopuni rečenicu</div>
+      <div id="fillQ" class="q"></div>
+      <div class="fillrow">
+        <input id="fillInput" autocomplete="off" placeholder="upiši odgovor">
+        <button class="check" onclick="checkFill()">Proveri</button>
+      </div>
+      <div class="small">Upiši samo predlog ili konstrukciju koja nedostaje.</div>
+      <div id="fillF" class="feedback"></div>
+      <button class="next" onclick="nextFill()">Sledeći primer →</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="card">
+      <div class="section-title"><span class="num">3</span> Složi rečenicu</div>
+      <div id="buildHint" class="q"></div>
+      <div id="buildArea" class="build"></div>
+      <div id="wordBank" class="words"></div>
+      <div id="buildF" class="feedback"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="next" onclick="checkBuild()">Proveri</button>
+        <button class="next" style="background:#6d7b8f" onclick="resetBuild()">Ponovo</button>
+      </div>
+      <button class="next" onclick="nextBuild()">Sledeći primer →</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="card">
+      <div class="section-title"><span class="num">4</span> Prevedi na nemački</div>
+      <div id="trQ" class="q"></div>
+      <div id="trA" class="answers"></div>
+      <div id="trF" class="feedback"></div>
+      <button class="next" onclick="nextTr()">Sledeći primer →</button>
+    </div>
+  </section>
+</main>
+<footer>DE‑MAX • A1 nemački jezik • Vremenski predlozi</footer>
+</div>
+
+<script>
+let score=0, attempts=0;
+
+function updateScore(correct){
+  attempts++;
+  if(correct) score++;
+  const p = attempts ? Math.round(score/attempts*100) : 0;
+  document.getElementById('scoreText').textContent=`Tačno: ${score} / ${attempts}`;
+  document.getElementById('percentText').textContent=p+'%';
+  document.getElementById('progress').style.width=p+'%';
+}
+function resetAll(){
+  score=0;attempts=0;updateUI();
+  mcqIndex=fillIndex=buildIndex=trIndex=0;
+  renderMCQ();renderFill();renderBuild();renderTr();
+}
+function updateUI(){
+  document.getElementById('scoreText').textContent=`Tačno: ${score} / ${attempts}`;
+  document.getElementById('percentText').textContent=(attempts?Math.round(score/attempts*100):0)+'%';
+  document.getElementById('progress').style.width=(attempts?Math.round(score/attempts*100):0)+'%';
+}
+function showTab(i){
+  document.querySelectorAll('.tab').forEach((e,n)=>e.classList.toggle('active',n===i));
+  document.querySelectorAll('.panel').forEach((e,n)=>e.classList.toggle('active',n===i));
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='de-DE'; u.rate=.87; u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const de=voices.find(v=>v.lang && v.lang.toLowerCase().startsWith('de'));
+  if(de) u.voice=de;
+  speechSynthesis.speak(u);
+}
+
+// 1 MCQ
+const mcqs=[
+  ['Ich habe ___ Montag.','am',['am','um','von','bis']],
+  ['Ich habe ___ 18 Uhr.','um',['am','um','von','bis']],
+  ['Ich habe ___ Montag ___ Freitag.','von … bis',['am … um','von … bis','um … am','bis … von']],
+  ['Der Kurs beginnt ___ 9 Uhr.','um',['am','um','von','bis']],
+  ['Wir haben Deutsch ___ Dienstag.','am',['am','um','von','bis']],
+  ['Ich arbeite ___ 8 ___ 16 Uhr.','von … bis',['am … um','von … bis','um … bis','bis … von']],
+  ['___ Freitag habe ich keinen Kurs.','Am',['Am','Um','Von','Bis']],
+  ['Der Unterricht ist ___ 17 Uhr.','um',['am','um','von','bis']],
+  ['Wir lernen ___ Montag ___ Donnerstag.','von … bis',['von … bis','am … um','bis … von','um … am']],
+  ['Wann? – ___ Mittwoch.','Am',['Am','Um','Von','Bis']]
+];
+let mcqIndex=0, mcqLocked=false;
+function renderMCQ(){
+  mcqLocked=false;
+  const [q,correct,opts]=mcqs[mcqIndex%mcqs.length];
+  document.getElementById('mcqQ').textContent=q;
+  document.getElementById('mcqF').textContent='';
+  const box=document.getElementById('mcqA'); box.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='ans'; b.textContent=o;
+    b.onclick=()=>{
+      if(mcqLocked)return;mcqLocked=true;
+      [...box.children].forEach(x=>{if(x.textContent===correct)x.classList.add('correct')});
+      if(o===correct){b.classList.add('correct');document.getElementById('mcqF').innerHTML='<span class="good">✓ Tačno!</span>';updateScore(true)}
+      else{b.classList.add('wrong');document.getElementById('mcqF').innerHTML='<span class="bad">✗ Nije tačno.</span>';updateScore(false)}
+    };
+    box.appendChild(b);
+  });
+}
+function nextMCQ(){mcqIndex=(mcqIndex+1)%mcqs.length;renderMCQ()}
+
+// 2 fill
+const fills=[
+ ['Ich habe ___ Montag.','am'],
+ ['Ich habe ___ 18 Uhr.','um'],
+ ['Ich habe ___ Montag ___ Freitag.','von|bis'],
+ ['Ich habe ___ 9 ___ 12 Uhr.','von|bis'],
+ ['Der Kurs ist ___ Mittwoch.','am'],
+ ['Der Kurs beginnt ___ 19 Uhr.','um'],
+ ['Ich lerne ___ Dienstag ___ Donnerstag.','von|bis'],
+ ['___ Sonntag habe ich frei.','am'],
+];
+let fillIndex=0, fillLocked=false;
+function renderFill(){
+  fillLocked=false;
+  document.getElementById('fillQ').textContent=fills[fillIndex%fills.length][0];
+  document.getElementById('fillInput').value='';
+  document.getElementById('fillF').textContent='';
+}
+function normalize(s){return s.toLowerCase().trim().replace(/\s+/g,' ')}
+function checkFill(){
+  if(fillLocked)return;
+  const val=normalize(document.getElementById('fillInput').value);
+  const ans=fills[fillIndex%fills.length][1];
+  let ok=false;
+  if(ans.includes('|')){
+    const [a,b]=ans.split('|');
+    ok = val===`${a} ${b}` || val===`${a}…${b}` || val===`${a} ... ${b}` || val===`${a} bis` || (val.includes(a)&&val.includes(b));
+  } else ok=val===ans;
+  if(!val) return;
+  fillLocked=true;updateScore(ok);
+  document.getElementById('fillF').innerHTML=ok?'<span class="good">✓ Tačno!</span>':`<span class="bad">✗ Tačno je: ${ans.replace('|',' … ')}</span>`;
+}
+function nextFill(){fillIndex=(fillIndex+1)%fills.length;renderFill()}
+
+// 3 build
+const builds=[
+  {sr:'Ja imam kurs u ponedeljak.', de:'Ich habe am Montag.', words:['Montag.','am','Ich','habe']},
+  {sr:'Ja imam kurs u 18 sati.', de:'Ich habe um 18 Uhr.', words:['18','Ich','Uhr.','um','habe']},
+  {sr:'Ja imam kurs od ponedeljka do petka.', de:'Ich habe von Montag bis Freitag.', words:['bis','Montag','Ich','Freitag.','von','habe']},
+  {sr:'Ja imam kurs od 9 do 12 sati.', de:'Ich habe von 9 bis 12 Uhr.', words:['9','Uhr.','von','Ich','12','bis','habe']},
+  {sr:'Kada imate kurs nemačkog?', de:'Wann haben Sie Deutschkurs?', words:['Sie','Deutschkurs?','Wann','haben']}
+];
+let buildIndex=0, buildLocked=false, chosen=[];
+function renderBuild(){
+  buildLocked=false;chosen=[];
+  const it=builds[buildIndex%builds.length];
+  document.getElementById('buildHint').textContent=it.sr;
+  document.getElementById('buildF').textContent='';
+  document.getElementById('buildArea').innerHTML='';
+  const bank=document.getElementById('wordBank');bank.innerHTML='';
+  [...it.words].sort(()=>Math.random()-.5).forEach((w,i)=>{
+    const b=document.createElement('button');b.className='word';b.textContent=w;
+    b.onclick=()=>{
+      if(buildLocked)return;
+      chosen.push(w); b.style.display='none'; drawChosen();
+    };
+    bank.appendChild(b);
+  });
+}
+function drawChosen(){
+  const area=document.getElementById('buildArea');area.innerHTML='';
+  chosen.forEach((w,i)=>{
+    const b=document.createElement('button');b.className='word';b.textContent=w;
+    b.onclick=()=>{ if(buildLocked)return; chosen.splice(i,1); renderBuildFromChosen(); };
+    area.appendChild(b);
+  });
+}
+function renderBuildFromChosen(){
+  const it=builds[buildIndex%builds.length];
+  const hidden={};
+  chosen.forEach(w=>hidden[w]=(hidden[w]||0)+1);
+  drawChosen();
+  const bank=document.getElementById('wordBank');bank.innerHTML='';
+  it.words.forEach(w=>{
+    if(hidden[w]){hidden[w]--;return;}
+    const b=document.createElement('button');b.className='word';b.textContent=w;
+    b.onclick=()=>{if(buildLocked)return;chosen.push(w);renderBuildFromChosen()};
+    bank.appendChild(b);
+  })
+}
+function checkBuild(){
+  if(buildLocked)return;
+  const user=chosen.join(' ').replace(/\s+([?.!,])/g,'$1');
+  const target=builds[buildIndex%builds.length].de;
+  const ok=user===target;
+  buildLocked=true;updateScore(ok);
+  document.getElementById('buildF').innerHTML=ok?'<span class="good">✓ Tačno!</span>':`<span class="bad">✗ Rešenje: ${target}</span>`;
+  if(ok)speak(target);
+}
+function resetBuild(){renderBuild()}
+function nextBuild(){buildIndex=(buildIndex+1)%builds.length;renderBuild()}
+
+// 4 translation MCQ
+const trs=[
+ {q:'Ja imam kurs u ponedeljak.', c:'Ich habe am Montag.', a:['Ich habe am Montag.','Ich habe um Montag.','Ich habe von Montag.']},
+ {q:'Ja imam kurs u 18 sati.', c:'Ich habe um 18 Uhr.', a:['Ich habe am 18 Uhr.','Ich habe um 18 Uhr.','Ich habe bis 18 Uhr.']},
+ {q:'Ja imam kurs od ponedeljka do petka.', c:'Ich habe von Montag bis Freitag.', a:['Ich habe am Montag um Freitag.','Ich habe von Montag bis Freitag.','Ich habe um Montag bis Freitag.']},
+ {q:'Ja imam kurs od 9 do 12 sati.', c:'Ich habe von 9 bis 12 Uhr.', a:['Ich habe um 9 am 12 Uhr.','Ich habe von 9 bis 12 Uhr.','Ich habe am 9 bis 12 Uhr.']},
+ {q:'Kada imate Vi kurs nemačkog jezika?', c:'Wann haben Sie Deutschkurs?', a:['Wo haben Sie Deutschkurs?','Wann haben Sie Deutschkurs?','Wie haben Sie Deutschkurs?']}
+];
+let trIndex=0,trLocked=false;
+function renderTr(){
+  trLocked=false;
+  const it=trs[trIndex%trs.length];
+  document.getElementById('trQ').textContent=it.q;
+  document.getElementById('trF').textContent='';
+  const box=document.getElementById('trA');box.innerHTML='';
+  it.a.forEach(o=>{
+    const b=document.createElement('button');b.className='ans';b.textContent=o;
+    b.onclick=()=>{
+      if(trLocked)return;trLocked=true;
+      [...box.children].forEach(x=>{if(x.textContent===it.c)x.classList.add('correct')});
+      const ok=o===it.c;b.classList.add(ok?'correct':'wrong');updateScore(ok);
+      document.getElementById('trF').innerHTML=ok?'<span class="good">✓ Tačno!</span>':`<span class="bad">✗ Tačan odgovor je označen zeleno.</span>`;
+      if(ok)speak(it.c);
+    };box.appendChild(b)
+  });
+}
+function nextTr(){trIndex=(trIndex+1)%trs.length;renderTr()}
+
+renderMCQ();renderFill();renderBuild();renderTr();
+</script>
+</body>
+</html>
