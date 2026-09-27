@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DE-MAX A1 – Wie ist das Wetter?</title>
+<style>
+  :root{
+    --blue:#0b57e3; --blue2:#07388f; --ink:#102a63;
+    --ok:#168a46; --bad:#cf3232; --soft:#eef5ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    min-height:100vh;
+    color:var(--ink);
+    background:linear-gradient(160deg,#e8f4ff 0%,#fbfdff 48%,#dcecff 100%);
+  }
+  .app{
+    width:min(100%,520px);
+    min-height:100vh;
+    margin:auto;
+    padding:18px 16px 28px;
+  }
+  .top{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    margin-bottom:12px;
+  }
+  .logo{
+    color:white;font-weight:950;letter-spacing:.4px;font-size:21px;
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+    padding:10px 15px;border-radius:15px;
+    box-shadow:0 8px 20px #0b57e32b;
+  }
+  .badge{
+    background:#fff;border:1px solid #cbdcff;border-radius:14px;
+    padding:9px 12px;font-weight:850;
+  }
+  h1{
+    text-align:center;margin:12px 0 5px;color:#082f8f;
+    font-size:clamp(29px,8vw,43px);line-height:1;
+  }
+  .subtitle{
+    text-align:center;font-size:16px;font-weight:750;color:#506b9d;
+    margin-bottom:17px;
+  }
+  .progress{
+    height:12px;background:#d6e6ff;border-radius:999px;overflow:hidden;
+  }
+  .bar{
+    width:0;height:100%;
+    background:linear-gradient(90deg,#1765ef,#5a90f3);
+    transition:.3s;
+  }
+  .meta{
+    display:flex;justify-content:space-between;
+    font-size:14px;font-weight:800;color:#456391;
+    margin:7px 1px 14px;
+  }
+  .card{
+    background:rgba(255,255,255,.97);
+    border:2px solid #cfe0ff;border-radius:25px;
+    padding:18px;box-shadow:0 16px 34px #1e5aab1e;
+  }
+  .question{
+    text-align:center;
+    font-size:30px;font-weight:950;color:#0a3caa;
+    margin:3px 0 14px;
+  }
+  .imageBox{
+    min-height:245px;border-radius:24px;
+    background:linear-gradient(180deg,#cfe9ff 0%,#eef8ff 63%,#f7fbff 100%);
+    border:1px solid #c7ddff;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:17px;
+    overflow:hidden;position:relative;
+  }
+  .scene{
+    text-align:center;position:relative;z-index:2;
+  }
+  .weatherIcon{
+    font-size:112px;line-height:1;
+    filter:drop-shadow(0 9px 10px #3366aa33);
+  }
+  .ground{
+    position:absolute;bottom:-25px;left:-5%;width:110%;height:90px;
+    background:linear-gradient(180deg,#dff3ca,#b9e39a);
+    border-radius:50% 50% 0 0;
+    opacity:.85;
+  }
+  .listenQuestion{
+    width:100%;border:1px solid #c9dbff;background:#eef5ff;color:#16429e;
+    border-radius:15px;padding:11px 12px;font-size:15px;font-weight:900;
+    margin-bottom:13px;cursor:pointer;
+  }
+  .options{display:grid;gap:12px}
+  .opt{
+    width:100%;text-align:center;
+    border:2px solid #c4d7fb;background:#fff;color:#123475;
+    border-radius:18px;padding:17px 13px;
+    font-size:21px;font-weight:900;
+    cursor:pointer;box-shadow:0 9px 20px #1e5aab10;
+    transition:.17s;
+  }
+  .opt:active{transform:scale(.99)}
+  .opt.correct{
+    border-color:#83d49f;background:#eaf9ef;color:#0e7638;
+  }
+  .opt.wrong{
+    border-color:#efa8a8;background:#fff0f0;color:#ab2d2d;
+  }
+  .feedback{
+    display:none;margin-top:13px;padding:13px 14px;border-radius:17px;
+    font-weight:850;line-height:1.4;
+  }
+  .feedback.ok{
+    display:block;background:#eaf9ef;border:1px solid #b7e6c6;color:#0f7839;
+  }
+  .feedback.bad{
+    display:block;background:#fff0f0;border:1px solid #f0bdbd;color:#a62d2d;
+  }
+  .solution{
+    display:block;margin-top:5px;color:#244f99;
+  }
+  .next{
+    display:none;width:100%;margin-top:12px;border:0;border-radius:16px;
+    padding:14px 12px;background:#132e70;color:white;
+    font-size:16px;font-weight:900;cursor:pointer;
+  }
+  .done{
+    display:none;text-align:center;
+  }
+  .done .cup{font-size:70px}
+  .done h2{font-size:29px;color:#0a3caa;margin:8px 0}
+  .finalScore{font-size:23px;font-weight:950;margin:12px 0}
+  .restart{
+    width:100%;border:0;border-radius:16px;padding:14px 12px;
+    background:#0b57e3;color:#fff;font-size:16px;font-weight:900;cursor:pointer;
+    margin-top:13px;
+  }
+  .footer{
+    text-align:center;color:#7285a8;font-size:12px;font-weight:700;margin-top:14px;
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="top">
+    <div class="logo">DE-MAX</div>
+    <div class="badge">A1 • Wetter</div>
+  </div>
+
+  <h1>Wie ist das Wetter?</h1>
+  <div class="subtitle">Pogledaj sliku i izaberi jedan od dva odgovora.</div>
+
+  <div id="quiz">
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="meta">
+      <span id="counter">Pitanje 1 / 12</span>
+      <span id="scoreTop">Tačno: 0</span>
+    </div>
+
+    <section class="card">
+      <div class="question">Wie ist das Wetter?</div>
+
+      <div class="imageBox">
+        <div class="scene">
+          <div class="weatherIcon" id="weatherIcon">☀️</div>
+        </div>
+        <div class="ground"></div>
+      </div>
+
+      <button class="listenQuestion" id="listenQuestion">🔊 Poslušaj pitanje</button>
+
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="nextBtn">Sledeće pitanje →</button>
+    </section>
+  </div>
+
+  <section class="card done" id="done">
+    <div class="cup">🏆</div>
+    <h2>Vežba je završena!</h2>
+    <div class="finalScore" id="finalScore"></div>
+    <div id="finalMsg"></div>
+    <button class="restart" onclick="restart()">Ponovi vežbu</button>
+  </section>
+
+  <div class="footer">DE-MAX • A1 nemački jezik</div>
+</main>
+
+<script>
+const items = [
+  {de:"Es ist sonnig.", icon:"☀️"},
+  {de:"Es ist bewölkt.", icon:"☁️"},
+  {de:"Es ist warm.", icon:"🌡️"},
+  {de:"Es blitzt.", icon:"⚡"},
+  {de:"Es ist kalt.", icon:"🥶"},
+  {de:"Es donnert.", icon:"⛈️"},
+  {de:"Es ist windig.", icon:"💨"},
+  {de:"Es scheint.", icon:"🌞"},
+  {de:"Es schneit.", icon:"❄️"},
+  {de:"Schlecht.", icon:"🌧️"},
+  {de:"Schön.", icon:"🌤️"},
+  {de:"Nicht so schön.", icon:"🌫️"}
+];
+
+let idx = 0;
+let score = 0;
+let locked = false;
+let questionTimer = null;
+
+const $ = id => document.getElementById(id);
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "de-DE";
+  u.rate = 0.88;
+  u.pitch = 1;
+  speechSynthesis.speak(u);
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function wrongAnswer(correct){
+  let w;
+  do{
+    w = items[Math.floor(Math.random()*items.length)].de;
+  } while(w === correct);
+  return w;
+}
+
+function render(){
+  clearTimeout(questionTimer);
+  locked = false;
+  const it = items[idx];
+
+  $("weatherIcon").textContent = it.icon;
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  $("nextBtn").style.display = "none";
+  $("counter").textContent = `Pitanje ${idx+1} / ${items.length}`;
+  $("scoreTop").textContent = `Tačno: ${score}`;
+  $("bar").style.width = `${(idx/items.length)*100}%`;
+
+  const choices = shuffle([it.de, wrongAnswer(it.de)]);
+  const wrap = $("options");
+  wrap.innerHTML = "";
+
+  choices.forEach(choice=>{
+    const b=document.createElement("button");
+    b.className="opt";
+    b.textContent=choice;
+    b.onclick=()=>choose(b, choice===it.de);
+    wrap.appendChild(b);
+  });
+
+  // Na početku se čita SAMO pitanje.
+  questionTimer = setTimeout(()=>speak("Wie ist das Wetter?"), 500);
+}
+
+function choose(button, isCorrect){
+  if(locked) return;
+  locked = true;
+
+  const correct = items[idx].de;
+  const buttons = [...document.querySelectorAll(".opt")];
+  buttons.forEach(b=>b.disabled=true);
+
+  if(isCorrect){
+    score++;
+    button.classList.add("correct");
+    $("feedback").className="feedback ok";
+    $("feedback").innerHTML=`✅ Tačno! <span class="solution">${correct}</span>`;
+    // Tek kada učenik pogodi, čita se tačan odgovor.
+    speak(correct);
+  } else {
+    button.classList.add("wrong");
+    buttons.forEach(b=>{
+      if(b.textContent===correct) b.classList.add("correct");
+    });
+    $("feedback").className="feedback bad";
+    $("feedback").innerHTML=`❌ Netačno.<span class="solution">Tačno rešenje: <b>${correct}</b></span>`;
+    // Ako pogreši, prikaži i pročitaj tačan odgovor.
+    speak(correct);
+  }
+
+  $("scoreTop").textContent=`Tačno: ${score}`;
+  $("nextBtn").style.display="block";
+}
+
+function next(){
+  idx++;
+  if(idx>=items.length){
+    $("quiz").style.display="none";
+    $("done").style.display="block";
+    const pct=Math.round(score/items.length*100);
+    $("finalScore").textContent=`${score} / ${items.length} tačno • ${pct}%`;
+    $("finalMsg").textContent=
+      pct>=90 ? "Odlično!" :
+      pct>=70 ? "Vrlo dobro!" :
+      "Ponovi izraze i pokušaj ponovo.";
+  }else{
+    render();
+  }
+}
+
+function restart(){
+  idx=0;
+  score=0;
+  locked=false;
+  $("done").style.display="none";
+  $("quiz").style.display="block";
+  render();
+}
+
+$("listenQuestion").addEventListener("click",()=>speak("Wie ist das Wetter?"));
+$("nextBtn").addEventListener("click",next);
+
+render();
+</script>
+</body>
+</html>
