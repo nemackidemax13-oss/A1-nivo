@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DE-MAX A1 Perfekt</title>
+<style>
+:root{
+  --blue:#083f96; --blue2:#0b6ed0; --navy:#05295f; --gold:#ffd233;
+  --bg:#eef7ff; --card:#ffffff; --line:#d5e7f7; --text:#10243d; --muted:#617991;
+  --green:#19884b; --red:#cf3036;
+}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+body{min-height:100vh;background:
+radial-gradient(circle at 10% 2%,rgba(255,255,255,.98),transparent 28%),
+linear-gradient(180deg,#dcefff 0,#fbfdff 42%,#edf7ff 100%)}
+.app{max-width:980px;margin:auto;padding:10px 10px 94px}
+.hero{
+  color:#fff;border-radius:25px;padding:16px;
+  background:linear-gradient(135deg,var(--navy),var(--blue2));
+  box-shadow:0 16px 34px rgba(2,65,128,.24);position:relative;overflow:hidden
+}
+.hero:after{content:"";position:absolute;right:-90px;top:-120px;width:250px;height:250px;border:34px solid rgba(255,255,255,.07);border-radius:50%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.logo{background:#fff;color:#ed1d28;border-radius:14px;padding:8px 13px;font-weight:1000;letter-spacing:-1px;box-shadow:0 5px 12px rgba(0,0,0,.15)}
+.logo small{font-size:10px;color:#111}
+.level{border:2px solid #dceeff;border-radius:13px;padding:6px 12px;font-weight:1000}
+h1{font-size:clamp(30px,7vw,52px);line-height:1;margin:14px 0 2px}
+.sub1{font-size:clamp(22px,4vw,30px);font-weight:1000;color:#d9ebff;margin:0}
+.sub2{margin:6px 0 0;color:#dceeff;font-weight:700}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:7px 10px;font-weight:900;font-size:13px}
+.progressbox{height:11px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;margin-top:12px}
+.progress{height:100%;width:0;background:#fff;transition:.25s}
+
+.tabs{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+ margin:13px 0;position:sticky;top:4px;z-index:15;padding:6px;border-radius:18px;
+ background:rgba(234,245,255,.92);backdrop-filter:blur(10px)
+}
+.tab{
+ border:1px solid var(--line);background:#fff;color:#0b467e;border-radius:14px;
+ padding:10px 7px;min-height:58px;font-size:12px;font-weight:1000;cursor:pointer
+}
+.tab.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-color:transparent}
+
+.card{
+ background:var(--card);border:1px solid var(--line);border-radius:22px;padding:17px;
+ box-shadow:0 13px 30px rgba(36,89,140,.12)
+}
+.counter{text-align:right;color:#617a90;font-size:13px;font-weight:900}
+.kicker{font-size:12px;color:var(--blue2);font-weight:1000;text-transform:uppercase;letter-spacing:.8px}
+.title{font-size:clamp(23px,5vw,33px);font-weight:1000;line-height:1.12;margin:5px 0}
+.help{margin:0 0 12px;color:var(--muted);font-weight:700}
+.question{
+ background:linear-gradient(180deg,#f9fcff,#eff7ff);border:2px solid #d8e9f8;
+ border-radius:18px;padding:15px;margin:12px 0
+}
+.qmain{font-size:clamp(22px,5.5vw,30px);font-weight:1000;line-height:1.23}
+.tr{font-style:italic;color:#627991;font-weight:750;margin-top:7px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chip{background:#e6f2ff;color:#0754a3;border:1px solid #afd2f2;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:900}
+
+.options{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.option{
+ border:2px solid #cfe2f5;background:#fff;color:#0b477f;border-radius:14px;
+ padding:13px 9px;font-size:18px;font-weight:1000;cursor:pointer;transition:.15s
+}
+.option:hover{transform:translateY(-1px)}
+.option.correct{background:#e9f8ef;border-color:#68bd82;color:#166a39}
+.option.wrong{background:#fff0f0;border-color:#ef9898;color:#9b2d2d}
+
+.build-zone{
+ min-height:72px;border:2px dashed #9bc7ee;background:#f3f9ff;border-radius:16px;
+ padding:10px;display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start;margin:12px 0
+}
+.words{display:flex;flex-wrap:wrap;gap:7px}
+.word,.placed{border-radius:12px;padding:9px 11px;font-weight:1000;cursor:pointer}
+.word{background:#fff;color:#0c4e90;border:1px solid #b8d7f3;box-shadow:0 3px 7px rgba(24,75,122,.08)}
+.word.used{opacity:.32;pointer-events:none}
+.placed{background:#0863ba;color:#fff}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;border-radius:14px;padding:12px 15px;font-size:15px;font-weight:1000;cursor:pointer}
+.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.ghost{background:#edf6ff;color:#0753a1;border:1px solid #c6dff7}
+.small{padding:9px 12px;font-size:14px}
+
+.feedback{display:none;margin-top:13px;padding:12px 13px;border-radius:15px;font-weight:850;line-height:1.45}
+.feedback.show{display:block}
+.feedback.ok{background:#e9f8ef;color:#176b3b;border:1px solid #92d5a8}
+.feedback.no{background:#fff0f0;color:#982929;border:1px solid #efadad}
+.soundnote{margin-top:8px;color:#55738e;font-size:13px;font-weight:800}
+.rule{margin-top:15px;background:#073a79;color:#fff;border-radius:18px;padding:13px 14px;font-weight:800;line-height:1.45}
+.rule b{color:#ffd759}
+.footer{
+ position:fixed;bottom:9px;left:50%;transform:translateX(-50%);width:min(960px,calc(100% - 18px));
+ display:flex;gap:8px;padding:8px;border-radius:18px;background:rgba(255,255,255,.96);
+ border:1px solid #d4e5f4;box-shadow:0 10px 30px rgba(0,61,119,.2);z-index:20;backdrop-filter:blur(12px)
+}
+.footer button{flex:1}
+@media(max-width:700px){
+ .app{padding:8px 8px 88px}.hero{padding:14px;border-radius:20px}.card{padding:14px;border-radius:19px}
+ .tab{font-size:10px;padding:7px 4px;min-height:54px}
+ .options{grid-template-columns:1fr}
+ .qmain{font-size:23px}.logo{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero">
+  <div class="top">
+    <div class="logo">DE-MAX <small>TUTIN</small></div>
+    <div class="level">A1</div>
+  </div>
+  <h1>PERFEKT</h1>
+  <p class="sub1">perfekat</p>
+  <p class="sub2">sein / haben + Partizip II</p>
+  <div class="stats">
+    <span class="pill">Tačno: <b id="correct">0</b></span>
+    <span class="pill">Pokušaji: <b id="attempts">0</b></span>
+    <span class="pill">Tačnost: <b id="accuracy">0%</b></span>
+  </div>
+  <div class="progressbox"><div class="progress" id="progress"></div></div>
+</section>
+
+<nav class="tabs">
+  <button class="tab active" data-mode="partizip">1. Infinitiv – Partizip II</button>
+  <button class="tab" data-mode="affirm">2. Potvrdne</button>
+  <button class="tab" data-mode="question">3. Upitne</button>
+  <button class="tab" data-mode="aux">4. Haben / Sein</button>
+</nav>
+
+<main class="card">
+  <div class="counter" id="counter"></div>
+  <div id="content"></div>
+</main>
+
+<section class="rule">
+  <b>Perfekt:</b> pomoćni glagol <b>haben</b> ili <b>sein</b> stoji na drugom mestu u potvrdnoj rečenici,
+  a glavni glagol ide u <b>Partizip II</b> na kraju rečenice.
+</section>
+</div>
+
+<div class="footer">
+  <button class="btn ghost" id="prev">← Prethodno</button>
+  <button class="btn primary" id="next">Sledeće →</button>
+</div>
+
+<script>
+const VERBS = [
+ {inf:"lernen", part:"gelernt", sr:"učiti", aux:"haben"},
+ {inf:"machen", part:"gemacht", sr:"raditi", aux:"haben"},
+ {inf:"hören", part:"gehört", sr:"slušati", aux:"haben"},
+ {inf:"arbeiten", part:"gearbeitet", sr:"raditi", aux:"haben"},
+ {inf:"sprechen", part:"gesprochen", sr:"govoriti", aux:"haben"},
+ {inf:"lesen", part:"gelesen", sr:"čitati", aux:"haben"},
+ {inf:"essen", part:"gegessen", sr:"jesti", aux:"haben"},
+ {inf:"schreiben", part:"geschrieben", sr:"pisati", aux:"haben"},
+ {inf:"trinken", part:"getrunken", sr:"piti", aux:"haben"},
+ {inf:"sehen", part:"gesehen", sr:"videti", aux:"haben"},
+ {inf:"kaufen", part:"gekauft", sr:"kupiti", aux:"haben"},
+ {inf:"wohnen", part:"gewohnt", sr:"stanovati", aux:"haben"},
+ {inf:"fragen", part:"gefragt", sr:"pitati", aux:"haben"},
+ {inf:"antworten", part:"geantwortet", sr:"odgovoriti", aux:"haben"},
+ {inf:"kochen", part:"gekocht", sr:"kuvati", aux:"haben"},
+ {inf:"lernen", part:"gelernt", sr:"učiti", aux:"haben"},
+ {inf:"tanzen", part:"getanzt", sr:"plesati", aux:"haben"},
+ {inf:"spielen", part:"gespielt", sr:"igrati", aux:"haben"},
+ {inf:"brauchen", part:"gebraucht", sr:"trebati", aux:"haben"},
+ {inf:"bezahlen", part:"bezahlt", sr:"platiti", aux:"haben"},
+ {inf:"finden", part:"gefunden", sr:"naći", aux:"haben"},
+ {inf:"bringen", part:"gebracht", sr:"doneti", aux:"haben"},
+ {inf:"schlafen", part:"geschlafen", sr:"spavati", aux:"haben"},
+ {inf:"putzen", part:"geputzt", sr:"čistiti", aux:"haben"},
+ {inf:"aufräumen", part:"aufgeräumt", sr:"pospremiti", aux:"haben"},
+ {inf:"telefonieren", part:"telefoniert", sr:"telefonirati", aux:"haben"},
+ {inf:"besuchen", part:"besucht", sr:"posetiti", aux:"haben"},
+ {inf:"öffnen", part:"geöffnet", sr:"otvoriti", aux:"haben"},
+ {inf:"schließen", part:"geschlossen", sr:"zatvoriti", aux:"haben"},
+ {inf:"helfen", part:"geholfen", sr:"pomoći", aux:"haben"},
+ {inf:"gehen", part:"gegangen", sr:"ići", aux:"sein"},
+ {inf:"fahren", part:"gefahren", sr:"voziti / putovati", aux:"sein"},
+ {inf:"kommen", part:"gekommen", sr:"dolaziti", aux:"sein"},
+ {inf:"sein", part:"gewesen", sr:"biti", aux:"sein"},
+ {inf:"springen", part:"gesprungen", sr:"skočiti", aux:"sein"},
+ {inf:"wachsen", part:"gewachsen", sr:"rasti", aux:"sein"},
+ {inf:"werden", part:"geworden", sr:"postati", aux:"sein"},
+ {inf:"sterben", part:"gestorben", sr:"umreti", aux:"sein"},
+ {inf:"laufen", part:"gelaufen", sr:"trčati", aux:"sein"},
+ {inf:"fliegen", part:"geflogen", sr:"leteti", aux:"sein"},
+ {inf:"reisen", part:"gereist", sr:"putovati", aux:"sein"},
+ {inf:"bleiben", part:"geblieben", sr:"ostati", aux:"sein"},
+ {inf:"aufstehen", part:"aufgestanden", sr:"ustati", aux:"sein"},
+ {inf:"einsteigen", part:"eingestiegen", sr:"ući / ukrcati se", aux:"sein"},
+ {inf:"aussteigen", part:"ausgestiegen", sr:"izaći / iskrcati se", aux:"sein"},
+ {inf:"ankommen", part:"angekommen", sr:"stići", aux:"sein"},
+ {inf:"zurückkommen", part:"zurückgekommen", sr:"vratiti se", aux:"sein"},
+ {inf:"fallen", part:"gefallen", sr:"pasti", aux:"sein"},
+ {inf:"passieren", part:"passiert", sr:"dogoditi se", aux:"sein"},
+ {inf:"aufwachen", part:"aufgewacht", sr:"probuditi se", aux:"sein"}
+];
+
+const AFFIRM = [
+ {w:["Ich","habe","Deutsch","gelernt","."], tr:"Ja sam učio nemački."},
+ {w:["Du","hast","die Hausaufgabe","gemacht","."], tr:"Ti si uradio domaći zadatak."},
+ {w:["Er","hat","Lieder","gehört","."], tr:"On je slušao pesme."},
+ {w:["Sie","hat","gestern","gearbeitet","."], tr:"Ona je juče radila."},
+ {w:["Es","hat","Deutsch","gesprochen","."], tr:"Ono je govorilo nemački."},
+ {w:["Wir","haben","ein Buch","gelesen","."], tr:"Mi smo čitali jednu knjigu."},
+ {w:["Ihr","habt","Pizza","gegessen","."], tr:"Vi ste jeli picu."},
+ {w:["Sie","haben","Briefe","geschrieben","."], tr:"Oni su pisali pisma."},
+ {w:["Ich","bin","nach Hause","gegangen","."], tr:"Ja sam otišao kući."},
+ {w:["Du","bist","mit dem Auto","gefahren","."], tr:"Ti si se vozio autom."},
+ {w:["Er","ist","gestern","gekommen","."], tr:"On je juče došao."},
+ {w:["Sie","ist","in Berlin","gewesen","."], tr:"Ona je bila u Berlinu."},
+ {w:["Es","ist","weit","gesprungen","."], tr:"Ono je skočilo daleko."},
+ {w:["Wir","sind","groß","gewachsen","."], tr:"Mi smo mnogo porasli."},
+ {w:["Ihr","seid","Freunde","geworden","."], tr:"Vi ste postali prijatelji."},
+ {w:["Sie","sind","gestern","gestorben","."], tr:"Oni su juče umrli."},
+ {w:["Ich","habe","einen Kaffee","getrunken","."], tr:"Ja sam popio jednu kafu."},
+ {w:["Wir","haben","eine Pizza","gekauft","."], tr:"Mi smo kupili jednu picu."},
+ {w:["Anna","hat","mich","gefragt","."], tr:"Anna me je pitala."},
+ {w:["Paul","ist","früh","aufgestanden","."], tr:"Paul je rano ustao."}
+];
+
+const QUESTION = [
+ {w:["Wo","hast","du","Deutsch","gelernt","?"], tr:"Gde si učio nemački?"},
+ {w:["Wann","bist","du","gekommen","?"], tr:"Kada si došao?"},
+ {w:["Hast","du","die Hausaufgabe","gemacht","?"], tr:"Da li si uradio domaći zadatak?"},
+ {w:["Hat","er","Lieder","gehört","?"], tr:"Da li je on slušao pesme?"},
+ {w:["Hat","sie","gestern","gearbeitet","?"], tr:"Da li je ona juče radila?"},
+ {w:["Haben","wir","ein Buch","gelesen","?"], tr:"Da li smo čitali jednu knjigu?"},
+ {w:["Habt","ihr","Pizza","gegessen","?"], tr:"Da li ste jeli picu?"},
+ {w:["Haben","sie","Briefe","geschrieben","?"], tr:"Da li su pisali pisma?"},
+ {w:["Bist","du","nach Hause","gegangen","?"], tr:"Da li si otišao kući?"},
+ {w:["Ist","er","gestern","gekommen","?"], tr:"Da li je on juče došao?"},
+ {w:["Ist","sie","in Berlin","gewesen","?"], tr:"Da li je ona bila u Berlinu?"},
+ {w:["Sind","wir","groß","gewachsen","?"], tr:"Da li smo mnogo porasli?"},
+ {w:["Seid","ihr","Freunde","geworden","?"], tr:"Da li ste postali prijatelji?"},
+ {w:["Sind","sie","gestern","gestorben","?"], tr:"Da li su oni juče umrli?"},
+ {w:["Was","hast","du","getrunken","?"], tr:"Šta si pio?"},
+ {w:["Wo","habt","ihr","eine Pizza","gekauft","?"], tr:"Gde ste kupili picu?"},
+ {w:["Wer","hat","dich","gefragt","?"], tr:"Ko te je pitao?"},
+ {w:["Wann","ist","Paul","aufgestanden","?"], tr:"Kada je Paul ustao?"},
+ {w:["Warum","bist","du","nach Berlin","gefahren","?"], tr:"Zašto si putovao u Berlin?"},
+ {w:["Wie","seid","ihr","gekommen","?"], tr:"Kako ste došli?"}
+];
+
+const AUX = [
+ {s:"Ich ___ Deutsch gelernt.", opts:["habe","bin"], a:"habe", full:"Ich habe Deutsch gelernt.", tr:"Ja sam učio nemački."},
+ {s:"Du ___ mit dem Auto gefahren.", opts:["hast","bist"], a:"bist", full:"Du bist mit dem Auto gefahren.", tr:"Ti si se vozio autom."},
+ {s:"Er ___ gestern gekommen.", opts:["hat","ist"], a:"ist", full:"Er ist gestern gekommen.", tr:"On je juče došao."},
+ {s:"Wir ___ ein Buch gelesen.", opts:["haben","sind"], a:"haben", full:"Wir haben ein Buch gelesen.", tr:"Mi smo čitali jednu knjigu."},
+ {s:"Ihr ___ Pizza gegessen.", opts:["habt","seid"], a:"habt", full:"Ihr habt Pizza gegessen.", tr:"Vi ste jeli picu."},
+ {s:"Sie ___ in Berlin gewesen.", opts:["hat","ist"], a:"ist", full:"Sie ist in Berlin gewesen.", tr:"Ona je bila u Berlinu."},
+ {s:"Paul ___ früh aufgestanden.", opts:["hat","ist"], a:"ist", full:"Paul ist früh aufgestanden.", tr:"Paul je rano ustao."},
+ {s:"Anna ___ mich gefragt.", opts:["hat","ist"], a:"hat", full:"Anna hat mich gefragt.", tr:"Anna me je pitala."},
+ {s:"Wir ___ groß gewachsen.", opts:["haben","sind"], a:"sind", full:"Wir sind groß gewachsen.", tr:"Mi smo mnogo porasli."},
+ {s:"Sie ___ Briefe geschrieben.", opts:["haben","sind"], a:"haben", full:"Sie haben Briefe geschrieben.", tr:"Oni su pisali pisma."},
+ {s:"Ich ___ einen Kaffee getrunken.", opts:["habe","bin"], a:"habe", full:"Ich habe einen Kaffee getrunken.", tr:"Ja sam popio jednu kafu."},
+ {s:"Ihr ___ Freunde geworden.", opts:["habt","seid"], a:"seid", full:"Ihr seid Freunde geworden.", tr:"Vi ste postali prijatelji."},
+ {s:"Du ___ nach Hause gegangen.", opts:["hast","bist"], a:"bist", full:"Du bist nach Hause gegangen.", tr:"Ti si otišao kući."},
+ {s:"Es ___ weit gesprungen.", opts:["hat","ist"], a:"ist", full:"Es ist weit gesprungen.", tr:"Ono je skočilo daleko."},
+ {s:"Wir ___ eine Pizza gekauft.", opts:["haben","sind"], a:"haben", full:"Wir haben eine Pizza gekauft.", tr:"Mi smo kupili jednu picu."},
+ {s:"Sie ___ gestern gestorben.", opts:["haben","sind"], a:"sind", full:"Sie sind gestern gestorben.", tr:"Oni su juče umrli."},
+ {s:"Du ___ die Hausaufgabe gemacht.", opts:["hast","bist"], a:"hast", full:"Du hast die Hausaufgabe gemacht.", tr:"Ti si uradio domaći zadatak."},
+ {s:"Er ___ Lieder gehört.", opts:["hat","ist"], a:"hat", full:"Er hat Lieder gehört.", tr:"On je slušao pesme."},
+ {s:"Ich ___ gestern gearbeitet.", opts:["habe","bin"], a:"habe", full:"Ich habe gestern gearbeitet.", tr:"Ja sam juče radio."},
+ {s:"Wir ___ nach Deutschland gereist.", opts:["haben","sind"], a:"sind", full:"Wir sind nach Deutschland gereist.", tr:"Mi smo putovali u Nemačku."}
+];
+
+let mode="partizip", index=0, attempts=0, correct=0, placed=[];
+const done=new Set();
+const content=document.getElementById("content"), counter=document.getElementById("counter");
+
+function speak(text){
+  if(!text || !("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang="de-DE"; u.rate=.86;
+  const v = speechSynthesis.getVoices().find(x=>/^de/i.test(x.lang));
+  if(v) u.voice=v;
+  speechSynthesis.speak(u);
+}
+function norm(arr){return arr.join(" ").replace(/\s+([?.!,])/g,"$1")}
+function activeArray(){
+  return mode==="partizip" ? VERBS : mode==="affirm" ? AFFIRM : mode==="question" ? QUESTION : AUX;
+}
+function updateStats(){
+  document.getElementById("correct").textContent=correct;
+  document.getElementById("attempts").textContent=attempts;
+  document.getElementById("accuracy").textContent=(attempts?Math.round(correct/attempts*100):0)+"%";
+  const total = VERBS.length + AFFIRM.length + QUESTION.length + AUX.length;
+  document.getElementById("progress").style.width=(done.size/total*100)+"%";
+}
+function markCorrect(){
+  const key = mode+":"+index;
+  if(!done.has(key)){done.add(key);correct++}
+  updateStats();
+}
+function render(){
+  speechSynthesis.cancel();
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.mode===mode));
+  const arr = activeArray(); if(index>=arr.length) index=0;
+  counter.textContent=(index+1)+" / "+arr.length;
+  if(mode==="partizip") renderPartizip(arr[index]);
+  else if(mode==="affirm" || mode==="question") renderBuilder(arr[index]);
+  else renderAux(arr[index]);
+}
+function renderPartizip(item){
+  const pool = VERBS.filter(v=>v.part!==item.part).map(v=>v.part);
+  const distractors = [];
+  while(distractors.length<3){
+    const pick = pool[Math.floor(Math.random()*pool.length)];
+    if(!distractors.includes(pick)) distractors.push(pick);
+  }
+  const opts = [item.part, ...distractors].sort(()=>Math.random()-.5);
+  content.innerHTML=`
+    <div class="kicker">A1 • Perfekt</div>
+    <div class="title">Vežbanje Infinitiv – Partizip II</div>
+    <p class="help">Izaberi odgovarajući <b>Partizip II</b> za dati infinitiv. Prikazuje se i pomoćni glagol da lakše pamtiš perfekt.</p>
+    <div class="chips">
+      <span class="chip">Infinitiv: ${item.inf}</span>
+      <span class="chip">Značenje: ${item.sr}</span>
+      <span class="chip">Pomoćni glagol: ${item.aux}</span>
+    </div>
+    <div class="question">
+      <div class="qmain">${item.inf} → ?</div>
+      <div class="tr">${item.sr}</div>
+    </div>
+    <div class="options">
+      ${opts.map(x=>`<button class="option" data-v="${x}">${x}</button>`).join("")}
+    </div>
+    <div id="feedback" class="feedback"></div>`;
+  const btns=[...document.querySelectorAll(".option")];
+  btns.forEach(b=>b.onclick=()=>{
+    if(b.disabled) return;
+    attempts++; updateStats();
+    const e=document.getElementById("feedback");
+    if(b.dataset.v===item.part){
+      btns.forEach(x=>x.disabled=true); b.classList.add("correct");
+      markCorrect();
+      e.className="feedback show ok";
+      e.innerHTML=`✓ Tačno!<br><b>${item.inf} → ${item.part}</b><br>Pomoćni glagol: <b>${item.aux}</b><br>${item.sr}`;
+      speak(item.part);
+    }else{
+      b.classList.add("wrong"); b.disabled=true;
+      e.className="feedback show no";
+      e.innerHTML=`✗ Nije tačno. Pokušaj ponovo.`;
+    }
+  });
+}
+function renderBuilder(item){
+  placed=[];
+  const isAff = mode==="affirm";
+  const shuffled = item.w.map((w,i)=>({w,i})).sort(()=>Math.random()-.5);
+  content.innerHTML=`
+    <div class="kicker">A1 • Perfekt</div>
+    <div class="title">${isAff ? "Složi potvrdnu rečenicu" : "Složi upitnu rečenicu"}</div>
+    <p class="help">${isAff
+      ? "Složi potvrdnu rečenicu u perfektu. Posle provere videćeš rešenje, prevod i čućeš rečenicu."
+      : "Složi upitnu rečenicu u perfektu. Posle provere videćeš rešenje, prevod i čućeš rečenicu."}</p>
+    <div class="question">
+      <div class="qmain">Složi rečenicu od ponuđenih reči</div>
+      <div class="tr">${item.tr}</div>
+    </div>
+    <div class="build-zone" id="zone"><span style="color:#7890a8;font-weight:900">Pritisni reči pravilnim redosledom…</span></div>
+    <div class="words">${shuffled.map(x=>`<button class="word" data-o="${x.i}" data-w="${x.w}">${x.w}</button>`).join("")}</div>
+    <div class="actions">
+      <button class="btn primary" id="check">Proveri</button>
+      <button class="btn ghost" id="reset">Obriši</button>
+      <button class="btn ghost small" id="showSolution">Prikaži rešenje</button>
+    </div>
+    <div id="feedback" class="feedback"></div>
+    <div class="soundnote">🔊 Kada učenik proveri rečenicu, aplikacija prikazuje tačno rešenje, prevod i čita nemačku rečenicu.</div>`;
+  const zone=document.getElementById("zone");
+  const btns=[...document.querySelectorAll(".word")];
+  function redraw(){
+    zone.innerHTML=placed.length
+      ? placed.map((p,j)=>`<span class="placed" data-j="${j}">${p.w}</span>`).join("")
+      : `<span style="color:#7890a8;font-weight:900">Pritisni reči pravilnim redosledom…</span>`;
+    document.querySelectorAll(".placed").forEach(x=>x.onclick=()=>{
+      const p=placed.splice(+x.dataset.j,1)[0];
+      btns.find(b=>+b.dataset.o===p.o).classList.remove("used");
+      redraw();
+    });
+  }
+  btns.forEach(b=>b.onclick=()=>{
+    if(b.classList.contains("used")) return;
+    placed.push({w:b.dataset.w,o:+b.dataset.o});
+    b.classList.add("used"); redraw();
+  });
+  document.getElementById("reset").onclick=()=>{
+    placed=[]; btns.forEach(b=>b.classList.remove("used")); redraw();
+    document.getElementById("feedback").className="feedback";
+  };
+  document.getElementById("showSolution").onclick=()=>{
+    const sol=norm(item.w), e=document.getElementById("feedback");
+    e.className="feedback show ok";
+    e.innerHTML=`Rešenje:<br><b>${sol}</b><br><span style="font-weight:800">${item.tr}</span>`;
+    speak(sol);
+  };
+  document.getElementById("check").onclick=()=>{
+    attempts++; updateStats();
+    const got=norm(placed.map(x=>x.w)), sol=norm(item.w);
+    const e=document.getElementById("feedback");
+    const ok = got===sol;
+    if(ok) markCorrect();
+    e.className="feedback show "+(ok?"ok":"no");
+    e.innerHTML=`${ok?"✓ Tačno!":"✗ Nije tačno."}<br><b>${sol}</b><br><span style="font-weight:800">${item.tr}</span>`;
+    speak(sol);
+  };
+}
+function renderAux(item){
+  content.innerHTML=`
+    <div class="kicker">A1 • Perfekt</div>
+    <div class="title">Vežbaj pomoćni glagol haben / sein</div>
+    <p class="help">Izaberi pravilan pomoćni glagol. Posle tačnog odgovora aplikacija prikazuje celu rečenicu i prevod.</p>
+    <div class="question">
+      <div class="qmain">${item.s}</div>
+      <div class="tr">${item.tr}</div>
+    </div>
+    <div class="options">
+      ${item.opts.map(x=>`<button class="option" data-v="${x}">${x}</button>`).join("")}
+    </div>
+    <div id="feedback" class="feedback"></div>`;
+  const btns=[...document.querySelectorAll(".option")];
+  btns.forEach(b=>b.onclick=()=>{
+    if(b.disabled) return;
+    attempts++; updateStats();
+    const e=document.getElementById("feedback");
+    if(b.dataset.v===item.a){
+      btns.forEach(x=>x.disabled=true); b.classList.add("correct");
+      markCorrect();
+      e.className="feedback show ok";
+      e.innerHTML=`✓ Tačno!<br><b>${item.full}</b><br>${item.tr}`;
+      speak(item.full);
+    }else{
+      b.classList.add("wrong"); b.disabled=true;
+      e.className="feedback show no";
+      e.innerHTML="✗ Nije tačno. Pokušaj ponovo.";
+    }
+  });
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{mode=b.dataset.mode; index=0; render()});
+document.getElementById("prev").onclick=()=>{const a=activeArray(); index=(index-1+a.length)%a.length; render()};
+document.getElementById("next").onclick=()=>{const a=activeArray(); index=(index+1)%a.length; render()};
+window.speechSynthesis.onvoiceschanged=()=>{};
+updateStats(); render();
+</script>
+</body>
+</html>
