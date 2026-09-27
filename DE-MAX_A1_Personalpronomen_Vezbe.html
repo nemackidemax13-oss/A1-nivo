@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DE-MAX A1 – Personalpronomen</title>
+<style>
+:root{
+  --red:#e30613;
+  --blue:#0b4aa2;
+  --green:#11882d;
+  --bg:#f3f7ff;
+  --card:#ffffff;
+  --text:#10244b;
+  --muted:#6c7893;
+  --ok:#159447;
+  --bad:#d92d3f;
+  --shadow:0 12px 35px rgba(20,45,90,.12);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(227,6,19,.08),transparent 26%),
+    radial-gradient(circle at 90% 10%,rgba(11,74,162,.10),transparent 28%),
+    var(--bg);
+  min-height:100vh;
+}
+.app{max-width:760px;margin:auto;padding:14px 14px 36px}
+.hero{
+  background:linear-gradient(135deg,#e30613,#b3000b);
+  color:#fff;border-radius:26px;padding:20px;
+  box-shadow:0 14px 30px rgba(179,0,11,.24);
+  position:relative;overflow:hidden;
+}
+.hero:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  border:24px solid rgba(255,255,255,.11);right:-70px;top:-70px;
+}
+.brand{font-size:14px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;opacity:.9}
+.hero h1{font-size:clamp(30px,7vw,50px);line-height:1;margin:8px 0 6px}
+.hero p{margin:0;font-size:18px;font-weight:700;opacity:.92}
+.mini-grid{
+  margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.mini{
+  border-radius:18px;padding:11px 14px;background:rgba(255,255,255,.13);
+  backdrop-filter:blur(4px);font-weight:800
+}
+.progress-card{
+  margin:14px 0;background:#fff;border-radius:22px;padding:14px 16px;box-shadow:var(--shadow)
+}
+.progress-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900}
+.bar{height:12px;background:#e8eef9;border-radius:999px;overflow:hidden;margin-top:10px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,#0b4aa2,#2f7de2);transition:.35s}
+.tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0
+}
+.tab{
+  border:0;border-radius:16px;padding:12px 8px;background:#fff;color:var(--text);
+  font-weight:900;box-shadow:0 6px 18px rgba(25,47,91,.09);cursor:pointer
+}
+.tab.active{background:#0b4aa2;color:#fff}
+.card{
+  background:var(--card);border-radius:26px;padding:20px;box-shadow:var(--shadow);
+  min-height:420px
+}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#6a7ba3}
+.qnum{font-size:14px;font-weight:900;color:#0b4aa2;margin-bottom:10px}
+.question{
+  font-size:clamp(25px,6vw,38px);line-height:1.18;font-weight:950;margin:10px 0 18px
+}
+.hint{font-size:15px;color:var(--muted);font-weight:700;margin-top:-8px;margin-bottom:16px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-answer{
+  border:2px solid #dce5f6;background:#f9fbff;border-radius:18px;padding:17px 12px;
+  font-size:21px;font-weight:900;color:var(--text);cursor:pointer;transition:.18s;
+  min-height:62px
+}
+.btn-answer:hover{transform:translateY(-1px);border-color:#9db9e8}
+.btn-answer.correct{background:#e8f8ee;border-color:#3fb66a;color:#0b6e32}
+.btn-answer.wrong{background:#fff0f2;border-color:#e76877;color:#a70f24}
+.feedback{
+  margin-top:16px;border-radius:18px;padding:14px 16px;font-weight:800;display:none;line-height:1.45
+}
+.feedback.ok{display:block;background:#eaf9ef;color:#0a6e31;border:1px solid #bce9cc}
+.feedback.bad{display:block;background:#fff0f2;color:#9e1730;border:1px solid #f0b8c1}
+.controls{display:flex;gap:10px;margin-top:18px}
+.control{
+  flex:1;border:0;border-radius:16px;padding:14px;font-weight:900;font-size:16px;cursor:pointer
+}
+.next{background:#0b4aa2;color:white}
+.secondary{background:#edf3fd;color:#0b4aa2}
+.sentence-box{
+  border:2px dashed #b9c9e8;background:#f8fbff;border-radius:18px;padding:16px;
+  min-height:76px;font-size:22px;font-weight:900;display:flex;flex-wrap:wrap;gap:8px;align-items:center
+}
+.wordbank{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.word{
+  border:0;background:#0b4aa2;color:#fff;border-radius:14px;padding:12px 14px;font-weight:900;
+  font-size:18px;cursor:pointer;box-shadow:0 5px 14px rgba(11,74,162,.18)
+}
+.word.used{opacity:.25;pointer-events:none}
+.token{
+  background:#fff;border:1px solid #cbd8ee;border-radius:12px;padding:9px 11px;cursor:pointer
+}
+.statline{
+  margin-top:14px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  color:#6b7892;font-weight:800;font-size:14px
+}
+.ref{
+  margin-top:14px;background:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow)
+}
+.ref h3{margin:0 0 12px;font-size:20px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ref-col{border-radius:18px;padding:14px;background:#f6f9ff}
+.ref-col:nth-child(2){background:#f2fbf4}
+.ref-title{font-weight:950;margin-bottom:8px}
+.ref-row{display:flex;justify-content:space-between;font-weight:900;padding:5px 0;border-bottom:1px dashed #d9e1ee}
+.ref-row:last-child{border-bottom:0}
+.footer{margin-top:14px;text-align:center;color:#7c879c;font-size:13px;font-weight:700}
+@media(max-width:520px){
+  .app{padding:10px 10px 28px}
+  .hero{border-radius:22px;padding:17px}
+  .tabs{gap:6px}
+  .tab{font-size:12px;padding:11px 6px}
+  .card{padding:17px;border-radius:22px}
+  .answers{grid-template-columns:1fr 1fr}
+  .btn-answer{font-size:19px;padding:14px 9px}
+  .ref-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="hero">
+    <div class="brand">DE-MAX • A1 nemački</div>
+    <h1>Personalpronomen</h1>
+    <p>Lične zamenice – vežbe</p>
+    <div class="mini-grid">
+      <div class="mini">👤 ich, du, er, sie, es</div>
+      <div class="mini">👥 wir, ihr, sie, Sie</div>
+    </div>
+  </section>
+
+  <section class="progress-card">
+    <div class="progress-top"><span>Ukupan napredak</span><span id="scoreText">0 / 0</span></div>
+    <div class="bar"><div id="bar"></div></div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-mode="translate">1. Prevod</button>
+    <button class="tab" data-mode="sentence">2. Rečenice</button>
+    <button class="tab" data-mode="build">3. Složi</button>
+  </nav>
+
+  <section class="card">
+    <div id="exercise"></div>
+  </section>
+
+  <section class="ref">
+    <h3>📘 Brzi pregled</h3>
+    <div class="ref-grid">
+      <div class="ref-col">
+        <div class="ref-title" style="color:#0b4aa2">Singular – jednina</div>
+        <div class="ref-row"><span>ich</span><span>ja</span></div>
+        <div class="ref-row"><span>du</span><span>ti</span></div>
+        <div class="ref-row"><span>er</span><span>on</span></div>
+        <div class="ref-row"><span>sie</span><span>ona</span></div>
+        <div class="ref-row"><span>es</span><span>ono</span></div>
+      </div>
+      <div class="ref-col">
+        <div class="ref-title" style="color:#11882d">Plural – množina</div>
+        <div class="ref-row"><span>wir</span><span>mi</span></div>
+        <div class="ref-row"><span>ihr</span><span>vi</span></div>
+        <div class="ref-row"><span>sie</span><span>oni / one / ona</span></div>
+        <div class="ref-row"><span>Sie</span><span>Vi (formalno)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">DE-MAX • vežbaj, poslušaj i ponovi</div>
+</main>
+
+<script>
+const DATA = {
+translate: [
+  {q:"ja", a:"ich", opts:["ich","du"]},
+  {q:"ti", a:"du", opts:["du","ihr"]},
+  {q:"on", a:"er", opts:["er","es"]},
+  {q:"ona", a:"sie", opts:["sie","er"]},
+  {q:"ono", a:"es", opts:["es","sie"]},
+  {q:"mi", a:"wir", opts:["wir","ihr"]},
+  {q:"vi", a:"ihr", opts:["ihr","wir"]},
+  {q:"oni / one / ona", a:"sie", opts:["sie","Sie"]},
+  {q:"Vi – formalno", a:"Sie", opts:["sie","Sie"]},
+  {q:"ja", a:"ich", opts:["wir","ich"]},
+  {q:"ona", a:"sie", opts:["es","sie"]},
+  {q:"mi", a:"wir", opts:["ihr","wir"]},
+  {q:"ti", a:"du", opts:["du","Sie"]},
+  {q:"on", a:"er", opts:["er","sie"]},
+  {q:"Vi – formalno", a:"Sie", opts:["ihr","Sie"]}
+],
+sentence: [
+  {q:"___ heiße Anna.", a:"Ich", opts:["Ich","Du"], t:"Zovem se Ana."},
+  {q:"___ kommst aus Berlin.", a:"Du", opts:["Du","Er"], t:"Ti dolaziš iz Berlina."},
+  {q:"___ wohnt in Wien. (on)", a:"Er", opts:["Er","Sie"], t:"On živi u Beču."},
+  {q:"___ lernt Deutsch. (ona)", a:"Sie", opts:["Sie","Es"], t:"Ona uči nemački."},
+  {q:"___ ist klein. (dete)", a:"Es", opts:["Es","Er"], t:"Ono je malo."},
+  {q:"___ wohnen in Tutin.", a:"Wir", opts:["Wir","Ihr"], t:"Mi živimo u Tutinu."},
+  {q:"___ seid sehr nett.", a:"Ihr", opts:["Ihr","Wir"], t:"Vi ste veoma ljubazni."},
+  {q:"___ kommen heute. (oni)", a:"Sie", opts:["Sie","Ihr"], t:"Oni dolaze danas."},
+  {q:"___ kommen aus Deutschland? (Vi – formalno)", a:"Sie", opts:["Sie","Du"], t:"Da li Vi dolazite iz Nemačke?"},
+  {q:"___ bin Lehrer.", a:"Ich", opts:["Ich","Er"], t:"Ja sam nastavnik."},
+  {q:"___ bist müde.", a:"Du", opts:["Du","Wir"], t:"Ti si umoran/umorna."},
+  {q:"___ arbeitet heute. (on)", a:"Er", opts:["Er","Es"], t:"On radi danas."},
+  {q:"___ ist meine Schwester.", a:"Sie", opts:["Sie","Er"], t:"Ona je moja sestra."},
+  {q:"___ spielen Fußball.", a:"Wir", opts:["Wir","Sie"], t:"Mi igramo fudbal."},
+  {q:"___ sprechen sehr gut Deutsch. (oni)", a:"Sie", opts:["Sie","Ihr"], t:"Oni veoma dobro govore nemački."},
+  {q:"___ haben drei Kinder.", a:"Wir", opts:["Wir","Ihr"], t:"Mi imamo troje dece."},
+  {q:"___ habt heute Schule.", a:"Ihr", opts:["Ihr","Sie"], t:"Vi danas imate školu."},
+  {q:"___ heißt Max. (pas)", a:"Er", opts:["Er","Es"], t:"On se zove Maks."},
+  {q:"___ ist neu. (auto)", a:"Es", opts:["Es","Sie"], t:"Ono je novo."},
+  {q:"___ sind Frau Müller?", a:"Sie", opts:["Sie","Du"], t:"Da li ste Vi gospođa Miler?"}
+],
+build: [
+  {words:["Ich","heiße","Amir."], a:"Ich heiße Amir.", t:"Zovem se Amir."},
+  {words:["Du","kommst","aus","Serbien."], a:"Du kommst aus Serbien.", t:"Ti dolaziš iz Srbije."},
+  {words:["Er","wohnt","in","Berlin."], a:"Er wohnt in Berlin.", t:"On živi u Berlinu."},
+  {words:["Sie","lernt","Deutsch."], a:"Sie lernt Deutsch.", t:"Ona uči nemački."},
+  {words:["Es","ist","sehr","klein."], a:"Es ist sehr klein.", t:"Ono je veoma malo."},
+  {words:["Wir","sprechen","Deutsch."], a:"Wir sprechen Deutsch.", t:"Mi govorimo nemački."},
+  {words:["Ihr","seid","heute","hier."], a:"Ihr seid heute hier.", t:"Vi ste danas ovde."},
+  {words:["Sie","kommen","aus","Österreich."], a:"Sie kommen aus Österreich.", t:"Oni dolaze iz Austrije."},
+  {words:["Sie","sind","Herr","Müller."], a:"Sie sind Herr Müller.", t:"Vi ste gospodin Miler."},
+  {words:["Ich","bin","heute","müde."], a:"Ich bin heute müde.", t:"Ja sam danas umoran/umorna."},
+  {words:["Du","bist","mein","Freund."], a:"Du bist mein Freund.", t:"Ti si moj prijatelj."},
+  {words:["Er","arbeitet","im","Büro."], a:"Er arbeitet im Büro.", t:"On radi u kancelariji."},
+  {words:["Sie","ist","meine","Mutter."], a:"Sie ist meine Mutter.", t:"Ona je moja majka."},
+  {words:["Wir","haben","heute","Deutsch."], a:"Wir haben heute Deutsch.", t:"Mi danas imamo nemački."},
+  {words:["Ihr","wohnt","in","Tutin."], a:"Ihr wohnt in Tutin.", t:"Vi živite u Tutinu."}
+]
+};
+
+let mode="translate", idx=0, total=0, correct=0, locked=false, built=[];
+
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="de-DE"; u.rate=.92; u.pitch=1;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+function updateScore(){
+  document.getElementById("scoreText").textContent=`${correct} / ${total}`;
+  document.getElementById("bar").style.width = total ? `${Math.round(correct/total*100)}%` : "0%";
+}
+function next(){
+  idx=(idx+1)%DATA[mode].length; locked=false; built=[]; render();
+}
+function setMode(m){
+  mode=m; idx=0; locked=false; built=[];
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.mode===m));
+  render();
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+
+function render(){
+  const ex=document.getElementById("exercise");
+  const item=DATA[mode][idx];
+  if(mode==="translate"){
+    ex.innerHTML=`
+      <div class="kicker">Izaberi nemačku ličnu zamenicu</div>
+      <div class="qnum">Pitanje ${idx+1} / ${DATA[mode].length}</div>
+      <div class="question">${item.q} = ?</div>
+      <div class="hint">Pritisni tačan odgovor.</div>
+      <div class="answers">${item.opts.map(o=>`<button class="btn-answer" data-v="${o}">${o}</button>`).join("")}</div>
+      <div id="feedback" class="feedback"></div>
+      <div class="controls"><button class="control next" id="nextBtn">Sledeće →</button></div>`;
+    ex.querySelectorAll(".btn-answer").forEach(b=>b.onclick=()=>checkChoice(b,item));
+    document.getElementById("nextBtn").onclick=next;
+  }
+  if(mode==="sentence"){
+    ex.innerHTML=`
+      <div class="kicker">Dopuni rečenicu</div>
+      <div class="qnum">Pitanje ${idx+1} / ${DATA[mode].length}</div>
+      <div class="question">${item.q}</div>
+      <div class="hint">Izaberi odgovarajuću ličnu zamenicu.</div>
+      <div class="answers">${item.opts.map(o=>`<button class="btn-answer" data-v="${o}">${o}</button>`).join("")}</div>
+      <div id="feedback" class="feedback"></div>
+      <div class="controls"><button class="control next" id="nextBtn">Sledeće →</button></div>`;
+    ex.querySelectorAll(".btn-answer").forEach(b=>b.onclick=()=>checkChoice(b,item,true));
+    document.getElementById("nextBtn").onclick=next;
+  }
+  if(mode==="build"){
+    const words=shuffle(item.words);
+    ex.innerHTML=`
+      <div class="kicker">Složi pravilnu rečenicu</div>
+      <div class="qnum">Pitanje ${idx+1} / ${DATA[mode].length}</div>
+      <div class="question" style="font-size:27px">Klikni reči pravilnim redom.</div>
+      <div class="sentence-box" id="builtBox"><span style="color:#93a0b8;font-size:16px">Ovde slažeš rečenicu…</span></div>
+      <div class="wordbank" id="wordbank">${words.map((w,i)=>`<button class="word" data-i="${i}" data-w="${w}">${w}</button>`).join("")}</div>
+      <div id="feedback" class="feedback"></div>
+      <div class="controls">
+        <button class="control secondary" id="clearBtn">Obriši</button>
+        <button class="control next" id="checkBtn">Proveri ✓</button>
+      </div>`;
+    ex.querySelectorAll(".word").forEach(b=>b.onclick=()=>addWord(b));
+    document.getElementById("clearBtn").onclick=()=>{built=[];renderBuilt();ex.querySelectorAll(".word").forEach(x=>x.classList.remove("used"));};
+    document.getElementById("checkBtn").onclick=()=>checkBuilt(item);
+  }
+}
+function checkChoice(btn,item,isSentence=false){
+  if(locked)return;
+  locked=true; total++;
+  const ok=btn.dataset.v===item.a;
+  const fb=document.getElementById("feedback");
+  document.querySelectorAll(".btn-answer").forEach(b=>{
+    if(b.dataset.v===item.a)b.classList.add("correct");
+  });
+  if(ok){
+    correct++;
+    fb.className="feedback ok";
+    if(isSentence){
+      const full=item.q.replace("___",item.a).replace(/\s+\([^)]*\)/,"");
+      fb.innerHTML=`✅ Tačno!<br><b>${full}</b><br><span style="font-weight:700">${item.t||""}</span>`;
+      speak(full);
+    }else{
+      fb.innerHTML=`✅ Tačno! <b>${item.a}</b>`;
+      speak(item.a);
+    }
+  }else{
+    btn.classList.add("wrong");
+    fb.className="feedback bad";
+    if(isSentence){
+      const full=item.q.replace("___",item.a).replace(/\s+\([^)]*\)/,"");
+      fb.innerHTML=`❌ Nije tačno.<br>Rešenje: <b>${full}</b><br><span style="font-weight:700">${item.t||""}</span>`;
+      speak(full);
+    }else{
+      fb.innerHTML=`❌ Nije tačno. Rešenje je: <b>${item.a}</b>`;
+      speak(item.a);
+    }
+  }
+  updateScore();
+}
+function addWord(btn){
+  if(btn.classList.contains("used"))return;
+  built.push({w:btn.dataset.w,i:btn.dataset.i});
+  btn.classList.add("used"); renderBuilt();
+}
+function renderBuilt(){
+  const box=document.getElementById("builtBox");
+  if(!built.length){box.innerHTML='<span style="color:#93a0b8;font-size:16px">Ovde slažeš rečenicu…</span>';return}
+  box.innerHTML=built.map((x,j)=>`<span class="token" data-j="${j}">${x.w}</span>`).join("");
+  box.querySelectorAll(".token").forEach(t=>t.onclick=()=>{
+    const item=built.splice(+t.dataset.j,1)[0];
+    document.querySelector(`.word[data-i="${item.i}"]`)?.classList.remove("used");
+    renderBuilt();
+  });
+}
+function checkBuilt(item){
+  if(locked)return;
+  total++;
+  const answer=built.map(x=>x.w).join(" ").replace(/\s+([.,!?])/g,"$1");
+  const ok=answer===item.a;
+  const fb=document.getElementById("feedback");
+  if(ok){
+    locked=true; correct++;
+    fb.className="feedback ok";
+    fb.innerHTML=`✅ Tačno!<br><b>${item.a}</b><br><span style="font-weight:700">${item.t}</span>`;
+    speak(item.a);
+    document.getElementById("checkBtn").textContent="Sledeće →";
+    document.getElementById("checkBtn").onclick=next;
+  }else{
+    fb.className="feedback bad";
+    fb.innerHTML=`❌ Pokušaj ponovo.<br>Rešenje: <b>${item.a}</b><br><span style="font-weight:700">${item.t}</span>`;
+    speak(item.a);
+  }
+  updateScore();
+}
+render(); updateScore();
+</script>
+</body>
+</html>
