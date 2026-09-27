@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DE-MAX A1 – Lokale Präpositionen</title>
+<style>
+:root{
+  --blue:#0a3b8a;
+  --blue2:#156fd1;
+  --red:#e1262f;
+  --green:#14935b;
+  --bg:#eef6ff;
+  --card:#ffffff;
+  --text:#132340;
+  --muted:#70829d;
+  --line:#d9e8f8;
+  --shadow:0 16px 40px rgba(10,59,138,.14);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#e8f3ff 0%,#f9fbff 52%,#eef6ff 100%);
+  color:var(--text);
+}
+.app{
+  width:min(100%,570px);
+  min-height:100vh;
+  margin:auto;
+  padding:14px 13px 34px;
+}
+.hero{
+  background:linear-gradient(135deg,#083072,#146dce);
+  color:#fff;
+  border-radius:28px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"🐱📦";
+  position:absolute;
+  right:14px;
+  top:12px;
+  font-size:38px;
+}
+.brand{font-size:12px;font-weight:900;letter-spacing:.14em;opacity:.92}
+h1{margin:6px 0 4px;font-size:30px;line-height:1.04}
+.sub{font-size:14px;line-height:1.42;max-width:84%;opacity:.92}
+.rules{
+  margin:12px 0;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(10,59,138,.07);
+}
+.rules h2{
+  margin:0 0 10px;
+  color:var(--blue);
+  font-size:18px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.item{
+  background:#f8fbff;
+  border:1px solid #dbe8f7;
+  border-radius:14px;
+  padding:9px 8px;
+  text-align:center;
+}
+.item b{display:block;color:var(--blue);font-size:18px}
+.item span{font-size:12px;color:#53657f;font-weight:700}
+.note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#fff8eb;
+  border:1px solid #f0d9a7;
+  font-size:13px;
+  line-height:1.5;
+}
+.note b{color:#b56a00}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:12px 0;
+}
+.stat{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:9px 5px;
+  text-align:center;
+}
+.stat b{display:block;font-size:18px;color:var(--blue)}
+.stat span{font-size:10px;color:var(--muted);font-weight:800}
+.progressWrap{
+  height:9px;
+  background:#e4edf8;
+  border-radius:999px;
+  overflow:hidden;
+  margin:10px 0 12px;
+}
+.progress{
+  width:0;height:100%;
+  background:linear-gradient(90deg,#0a3b8a,#3aa1f6);
+  transition:.25s;
+}
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.pill{
+  display:inline-block;
+  background:#eef5ff;
+  color:var(--blue);
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+}
+.counter{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
+.visual{
+  text-align:center;
+  font-size:56px;
+  margin:9px 0 4px;
+}
+.question{
+  text-align:center;
+  font-size:22px;
+  line-height:1.33;
+  font-weight:900;
+  margin:8px 0 16px;
+}
+.example{
+  display:inline-block;
+  margin-top:6px;
+  color:var(--blue);
+  background:#eef6ff;
+  border-radius:12px;
+  padding:4px 10px;
+}
+.options{
+  display:grid;
+  gap:9px;
+}
+.option{
+  border:2px solid var(--line);
+  background:#fff;
+  border-radius:16px;
+  padding:14px;
+  font-size:18px;
+  font-weight:900;
+  color:var(--text);
+  cursor:pointer;
+}
+.option:active{transform:scale(.99)}
+.option.good{background:#e9faf1;border-color:#7fd3a8;color:#087743}
+.option.bad{background:#fff0f2;border-color:#f0a1ab;color:#af2336}
+.option:disabled{cursor:default}
+.feedback{
+  display:none;
+  border-radius:15px;
+  padding:11px 12px;
+  margin-top:12px;
+  font-weight:800;
+  line-height:1.4;
+}
+.feedback.ok{display:block;background:#e9faf1;color:#087743}
+.feedback.no{display:block;background:#fff0f2;color:#ad2435}
+.listen,.next{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:13px 14px;
+  font-weight:900;
+  cursor:pointer;
+}
+.listen{
+  margin-top:10px;
+  background:#ebf4ff;
+  color:var(--blue);
+}
+.next{
+  margin-top:10px;
+  background:linear-gradient(135deg,#0a3b8a,#1977d3);
+  color:#fff;
+  font-size:16px;
+}
+.next:disabled{opacity:.45}
+.examples{
+  margin-top:13px;
+  display:grid;
+  gap:7px;
+}
+.examples div{
+  background:#f8fbff;
+  border:1px solid #dce9f8;
+  border-radius:13px;
+  padding:8px 9px;
+  font-size:12px;
+  line-height:1.4;
+}
+.examples b{color:var(--blue)}
+.footer{
+  text-align:center;
+  color:#8191a7;
+  font-size:10px;
+  margin-top:13px;
+}
+@media(min-width:700px){
+  .app{margin:18px auto;min-height:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <section class="hero">
+    <div class="brand">DE-MAX • A1 NEMAČKI</div>
+    <h1>Lokale Präpositionen</h1>
+    <div class="sub">Vežba za predloge: an, auf, hinter, in, neben, über, unter, vor, zwischen</div>
+  </section>
+
+  <section class="rules">
+    <h2>Lokacioni predlozi (Wo? – Gde?)</h2>
+    <div class="grid">
+      <div class="item"><b>an</b><span>uz</span></div>
+      <div class="item"><b>auf</b><span>na</span></div>
+      <div class="item"><b>hinter</b><span>iza</span></div>
+      <div class="item"><b>in</b><span>u</span></div>
+      <div class="item"><b>neben</b><span>pored</span></div>
+      <div class="item"><b>über</b><span>iznad</span></div>
+      <div class="item"><b>unter</b><span>ispod</span></div>
+      <div class="item"><b>vor</b><span>ispred</span></div>
+      <div class="item"><b>zwischen</b><span>između</span></div>
+    </div>
+    <div class="note">
+      <b>Podsetnik:</b> <b>an + dem = am</b> i <b>in + dem = im</b>.<br>
+      Primeri: <i>am Fenster</i>, <i>im Regal</i>, <i>im Zimmer</i>.
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><b id="done">0</b><span>URAĐENO</span></div>
+    <div class="stat"><b id="right">0</b><span>TAČNO</span></div>
+    <div class="stat"><b id="accuracy">0%</b><span>TAČNOST</span></div>
+  </div>
+  <div class="progressWrap"><div class="progress" id="progress"></div></div>
+
+  <section class="card">
+    <div class="top">
+      <div class="pill">Izaberi tačan predlog</div>
+      <div class="counter" id="counter">1 / 24</div>
+    </div>
+
+    <div class="visual" id="visual">🐱📦</div>
+    <div class="question" id="question"></div>
+
+    <div class="options" id="options"></div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="listen" id="listenBtn">🔊 Poslušaj tačnu rečenicu</button>
+    <button class="next" id="nextBtn" disabled>Sledeći primer →</button>
+
+    <div class="examples">
+      <div><b>Primer:</b> Die Vase steht <b>auf</b> dem Tisch.</div>
+      <div><b>Primer:</b> Die Katze ist <b>in</b> der Box.</div>
+      <div><b>Primer:</b> Die Schuhe sind <b>unter</b> dem Bett.</div>
+    </div>
+  </section>
+
+  <div class="footer">DE-MAX • A1 vežba • Lokale Präpositionen</div>
+</div>
+
+<script>
+const exercises = [
+  {icon:"🏺🪑", q:"Die Vase steht ___ dem Tisch.", a:"auf", choices:["auf","unter"], full:"Die Vase steht auf dem Tisch."},
+  {icon:"🐱📦", q:"Die Katze ist ___ der Box.", a:"in", choices:["in","auf"], full:"Die Katze ist in der Box."},
+  {icon:"⚽🪑", q:"Der Ball ist ___ dem Tisch.", a:"unter", choices:["unter","auf"], full:"Der Ball ist unter dem Tisch."},
+  {icon:"🐶🏠", q:"Der Hund sitzt ___ dem Hundehaus.", a:"vor", choices:["vor","in"], full:"Der Hund sitzt vor dem Hundehaus."},
+  {icon:"🧸📚", q:"Der Teddybär sitzt ___ dem Regal.", a:"auf", choices:["auf","in"], full:"Der Teddybär sitzt auf dem Regal."},
+  {icon:"🎒🧥", q:"Die Tasche steht ___ der Jacke.", a:"neben", choices:["neben","über"], full:"Die Tasche steht neben der Jacke."},
+  {icon:"🌸🪟", q:"Die Blume steht ___ dem Fenster.", a:"an", choices:["an","hinter"], full:"Die Blume steht an dem Fenster."},
+  {icon:"👟🛏️", q:"Die Schuhe sind ___ dem Bett.", a:"unter", choices:["unter","auf"], full:"Die Schuhe sind unter dem Bett."},
+  {icon:"🐱🪑", q:"Die Katze sitzt ___ dem Stuhl.", a:"auf", choices:["auf","unter"], full:"Die Katze sitzt auf dem Stuhl."},
+  {icon:"📚🪑", q:"Die Bücher liegen ___ dem Tisch.", a:"auf", choices:["auf","vor"], full:"Die Bücher liegen auf dem Tisch."},
+  {icon:"🚗🏠", q:"Das Auto steht ___ dem Haus.", a:"vor", choices:["vor","hinter"], full:"Das Auto steht vor dem Haus."},
+  {icon:"🌳🏠", q:"Der Baum steht ___ dem Haus.", a:"hinter", choices:["hinter","vor"], full:"Der Baum steht hinter dem Haus."},
+  {icon:"🐱📦", q:"Die Katze sitzt ___ der Box.", a:"hinter", choices:["hinter","in"], full:"Die Katze sitzt hinter der Box."},
+  {icon:"💡🪑", q:"Die Lampe hängt ___ dem Tisch.", a:"über", choices:["über","unter"], full:"Die Lampe hängt über dem Tisch."},
+  {icon:"🧒📚📚", q:"Das Kind sitzt ___ zwei Stühlen.", a:"zwischen", choices:["zwischen","neben"], full:"Das Kind sitzt zwischen zwei Stühlen."},
+  {icon:"🪑🪟", q:"Der Stuhl steht ___ dem Fenster.", a:"an", choices:["an","unter"], full:"Der Stuhl steht an dem Fenster."},
+  {icon:"👕🧳", q:"Das T-Shirt liegt ___ dem Koffer.", a:"in", choices:["in","neben"], full:"Das T-Shirt liegt in dem Koffer."},
+  {icon:"🐭📦", q:"Die Maus ist ___ der Box.", a:"unter", choices:["unter","über"], full:"Die Maus ist unter der Box."},
+  {icon:"🖼️🛋️", q:"Das Bild hängt ___ dem Sofa.", a:"über", choices:["über","zwischen"], full:"Das Bild hängt über dem Sofa."},
+  {icon:"📘🖊️", q:"Der Stift liegt ___ dem Buch.", a:"auf", choices:["auf","hinter"], full:"Der Stift liegt auf dem Buch."},
+  {icon:"🚲🚗", q:"Das Fahrrad steht ___ dem Auto.", a:"neben", choices:["neben","in"], full:"Das Fahrrad steht neben dem Auto."},
+  {icon:"🌸🌸🪟", q:"Die Blume steht ___ den Fenstern.", a:"zwischen", choices:["zwischen","auf"], full:"Die Blume steht zwischen den Fenstern."},
+  {icon:"🐦🏠", q:"Der Vogel sitzt ___ dem Dach.", a:"auf", choices:["auf","vor"], full:"Der Vogel sitzt auf dem Dach."},
+  {icon:"🧸📦", q:"Der Teddy ist ___ der Kiste.", a:"in", choices:["in","neben"], full:"Der Teddy ist in der Kiste."}
+];
+
+let index = 0;
+let stats = {done:0,right:0};
+let locked = false;
+let currentSentence = "";
+
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){
+  return [...arr].sort(() => Math.random() - .5);
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "de-DE";
+  u.rate = .86;
+  speechSynthesis.speak(u);
+}
+function updateStats(){
+  $("done").textContent = stats.done;
+  $("right").textContent = stats.right;
+  $("accuracy").textContent = stats.done ? Math.round(stats.right / stats.done * 100) + "%" : "0%";
+  $("progress").style.width = Math.min(100, (stats.done % exercises.length) / exercises.length * 100) + "%";
+}
+function setFeedback(ok, html){
+  $("feedback").className = "feedback " + (ok ? "ok" : "no");
+  $("feedback").innerHTML = html;
+}
+function finish(ok, full){
+  if(locked) return;
+  locked = true;
+  currentSentence = full;
+  stats.done++;
+  if(ok) stats.right++;
+  updateStats();
+  $("nextBtn").disabled = false;
+  if(ok){
+    setFeedback(true, "✅ Tačno! <b>" + full + "</b>");
+    speak(full);
+  }else{
+    setFeedback(false, "❌ Nije tačno.<br>Tačno rešenje je: <b>" + full + "</b>");
+    setTimeout(() => speak(full), 250);
+  }
+}
+function render(){
+  locked = false;
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  $("nextBtn").disabled = true;
+  $("options").innerHTML = "";
+  $("counter").textContent = (index + 1) + " / " + exercises.length;
+
+  const ex = exercises[index];
+  $("visual").textContent = ex.icon;
+  $("question").innerHTML = ex.q;
+
+  shuffle(ex.choices).forEach(choice => {
+    const b = document.createElement("button");
+    b.className = "option";
+    b.textContent = choice;
+    b.onclick = () => {
+      if(locked) return;
+      const ok = choice === ex.a;
+      b.classList.add(ok ? "good" : "bad");
+      [...$("options").children].forEach(el => {
+        if(el.textContent === ex.a) el.classList.add("good");
+        el.disabled = true;
+      });
+      finish(ok, ex.full);
+    };
+    $("options").appendChild(b);
+  });
+}
+$("listenBtn").onclick = () => {
+  if(currentSentence) speak(currentSentence);
+};
+$("nextBtn").onclick = () => {
+  index = (index + 1) % exercises.length;
+  render();
+};
+render();
+</script>
+</body>
+</html>
