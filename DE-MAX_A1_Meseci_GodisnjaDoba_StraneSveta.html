@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DE-MAX A1 – Meseci, godišnja doba i strane sveta</title>
+<style>
+:root{
+  --b:#0b3b88; --b2:#1672d2; --bg:#edf6ff; --card:#fff;
+  --txt:#12223f; --muted:#6e7e98; --ok:#14935b; --bad:#d73d4f;
+  --line:#dbe9f8; --shadow:0 15px 38px rgba(11,59,136,.13);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#e8f3ff,#f9fbff 55%,#edf6ff);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+}
+.app{
+  width:min(100%,560px);
+  min-height:100vh;
+  margin:auto;
+  padding:14px 13px 34px;
+}
+.hero{
+  border-radius:27px;
+  padding:18px;
+  color:#fff;
+  background:linear-gradient(135deg,#082f73,#1673d3);
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"🌍";
+  position:absolute;
+  right:15px;
+  top:12px;
+  font-size:44px;
+}
+.brand{font-size:12px;font-weight:900;letter-spacing:.14em;opacity:.92}
+h1{font-size:29px;line-height:1.05;margin:6px 0 5px}
+.sub{font-size:14px;opacity:.92;max-width:85%}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{
+  background:#fff;border:1px solid var(--line);border-radius:17px;padding:9px 5px;
+  text-align:center;box-shadow:0 6px 18px rgba(11,59,136,.06)
+}
+.stat b{display:block;font-size:18px;color:var(--b)}
+.stat span{font-size:10px;color:var(--muted);font-weight:700}
+.progressWrap{height:9px;background:#e7eef8;border-radius:999px;overflow:hidden;margin:12px 0}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#0b3b88,#37a0ff);transition:.25s}
+.nav{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 8px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:0;border-radius:14px;background:#e6f1ff;color:var(--b);
+  padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer
+}
+.tab.active{background:var(--b);color:#fff;box-shadow:0 7px 16px #0b3b8838}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:26px;
+  padding:17px;box-shadow:var(--shadow)
+}
+.pill{
+  display:inline-block;background:#edf5ff;color:var(--b);padding:7px 10px;border-radius:999px;
+  font-size:11px;font-weight:900
+}
+.visual{text-align:center;font-size:60px;margin:8px 0 0;min-height:70px}
+.q{
+  text-align:center;font-size:22px;font-weight:900;line-height:1.28;margin:5px auto 15px;
+}
+.highlight{
+  display:inline-block;background:#eef6ff;color:var(--b);padding:3px 9px;border-radius:10px;margin-top:5px
+}
+.answers{display:grid;gap:9px}
+.answer{
+  border:2px solid var(--line);background:#fff;border-radius:16px;padding:13px 12px;
+  font-size:17px;font-weight:850;color:var(--txt);cursor:pointer;transition:.12s
+}
+.answer:active{transform:scale(.99)}
+.answer.good{background:#e9faf1;border-color:#7dd1a7;color:#087743}
+.answer.bad{background:#fff0f2;border-color:#ef9ba6;color:#ab2335}
+.answer:disabled{cursor:default}
+.feedback{
+  display:none;border-radius:15px;padding:11px 12px;margin-top:11px;font-weight:800;line-height:1.35
+}
+.feedback.ok{display:block;background:#e9faf1;color:#087743}
+.feedback.no{display:block;background:#fff0f2;color:#ad2435}
+.btn{
+  border:0;border-radius:15px;padding:13px 14px;font-weight:900;cursor:pointer
+}
+.listen{
+  width:100%;background:#eaf4ff;color:var(--b);font-size:16px;margin:3px 0 12px
+}
+.next{
+  width:100%;margin-top:10px;background:linear-gradient(135deg,#0b3b88,#1976d2);
+  color:#fff;font-size:16px
+}
+.next:disabled{opacity:.4}
+.rule{
+  margin-top:13px;border:1px solid var(--line);background:#f8fbff;border-radius:18px;padding:13px;
+  font-size:13px;line-height:1.5;color:#4f617d
+}
+.rule b{color:var(--b)}
+.grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:12px
+}
+.item{
+  border:1px solid #dce9f8;background:#fbfdff;border-radius:14px;padding:9px 10px;font-size:13px
+}
+.item b{color:var(--b);font-size:14px}
+.item small{display:block;color:#77879f;margin-top:1px}
+.footer{text-align:center;color:#8090a7;font-size:10px;margin-top:13px}
+@media(min-width:700px){.app{margin:18px auto;min-height:auto}.card,.hero{border-radius:30px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <div class="brand">DE-MAX • A1</div>
+    <h1>Meseci, godišnja doba i strane sveta</h1>
+    <div class="sub">Jednostavna vežba sa nemačkim izgovorom i proverom odgovora</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="done">0</b><span>URAĐENO</span></div>
+    <div class="stat"><b id="right">0</b><span>TAČNO</span></div>
+    <div class="stat"><b id="acc">0%</b><span>TAČNOST</span></div>
+  </div>
+
+  <div class="progressWrap"><div class="progress" id="progress"></div></div>
+
+  <div class="nav">
+    <button class="tab active" data-mode="months">1. Meseci</button>
+    <button class="tab" data-mode="seasons">2. Godišnja doba</button>
+    <button class="tab" data-mode="directions">3. Strane sveta</button>
+  </div>
+
+  <div class="card">
+    <div class="pill" id="label">Meseci</div>
+    <div class="visual" id="visual">📅</div>
+    <div class="q" id="question"></div>
+
+    <button class="btn listen" id="listenBtn">🔊 Pusti izgovor</button>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="btn next" id="next" disabled>Sledeće pitanje →</button>
+
+    <div class="rule" id="rule"></div>
+
+    <div class="grid" id="helperGrid"></div>
+  </div>
+
+  <div class="footer">DE-MAX • prilagođeno mobilnom telefonu</div>
+</div>
+
+<script>
+const months = [
+  {de:"Januar", sr:"januar", icon:"❄️"},
+  {de:"Februar", sr:"februar", icon:"⛄"},
+  {de:"März", sr:"mart", icon:"🌷"},
+  {de:"April", sr:"april", icon:"🌦️"},
+  {de:"Mai", sr:"maj", icon:"🌿"},
+  {de:"Juni", sr:"jun", icon:"☀️"},
+  {de:"Juli", sr:"jul", icon:"🏖️"},
+  {de:"August", sr:"avgust", icon:"🌻"},
+  {de:"September", sr:"septembar", icon:"🍂"},
+  {de:"Oktober", sr:"oktobar", icon:"🎃"},
+  {de:"November", sr:"novembar", icon:"🌧️"},
+  {de:"Dezember", sr:"decembar", icon:"🎄"}
+];
+const seasons = [
+  {de:"der Winter", sr:"zima", icon:"❄️"},
+  {de:"der Frühling", sr:"proleće", icon:"🌷"},
+  {de:"der Sommer", sr:"leto", icon:"☀️"},
+  {de:"der Herbst", sr:"jesen", icon:"🍂"}
+];
+const directions = [
+  {de:"der Norden", sr:"sever", icon:"⬆️"},
+  {de:"der Süden", sr:"jug", icon:"⬇️"},
+  {de:"der Osten", sr:"istok", icon:"➡️"},
+  {de:"der Westen", sr:"zapad", icon:"⬅️"},
+  {de:"der Nordosten", sr:"severoistok", icon:"↗️"},
+  {de:"der Nordwesten", sr:"severozapad", icon:"↖️"},
+  {de:"der Südosten", sr:"jugoistok", icon:"↘️"},
+  {de:"der Südwesten", sr:"jugozapad", icon:"↙️"}
+];
+
+let mode="months", current=null, locked=false, stats={d:0,r:0};
+
+const $ = id => document.getElementById(id);
+
+function rnd(n){ return Math.floor(Math.random()*n); }
+function sh(a){ return [...a].sort(()=>Math.random()-.5); }
+
+function speak(text, rate=.86){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "de-DE";
+  u.rate = rate;
+  speechSynthesis.speak(u);
+}
+
+function updateStats(){
+  $("done").textContent = stats.d;
+  $("right").textContent = stats.r;
+  $("acc").textContent = stats.d ? Math.round(stats.r / stats.d * 100) + "%" : "0%";
+  $("progress").style.width = Math.min(100, (stats.d % 20) / 20 * 100) + "%";
+}
+
+function setFeedback(ok, html){
+  $("feedback").className = "feedback " + (ok ? "ok" : "no");
+  $("feedback").innerHTML = html;
+}
+
+function finish(ok, correctText, spoken){
+  if(locked) return;
+  locked = true;
+  stats.d++;
+  if(ok) stats.r++;
+  updateStats();
+  $("next").disabled = false;
+  if(ok){
+    setFeedback(true, "✅ Tačno! <b>" + correctText + "</b>");
+    if(spoken) speak(spoken);
+  } else {
+    setFeedback(false, "❌ Nije tačno. Tačan odgovor je <b>" + correctText + "</b>.");
+  }
+}
+
+function renderOptions(correct, pool, spoken){
+  $("answers").innerHTML = "";
+  const wrong = sh(pool.filter(x => x !== correct)).slice(0, Math.min(3, pool.length-1));
+  const options = sh([...wrong, correct]);
+  options.forEach(opt => {
+    const b = document.createElement("button");
+    b.className = "answer";
+    b.textContent = opt;
+    b.onclick = () => {
+      if(locked) return;
+      const ok = opt === correct;
+      b.classList.add(ok ? "good" : "bad");
+      [...$("answers").children].forEach(el => {
+        if(el.textContent === correct) el.classList.add("good");
+        el.disabled = true;
+      });
+      finish(ok, correct, spoken || correct);
+    };
+    $("answers").appendChild(b);
+  });
+}
+
+function renderHelper(items){
+  $("helperGrid").innerHTML = "";
+  items.forEach(it => {
+    const d = document.createElement("div");
+    d.className = "item";
+    d.innerHTML = "<b>" + it.de + "</b><small>" + it.sr + "</small>";
+    $("helperGrid").appendChild(d);
+  });
+}
+
+function resetCard(){
+  locked = false;
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  $("next").disabled = true;
+  $("listenBtn").onclick = null;
+}
+
+function makeQuestion(){
+  resetCard();
+
+  if(mode === "months"){
+    current = months[rnd(months.length)];
+    $("label").textContent = "Meseci";
+    $("visual").textContent = current.icon;
+    $("question").innerHTML = 'Kako se na nemačkom kaže <span class="highlight">' + current.sr + '</span>?';
+    $("rule").innerHTML = "<b>Podsetnik:</b> Nazivi meseci u nemačkom se pišu velikim početnim slovom.";
+    $("listenBtn").textContent = "🔊 Pusti izgovor";
+    $("listenBtn").onclick = () => speak(current.de);
+    renderOptions(current.de, months.map(x => x.de), current.de);
+    renderHelper(months);
+  }
+
+  if(mode === "seasons"){
+    current = seasons[rnd(seasons.length)];
+    $("label").textContent = "Godišnja doba";
+    $("visual").textContent = current.icon;
+    $("question").innerHTML = 'Kako se na nemačkom kaže <span class="highlight">' + current.sr + '</span>?';
+    $("rule").innerHTML = "<b>Jahreszeiten:</b> der Winter – zima • der Frühling – proleće • der Sommer – leto • der Herbst – jesen.";
+    $("listenBtn").textContent = "🔊 Pusti izgovor";
+    $("listenBtn").onclick = () => speak(current.de);
+    renderOptions(current.de, seasons.map(x => x.de), current.de);
+    renderHelper(seasons);
+  }
+
+  if(mode === "directions"){
+    current = directions[rnd(directions.length)];
+    $("label").textContent = "Strane sveta";
+    $("visual").textContent = current.icon;
+    $("question").innerHTML = 'Kako se na nemačkom kaže <span class="highlight">' + current.sr + '</span>?';
+    $("rule").innerHTML = "<b>Himmelsrichtungen:</b> der Norden, der Süden, der Osten, der Westen.";
+    $("listenBtn").textContent = "🔊 Pusti izgovor";
+    $("listenBtn").onclick = () => speak(current.de);
+    renderOptions(current.de, directions.map(x => x.de), current.de);
+    renderHelper(directions);
+  }
+}
+
+$("next").onclick = makeQuestion;
+
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.onclick = () => {
+    mode = tab.dataset.mode;
+    document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t === tab));
+    makeQuestion();
+  };
+});
+
+makeQuestion();
+</script>
+</body>
+</html>
