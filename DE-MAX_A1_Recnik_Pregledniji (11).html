@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b5ed7">
+<title>De-Max rečnik 10.000 reči</title>
+<style>
+:root{
+  --blue:#0b5ed7;--blue2:#3d8bfd;--ink:#17324d;--muted:#6d8299;--line:#dce8f5;
+  --bg:#f5f9fe;--card:#fff;--ok:#12833d;--bad:#c7352b;--soft:#eaf3ff;
+  --shadow:0 10px 28px rgba(20,76,133,.10);--radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.shell{max-width:980px;margin:0 auto;min-height:100vh;padding:8px 12px 72px}
+.topbar{position:sticky;top:0;z-index:20;padding-top:max(8px,env(safe-area-inset-top));background:linear-gradient(180deg,rgba(245,249,254,.98) 72%,rgba(245,249,254,0));backdrop-filter:blur(12px)}
+.header{background:linear-gradient(135deg,#0757c7,#3f95ff);color:#fff;border-radius:20px;padding:9px 12px;box-shadow:0 12px 28px rgba(11,94,215,.20)}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{display:flex;align-items:center;gap:8px;min-width:0}.mark{width:38px;height:38px;border-radius:12px;background:#fff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:14px;box-shadow:0 6px 16px rgba(0,0,0,.10)}
+.brand h1{margin:0;font-size:18px;line-height:1.08}.brand small{display:none}.badge{display:none}
+.searchrow{display:grid;grid-template-columns:1fr;gap:7px;margin-top:9px}.searchbox{position:relative}.searchbox span{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:16px}.searchbox input,.toolbar select{width:100%;border:1px solid rgba(255,255,255,.55);background:#fff;color:var(--ink);border-radius:12px;padding:10px 12px;outline:none}.searchbox input{padding-left:34px}.searchbox input:focus,.toolbar select:focus{box-shadow:0 0 0 3px rgba(61,139,253,.20)}
+.stats{display:none}.stat{display:none}
+.status{margin:16px 2px 8px;color:var(--muted);font-size:13px}.status strong{color:var(--ink)}
+.section{display:none}.section.active{display:block}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:18px 2px 12px}.sectionHead h2{font-size:21px;margin:0}.sectionHead p{margin:4px 0 0;color:var(--muted);font-size:13px}.topicHead{margin:12px 2px 9px;align-items:center}.topicHead h2{font-size:18px}.topicHead p{font-size:11px;margin-top:2px}.topicHead .count{font-size:10px;padding:5px 8px}.count{font-size:12px;font-weight:800;color:var(--blue);background:var(--soft);padding:7px 10px;border-radius:999px;white-space:nowrap}
+.topicGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.topicCard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:11px}.topicTop{display:flex;gap:10px}.topicNo{flex:0 0 42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:var(--blue);font-weight:900}.topicText{min-width:0}.topicText h3{font-size:16px;margin:1px 0 4px}.topicText div{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.topicMeta{font-size:12px;color:var(--muted)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}.btn{border:0;border-radius:12px;padding:9px 11px;font-weight:800;font-size:12px}.primary{background:var(--blue);color:#fff}.soft{background:var(--soft);color:var(--blue)}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}.speakable{cursor:pointer;display:inline-flex;align-items:center;gap:6px}.speakable:hover{color:var(--blue)}.miniSound{font-size:.8em;color:var(--blue);font-weight:700}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:17px;padding:10px;display:grid;grid-template-columns:1fr 170px 150px;gap:8px;margin-bottom:10px;box-shadow:0 7px 20px rgba(31,76,122,.06)}
+.wordList{display:grid;gap:8px}.wordRow{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 12px 11px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;box-shadow:0 5px 16px rgba(31,76,122,.05)}.wordDe{font-size:18px;font-weight:850;line-height:1.15;cursor:pointer;display:inline-block}.wordSr{font-size:13px;color:var(--muted);margin-top:4px}.wordTopic{font-size:11px;color:#7890a8;margin-top:7px}.rowBtns{display:flex;gap:6px}.icon{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:12px;display:grid;place-items:center;font-size:17px;color:var(--blue)}.icon.fav{color:#c98500;background:#fff9e8;border-color:#f3df9e}
+.pager{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0}.pager button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 13px;font-weight:800;color:var(--blue)}.pager button:disabled{opacity:.35}.pager span{font-size:13px;color:var(--muted)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}.quizWord{font-size:34px;font-weight:900;text-align:center;margin:18px 0 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}.quizSub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}.answer{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;text-align:left;color:var(--ink);font-weight:700}.answer.correct{border-color:#92d5aa;background:#eaf8ef;color:var(--ok)}.answer.wrong{border-color:#f0aea9;background:#fff0ef;color:var(--bad)}.quizFooter{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:14px}.feedback{font-size:13px;font-weight:800}.feedback.ok{color:var(--ok)}.feedback.bad{color:var(--bad)}
+.dialogSelect{display:grid;grid-template-columns:1fr auto;gap:8px}.dialogCard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow)}.dialogTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}.dialogTitle h3{margin:0;font-size:17px}.dialogLine{padding:10px 11px;border-radius:13px;background:#f8fbff;border:1px solid #e3edf8;margin-bottom:7px;cursor:pointer}.dialogLine b{display:block;font-size:14px}.dialogLine span{display:block;color:var(--muted);font-size:12px;margin-top:3px}.dialogLine{transition:border-color .35s ease,background .35s ease,box-shadow .35s ease,transform .35s ease}.dialogLine.active{background:#fff7f7;border:2px solid #e53935;box-shadow:0 8px 22px rgba(229,57,53,.18);transform:scale(1.01)}.dialogLine.active b{color:#c62828}
+.empty{background:#fff;border:1px dashed #cfddeb;border-radius:18px;padding:25px;text-align:center;color:var(--muted)}
+.loading{padding:42px 10px;text-align:center}.spinner{width:42px;height:42px;border-radius:50%;border:4px solid #d9e9fb;border-top-color:var(--blue);margin:0 auto 13px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.bottom{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:max(7px,env(safe-area-inset-bottom));width:min(280px,calc(100% - 22px));display:grid;grid-template-columns:repeat(2,1fr);gap:3px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:14px;padding:4px;box-shadow:0 9px 20px rgba(21,61,105,.15);backdrop-filter:blur(14px)}.nav{border:0;background:transparent;border-radius:10px;padding:5px 3px;color:#7088a1;font-size:9px;font-weight:800;display:grid;gap:1px;place-items:center}.nav span{font-size:13px;line-height:1}.nav.active{background:var(--blue);color:#fff}
+.toast{position:fixed;left:50%;bottom:74px;transform:translate(-50%,15px);background:#17324d;color:#fff;padding:9px 13px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:720px){.shell{padding-left:10px;padding-right:10px}.searchrow{grid-template-columns:1fr}.topicGrid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.toolbar select:first-child{grid-column:1/-1}.answers{grid-template-columns:1fr}.header{padding:10px}.brand h1{font-size:16px}}
+@media(max-width:420px){.mark{width:34px;height:34px}.wordDe{font-size:17px}.rowBtns{gap:4px}.icon{width:36px;height:36px}.toolbar{grid-template-columns:1fr}.toolbar select:first-child{grid-column:auto}}
+
+.searchCircle{margin-left:auto;width:38px;height:38px;border:1px solid rgba(255,255,255,.45);border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;font-size:18px;padding:0;box-shadow:none}
+.searchCircle:active{transform:scale(.96)}
+.quickSearch{display:none;margin-top:8px;gap:7px;align-items:center}
+.quickSearch.open{display:flex}
+.quickSearch input{flex:1;min-width:0;border:0;border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink);outline:none}
+.quickSearch .closeSearch{width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:16px;padding:0}
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <header class="header">
+      <div class="brandrow">
+        <div class="brand"><div class="mark">DM</div><div><h1>De-Max rečnik 10.000 reči</h1></div></div>
+        <button class="searchCircle" id="searchToggle" aria-label="Pretraga" title="Pretraga">⌕</button>
+      </div>
+      <div class="quickSearch" id="quickSearch">
+        <input id="searchInput" autocomplete="off" placeholder="Pretraži nemačku ili srpsku reč…">
+        <button class="closeSearch" id="searchClose" aria-label="Zatvori pretragu">×</button>
+      </div>
+    </header>
+  </div>
+
+  <div id="status" class="status">Učitavanje sadržaja…</div>
+  <main id="main">
+    <section id="topics" class="section active"><div class="loading"><div class="spinner"></div>Učitavam DE-MAX rečnik…</div></section>
+    <section id="words" class="section"></section>
+    <section id="quiz" class="section"></section>
+    <section id="dialogs" class="section"></section>
+  </main>
+</div>
+
+<nav class="bottom">
+  <button class="nav active" data-section="topics"><span>▦</span>Teme</button>
+  <button class="nav" data-section="dialogs"><span>◉</span>Dijalozi</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const SOURCE='https://raw.githubusercontent.com/nemackidemax13-oss/A1-nivo/main/DE-MAX_Jedna_Aplikacija_Recnik%20(1).html';
+const CACHE_KEY='demax_a1_dictionary_cache_v2';
+const FAVORITES_KEY='demax_a1_favorites_v1';
+let appData=[];
+let allWords=[];
+let currentSection='topics';
+let selectedTopic='all';
+let query='';
+let sortMode='az';
+let wordPage=1;
+const PAGE_SIZE=50;
+let quizMode='all', quizTopic='all', quizQuestion=null, quizScore=0, quizTotal=0, answered=false;
+let favorites=new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]'));
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const keyFor=w=>`${w.topicId}::${w.de}::${w.sr}`;
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1400)}
+function speak(text){
+  if(!text)return;
+  if(!('speechSynthesis' in window))return toast('Izgovor nije dostupan u ovom pregledaču.');
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='de-DE';
+  u.rate=.88;
+  u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const deVoice=voices.find(v=>/^de(-|_)/i.test(v.lang))||voices.find(v=>/german|deutsch/i.test(v.name));
+  if(deVoice)u.voice=deVoice;
+  speechSynthesis.speak(u);
+}
+function setStatus(html){$('#status').innerHTML=html}
+function topicNo(id){const i=appData.findIndex(t=>t.id===id);return i<0?'':i+1}
+
+async function loadData(){
+  try{
+    const cached=localStorage.getItem(CACHE_KEY);
+    if(cached){const c=JSON.parse(cached);if(Array.isArray(c)&&c.length){appData=c;prepare();setStatus(`<strong>${appData.length} tema</strong> učitano iz memorije. Osvežavam podatke…`);}}
+  }catch(e){}
+  try{
+    const res=await fetch(SOURCE,{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const src=await res.text();
+    const start=src.indexOf('const appData');
+    if(start<0)throw new Error('appData nije pronađen');
+    const a=src.indexOf('[',start);
+    const marker='\n];\n\nconst state';
+    let b=src.indexOf(marker,a), end;
+    if(b>=0) end=b+2;
+    else { b=src.indexOf('];\nconst state',a); end=b+1; }
+    if(b<0)throw new Error('Kraj appData nije pronađen');
+    const literal=src.slice(a,end);
+    let parsed;
+    try{parsed=JSON.parse(literal)}catch(_){parsed=Function('"use strict";return ('+literal+')')()}
+    if(!Array.isArray(parsed)||!parsed.length)throw new Error('Prazan sadržaj');
+    appData=parsed;
+    try{localStorage.setItem(CACHE_KEY,JSON.stringify(appData))}catch(e){}
+    prepare();
+    setStatus(`<strong>${appData.length} tema</strong> • <strong>${allWords.length.toLocaleString('sr-RS')} reči</strong> • sadržaj je spreman.`);
+  }catch(err){
+    if(!appData.length){
+      $('#topics').innerHTML=`<div class="empty"><b>Nije moguće učitati rečnik.</b><br><br>Potrebna je internet veza pri prvom pokretanju. Kada se jednom učita, sadržaj se čuva u pregledaču.</div>`;
+      setStatus('Greška pri učitavanju sadržaja.');
+    } else setStatus(`<strong>${appData.length} tema</strong> učitano iz sačuvane kopije.`);
+  }
+}
+
+function prepare(){
+  allWords=appData.flatMap((t,ti)=>t.words.map((w,wi)=>({...w,topicId:t.id,topic:t.title,deTitle:t.deTitle,topicIndex:ti,wordIndex:wi})));
+  renderAll();
+}
+
+function filteredWords(){
+  let arr=allWords.filter(w=>{
+    if(selectedTopic!=='all'&&w.topicId!==selectedTopic)return false;
+    if(selectedTopic==='favorites'&&!favorites.has(keyFor(w)))return false;
+    if(!query)return true;
+    const q=query.toLocaleLowerCase('sr');
+    return [w.de,w.sr,w.topic,w.deTitle].some(x=>String(x).toLocaleLowerCase('sr').includes(q));
+  });
+  if(sortMode==='az')arr.sort((a,b)=>a.de.localeCompare(b.de,'de'));
+  if(sortMode==='za')arr.sort((a,b)=>b.de.localeCompare(a.de,'de'));
+  if(sortMode==='sr')arr.sort((a,b)=>a.sr.localeCompare(b.sr,'sr'));
+  if(sortMode==='topic')arr.sort((a,b)=>a.topicIndex-b.topicIndex||a.de.localeCompare(b.de,'de'));
+  return arr;
+}
+
+function filteredTopics(){
+  if(!query)return appData;
+  const q=query.toLocaleLowerCase('sr');
+  return appData.filter(t=>[t.title,t.deTitle].some(x=>String(x).toLocaleLowerCase('sr').includes(q))||t.words.some(w=>w.de.toLocaleLowerCase('de').includes(q)||w.sr.toLocaleLowerCase('sr').includes(q)));
+}
+
+function renderTopics(){
+  const data=filteredTopics();
+  $('#topics').innerHTML=`
+    <div class="sectionHead topicHead"><div><h2>Teme</h2><p>Izaberi temu, reči ili dijalog.</p></div><div class="count">${data.length}</div></div>
+    ${data.length?`<div class="topicGrid">${data.map(t=>`
+      <article class="topicCard">
+        <div class="topicTop"><div class="topicNo">${topicNo(t.id)}</div><div class="topicText"><h3 class="speakable" role="button" tabindex="0" title="Izgovori naslov teme" onclick="speak(${esc(JSON.stringify(t.deTitle))})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speak(${esc(JSON.stringify(t.deTitle))})}">${esc(t.deTitle)} <span class="miniSound" aria-hidden="true">🔊</span></h3><div>${esc(t.title)}</div></div></div>
+        <div class="topicMeta">${t.words.length} reči • ${Array.isArray(t.dialog)?t.dialog.length:0} rečenica u dijalogu</div>
+        <div class="actions"><button class="btn ghost" onclick="speak(${esc(JSON.stringify(t.deTitle))})">🔊 Tema</button><button class="btn primary" onclick="openTopicWords('${esc(t.id)}')">Reči</button><button class="btn soft" onclick="openDialog('${esc(t.id)}')">Dijalog</button></div>
+      </article>`).join('')}</div>`:`<div class="empty">Nema tema za ovu pretragu.</div>`}`;
+}
+
+function topicOptions(includeSpecial=true){
+  return `${includeSpecial?`<option value="all">Sve teme</option><option value="favorites">★ Omiljene reči</option>`:''}${appData.map((t,i)=>`<option value="${esc(t.id)}">${i+1}. ${esc(t.deTitle)} — ${esc(t.title)}</option>`).join('')}`;
+}
+
+function renderWords(){
+  const arr=filteredWords();
+  const pages=Math.max(1,Math.ceil(arr.length/PAGE_SIZE));
+  if(wordPage>pages)wordPage=pages;
+  const start=(wordPage-1)*PAGE_SIZE, page=arr.slice(start,start+PAGE_SIZE);
+  $('#words').innerHTML=`
+    <div class="sectionHead"><div><h2>Reči</h2><p>Kompaktan prikaz, 50 reči po strani. Svaka nemačka reč ima zvuk.</p></div><div class="count">${arr.length.toLocaleString('sr-RS')} rezultata</div></div>
+    <div class="toolbar"><select id="topicFilter">${topicOptions(true)}</select><select id="pageSizeInfo" disabled><option>50 po strani</option></select><button class="btn ghost" onclick="clearFilters()">Očisti filter</button></div>
+    ${page.length?`<div class="wordList">${page.map(w=>{const fav=favorites.has(keyFor(w));return `
+      <div class="wordRow"><div><div class="wordDe" role="button" tabindex="0" title="Klikni za izgovor" onclick="speak(${esc(JSON.stringify(w.de))})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speak(${esc(JSON.stringify(w.de))})}">${esc(w.de)} <span aria-hidden="true" style="font-size:.78em;color:var(--blue);font-weight:700">🔊</span></div><div class="wordSr">${esc(w.sr)}</div><div class="wordTopic">Tema ${topicNo(w.topicId)} • ${esc(w.deTitle)}</div></div><div class="rowBtns"><button class="icon" title="Izgovor" aria-label="Izgovori ${esc(w.de)}" onclick="speak(${esc(JSON.stringify(w.de))})">🔊</button><button class="icon ${fav?'fav':''}" title="Omiljeno" onclick="toggleFavorite(${esc(JSON.stringify(keyFor(w)))})">${fav?'★':'☆'}</button></div></div>`}).join('')}</div>
+      <div class="pager"><button ${wordPage<=1?'disabled':''} onclick="changePage(-1)">← Prethodna</button><span>${wordPage} / ${pages}</span><button ${wordPage>=pages?'disabled':''} onclick="changePage(1)">Sledeća →</button></div>`:`<div class="empty">Nema pronađenih reči.</div>`}`;
+  const tf=$('#topicFilter'); if(tf){tf.value=selectedTopic;tf.onchange=e=>{selectedTopic=e.target.value;wordPage=1;renderWords()}}
+}
+
+function openTopicWords(id){selectedTopic=id;wordPage=1;showSection('words')}
+function clearFilters(){selectedTopic='all';query='';wordPage=1;const si=$('#searchInput');if(si)si.value='';renderAll()}
+function changePage(d){wordPage+=d;renderWords();window.scrollTo({top:0,behavior:'smooth'})}
+function toggleFavorite(k){favorites.has(k)?favorites.delete(k):favorites.add(k);localStorage.setItem(FAVORITES_KEY,JSON.stringify([...favorites]));toast(favorites.has(k)?'Dodato u omiljene.':'Uklonjeno iz omiljenih.');renderWords()}
+
+function makeQuestion(topicId='all'){
+  const pool=topicId==='all'?allWords:allWords.filter(w=>w.topicId===topicId);
+  if(!pool.length)return null;
+  const correct=pool[Math.floor(Math.random()*pool.length)];
+  const opts=[correct];
+  const candidates=allWords.filter(w=>w.sr!==correct.sr&&w.de!==correct.de);
+  while(opts.length<4&&candidates.length){const i=Math.floor(Math.random()*candidates.length);opts.push(candidates.splice(i,1)[0])}
+  for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}
+  return {correct,opts};
+}
+function startQuiz(id='all'){quizTopic=id==='favorites'?'all':id;quizQuestion=makeQuestion(quizTopic);answered=false;showSection('quiz')}
+function nextQuiz(){quizQuestion=makeQuestion(quizTopic);answered=false;renderQuiz()}
+function renderQuiz(){
+  if(!appData.length)return;
+  if(!quizQuestion)quizQuestion=makeQuestion(quizTopic);
+  const q=quizQuestion;
+  const label=quizTopic==='all'?'Sve teme':`${topicNo(quizTopic)}. ${appData.find(t=>t.id===quizTopic)?.deTitle||''}`;
+  $('#quiz').innerHTML=`
+    <div class="sectionHead"><div><h2>Vežba</h2><p>Izaberi tačan srpski prevod nemačke reči.</p></div><div class="count">Tačno ${quizScore} / ${quizTotal}</div></div>
+    <div class="panel"><div class="toolbar" style="grid-template-columns:1fr auto"><select id="quizTopicSel">${`<option value="all">Sve teme</option>`+appData.map((t,i)=>`<option value="${esc(t.id)}">${i+1}. ${esc(t.deTitle)}</option>`).join('')}</select><button class="btn ghost" onclick="resetQuiz()">Resetuj rezultat</button></div>
+    <div class="quizSub">${esc(label)}</div><div class="quizWord" role="button" tabindex="0" title="Klikni za izgovor" onclick="speak(${esc(JSON.stringify(q.correct.de))})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speak(${esc(JSON.stringify(q.correct.de))})}">${esc(q.correct.de)} <span class="miniSound" aria-hidden="true">🔊</span></div><div class="quizSub"><button class="icon" style="margin:auto" onclick="speak(${esc(JSON.stringify(q.correct.de))})">🔊</button></div>
+    <div class="answers">${q.opts.map((o,i)=>`<button class="answer" data-de="${esc(o.de)}" onclick="answerQuiz(${esc(JSON.stringify(o.de))},this)">${esc(o.sr)}</button>`).join('')}</div>
+    <div class="quizFooter"><div id="feedback" class="feedback"></div><button class="btn primary" onclick="nextQuiz()">Sledeće pitanje</button></div></div>`;
+  const sel=$('#quizTopicSel');sel.value=quizTopic;sel.onchange=e=>{quizTopic=e.target.value;quizQuestion=makeQuestion(quizTopic);answered=false;renderQuiz()}
+}
+function answerQuiz(de,btn){if(answered)return;answered=true;quizTotal++;const ok=de===quizQuestion.correct.de;if(ok)quizScore++;$$('.answer').forEach(b=>{if(b.dataset.de===quizQuestion.correct.de)b.classList.add('correct');else if(b===btn&&!ok)b.classList.add('wrong');b.disabled=true});const f=$('#feedback');f.className='feedback '+(ok?'ok':'bad');f.textContent=ok?'Tačno! Bravo.':`Netačno — ${quizQuestion.correct.de} = ${quizQuestion.correct.sr}`;speak(quizQuestion.correct.de)}
+function resetQuiz(){quizScore=0;quizTotal=0;quizQuestion=makeQuestion(quizTopic);answered=false;renderQuiz()}
+
+function renderDialogs(){
+  if(!appData.length)return;
+  let id=selectedTopic;
+  if(id==='all'||id==='favorites'||!appData.some(t=>t.id===id))id=appData[0].id;
+  const t=appData.find(x=>x.id===id)||appData[0];
+  $('#dialogs').innerHTML=`
+    <div class="sectionHead"><div><h2>Dijalozi</h2><p>Pusti ceo dijalog automatski. Naslov teme i svaka nemačka rečenica imaju zvuk, a aktivna rečenica je označena dok se čita.</p></div><div class="count">${Array.isArray(t.dialog)?t.dialog.length:0} rečenica</div></div>
+    <div class="panel"><div class="dialogSelect"><select id="dialogTopicSel">${appData.map((x,i)=>`<option value="${esc(x.id)}">${i+1}. ${esc(x.deTitle)} — ${esc(x.title)}</option>`).join('')}</select><button class="btn primary" onclick="playDialog(${esc(JSON.stringify(t.id))})">▶ Pusti ceo dijalog</button></div></div>
+    <div class="dialogCard"><div class="dialogTitle"><div><h3 class="speakable" role="button" tabindex="0" title="Izgovori naslov teme" onclick="speak(${esc(JSON.stringify(t.deTitle))})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speak(${esc(JSON.stringify(t.deTitle))})}">${topicNo(t.id)}. ${esc(t.deTitle)} <span class="miniSound" aria-hidden="true">🔊</span></h3><div class="wordSr">${esc(t.title)}</div></div><button class="btn soft" onclick="openTopicWords(${esc(JSON.stringify(t.id))})">Povezane reči</button></div>
+    ${(t.dialog||[]).map((d,i)=>`<div class="dialogLine" id="dlg-${i}" role="button" tabindex="0" title="Izgovori rečenicu" onclick="speak(${esc(JSON.stringify(d[0]))})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speak(${esc(JSON.stringify(d[0]))})}"><b>${i+1}. ${esc(d[0])} <span class="miniSound" aria-hidden="true">🔊</span></b><span>${esc(d[1])}</span></div>`).join('')}</div>`;
+  const s=$('#dialogTopicSel');s.value=t.id;s.onchange=e=>{selectedTopic=e.target.value;renderDialogs();setTimeout(()=>playDialog(selectedTopic),180)}
+}
+function openDialog(id){selectedTopic=id;showSection('dialogs');setTimeout(()=>playDialog(id),220)}
+function playDialog(id){
+  const t=appData.find(x=>x.id===id);
+  if(!t)return;
+  if(!('speechSynthesis' in window))return toast('Izgovor nije dostupan u ovom pregledaču.');
+  speechSynthesis.cancel();
+  let i=0;
+  const lines=$$('.dialogLine');
+  const card=$('.dialogCard');
+  if(card)card.scrollIntoView({behavior:'smooth',block:'start'});
+  const clear=()=>lines.forEach(x=>x.classList.remove('active'));
+  const voices=speechSynthesis.getVoices();
+  const deVoice=voices.find(v=>/^de(-|_)/i.test(v.lang))||voices.find(v=>/german|deutsch/i.test(v.name));
+  const next=()=>{
+    if(i>=t.dialog.length){
+      setTimeout(()=>{
+        clear();
+        toast('Dijalog je završen.');
+        selectedTopic='all';
+        showSection('topics');
+        setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),250);
+      },700);
+      return;
+    }
+    clear();
+    const line=$(`#dlg-${i}`);
+    if(line){
+      line.classList.add('active');
+      line.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    const u=new SpeechSynthesisUtterance(t.dialog[i][0]);
+    u.lang='de-DE';
+    u.rate=.86;
+    u.pitch=1;
+    if(deVoice)u.voice=deVoice;
+    u.onend=()=>{ i++; setTimeout(next, 650); };
+    speechSynthesis.speak(u);
+  };
+  next();
+}
+
+function showSection(id){
+  currentSection=id;
+  $$('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+  const navTarget=(id==='words'||id==='quiz')?'topics':id;
+  $$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.section===navTarget));
+  if(id==='topics')renderTopics();
+  if(id==='words')renderWords();
+  if(id==='quiz')renderQuiz();
+  if(id==='dialogs')renderDialogs();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderAll(){if(!appData.length)return;renderTopics();renderWords();renderQuiz();renderDialogs()}
+
+$$('.nav').forEach(n=>n.onclick=()=>showSection(n.dataset.section));
+
+const searchToggle=$('#searchToggle');
+const quickSearch=$('#quickSearch');
+const searchInput=$('#searchInput');
+const searchClose=$('#searchClose');
+if(searchToggle&&quickSearch&&searchInput){
+  searchToggle.onclick=()=>{
+    quickSearch.classList.toggle('open');
+    if(quickSearch.classList.contains('open'))setTimeout(()=>searchInput.focus(),50);
+  };
+  searchClose.onclick=()=>{
+    quickSearch.classList.remove('open');
+    query='';
+    searchInput.value='';
+    selectedTopic='all';
+    wordPage=1;
+    showSection('topics');
+  };
+  searchInput.addEventListener('input',e=>{
+    query=e.target.value.trim();
+    wordPage=1;
+    if(query){
+      selectedTopic='all';
+      showSection('words');
+    }else{
+      showSection('topics');
+    }
+  });
+}
+
+loadData();
+</script>
+</body>
+</html>
