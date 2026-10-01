@@ -68,6 +68,36 @@ h2{font-size:21px;margin:4px 0 2px;letter-spacing:-.03em}
   .card{padding:13px} .play{width:70px;height:70px} .answer{font-size:16px}
 }
 </style>
+<style>
+@media (max-width:700px) {
+  html { scroll-behavior:auto; }
+  .app { width:100%; max-width:none; min-height:100vh; min-height:100dvh; padding-bottom:calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .hero { position:static; top:auto; padding:12px 14px; }
+  .brand { min-width:0; gap:10px; }
+  .brand > div:last-child { min-width:0; }
+  .logoimg { width:54px; height:54px; flex:0 0 auto; }
+  .brand h1 { font-size:clamp(16px, 4.8vw, 19px); overflow-wrap:anywhere; }
+  .brand p { font-size:13px; line-height:1.35; }
+  .content { padding:12px; }
+  .card { min-width:0; padding:13px; }
+  .topline { align-items:flex-start; flex-wrap:wrap; }
+  .topline > div:first-child { min-width:0; flex:1 1 200px; }
+  .topline > .pill { flex:0 0 auto; }
+  h2 { overflow-wrap:anywhere; }
+  .sub { font-size:13px; line-height:1.4; overflow-wrap:anywhere; }
+  .topic-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); max-height:none; overflow:visible; padding:0; }
+  .topic-btn { min-width:0; min-height:44px; font-size:13px; overflow-wrap:anywhere; }
+  .dict { min-width:0; padding:12px; }
+  .speed, .nav, .actions { flex-wrap:wrap; }
+  .btn { min-height:44px; flex:1 1 auto; }
+  .play { width:72px; height:72px; }
+  .answer { width:100%; min-height:48px; font-size:16px; }
+  .actions .btn { flex:1 1 120px; }
+  .feedback { overflow-wrap:anywhere; }
+  .pill { max-width:100%; white-space:normal; overflow-wrap:anywhere; }
+  .footer { padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px)); }
+}
+</style>
 </head>
 <body>
 <div class="app">

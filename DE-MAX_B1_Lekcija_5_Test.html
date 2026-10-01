@@ -164,6 +164,37 @@
     .q-text{font-size:24px}
   }
 </style>
+<style>
+@media (max-width:700px) {
+  .app { width:100%; min-height:100vh; min-height:100dvh; padding:18px 12px calc(40px + env(safe-area-inset-bottom, 0px)); }
+  .topbar { position:static; top:auto; margin:-18px -12px 14px; padding:10px 12px; }
+  .topline { min-width:0; gap:8px; }
+  .brand { min-width:0; gap:8px; }
+  .brandtext { min-width:0; }
+  .brandtext b { font-size:16px; }
+  .mini-score { flex:0 0 auto; font-size:11px; padding:8px; }
+  .hero { padding:20px 16px; border-radius:22px; }
+  .hero:after { right:-10px; bottom:-28px; font-size:105px; }
+  h1 { font-size:clamp(27px, 8vw, 32px); line-height:1.08; letter-spacing:-1px; overflow-wrap:anywhere; }
+  .hero p { font-size:14px; }
+  .section-title { align-items:flex-start; flex-wrap:wrap; }
+  .lesson-card { min-width:0; padding:15px; }
+  .lesson-card .row > div:last-child { min-width:0; }
+  .lesson-card h3, .lesson-card p { overflow-wrap:anywhere; }
+  .quiz-head { min-width:0; align-items:flex-start; gap:8px; }
+  .back { flex:0 0 auto; min-width:44px; min-height:44px; }
+  .quiz-title { min-width:0; }
+  .quiz-title h2, .quiz-title div { overflow-wrap:anywhere; line-height:1.35; }
+  .counter { flex:0 0 auto; white-space:nowrap; }
+  .question-card, .result { min-width:0; padding:16px; overflow-wrap:anywhere; }
+  .q-text { font-size:clamp(19px, 5.5vw, 22px); overflow-wrap:anywhere; }
+  .option { min-height:48px; overflow-wrap:anywhere; }
+  .next { min-height:48px; }
+  .result-actions { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .result-actions button { min-height:48px; overflow-wrap:anywhere; }
+  .footer { padding-bottom:calc(8px + env(safe-area-inset-bottom, 0px)); }
+}
+</style>
 </head>
 <body>
 <div class="app">

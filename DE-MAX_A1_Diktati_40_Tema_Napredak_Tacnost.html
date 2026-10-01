@@ -68,6 +68,45 @@ h2{font-size:21px;margin:4px 0 2px;letter-spacing:-.03em}
   .card{padding:13px} .play{width:70px;height:70px} .answer{font-size:16px}
 }
 </style>
+<style>
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  .app{width:100%;max-width:none;min-height:100svh;min-height:100dvh;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .hero{position:relative;top:auto;padding:max(12px,env(safe-area-inset-top)) 14px 12px}
+  .brand{min-width:0;gap:10px}
+  .brand>div{min-width:0}
+  .logoimg{width:52px;height:52px;flex:0 0 52px}
+  .brand h1{font-size:clamp(16px,4.8vw,19px);overflow-wrap:anywhere}
+  .brand p{font-size:12px;line-height:1.35}
+  .statrow{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .stat{min-width:0;padding:8px 4px}
+  .stat span{font-size:10px}
+  .content{padding:12px 12px calc(16px + env(safe-area-inset-bottom))}
+  .card{min-width:0;padding:13px;border-radius:18px}
+  .topline{align-items:flex-start}
+  .topic-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;overflow:visible;padding-right:0}
+  .topic-btn{min-width:0;min-height:44px;padding:10px 9px;font-size:12px;overflow-wrap:anywhere}
+  .answer{font-size:16px;min-width:0}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:10px 9px;white-space:normal;line-height:1.25}
+  .play{width:74px;height:74px}
+  .speed{gap:7px}
+  .speed .btn{min-height:44px}
+  .nav{gap:8px}
+  .nav .btn{flex:1}
+  .feedback,.dict{min-width:0}
+  .solution,.translation{overflow-wrap:anywhere}
+  .footer{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+@media (max-width:420px){
+  .topic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topic-btn{font-size:11.5px}
+  .card{padding:12px}
+  .content{padding-right:10px;padding-left:10px}
+  .actions .btn{flex:1 1 auto}
+  .nav .btn{padding-left:7px;padding-right:7px}
+}
+</style>
 </head>
 <body>
 <div class="app">

@@ -63,6 +63,32 @@ main{max-width:1000px;margin:-20px auto 60px;padding:0 14px}
  .btn{flex:1}.qtype{font-size:11px}.progress-wrap{top:0}
 }
 </style>
+<style id="demax-mobile-layout">
+@media (max-width:700px) {
+  html,body{width:100%;min-height:100dvh}
+  header{padding:14px 12px 26px}
+  .brand{align-items:center;gap:10px}
+  .brand img{width:68px;height:46px;flex-shrink:0;border-radius:10px}
+  .brand>div{min-width:0}
+  .brand h1{font-size:clamp(22px,6vw,30px);line-height:1.2;overflow-wrap:anywhere}
+  .brand p{font-size:13px;line-height:1.4}
+  main{width:100%;max-width:none;padding:0 8px;margin-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+  .panel{padding:12px;border-radius:18px}
+  .lesson-title{font-size:21px;line-height:1.3}
+  .meta{gap:6px;margin-top:12px}
+  .pill{font-size:12px;padding:6px 8px;overflow-wrap:anywhere}
+  .q{padding:12px;margin:12px 0;scroll-margin-block:12px 140px}
+  .qhead{flex-wrap:wrap}
+  .prompt{font-size:17px;overflow-wrap:anywhere}
+  .choice{min-height:44px;font-size:16px;align-items:flex-start;overflow-wrap:anywhere}
+  .choice input{flex-shrink:0;margin-top:4px}
+  .word,.smallbtn{min-height:44px;font-size:16px;max-width:100%;overflow-wrap:anywhere}
+  .wordbank,.sentencebox{gap:6px}
+  .actions{margin:16px -12px -12px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));gap:8px}
+  .actions .btn{flex:1 1 140px;min-width:0;min-height:44px;font-size:16px;padding:12px 10px}
+  .feedback,.result{overflow-wrap:anywhere}
+}
+</style>
 </head>
 <body>
 <div class="topbar"></div>

@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 2 • Test</h1><div class="sub">Časovi 4–6 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
 const questions = [{"type": "mcq", "q": "Koji odgovor odgovara pitanju „Wie geht’s?“", "options": ["Gut, danke.", "Ich heiße Adnan.", "Ich komme aus Serbien.", "Ich bin 30 Jahre alt."], "answer": "Gut, danke."}, {"type": "mcq", "q": "Koje pitanje je formalno?", "options": ["Wie geht es Ihnen?", "Wie geht es dir?", "Wie heißt du?", "Wo wohnst du?"], "answer": "Wie geht es Ihnen?"}, {"type": "mcq", "q": "Koje pitanje je neformalno?", "options": ["Wie geht es dir?", "Wie geht es Ihnen?", "Wie heißen Sie?", "Woher kommen Sie?"], "answer": "Wie geht es dir?"}, {"type": "mcq", "q": "Dopuni: Ich ___ aus Serbien.", "options": ["komme", "kommst", "kommt", "kommen"], "answer": "komme"}, {"type": "mcq", "q": "Dopuni: Du ___ in Tutin.", "options": ["wohnst", "wohne", "wohnt", "wohnen"], "answer": "wohnst"}, {"type": "mcq", "q": "Dopuni: Wir ___ in Deutschland.", "options": ["leben", "lebt", "lebst", "lebe"], "answer": "leben"}, {"type": "mcq", "q": "Dopuni: Sie ___ Deutsch.", "options": ["studieren", "studiert", "studiere", "studierst"], "answer": "studieren"}, {"type": "mcq", "q": "Dopuni: Du ___ Amira.", "options": ["heißt", "heiße", "heißen", "heißtst"], "answer": "heißt"}, {"type": "mcq", "q": "Koji broj je „vierzehn“?", "options": ["14", "40", "4", "24"], "answer": "14"}, {"type": "mcq", "q": "Kako se kaže broj 20?", "options": ["zwanzig", "zwölf", "zwei", "dreißig"], "answer": "zwanzig"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Vater.", "options": ["mein", "meine", "meinen", "meiner"], "answer": "mein"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Mutter.", "options": ["meine", "mein", "meiner", "meinen"], "answer": "meine"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Kind.", "options": ["mein", "meine", "meinen", "meiner"], "answer": "mein"}, {"type": "mcq", "q": "Dopuni: Das sind ___ Kinder.", "options": ["meine", "mein", "meiner", "meinen"], "answer": "meine"}, {"type": "order", "q": "Sastavi pravilnu potvrdnu rečenicu.", "words": ["spiele", "Ich", "Fußball", "heute", "."], "answer": ["Ich", "spiele", "heute", "Fußball", "."]}, {"type": "order", "q": "Sastavi W-pitanje.", "words": ["du", "Wann", "Fußball", "spielst", "heute", "?"], "answer": ["Wann", "spielst", "du", "heute", "Fußball", "?"]}, {"type": "mcq", "q": "Dopuni: Ich ___ müde.", "options": ["bin", "bist", "ist", "sind"], "answer": "bin"}, {"type": "mcq", "q": "Dopuni: Du ___ Zeit.", "options": ["hast", "habe", "hat", "haben"], "answer": "hast"}, {"type": "mcq", "q": "Präteritum od „sein“ za „ich“ glasi:", "options": ["war", "warst", "waren", "wart"], "answer": "war"}, {"type": "mcq", "q": "Kako se kaže broj 42?", "options": ["zweiundvierzig", "vierundzwei", "vierzigzwei", "zwanzigvier"], "answer": "zweiundvierzig"}];
 let idx=0, score=0;

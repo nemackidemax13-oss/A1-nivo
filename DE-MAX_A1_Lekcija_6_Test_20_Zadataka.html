@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 6 • Test</h1><div class="sub">Časovi 16–18 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>const questions = [{"type": "mcq", "q": "Dopuni: Ich ___ Deutsch sprechen.", "options": ["kann", "kannst", "können", "könnt"], "answer": "kann"}, {"type": "mcq", "q": "Dopuni: Du ___ heute lernen.", "options": ["willst", "will", "wollen", "wollt"], "answer": "willst"}, {"type": "mcq", "q": "Dopuni: Er ___ hier parken.", "options": ["darf", "darfst", "dürfen", "dürft"], "answer": "darf"}, {"type": "mcq", "q": "Dopuni: Wir ___ mehr Deutsch lernen.", "options": ["müssen", "muss", "müsst", "musst"], "answer": "müssen"}, {"type": "mcq", "q": "Dopuni: Ihr ___ Musik.", "options": ["mögt", "mag", "mögen", "magst"], "answer": "mögt"}, {"type": "mcq", "q": "Dopuni: Ich ___ einen Kaffee.", "options": ["möchte", "möchtest", "möchten", "möchtet"], "answer": "möchte"}, {"type": "order", "q": "Sastavi potvrdnu rečenicu sa modalnim glagolom.", "words": ["lernen", "Deutsch", "mehr", "Ich", "muss", "."], "answer": ["Ich", "muss", "mehr", "Deutsch", "lernen", "."], "translation": "Moram više da učim nemački."}, {"type": "order", "q": "Sastavi upitnu rečenicu sa modalnim glagolom.", "words": ["du", "lernen", "Musst", "Deutsch", "mehr", "?"], "answer": ["Musst", "du", "mehr", "Deutsch", "lernen", "?"], "translation": "Moraš li više da učiš nemački?"}, {"type": "mcq", "q": "Koja rečenica znači „Sunčano je“?", "options": ["Es ist sonnig.", "Es ist bewölkt.", "Es ist windig.", "Es schneit."], "answer": "Es ist sonnig."}, {"type": "mcq", "q": "Dopuni: Ich komme ___ Montag.", "options": ["am", "um", "im", "nach"], "answer": "am"}, {"type": "mcq", "q": "Dopuni: Der Unterricht beginnt ___ 18 Uhr.", "options": ["um", "am", "im", "bei"], "answer": "um"}, {"type": "mcq", "q": "Dopuni: Ich lerne Deutsch ___ Sommer.", "options": ["im", "am", "um", "nach"], "answer": "im"}, {"type": "mcq", "q": "Dopuni: Ich fahre ___ Berlin.", "options": ["nach", "in", "zur", "zum"], "answer": "nach"}, {"type": "mcq", "q": "Dopuni: Ich gehe ___ Schule.", "options": ["zur", "zum", "nach", "bei"], "answer": "zur"}, {"type": "mcq", "q": "Akuzativ: Ich sehe ___ Mann.", "options": ["den", "der", "dem", "die"], "answer": "den"}, {"type": "mcq", "q": "Akuzativ: Ich sehe ___ Mann. (neodređeni član)", "options": ["einen", "ein", "einem", "eine"], "answer": "einen"}, {"type": "mcq", "q": "Akuzativ negacije: Ich sehe ___ Mann.", "options": ["keinen", "kein", "keinem", "keine"], "answer": "keinen"}, {"type": "mcq", "q": "Akuzativ prisvojne zamenice: Ich sehe ___ Mann.", "options": ["meinen", "mein", "meinem", "meine"], "answer": "meinen"}, {"type": "order", "q": "Sastavi rečenicu u Futuru I.", "words": ["ein", "Ich", "kaufen", "Auto", "werde", "."], "answer": ["Ich", "werde", "ein", "Auto", "kaufen", "."], "translation": "Kupiću auto."}, {"type": "mcq", "q": "Koja lična zamenica u dativu odgovara za „du“?", "options": ["dir", "dich", "du", "dein"], "answer": "dir"}];
 
 let idx=0, score=0;
