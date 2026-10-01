@@ -258,6 +258,32 @@ button{font:inherit;cursor:pointer}
   .app{padding:14px 12px 24px}
 }
 </style>
+<style>
+@media (max-width:700px) {
+  .app { width:100%; min-height:100vh; min-height:100dvh; padding:16px 12px calc(36px + env(safe-area-inset-bottom, 0px)); }
+  .brand { min-width:0; gap:8px; }
+  .logo { font-size:26px; flex:0 0 auto; }
+  .badge { max-width:65%; text-align:center; overflow-wrap:anywhere; }
+  .hero { padding:20px 16px; border-radius:24px; }
+  .hero h1 { font-size:clamp(26px, 8vw, 30px); overflow-wrap:anywhere; }
+  .hero p { font-size:15px; overflow-wrap:anywhere; }
+  .panel, .qcard { min-width:0; }
+  .panel { padding:14px; }
+  .qcard { padding:16px; }
+  .stats { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; }
+  .stat { min-width:0; }
+  .top { min-width:0; gap:8px; }
+  .meta { min-width:0; }
+  .meta span { line-height:1.35; overflow-wrap:anywhere; }
+  .q { font-size:clamp(19px, 5.5vw, 22px); overflow-wrap:anywhere; }
+  .opt { min-height:48px; font-size:16px; overflow-wrap:anywhere; }
+  .actions { flex-wrap:wrap; }
+  .actions > * { min-height:44px; flex:1 1 140px; }
+  .startBtn, .primary, .back { min-height:44px; }
+  .topicstrip span { font-size:12px; overflow-wrap:anywhere; }
+  .footer { padding-bottom:calc(8px + env(safe-area-inset-bottom, 0px)); }
+}
+</style>
 </head>
 <body>
 <div class="app">

@@ -12,6 +12,28 @@
 main{padding:14px 10px 28px}.card,.q{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}.card h2{margin:0 0 7px;font-size:1rem}.sub{margin:0;color:var(--muted);font-size:.84rem;line-height:1.5}.translation{color:var(--muted);font-size:.85rem;margin:5px 0 10px;padding-left:10px;border-left:3px solid #bfe2cb}.wordbig{font-size:1.5rem;font-weight:950;color:var(--g2);margin:3px 0}.qnum{font-size:.72rem;font-weight:900;color:var(--g2);text-transform:uppercase;letter-spacing:.05em}.btnrow,.letters,.quizopts{display:flex;gap:7px;flex-wrap:wrap}.btnrow{margin-top:10px}.btn,.letter,.qopt{border:0;border-radius:11px;padding:9px 11px;font-weight:900;cursor:pointer}.primary{background:var(--g);color:#fff}.ghost{background:var(--g3);color:var(--g2)}.letter{width:43px;height:43px;padding:0;border:1px solid #cde5d4;background:#fff;color:var(--g2);font-size:1rem}.letter:active,.btn:active,.qopt:active{transform:scale(.97)}.alphabet-note{font-size:.8rem;color:var(--muted);margin:9px 0 0}.quizbox{background:var(--g3);border-radius:14px;padding:12px;margin-top:10px}.quiztitle{font-weight:900;margin-bottom:8px}.qopt{background:#fff;color:var(--ink);border:1px solid #cde5d4;min-width:50px}.qopt.good{background:#e6faee;color:var(--good);border-color:#9ed7b1}.qopt.bad{background:#fff0f0;color:var(--bad);border-color:#efb2b2}.feedback{font-size:.84rem;font-weight:850;margin-top:8px}.ok{color:var(--good)}.no{color:var(--bad)}.footer{text-align:center;color:var(--muted);font-size:.73rem;padding:5px 0 16px}
 @media(max-width:520px){.hero{padding:15px 11px 12px}.hero h1{font-size:1.02rem}main{padding:11px 8px 22px}.card,.q{padding:12px;border-radius:16px}.letter{width:39px;height:39px}.btn{flex:1}.wordbig{font-size:1.35rem}}
 </style>
+<style>
+@media (max-width:700px) {
+  *,*::before,*::after { box-sizing:border-box; }
+  html,body { width:100%; max-width:100%; min-width:0; }
+  body { min-height:100vh; min-height:100svh; padding-bottom:calc(20px + env(safe-area-inset-bottom)); }
+  .app { width:100%; max-width:100%; min-width:0; min-height:100vh; min-height:100svh; height:auto; margin-left:auto; margin-right:auto; padding-left:max(10px,env(safe-area-inset-left)); padding-right:max(10px,env(safe-area-inset-right)); padding-bottom:calc(26px + env(safe-area-inset-bottom)); }
+  .app :where(*),main :where(*) { min-width:0; }
+  img,svg,video,canvas { max-width:100%; }
+  h1 { font-size:clamp(1.35rem,6vw,2rem); line-height:1.12; overflow-wrap:anywhere; }
+  h2 { font-size:clamp(1.1rem,5vw,1.55rem); overflow-wrap:anywhere; }
+  h3,h4 { overflow-wrap:anywhere; }
+  :where(p,li,td,th,label,.question,.prompt,.sentence,.phrase,.de,.word,.option,.opt) { overflow-wrap:anywhere; }
+  input,select,textarea { max-width:100%; min-width:0; min-height:44px; font-size:16px!important; }
+  button,[role=button],input[type=button],input[type=submit] { max-width:100%; min-height:44px; touch-action:manipulation; }
+  .tab,.btn,.option,.opt,.ans,.answer,.answerBtn,.choice,.pair,.vocab-btn,.word,.word-chip,.answer-chip,.speak,.reset,.check,.next,.listenQuestion,.auto-toggle,.listen-all,.control,.btn-answer,.wordbank button,.actions button,.btnrow button,.tabs button { min-height:44px; }
+  .footer { position:static; inset:auto; transform:none; width:100%; max-width:100%; margin-top:12px; margin-bottom:0; }
+  .footer-actions { position:static; inset:auto; }
+  .nav { overflow:visible; flex-wrap:wrap; }
+  table { max-width:100%; }
+}
+</style>
+<style>@media(max-width:700px){.blank{min-width:min(8em,100%)!important}.pronounbank .choice{min-width:52px!important}.qopt{min-width:50px!important}.sectiontitle .num{min-width:32px!important}.score-box{min-width:min(130px,100%)!important}.badge{min-width:34px!important}button,[role=button],input[type=button],input[type=submit],.tab,.btn,.option,.opt,.ans,.answer,.answerBtn,.choice,.pair,.vocab-btn,.word,.word-chip,.answer-chip,.speak,.reset,.check,.next,.listenQuestion,.auto-toggle,.listen-all,.control,.btn-answer{min-width:44px!important}}</style>
 </head>
 <body>
 <div class="app">

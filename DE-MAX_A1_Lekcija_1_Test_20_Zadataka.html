@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 1 • Test</h1><div class="sub">Časovi 1–3 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
 const questions = [{"type": "mcq", "q": "Koliko slova ima nemačka abeceda prema gradivu?", "options": ["26", "28", "30", "32"], "answer": "30", "hint": "U gradivu su zajedno obuhvaćena osnovna slova i posebna nemačka slova."}, {"type": "mcq", "q": "Koja grupa sadrži samoglasnike iz prve lekcije?", "options": ["a, e, i, o, u, y", "a, b, c, d, e, f", "ä, ö, ü, ß", "m, n, r, s, t, z"], "answer": "a, e, i, o, u, y"}, {"type": "mcq", "q": "Koji su nemački umlauti?", "options": ["ä, ö, ü", "ai, ei, eu", "ch, sch, tsch", "ß, x, z"], "answer": "ä, ö, ü"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „eu“?", "options": ["aj", "oj", "i", "au"], "answer": "oj"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „ei“?", "options": ["aj", "oj", "ej", "i"], "answer": "aj"}, {"type": "mcq", "q": "Kako se izgovara „ie“ u reči „Liebe“?", "options": ["kao dugo i", "kao aj", "kao oj", "kao e"], "answer": "kao dugo i"}, {"type": "mcq", "q": "Koji primer sadrži glasovnu kombinaciju „sch“?", "options": ["Schule", "Katze", "Deutsch", "Weg"], "answer": "Schule"}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wie heißen Sie?“", "options": ["Ich heiße Amira.", "Ich komme aus Serbien.", "Ich wohne in Tutin.", "Ich spreche Deutsch."], "answer": "Ich heiße Amira."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wer sind Sie?“", "options": ["Ich bin Emir.", "Ich heiße aus Emir.", "Ich komme Emir.", "Ich spreche Emir."], "answer": "Ich bin Emir."}, {"type": "order", "q": "Sastavi odgovor na pitanje „Wie ist Ihr Name?“", "words": ["ist", "Name", "Mein", "Amela", "."], "answer": ["Mein", "Name", "ist", "Amela", "."]}, {"type": "mcq", "q": "Šta znači W-pitanje „Wo?“", "options": ["gde", "ko", "kada", "zašto"], "answer": "gde"}, {"type": "mcq", "q": "Koja lična zamenica znači „ja“?", "options": ["ich", "du", "wir", "ihr"], "answer": "ich"}, {"type": "mcq", "q": "Koju zamenicu koristimo za formalno „Vi“?", "options": ["Sie", "du", "er", "ihr"], "answer": "Sie"}, {"type": "mcq", "q": "Koja rečenica je pravilno napisana?", "options": ["Deutschland ist ein schönes Land.", "deutschland ist ein schönes land.", "Deutschland ist ein schönes land.", "deutschland ist ein schönes Land."], "answer": "Deutschland ist ein schönes Land."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Woher kommen Sie?“", "options": ["Ich komme aus Serbien.", "Ich wohne Serbien.", "Ich heiße Serbien.", "Ich spreche aus Serbien."], "answer": "Ich komme aus Serbien."}, {"type": "order", "q": "Sastavi neformalni odgovor: „Dolazim iz Tutina.“", "words": ["komme", "Ich", "Tutin", "aus", "."], "answer": ["Ich", "komme", "aus", "Tutin", "."]}, {"type": "mcq", "q": "Kako kažeš „Govorim srpski“?", "options": ["Ich spreche Serbisch.", "Ich komme Serbisch.", "Ich heiße Serbisch.", "Ich wohne Serbisch."], "answer": "Ich spreche Serbisch."}, {"type": "order", "q": "Sastavi rečenicu „Učim nemački.“", "words": ["Deutsch", "Ich", "lerne", "."], "answer": ["Ich", "lerne", "Deutsch", "."]}, {"type": "mcq", "q": "Šta znači „Familienname“ u prijavnom formularu?", "options": ["prezime", "ime", "adresa", "država"], "answer": "prezime"}, {"type": "order", "q": "Sastavi potpuno predstavljanje.", "words": ["Name", "ist", "Mein", "Naida", "."], "answer": ["Mein", "Name", "ist", "Naida", "."]}];
 let idx=0, score=0;

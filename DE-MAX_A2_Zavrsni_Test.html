@@ -32,6 +32,34 @@ button.opt:hover{border-color:#96bfff;background:#f2f7ff} button.opt.correct{bac
 .footer{text-align:center;color:#8a99ad;font-size:12px;margin-top:18px} .hidden{display:none!important}
 @media (max-width:390px){.hero h1{font-size:26px}.q{font-size:20px}.app{padding:14px 12px 24px}}
 </style>
+<style>
+@media (max-width:700px) {
+  .app { width:100%; min-height:100vh; min-height:100dvh; padding:16px 12px calc(36px + env(safe-area-inset-bottom, 0px)); }
+  .brand { min-width:0; gap:8px; }
+  .logo { font-size:26px; flex:0 0 auto; }
+  .badge { max-width:65%; text-align:center; overflow-wrap:anywhere; }
+  .hero { padding:20px 16px; border-radius:24px; }
+  .hero h1 { font-size:clamp(26px, 8vw, 30px); overflow-wrap:anywhere; }
+  .hero p { font-size:15px; overflow-wrap:anywhere; }
+  .panel, .qcard { min-width:0; }
+  .panel { padding:14px; }
+  .qcard { padding:16px; }
+  .grid { min-width:0; }
+  .lesson { min-width:0; min-height:72px; gap:10px; padding:14px; }
+  .lesson > div:last-child { min-width:0; }
+  .lesson h3, .lesson p { overflow-wrap:anywhere; }
+  .num { flex:0 0 48px; }
+  .top { min-width:0; gap:8px; }
+  .meta { min-width:0; }
+  .meta span { line-height:1.35; overflow-wrap:anywhere; }
+  .q { font-size:clamp(19px, 5.5vw, 22px); overflow-wrap:anywhere; }
+  .opt { min-height:48px; font-size:16px; overflow-wrap:anywhere; }
+  .actions { flex-wrap:wrap; }
+  .actions > * { min-height:44px; flex:1 1 140px; }
+  .primary, .back { min-height:44px; }
+  .footer { padding-bottom:calc(8px + env(safe-area-inset-bottom, 0px)); }
+}
+</style>
 </head>
 <body>
 <div class="app">

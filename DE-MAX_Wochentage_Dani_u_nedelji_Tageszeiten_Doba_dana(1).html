@@ -135,6 +135,30 @@
     .app{margin:18px 0;min-height:auto;border-radius:28px}
   }
 </style>
+<style id="demax-mobile-layout">
+@media (max-width:700px) {
+  html,body{width:100%;min-height:100dvh}
+  .app{width:100%;max-width:none;min-height:100dvh;overflow:visible}
+  .header{padding:14px 12px}
+  .brand{flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .logo{font-size:20px;padding:8px 10px}
+  h1{font-size:clamp(23px,6vw,30px);line-height:1.2;overflow-wrap:anywhere}
+  .moduleTabs{position:static;display:grid;grid-template-columns:minmax(0,1fr);padding:10px;gap:8px}
+  .tabs{padding:8px 10px;gap:6px}
+  .moduleBtn,.tab{min-width:0;white-space:normal;line-height:1.35}
+  .screen{padding:8px 10px calc(20px + env(safe-area-inset-bottom,0px))}
+  .heroCards,.answers{grid-template-columns:minmax(0,1fr)}
+  .day{grid-template-columns:38px minmax(0,1fr) 52px}
+  .daytext{min-width:0;padding:12px 10px}
+  .de{font-size:21px;line-height:1.2;overflow-wrap:anywhere}
+  .sr{overflow-wrap:anywhere}
+  button{min-height:44px;max-width:100%;font-size:16px;white-space:normal}
+  .speaker{width:44px;height:44px;margin-right:8px}
+  .score{flex-wrap:wrap;gap:8px}
+  .practice-box,.quiz{padding:12px}
+  .quizword{font-size:26px;overflow-wrap:anywhere}
+}
+</style>
 </head>
 <body>
 <div class="app">

@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 7 • Test</h1><div class="sub">Časovi 19–20 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>const questions = [{"type": "mcq", "q": "Perfekat se gradi pomoću:", "options": ["haben/sein + Partizip II", "werden + Infinitiv", "sein + Adjektiv", "Modalverb + Infinitiv"], "answer": "haben/sein + Partizip II"}, {"type": "mcq", "q": "Dopuni: Ich ___ Deutsch gelernt.", "options": ["habe", "bin", "hast", "ist"], "answer": "habe"}, {"type": "mcq", "q": "Dopuni: Du ___ Hausaufgaben gemacht.", "options": ["hast", "bist", "habe", "hat"], "answer": "hast"}, {"type": "mcq", "q": "Dopuni: Er hat Lieder ___.", "options": ["gehört", "gehören", "hört", "gehörst"], "answer": "gehört"}, {"type": "mcq", "q": "Dopuni: Wir haben ein Buch ___.", "options": ["gelesen", "gelernt", "gegangen", "geschlafen"], "answer": "gelesen"}, {"type": "mcq", "q": "Dopuni: Ich ___ nach Hause gegangen.", "options": ["bin", "habe", "bist", "hat"], "answer": "bin"}, {"type": "mcq", "q": "Dopuni: Du ___ mit dem Auto gefahren.", "options": ["bist", "hast", "bin", "seid"], "answer": "bist"}, {"type": "mcq", "q": "Dopuni: Er ist gestern ___.", "options": ["gekommen", "gekommt", "gekommten", "kommen"], "answer": "gekommen"}, {"type": "order", "q": "Sastavi W-pitanje u perfektu.", "words": ["du", "Wo", "Deutsch", "gelernt", "hast", "?"], "answer": ["Wo", "hast", "du", "Deutsch", "gelernt", "?"], "translation": "Gde si učio nemački?"}, {"type": "order", "q": "Sastavi pitanje u perfektu sa „kommen“.", "words": ["du", "Wann", "gekommen", "bist", "?"], "answer": ["Wann", "bist", "du", "gekommen", "?"], "translation": "Kada si došao?"}, {"type": "mcq", "q": "Koji pomoćni glagol koristi „gehen“ u perfektu?", "options": ["sein", "haben", "werden", "können"], "answer": "sein"}, {"type": "mcq", "q": "Koji je Partizip II od „essen“?", "options": ["gegessen", "geessen", "essen", "geesst"], "answer": "gegessen"}, {"type": "mcq", "q": "Lična zamenica u akuzativu za „er“ glasi:", "options": ["ihn", "ihm", "er", "sein"], "answer": "ihn"}, {"type": "order", "q": "Spoji dve glavne rečenice veznikom „denn“.", "words": ["krank", "denn", "bin", "Ich", "ich", "Arbeit", "nicht", "zur", "gehe", ",", "."], "answer": ["Ich", "gehe", "nicht", "zur", "Arbeit", ",", "denn", "ich", "bin", "krank", "."], "translation": "Ne idem na posao jer sam bolestan."}, {"type": "mcq", "q": "Koji lokacioni predlog znači „ispod“?", "options": ["unter", "über", "auf", "neben"], "answer": "unter"}, {"type": "mcq", "q": "Spojeno „in + dem“ glasi:", "options": ["im", "am", "zum", "zur"], "answer": "im"}, {"type": "mcq", "q": "Imperativ za „du“ od kommen glasi:", "options": ["komm!", "kommt!", "kommen Sie!", "komme!"], "answer": "komm!"}, {"type": "mcq", "q": "Imperativ za „ihr“ od gehen glasi:", "options": ["geht!", "geh!", "gehen Sie!", "gehe!"], "answer": "geht!"}, {"type": "mcq", "q": "Imperativ za „Sie“ od sein glasi:", "options": ["Seien Sie!", "Seid!", "Sei!", "Sind Sie!"], "answer": "Seien Sie!"}, {"type": "mcq", "q": "Dopuni: Du ___ deine Freunde. (treffen)", "options": ["triffst", "treffst", "triff", "treffen"], "answer": "triffst"}];
 
 let idx=0, score=0;

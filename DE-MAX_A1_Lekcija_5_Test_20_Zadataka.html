@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 5 • Test</h1><div class="sub">Časovi 13–15 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>const questions = [{"type": "order", "q": "Sastavi potvrdnu rečenicu sa razdvojivim glagolom.", "words": ["früh", "Ich", "auf", "stehe", "."], "answer": ["Ich", "stehe", "früh", "auf", "."], "translation": "Ustajem rano."}, {"type": "mcq", "q": "Dopuni pitanje: ___ du deine Mutter an?", "options": ["Rufst", "Rufe", "Ruft", "Rufen"], "answer": "Rufst"}, {"type": "order", "q": "Sastavi W-pitanje sa „aufstehen“.", "words": ["du", "Wann", "auf", "stehst", "?"], "answer": ["Wann", "stehst", "du", "auf", "?"], "translation": "Kada ustaješ?"}, {"type": "mcq", "q": "Koji dan je „Mittwoch“?", "options": ["sreda", "utorak", "četvrtak", "nedelja"], "answer": "sreda"}, {"type": "mcq", "q": "Dopuni: Ich komme ___ Montag.", "options": ["am", "um", "im", "in"], "answer": "am"}, {"type": "mcq", "q": "Dopuni: Der Kurs beginnt ___ 18 Uhr.", "options": ["um", "am", "im", "von"], "answer": "um"}, {"type": "mcq", "q": "Dopuni: Ich habe ___ 9 ___ 12 Uhr Unterricht.", "options": ["von / bis", "am / um", "im / in", "zum / zur"], "answer": "von / bis"}, {"type": "mcq", "q": "Koji izraz znači „noću“?", "options": ["in der Nacht", "am Morgen", "am Mittag", "am Vormittag"], "answer": "in der Nacht"}, {"type": "order", "q": "Sastavi rečenicu sa obrnutim redosledom reči.", "words": ["Larsen", "Musik", "hört", "Am", "Morgen", "."], "answer": ["Am", "Morgen", "hört", "Larsen", "Musik", "."], "translation": "Ujutru Larsen sluša muziku."}, {"type": "mcq", "q": "Koji mesec je „März“?", "options": ["mart", "maj", "jun", "januar"], "answer": "mart"}, {"type": "mcq", "q": "Koji je redni broj za 1?", "options": ["der erste", "der zweite", "der dritte", "der vierte"], "answer": "der erste"}, {"type": "mcq", "q": "Kako se kaže datum 14. februar?", "options": ["der vierzehnte Februar", "der vierzigste Februar", "der vierte Februar", "am vierzehn Februar"], "answer": "der vierzehnte Februar"}, {"type": "mcq", "q": "Dopuni: Ich habe ___ einundzwanzigsten April Geburtstag.", "options": ["am", "um", "im", "von"], "answer": "am"}, {"type": "mcq", "q": "Dopuni period: ___ 5. bis ___ 11. August.", "options": ["vom / zum", "von / um", "am / bis", "im / zur"], "answer": "vom / zum"}, {"type": "mcq", "q": "Koja reč znači „oko“?", "options": ["das Auge", "der Kopf", "die Nase", "der Mund"], "answer": "das Auge"}, {"type": "mcq", "q": "Dopuni jedninu: Mein Auge ___ weh.", "options": ["tut", "tun", "tue", "tust"], "answer": "tut"}, {"type": "mcq", "q": "Dopuni množinu: Meine Augen ___ weh.", "options": ["tun", "tut", "tust", "tue"], "answer": "tun"}, {"type": "mcq", "q": "Kako se neformalno kaže 12:30?", "options": ["Es ist halb eins.", "Es ist halb zwölf.", "Es ist dreißig nach zwölf Uhr.", "Es ist Viertel vor eins."], "answer": "Es ist halb eins."}, {"type": "mcq", "q": "Kako se neformalno kaže 12:45?", "options": ["Es ist Viertel vor eins.", "Es ist Viertel nach zwölf.", "Es ist halb eins.", "Es ist fünf vor eins."], "answer": "Es ist Viertel vor eins."}, {"type": "order", "q": "Sastavi rečenicu o omiljenoj muzici.", "words": ["Popmusik", "Meine", "ist", "Lieblingsmusik", "."], "answer": ["Meine", "Lieblingsmusik", "ist", "Popmusik", "."], "translation": "Moja omiljena muzika je pop muzika."}];
 
 let idx=0, score=0;

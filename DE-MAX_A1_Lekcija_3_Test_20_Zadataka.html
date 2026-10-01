@@ -14,6 +14,39 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
 .footerStat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px;font-weight:700}.pill{background:#edf5ff;color:#0a4baa;border-radius:999px;padding:7px 10px}
 .result{text-align:center;padding:12px 2px}.scoreCircle{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--blue) var(--pct),#e5eef9 0);position:relative}.scoreCircle:after{content:'';position:absolute;inset:11px;background:white;border-radius:50%}.scoreText{position:relative;z-index:1;font-size:28px;font-weight:950;color:var(--blue)}.result h2{font-size:25px;margin:10px 0 6px}.result p{color:var(--muted);margin:0 0 16px}
 @media (max-width:420px){.app{padding:10px 10px 22px}.header{border-radius:20px;padding:15px}.card{border-radius:20px;padding:16px}.q{font-size:18px}.opt{font-size:15px;padding:13px}.word{font-size:15px}.brand .logo{font-size:16px}}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0;overflow-x:clip}
+  body{display:block}
+  .app{width:100%;max-width:640px;min-height:100svh;min-height:100dvh;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom))}
+  .header{position:relative;top:auto;min-width:0;padding:15px}
+  .brand{min-width:0;align-items:flex-start;flex-wrap:wrap;gap:8px}
+  .brand>*{min-width:0}
+  .brand .logo{font-size:clamp(15px,4.5vw,18px);white-space:normal;overflow-wrap:anywhere}
+  .badge{max-width:100%;white-space:normal}
+  h1{font-size:clamp(19px,5.8vw,22px);overflow-wrap:anywhere}
+  .sub{overflow-wrap:anywhere}
+  .progressRow{min-width:0;gap:8px}
+  .bar{min-width:0}
+  .count{min-width:48px}
+  .card{min-width:0;padding:16px}
+  .q{font-size:clamp(18px,5vw,20px);overflow-wrap:anywhere}
+  .options{grid-template-columns:minmax(0,1fr)}
+  .opt{min-width:0;min-height:44px;padding:13px 12px;font-size:16px;overflow-wrap:anywhere}
+  .wordbank,.assembled{min-width:0;gap:8px;padding:10px}
+  .word{min-width:0;min-height:44px;padding:10px 11px;font-size:16px;overflow-wrap:anywhere}
+  .actions{gap:8px}
+  .btn{min-width:0;min-height:44px;padding:12px 10px;overflow-wrap:anywhere}
+  .footerStat{flex-wrap:wrap;gap:8px}
+  .pill{max-width:100%;overflow-wrap:anywhere}
+  .result{min-width:0}
+}
+@media (max-width:380px){
+  .app{padding-right:10px;padding-left:10px}
+  .header,.card{padding:13px}
+  .brand{gap:6px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1 1 100%}
+}
 </style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 3 • Test</h1><div class="sub">Časovi 7–9 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
 const questions = [{"type": "mcq", "q": "Dopuni: Das ist ___ Mann.", "options": ["ein", "eine", "einen", "—"], "answer": "ein"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Frau.", "options": ["eine", "ein", "einen", "—"], "answer": "eine"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Kind.", "options": ["ein", "eine", "einen", "—"], "answer": "ein"}, {"type": "mcq", "q": "Koji neodređeni član stoji uz množinu?", "options": ["nema člana", "ein", "eine", "einen"], "answer": "nema člana"}, {"type": "mcq", "q": "Negiraj: Das ist ein Mann.", "options": ["Das ist kein Mann.", "Das ist keine Mann.", "Das ist nicht ein Mann.", "Das kein ist Mann."], "answer": "Das ist kein Mann."}, {"type": "mcq", "q": "Negiraj: Das ist eine Frau.", "options": ["Das ist keine Frau.", "Das ist kein Frau.", "Das ist nicht Frau.", "Das keine ist Frau."], "answer": "Das ist keine Frau."}, {"type": "mcq", "q": "Negiraj: Das ist ein Kind.", "options": ["Das ist kein Kind.", "Das ist keine Kind.", "Das ist keinen Kind.", "Das ist nicht Kind."], "answer": "Das ist kein Kind."}, {"type": "mcq", "q": "Negiraj množinu: Das sind Kinder.", "options": ["Das sind keine Kinder.", "Das sind kein Kinder.", "Das ist keine Kinder.", "Das sind nicht ein Kinder."], "answer": "Das sind keine Kinder."}, {"type": "mcq", "q": "Dopuni: Ich ___ Brot.", "options": ["esse", "isst", "essen", "esst"], "answer": "esse"}, {"type": "mcq", "q": "Dopuni: Du ___ Pizza.", "options": ["isst", "esse", "essen", "esst"], "answer": "isst"}, {"type": "mcq", "q": "Dopuni: Wir ___ Salat.", "options": ["essen", "isst", "esst", "esse"], "answer": "essen"}, {"type": "mcq", "q": "Dopuni: Ich ___ Wasser.", "options": ["trinke", "trinkst", "trinkt", "trinken"], "answer": "trinke"}, {"type": "mcq", "q": "Dopuni: Du ___ Saft.", "options": ["trinkst", "trinke", "trinkt", "trinken"], "answer": "trinkst"}, {"type": "mcq", "q": "Koje pitanje znači „Šta je tvoje omiljeno jelo?“", "options": ["Was ist dein Lieblingsessen?", "Was trinkst du gern?", "Wie geht es dir?", "Woher kommst du?"], "answer": "Was ist dein Lieblingsessen?"}, {"type": "order", "q": "Sastavi odgovor: „Moje omiljeno jelo je pica.“", "words": ["ist", "Pizza", "Mein", "Lieblingsessen", "."], "answer": ["Mein", "Lieblingsessen", "ist", "Pizza", "."]}, {"type": "mcq", "q": "Dopuni: Ich ___ Wasser.", "options": ["brauche", "brauchst", "braucht", "brauchen"], "answer": "brauche"}, {"type": "mcq", "q": "Dopuni: Du ___ ein Heft.", "options": ["brauchst", "brauche", "braucht", "brauchen"], "answer": "brauchst"}, {"type": "mcq", "q": "Dopuni: Wir ___ mehr Zeit.", "options": ["brauchen", "braucht", "brauchst", "brauche"], "answer": "brauchen"}, {"type": "mcq", "q": "Koji oblik je pravilan uz „mit“: „Idem kolima.“", "options": ["Ich fahre mit dem Auto.", "Ich fahre mit das Auto.", "Ich fahre mit der Auto.", "Ich fahre mit den Auto."], "answer": "Ich fahre mit dem Auto."}, {"type": "order", "q": "Sastavi pitanje sa glagolom „brauchen“.", "words": ["du", "Was", "brauchst", "?"], "answer": ["Was", "brauchst", "du", "?"]}];
 let idx=0, score=0;
