@@ -53,6 +53,16 @@ h2{font-size:21px;margin:4px 0 2px;letter-spacing:-.03em}
 .dialogue{display:grid;gap:9px;margin-top:12px}
 .line{border:1px solid #dfebf7;border-radius:16px;padding:11px 12px;background:#fbfdff}
 .line.a{border-left:4px solid #0b63ce} .line.b{border-left:4px solid #6c8fb8}
+.line.reading{
+  border:2px solid #e11d48!important;
+  border-left:6px solid #e11d48!important;
+  background:#fff1f2!important;
+  box-shadow:0 0 0 3px rgba(225,29,72,.10),0 8px 20px rgba(225,29,72,.12);
+  transform:scale(1.01);
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.line.reading .de{color:#c8102e}
+.line.reading .speaker{color:#c8102e}
 .linehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
 .speaker{font-size:11px;font-weight:950;color:#0b63ce;text-transform:uppercase;letter-spacing:.06em}
 .de{font-size:15px;line-height:1.36;font-weight:800}
@@ -486,12 +496,23 @@ let playSession=0;
 let scrollSession=0;
 let audioUnlocked=false;
 
+function clearActiveLine(){
+  document.querySelectorAll(".line.reading").forEach(el=>el.classList.remove("reading"));
+}
+
+function setActiveLine(index){
+  clearActiveLine();
+  const line=document.querySelector(`[data-dialog-line="${index}"]`);
+  if(line) line.classList.add("reading");
+}
+
 function stopAllSpeech(){
   playSession++;
   scrollSession++;
   if(autoPlayTimer){ clearTimeout(autoPlayTimer); autoPlayTimer=null; }
   if(returnTopTimer){ clearTimeout(returnTopTimer); returnTopTimer=null; }
   if("speechSynthesis" in window) speechSynthesis.cancel();
+  clearActiveLine();
 }
 
 function loadVoices(){
@@ -623,14 +644,19 @@ function speechTextGerman(text){
   return s;
 }
 
-function speak(text, who="A", rate=.92, onend=null){
+function speak(text, who="A", rate=.92, onend=null, lineIndex=null){
   if(!("speechSynthesis" in window)) return;
   stopAllSpeech();
+  if(lineIndex!==null) setActiveLine(lineIndex);
   const u=new SpeechSynthesisUtterance(speechTextGerman(text));
   u.lang="de-DE"; u.rate=rate; u.pitch=1;
   const sel=document.getElementById(who==="B"?"voiceB":"voiceA");
   if(voices.length && sel && voices[Number(sel.value)]) u.voice=voices[Number(sel.value)];
-  if(onend) u.onend=onend;
+  u.onend=()=>{
+    clearActiveLine();
+    if(onend) onend();
+  };
+  u.onerror=()=>clearActiveLine();
   speechSynthesis.speak(u);
 }
 
@@ -639,6 +665,7 @@ function speakSequence(lines, i=0, sessionId=null){
   if(sessionId===null) sessionId = ++playSession;
   if(sessionId !== playSession || i>=lines.length) return;
 
+  setActiveLine(i);
   slowScrollToLine(i, sessionId);
 
   const x=lines[i];
@@ -652,6 +679,7 @@ function speakSequence(lines, i=0, sessionId=null){
   u.onend=()=>{
     if(sessionId !== playSession) return;
     if(i===lines.length-1){
+      clearActiveLine();
       slowScrollToDialogueEnd(sessionId);
       returnTopTimer = setTimeout(()=>{
         if(sessionId!==playSession || sessionId!==scrollSession) return;
@@ -660,6 +688,9 @@ function speakSequence(lines, i=0, sessionId=null){
       return;
     }
     autoPlayTimer = setTimeout(()=>speakSequence(lines,i+1,sessionId),220);
+  };
+  u.onerror=()=>{
+    if(sessionId===playSession) clearActiveLine();
   };
   speechSynthesis.speak(u);
 }
@@ -712,7 +743,7 @@ function renderDialog(){
       <div class="linehead"><span class="speaker">${i+1}. Osoba ${x.speaker}</span><button class="iconbtn" title="Pusti izgovor">🔊</button></div>
       <div class="de">${x.de}</div>
       <div class="sr ${showTranslations?"":"hidden"}">${x.sr}</div>`;
-    div.querySelector("button").onclick=()=>speak(x.de,x.speaker,dialogRate);
+    div.querySelector("button").onclick=()=>speak(x.de,x.speaker,dialogRate,null,i);
     wrap.appendChild(div);
   });
 }
