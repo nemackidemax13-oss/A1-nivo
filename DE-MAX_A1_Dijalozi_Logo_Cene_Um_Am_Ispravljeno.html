@@ -54,12 +54,14 @@ h2{font-size:21px;margin:4px 0 2px;letter-spacing:-.03em}
 .line{border:1px solid #dfebf7;border-radius:16px;padding:11px 12px;background:#fbfdff}
 .line.a{border-left:4px solid #0b63ce} .line.b{border-left:4px solid #6c8fb8}
 .line.reading{
-  border:3px solid #dc2626!important;
-  border-left:6px solid #dc2626!important;
-  background:#fbfdff!important;
-  box-shadow:0 0 0 3px rgba(220,38,38,.12),0 8px 20px rgba(220,38,38,.10);
+  border:3px solid #ff0000!important;
+  border-left:6px solid #ff0000!important;
+  outline:3px solid #ff0000!important;
+  outline-offset:2px!important;
+  background:#fff!important;
+  box-shadow:0 0 0 2px rgba(255,0,0,.10),0 8px 22px rgba(255,0,0,.16)!important;
   transform:scale(1.01);
-  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+  transition:border-color .12s ease,outline-color .12s ease,box-shadow .12s ease,transform .12s ease;
 }
 .line.reading .de{color:#14304d!important}
 .line.reading .speaker{color:#0b63ce!important}
@@ -559,7 +561,7 @@ function slowScrollToLine(index, sessionId){
   if(!line) return;
   const rect=line.getBoundingClientRect();
   const target=window.scrollY + rect.top - Math.max(90, window.innerHeight*0.28);
-  slowScrollToY(target, 1500, sessionId);
+  slowScrollToY(target, 520, sessionId);
 }
 
 function slowScrollToDialogueEnd(sessionId){
@@ -649,11 +651,13 @@ function speechTextGerman(text){
 function speak(text, who="A", rate=.92, onend=null, lineIndex=null){
   if(!("speechSynthesis" in window)) return;
   stopAllSpeech();
-  if(lineIndex!==null) setActiveLine(lineIndex);
   const u=new SpeechSynthesisUtterance(speechTextGerman(text));
   u.lang="de-DE"; u.rate=rate; u.pitch=1;
   const sel=document.getElementById(who==="B"?"voiceB":"voiceA");
   if(voices.length && sel && voices[Number(sel.value)]) u.voice=voices[Number(sel.value)];
+  u.onstart=()=>{
+    if(lineIndex!==null) setActiveLine(lineIndex);
+  };
   u.onend=()=>{
     clearActiveLine();
     if(onend) onend();
@@ -667,7 +671,7 @@ function speakSequence(lines, i=0, sessionId=null){
   if(sessionId===null) sessionId = ++playSession;
   if(sessionId !== playSession || i>=lines.length) return;
 
-  setActiveLine(i);
+  clearActiveLine();
   slowScrollToLine(i, sessionId);
 
   const x=lines[i];
@@ -678,10 +682,14 @@ function speakSequence(lines, i=0, sessionId=null){
   const sel=document.getElementById(x.speaker==="B"?"voiceB":"voiceA");
   if(voices.length && sel && voices[Number(sel.value)]) u.voice=voices[Number(sel.value)];
 
+  u.onstart=()=>{
+    if(sessionId===playSession) setActiveLine(i);
+  };
+
   u.onend=()=>{
     if(sessionId !== playSession) return;
+    clearActiveLine();
     if(i===lines.length-1){
-      clearActiveLine();
       slowScrollToDialogueEnd(sessionId);
       returnTopTimer = setTimeout(()=>{
         if(sessionId!==playSession || sessionId!==scrollSession) return;
@@ -694,7 +702,11 @@ function speakSequence(lines, i=0, sessionId=null){
   u.onerror=()=>{
     if(sessionId===playSession) clearActiveLine();
   };
-  speechSynthesis.speak(u);
+
+  autoPlayTimer=setTimeout(()=>{
+    if(sessionId!==playSession) return;
+    speechSynthesis.speak(u);
+  },560);
 }
 
 function autoPlayCurrentDialogue(force=false){
