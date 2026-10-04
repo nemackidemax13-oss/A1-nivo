@@ -40,7 +40,7 @@
       <button class="btn speak" id="speak" type="button" disabled>🔊 Izgovor</button>
       <button class="btn next" id="next" type="button" disabled>Sledeći ➜</button>
     </div>
-    <div class="small-note">Dodirni odgovor. Posle odgovora dobijaš prevod i možeš da poslušaš tačan nemački izgovor.</div>
+    <div class="small-note">Dodirni odgovor. Nemački se izgovara automatski, a dugme 🔊 možeš koristiti za ponovno slušanje.</div>
   </section>
 
   <section class="card rules">
@@ -93,6 +93,7 @@ function nextQ(){
  let opts=shuffle([correct,...distractors]);
  const box=$('#answers'); box.innerHTML='';
  opts.forEach(text=>{const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=text;b.addEventListener('click',()=>answer(b,text));box.appendChild(b)});
+ setTimeout(()=>speakText(current.v),250);
 }
 function answer(btn,text){if(locked)return;locked=true;total++;const ok=text===correct;if(ok)right++;else wrong++;
  root.querySelectorAll('.answer').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct')});if(!ok)btn.classList.add('wrong');
@@ -100,9 +101,20 @@ function answer(btn,text){if(locked)return;locked=true;total++;const ok=text===c
  const f=$('#feedback');f.className='feedback show '+(ok?'ok':'no');
  f.innerHTML=(ok?'✅ Tačno!':'❌ Nije tačno. Tačan odgovor je: <b>'+correct+'</b>')+'<div class="translation">🇷🇸 Prevod: '+translation+'</div>';
  $('#speak').disabled=false;$('#next').disabled=false;
+ setTimeout(()=>speakText(correct),180);
 }
-function speak(){if(!correct)return;if(!('speechSynthesis' in window)){const f=$('#feedback');f.className='feedback show no';f.textContent='Izgovor nije podržan u ovom pregledaču.';return}
- window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(correct.replace('!',''));u.lang='de-DE';u.rate=.82;u.pitch=1;window.speechSynthesis.speak(u)}
+function speakText(text){
+ if(!text||!('speechSynthesis' in window))return;
+ window.speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text.replace(/!/g,''));
+ u.lang='de-DE';u.rate=.82;u.pitch=1;
+ window.speechSynthesis.speak(u);
+}
+function speak(){
+ if(!correct)return;
+ if(!('speechSynthesis' in window)){const f=$('#feedback');f.className='feedback show no';f.textContent='Izgovor nije podržan u ovom pregledaču.';return}
+ speakText(correct);
+}
 $('#speak').addEventListener('click',speak);$('#next').addEventListener('click',nextQ);
 root.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{root.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;nextQ()}));
 nextQ();
