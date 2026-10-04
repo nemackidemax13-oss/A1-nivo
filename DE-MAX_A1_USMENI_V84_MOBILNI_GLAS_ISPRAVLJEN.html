@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b5ed7">
+<title>De-Max A1 Usmeni • V84 mobilni glas ispravljen</title>
+<style>
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#f4f8fc;color:#17324d}
+#load{min-height:100dvh;display:grid;place-items:center;padding:24px;text-align:center}
+.box{max-width:520px;background:#fff;border:1px solid #dce8f5;border-radius:22px;padding:22px;box-shadow:0 12px 30px rgba(29,77,125,.10)}
+.logo{font-size:30px;font-weight:1000;color:#0b5ed7}.logo span{color:#e53935}
+.msg{margin-top:10px;font-weight:800;line-height:1.5}.err{color:#c8231e}
+</style>
+</head>
+<body>
+<div id="load"><div class="box"><div class="logo">De-<span>Max</span></div><div class="msg" id="msg">Učitavam V84 mobilnu verziju…</div></div></div>
+<script>
+(async function(){
+  const msg=document.getElementById("msg");
+  try{
+    const response=await fetch("./DE-MAX_A1_USMENI_V83_MOBILE.html?v=84-mobile-fix-1",{cache:"no-store"});
+    if(!response.ok)throw new Error("Osnovna V83 aplikacija nije dostupna ("+response.status+").");
+    let html=await response.text();
+    let changes=0;
+
+    const oldAppend=/function appendFinalSpeechSegment\(existing, segment\)\{[\s\S]*?\n\}\n\nfunction setupRec\(\)\{/;
+    const newAppend=[
+      'function mobileSpeechClient(){',
+      '  const ua=String(navigator.userAgent||"");',
+      '  return /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (navigator.maxTouchPoints>1 && Math.min(screen.width||9999,innerWidth||9999)<=900);',
+      '}',
+      'function speechSegmentWords(text){',
+      '  return String(text||"").toLowerCase().replace(/[.!?,;:]+/g," ").replace(/\\s+/g," ").trim().split(" ").filter(Boolean);',
+      '}',
+      'function appendFinalSpeechSegment(existing, segment){',
+      '  const prev=String(existing||"").trim();',
+      '  const next=String(segment||"").trim();',
+      '  if(!next)return prev;',
+      '  if(!prev)return next;',
+      '  const pw=speechSegmentWords(prev), nw=speechSegmentWords(next);',
+      '  const pn=pw.join(" "), nn=nw.join(" ");',
+      '  if(nn && pn===nn)return prev;',
+      '  if(nn && pn.endsWith(nn))return prev;',
+      '  if(pn && nn.startsWith(pn))return next;',
+      '  let overlap=0;',
+      '  const max=Math.min(12,pw.length,nw.length);',
+      '  for(let k=max;k>=1;k--){',
+      '    if(pw.slice(-k).join(" ")===nw.slice(0,k).join(" ")){overlap=k;break}',
+      '  }',
+      '  let fresh=next;',
+      '  if(overlap){',
+      '    const rawNext=next.split(/\\s+/);',
+      '    fresh=rawNext.slice(overlap).join(" ").trim();',
+      '    if(!fresh)return prev;',
+      '  }',
+      '  if(startsLikeNewGermanSentence(fresh)){',
+      '    const closed=/[.!?:]$/.test(prev) ? prev : prev+".";',
+      '    return (closed+" "+fresh).trim();',
+      '  }',
+      '  return (prev+" "+fresh).replace(/\\s+/g," ").trim();',
+      '}',
+      '',
+      '/* ===== V84 • MOBILNI ASR: bez dopisivanja i dupliranja govora ===== */',
+      'function setupRec(){'
+    ].join("\n");
+    if(oldAppend.test(html)){html=html.replace(oldAppend,newAppend);changes++;}
+
+    const oldInit='  const r=new SR();r.lang="de-DE";r.interimResults=true;r.continuous=true;r.maxAlternatives=10;';
+    const newInit=[
+      '  const mobileASR=mobileSpeechClient();',
+      '  const r=new SR();',
+      '  r.lang="de-DE";',
+      '  r.interimResults=true;',
+      '  r.continuous=mobileASR ? ["intro","topic","pic"].includes(recMode) : true;',
+      '  r.maxAlternatives=mobileASR?3:10;',
+      '  let lastMobileFinalNorm="";',
+      '  let lastMobileFinalAt=0;'
+    ].join("\n");
+    if(html.includes(oldInit)){html=html.replace(oldInit,newInit);changes++;}
+
+    const oldBest=[
+      '      const best=ranked[0]?.cand||result[0];',
+      '      const tx=best.transcript;',
+      '      recognitionBestAlternatives=ranked.slice(0,5).map(x=>x.cand.transcript);'
+    ].join("\n");
+    const newBest=[
+      '      // Telefon: koristi primarni rezultat browsera; ne dozvoli bazi da izabere dužu pretpostavljenu rečenicu.',
+      '      const best=mobileASR ? result[0] : (ranked[0]?.cand||result[0]);',
+      '      const tx=String(best?.transcript||"").trim();',
+      '      recognitionBestAlternatives=(mobileASR',
+      '        ? Array.from(result).slice(0,3).map(x=>x.transcript)',
+      '        : ranked.slice(0,5).map(x=>x.cand.transcript));'
+    ].join("\n");
+    if(html.includes(oldBest)){html=html.replace(oldBest,newBest);changes++;}
+
+    const oldFinal='      if(result.isFinal){\n        const rawConf=Number(best.confidence)||0;';
+    const newFinal=[
+      '      if(result.isFinal){',
+      '        if(mobileASR){',
+      '          const now=performance.now();',
+      '          const norm=normalizeSpeechMatchText(tx);',
+      '          if(norm && norm===lastMobileFinalNorm && now-lastMobileFinalAt<3000)continue;',
+      '          lastMobileFinalNorm=norm;',
+      '          lastMobileFinalAt=now;',
+      '        }',
+      '        const rawConf=Number(best.confidence)||0;'
+    ].join("\n");
+    if(html.includes(oldFinal)){html=html.replace(oldFinal,newFinal);changes++;}
+
+    const oldEnd='    heardSpeech=false;\n    rec=null;';
+    const newEnd=[
+      '    heardSpeech=false;',
+      '    // Na telefonu nepotvrđeni interim tekst ne ulazi u konačan odgovor ako finalni govor već postoji.',
+      '    if(mobileSpeechClient() && String(finalText||"").trim()){',
+      '      interimText="";',
+      '      renderRecTarget();',
+      '    }',
+      '    rec=null;'
+    ].join("\n");
+    if(html.includes(oldEnd)){html=html.replace(oldEnd,newEnd);changes++;}
+
+    html=html.replace(/<title>[\s\S]*?<\/title>/i,'<title>De-Max A1 Usmeni • V84 mobilni glas ispravljen</title>');
+
+    if(changes<5){
+      throw new Error("V84 glasovna ispravka nije mogla bezbedno da se primeni na V83 bazu ("+changes+"/5 izmena).");
+    }
+
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    console.error(err);
+    msg.classList.add("err");
+    msg.textContent="Greška pri učitavanju aplikacije: "+(err&&err.message?err.message:err);
+  }
+})();
+</script>
+</body>
+</html>
