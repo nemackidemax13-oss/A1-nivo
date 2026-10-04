@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V86 pažljivo slušanje</title>
+<title>De-Max A1 Usmeni • V87 pažljivo slušanje</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -2733,16 +2733,17 @@ let speechSilenceTimer=null;
 let heardSpeech=false;
 function clearSpeechSilence(){if(speechSilenceTimer){clearTimeout(speechSilenceTimer);speechSilenceTimer=null}}
 function silenceMsForMode(mode){
-  // V86: kratka pauza NIJE kraj odgovora. Obrada tek posle duže tišine.
+  // V87: pažljivo slušanje — kratka pauza nije kraj odgovora.
+  // Odgovor se obrađuje tek posle duže tišine učenika.
   if(mode==="pic")return 10000;
   if(mode==="picRetry")return 6000;
   if(mode==="chat")return 5500;
   if(mode==="topicQ")return 5200;
-  if(mode==="topicRetry")return 5200;
-  if(mode==="topicMainRetry")return 5500;
+  if(mode==="topicRetry")return 5000;
+  if(mode==="topicMainRetry")return 5200;
   if(mode==="roleChoice")return 5200;
-  if(mode==="topic")return 6200;
-  if(mode==="intro")return 6000;
+  if(mode==="topic")return 6500;
+  if(mode==="intro")return 6200;
   if(mode==="topicChoice")return 5500;
   return 5500;
 }
@@ -3486,17 +3487,18 @@ function appendFinalSpeechSegment(existing, segment){
 
 function mobileSpeechClient(){
   const ua=String(navigator.userAgent||"");
-  return /Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
-    (navigator.maxTouchPoints>1 && Math.min(screen.width||9999,innerWidth||9999)<=1000);
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (navigator.maxTouchPoints>1 && Math.min(screen.width||9999,innerWidth||9999)<=900);
 }
-
 function setupRec(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return null;
-  const r=new SR();r.lang="de-DE";r.interimResults=true;r.continuous=true;r.maxAlternatives=10;
+  const r=new SR();
+  r.lang="de-DE";
+  r.interimResults=true;
+  r.continuous=true;
+  r.maxAlternatives=mobileSpeechClient()?5:10;
   r.onresult=e=>{
-    window.__demaxLastSpeechAt=performance.now();
-    window.__demaxAutoRestartCount=0;
+    window.__demaxUnexpectedEndCount=0;
     lastSpeechResultCount++;
     let f="",it="", conf=[];
     for(let i=e.resultIndex;i<e.results.length;i++){
@@ -3558,39 +3560,20 @@ function setupRec(){
     }
   };
   r.onerror=e=>{
+    window.__demaxStopRequested=true;
     clearSpeechSilence();
     renderRecTarget();
     if(e.error!=="no-speech")alert("Mikrofon/prepoznavanje govora: "+e.error+". Otvorite aplikaciju preko HTTPS-a u Chrome/Edge browseru.");
   };
   r.onend=()=>{
-    document.querySelectorAll(".mic").forEach(b=>b.classList.remove("live"));
     const endedMode=recMode;
     const endedTopic=currentTopic;
-    lastSpeechMode=endedMode||lastSpeechMode;
-    lastSpeechDurationMs=speechStartedAt?Math.max(0,performance.now()-speechStartedAt):0;
-
-    const stopRequested=!!window.__demaxStopRequested;
-    const endedHeard=!!heardSpeech;
-    const now=performance.now();
-    const lastAt=Number(window.__demaxLastSpeechAt||0);
-    const required=silenceMsForMode(endedMode);
-    const sinceLast=lastAt?Math.max(0,now-lastAt):0;
-    const remaining=lastAt?Math.max(0,required-sinceLast):required;
-    const restarts=Number(window.__demaxAutoRestartCount||0);
-
-    clearSpeechSilence();
-    rec=null;
-
-    // Chrome/Android ponekad sam zatvori prepoznavanje posle kratke pauze.
-    // Tada NE ocenjujemo odgovor. Nastavljamo da slušamo dok učenik stvarno
-    // ne napravi celu V86 pauzu. Bez govora dozvoljavamo dva dodatna ciklusa.
-    const shouldResume=mobileSpeechClient() && !stopRequested &&
-      ((endedHeard && remaining>250) || (!endedHeard && restarts<2));
-
-    if(shouldResume && restarts<8){
-      window.__demaxAutoRestartCount=restarts+1;
-      const resumeAfter=140;
-      const stopAfter=Math.max(650,remaining||required);
+    const requestedStop=!!window.__demaxStopRequested;
+    // Mobilni browser ponekad sam prekine SpeechRecognition tokom kratke pauze.
+    // To više nije kraj odgovora: odmah nastavljamo da slušamo i čuvamo isti tekst.
+    if(mobileSpeechClient() && !requestedStop && endedMode && (window.__demaxUnexpectedEndCount||0)<4){
+      window.__demaxUnexpectedEndCount=(window.__demaxUnexpectedEndCount||0)+1;
+      rec=null;
       setTimeout(()=>{
         if(rec || recMode!==endedMode)return;
         window.__demaxStopRequested=false;
@@ -3598,24 +3581,17 @@ function setupRec(){
         if(!rec)return;
         document.querySelectorAll(".mic").forEach(b=>b.classList.add("live"));
         try{rec.start()}catch(e){}
-        clearSpeechSilence();
-        speechSilenceTimer=setTimeout(()=>{
-          if(rec && recMode===endedMode){
-            window.__demaxStopRequested=true;
-            try{rec.stop()}catch(e){}
-          }
-        },stopAfter);
-      },resumeAfter);
+      },120);
       return;
     }
-
     window.__demaxStopRequested=false;
-    window.__demaxAutoRestartCount=0;
-    if(mobileSpeechClient() && String(finalText||"").trim()){
-      interimText="";
-      renderRecTarget();
-    }
+    window.__demaxUnexpectedEndCount=0;
+    document.querySelectorAll(".mic").forEach(b=>b.classList.remove("live"));
+    lastSpeechMode=endedMode||lastSpeechMode;
+    lastSpeechDurationMs=speechStartedAt?Math.max(0,performance.now()-speechStartedAt):0;
+    clearSpeechSilence();
     heardSpeech=false;
+    rec=null;
     if(endedMode==="intro"){
       const btn=document.getElementById("micIntro");
       if(btn){btn.classList.remove("live");btn.textContent="🎤 Ponovi predstavljanje";}
@@ -3895,8 +3871,7 @@ function toggleRec(mode){
     try{rec.stop()}catch(e){};document.querySelectorAll(".mic").forEach(b=>b.classList.remove("live"));return
   }
   window.__demaxStopRequested=false;
-  window.__demaxAutoRestartCount=0;
-  window.__demaxLastSpeechAt=0;
+  window.__demaxUnexpectedEndCount=0;
   recMode=mode;finalText="";interimText="";heardSpeech=false;recognitionUncertain=false;recognitionUncertainReason="";recognitionBestAlternatives=[];clearSpeechSilence();
   if(mode==="topicChoice"){topicChoiceAnswer="";renderTopics([],false);const t=document.getElementById("topicChoiceText");if(t)t.textContent="Slušam odgovor učenika..."}
   if(mode==="chat" && window.chatText){
@@ -3920,8 +3895,8 @@ function toggleRec(mode){
   }
   if(targetBtn){
     targetBtn.classList.add("live");
-    if(mode==="intro")targetBtn.textContent="🔴 Slušam... predstavite se";
-    if(mode==="pic")targetBtn.textContent="🔴 SLUŠAM CEO OPIS... možete kratko zastati";
+    if(mode==="intro")targetBtn.textContent="🔴 PAŽLJIVO SLUŠAM... predstavite se";
+    if(mode==="pic")targetBtn.textContent="🔴 PAŽLJIVO SLUŠAM CEO OPIS... slobodno zastanite";
     if(mode==="roleChoice")targetBtn.textContent="🔴 SLUŠAM... IZABERITE OSOBU";
   }
   speechStartedAt=performance.now();
@@ -9199,9 +9174,5 @@ function renderLiveTranslationFor(el,text){
 })();
 </script>
 
-<script>
-window.__DEMAX_V86_DIRECT__=true;
-console.info("De-Max V86 direct patient-listening build loaded");
-</script>
 </body>
 </html>
