@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0866c6">
+<title>DE-MAX A1 • Brzi kviz 60 sekundi</title>
+<style>
+:root{--blue:#0866c6;--blue2:#064b98;--red:#e1242f;--bg:#f3f7fc;--card:#fff;--ink:#132235;--muted:#68768a;--line:#dce6f1;--good:#158a4b;--bad:#c7333c;--soft:#eaf3ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#eef5ff 0,#f8fbff 42%,#eef3f8 100%);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button{font:inherit}
+.app{width:min(100%,720px);margin:0 auto;padding:14px 12px calc(28px + env(safe-area-inset-bottom))}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#fff,#eef5ff);border:2px solid var(--blue);display:grid;place-items:center;box-shadow:0 8px 22px rgba(8,102,198,.13);flex:0 0 auto}
+.logo b{font-size:15px;line-height:1;color:var(--blue);letter-spacing:-.5px}
+.logo small{display:block;color:var(--red);font-size:8px;text-align:center;margin-top:3px;letter-spacing:.7px}
+.brand h1{margin:0;font-size:clamp(1.05rem,4.5vw,1.45rem);line-height:1.12}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:.8rem}
+.best{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 10px;text-align:center;min-width:76px;box-shadow:0 5px 15px rgba(27,64,103,.06)}
+.best span{display:block;color:var(--muted);font-size:.68rem}.best b{font-size:1.15rem;color:var(--blue)}
+.timer-card{background:linear-gradient(135deg,var(--blue2),var(--blue));border-radius:22px;padding:16px;color:#fff;box-shadow:0 14px 30px rgba(8,102,198,.2);margin-bottom:12px}
+.timer-top{display:flex;align-items:end;justify-content:space-between;gap:12px}
+.time{font-size:clamp(2.5rem,12vw,4rem);font-weight:950;line-height:.9;font-variant-numeric:tabular-nums}
+.time-label{font-size:.75rem;opacity:.9;margin-top:4px}
+.live-stats{display:flex;gap:14px;text-align:right}.live-stats span{display:block;font-size:.68rem;opacity:.82}.live-stats b{font-size:1.35rem}
+.track{height:9px;background:rgba(255,255,255,.24);border-radius:99px;overflow:hidden;margin-top:14px}
+.track span{height:100%;width:100%;display:block;background:#fff;border-radius:99px;transition:width .2s linear}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 12px 30px rgba(25,56,91,.08)}
+.start{text-align:center;padding:28px 18px}
+.start .clock{font-size:4rem;line-height:1}
+.start h2{font-size:1.45rem;margin:12px 0 8px}
+.start p{color:var(--muted);line-height:1.55;margin:0 auto 18px;max-width:500px}
+.badges{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:20px}
+.badge{background:var(--soft);color:var(--blue2);border:1px solid #cde2fb;border-radius:999px;padding:7px 10px;font-size:.75rem;font-weight:850}
+.primary,.secondary,.skip{border:0;border-radius:14px;min-height:48px;padding:12px 16px;font-weight:900;cursor:pointer;touch-action:manipulation}
+.primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(8,102,198,.2);width:min(100%,340px)}
+.secondary{background:#eef3f8;color:var(--ink);border:1px solid var(--line)}
+.skip{background:transparent;color:var(--muted);border:1px solid var(--line);min-height:44px}
+.quiz{display:none}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}
+.lesson{background:var(--soft);color:var(--blue2);border-radius:999px;padding:7px 10px;font-size:.72rem;font-weight:900;max-width:74%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.counter{color:var(--muted);font-size:.78rem;font-weight:800}
+.question{font-size:clamp(1.18rem,5vw,1.52rem);line-height:1.4;font-weight:900;margin:8px 0 16px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.answer{min-height:64px;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:15px;padding:12px 10px;font-weight:800;cursor:pointer;text-align:left;line-height:1.3;transition:.12s;touch-action:manipulation}
+.answer:active{transform:scale(.985)}
+.answer.correct{border-color:#2ca866;background:#eaf9f0;color:#0d6b39}
+.answer.wrong{border-color:#df5860;background:#fff0f1;color:#a5232b}
+.answer.dim{opacity:.5}
+.feedback{min-height:44px;margin-top:12px;border-radius:12px;padding:10px 12px;font-weight:850;display:none}
+.feedback.good{display:block;background:#eaf9f0;color:#0f7540}
+.feedback.bad{display:block;background:#fff0f1;color:#a5232b}
+.actions{display:flex;justify-content:flex-end;margin-top:12px}
+.result{display:none;text-align:center;padding:24px 16px}
+.result .trophy{font-size:4rem}
+.result h2{margin:7px 0 4px;font-size:1.55rem}
+.result-sub{color:var(--muted);margin:0 0 18px}
+.score-big{font-size:3.3rem;font-weight:950;color:var(--blue);line-height:1}
+.score-big small{font-size:.95rem;color:var(--muted);font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.stat{background:#f5f8fc;border:1px solid var(--line);border-radius:14px;padding:12px 6px}.stat b{display:block;font-size:1.3rem}.stat span{display:block;font-size:.7rem;color:var(--muted);margin-top:2px}
+.source{font-size:.72rem;color:var(--muted);text-align:center;margin-top:12px}
+@media(max-width:520px){.app{padding:10px 8px 24px}.logo{width:52px;height:52px}.best{padding:7px 8px}.timer-card{padding:14px;border-radius:18px}.card{padding:14px;border-radius:18px}.answers{grid-template-columns:1fr}.answer{min-height:56px}.start{padding:22px 10px}.live-stats{gap:9px}.lesson{max-width:70%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <div class="logo" aria-label="DE-MAX"><div><b>DE-MAX</b><small>TUTIN</small></div></div>
+      <div><h1>A1 Brzi kviz</h1><p>60 sekundi • pitanja iz GitHub A1 baze</p></div>
+    </div>
+    <div class="best"><span>REKORD</span><b id="bestScore">0</b></div>
+  </div>
+
+  <section class="timer-card" id="timerCard">
+    <div class="timer-top">
+      <div><div class="time" id="time">60</div><div class="time-label">sekundi</div></div>
+      <div class="live-stats">
+        <div><span>TAČNO</span><b id="correctLive">0</b></div>
+        <div><span>NIZ</span><b id="streakLive">0</b></div>
+      </div>
+    </div>
+    <div class="track"><span id="timeBar"></span></div>
+  </section>
+
+  <section class="card start" id="startScreen">
+    <div class="clock">⏱️</div>
+    <h2>Koliko znaš za 60 sekundi?</h2>
+    <p>Odgovaraj što brže. Svako pitanje ima jedan tačan odgovor. Pitanja se nasumično biraju iz završnog A1 testa, lekcije 1–7.</p>
+    <div class="badges">
+      <span class="badge">42 pitanja u bazi</span>
+      <span class="badge">4 odgovora</span>
+      <span class="badge">bez upisivanja</span>
+      <span class="badge">nasumičan redosled</span>
+    </div>
+    <button class="primary" id="startBtn" type="button">▶ Započni kviz</button>
+  </section>
+
+  <section class="card quiz" id="quizScreen" aria-live="polite">
+    <div class="qmeta"><span class="lesson" id="lesson">Lekcija 1</span><span class="counter" id="counter">Pitanje 1</span></div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="actions"><button class="skip" id="skipBtn" type="button">Preskoči →</button></div>
+  </section>
+
+  <section class="card result" id="resultScreen">
+    <div class="trophy">🏆</div>
+    <h2>Vreme je isteklo!</h2>
+    <p class="result-sub" id="resultText">Rezultat</p>
+    <div class="score-big"><span id="finalScore">0</span> <small>tačnih</small></div>
+    <div class="grid">
+      <div class="stat"><b id="answeredStat">0</b><span>odgovoreno</span></div>
+      <div class="stat"><b id="wrongStat">0</b><span>grešaka</span></div>
+      <div class="stat"><b id="accuracyStat">0%</b><span>tačnost</span></div>
+    </div>
+    <button class="primary" id="againBtn" type="button">↻ Igraj ponovo</button>
+  </section>
+
+  <div class="source">DE-MAX • A1 • Izvor pitanja: završni test, lekcije 1–7</div>
+</div>
+
+<script>
+const BANK=[{"p":"Kako pravilno odgovaramo na „Wie heißen Sie?“","o":["Ich heiße Amir.","Ich heißt Amir.","Ich heißen Amir.","Ich bist Amir."],"a":0,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"„Wer sind Sie?“ – tačan odgovor je:","o":["Ich habe Jasmin.","Ich bin Jasmin.","Ich heiße aus Jasmin.","Mein Jasmin ist."],"a":1,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"„Wie ist Ihr Name?“ – tačan odgovor je:","o":["Mein Name ist Sara.","Ich Name Sara.","Meine Name ist Sara.","Mein Name sind Sara."],"a":0,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"Koja lična zamenica znači „ti“?","o":["ich","du","er","ihr"],"a":1,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"Dopuni: „_____ kommen Sie?“ – „Aus Serbien.“","o":["Wo","Wer","Woher","Wie"],"a":2,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"„Welche Sprache sprechen Sie?“ – tačan odgovor je:","o":["Ich spreche Serbisch.","Ich komme Serbisch.","Ich bin Serbisch sprechen.","Ich habe Serbisch."],"a":0,"lesson":1,"lessonTitle":"Lekcija 1 – Predstavljanje, zamenice i W-pitanja"},{"p":"„Wie geht’s?“ – koji odgovor je pravilan?","o":["Gut, danke.","Ich heiße gut.","Ich komme danke.","Ich bin heißen."],"a":0,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Dopuni: „Ich _____ Marko.“","o":["heißt","heißen","heiße","heißtet"],"a":2,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Dopuni: „Du _____ Ana.“","o":["heiße","heißt","heißen","heiß"],"a":1,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Dopuni: „Wir _____ Smailović.“","o":["heißt","heiße","heißen","heiß"],"a":2,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Kako se piše broj 17?","o":["siebzig","siebzehn","siebenzig","siebzeig"],"a":1,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Dopuni: „Er _____ Zeit.“","o":["habe","haben","hat","hast"],"a":2,"lesson":2,"lessonTitle":"Lekcija 2 – Wie geht’s?, heißen, brojevi, sein i haben"},{"p":"Dopuni: „Das ist _____ Vater.“","o":["meine","mein","meinen","einer"],"a":1,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"Dopuni: „Das ist _____ Mutter.“","o":["mein","meine","meinen","ein"],"a":1,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"Dopuni: „Das ist _____ Kind.“","o":["meine","mein","einen","einer"],"a":1,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"„Das ist _____ Mann.“","o":["eine","ein","einen","einer"],"a":1,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"„Das ist _____ Frau.“","o":["ein","einen","eine","eines"],"a":2,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"Negacija: „Das ist _____ Mann.“","o":["keine","kein","nicht ein","keinen"],"a":1,"lesson":3,"lessonTitle":"Lekcija 3 – mein/meine, ein/eine, kein/keine, red reči"},{"p":"Dopuni: „Du _____ Pizza.“","o":["esse","isst","essen","esst"],"a":1,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"Dopuni: „Wir _____ Wasser.“","o":["trinke","trinkst","trinken","trinkt"],"a":2,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"„Was ist dein Lieblingsessen?“","o":["Mein Lieblingsessen ist Pizza.","Ich Lieblingsessen Pizza.","Ich bin Pizza.","Mein Pizza essen."],"a":0,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"Dopuni: „Ich _____ Wasser.“","o":["brauchst","braucht","brauche","brauchen"],"a":2,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"Koji član ide uz „Mann“?","o":["die","das","der","den"],"a":2,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"Kako se kaže 1,10 €?","o":["ein Euro zehn","zehn Euro eins","ein zehn Euro","eins Euro und zehn Euro"],"a":0,"lesson":4,"lessonTitle":"Lekcija 4 – Essen & Trinken, brauchen, članovi i cene"},{"p":"Dopuni: „Das Haus ist _____.“","o":["klein","kleine","kleinen","kleines"],"a":0,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"Suprotno od „neu“ je:","o":["schön","alt","groß","teuer"],"a":1,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"Suprotno od „teuer“ je:","o":["billig","breit","hell","klein"],"a":0,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"Kako se piše 123?","o":["einhundertdreiundzwanzig","einhundertzwanzigunddrei","einhundertdreizwanzig","hundertunddreiundzwanzig"],"a":0,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"Broj 1000 je:","o":["einhundert","eintausend","zehntausend","eine Million"],"a":1,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"12:45 se neformalno kaže:","o":["Viertel nach zwölf","halb zwölf","Viertel vor eins","fünf vor zwölf"],"a":2,"lesson":5,"lessonTitle":"Lekcija 5 – Pridevi, hobi, veliki brojevi i vreme"},{"p":"Koja rečenica je pravilna?","o":["Ich aufstehe früh.","Ich stehe früh auf.","Ich stehe auf früh auf.","Ich früh auf stehe."],"a":1,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"Pravilno pitanje je:","o":["Wann du stehst auf?","Wann aufstehst du?","Wann stehst du auf?","Wann du aufstehen?"],"a":2,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"Dopuni: „_____ Montag gehe ich zur Arbeit.“","o":["Um","Am","Im","In"],"a":1,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"Dopuni: „Der Kurs beginnt _____ 18 Uhr.“","o":["am","im","um","bei"],"a":2,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"„Moje oko me boli.“ je:","o":["Meine Augen tun weh.","Mein Auge tut weh.","Mein Auge tun weh.","Meine Auge tut weh."],"a":1,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"„Sunčano je.“","o":["Es ist kalt.","Es ist windig.","Es ist sonnig.","Es schneit."],"a":2,"lesson":6,"lessonTitle":"Lekcija 6 – Razdvojivi i modalni glagoli, vreme, delovi tela"},{"p":"Dopuni: „Ich sehe _____ Mann.“ – negacija","o":["kein","keinen","keine","keinem"],"a":1,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"},{"p":"Dopuni: „Ich sehe _____ Mann.“ – moj muž","o":["mein","meine","meinen","meinem"],"a":2,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"},{"p":"Dopuni: „Du _____ Arzt.“ – werden","o":["werde","wirst","wird","werden"],"a":1,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"},{"p":"Koja rečenica je pravilno napisana u Futuru I?","o":["Ich werde ein Auto kaufen.","Ich ein Auto werde kaufen.","Ich kaufen werde ein Auto.","Ich werde kaufen ein Auto."],"a":0,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"},{"p":"Koja lična zamenica u dativu odgovara „ich“?","o":["mich","mir","mein","dir"],"a":1,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"},{"p":"Dopuni Perfekt: „Ich _____ Deutsch gelernt.“","o":["bin","ist","habe","werde"],"a":2,"lesson":7,"lessonTitle":"Lekcija 7 – Akuzativ, Futur I, Perfekt, zamenice i denn"}];
+const $=id=>document.getElementById(id);
+let queue=[], pos=0, timeLeft=60, timer=null, running=false, locked=false;
+let correct=0, wrong=0, answered=0, streak=0, current=null;
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function loadBest(){
+  let v=0;
+  try{v=Number(localStorage.getItem("demax_a1_quiz60_best")||0)}catch(e){}
+  $("bestScore").textContent=v;
+}
+function saveBest(v){
+  try{
+    const old=Number(localStorage.getItem("demax_a1_quiz60_best")||0);
+    if(v>old)localStorage.setItem("demax_a1_quiz60_best",String(v));
+  }catch(e){}
+  loadBest();
+}
+function resetState(){
+  clearInterval(timer); timer=null; running=false; locked=false;
+  queue=shuffle(BANK.map((q,i)=>i)); pos=0; timeLeft=60;
+  correct=0; wrong=0; answered=0; streak=0; current=null;
+  $("time").textContent="60";
+  $("timeBar").style.width="100%";
+  $("correctLive").textContent="0";
+  $("streakLive").textContent="0";
+  $("feedback").className="feedback"; $("feedback").textContent="";
+}
+function startGame(){
+  resetState();
+  $("startScreen").style.display="none";
+  $("resultScreen").style.display="none";
+  $("quizScreen").style.display="block";
+  running=true;
+  nextQuestion();
+  timer=setInterval(()=>{
+    timeLeft=Math.max(0,timeLeft-1);
+    $("time").textContent=timeLeft;
+    $("timeBar").style.width=(timeLeft/60*100)+"%";
+    if(timeLeft<=0)endGame();
+  },1000);
+}
+function getNextIndex(){
+  if(pos>=queue.length){queue=shuffle(BANK.map((q,i)=>i));pos=0}
+  return queue[pos++];
+}
+function nextQuestion(){
+  if(!running)return;
+  locked=false;
+  $("feedback").className="feedback";
+  $("feedback").textContent="";
+  const q=BANK[getNextIndex()];
+  current=q;
+  $("lesson").textContent="Lekcija "+q.lesson;
+  $("lesson").title=q.lessonTitle||"";
+  $("counter").textContent="Pitanje "+(answered+1);
+  $("question").textContent=q.p;
+  const opts=q.o.map((label,orig)=>({label,orig}));
+  const mixed=shuffle(opts);
+  const box=$("answers"); box.innerHTML="";
+  mixed.forEach(item=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="answer"; b.textContent=item.label;
+    b.dataset.orig=String(item.orig);
+    b.addEventListener("click",()=>choose(b,item.orig));
+    box.appendChild(b);
+  });
+}
+function choose(btn,orig){
+  if(!running||locked)return;
+  locked=true; answered++;
+  const ok=orig===current.a;
+  [...$("answers").children].forEach(b=>{
+    b.disabled=true;
+    if(Number(b.dataset.orig)===current.a)b.classList.add("correct");
+  });
+  if(ok){
+    correct++; streak++;
+    $("feedback").textContent="✓ Tačno!";
+    $("feedback").className="feedback good";
+  }else{
+    wrong++; streak=0; btn.classList.add("wrong");
+    $("feedback").textContent="Tačno: "+current.o[current.a];
+    $("feedback").className="feedback bad";
+  }
+  $("correctLive").textContent=correct;
+  $("streakLive").textContent=streak;
+  setTimeout(()=>{if(running)nextQuestion()},430);
+}
+function skip(){
+  if(!running||locked)return;
+  streak=0; $("streakLive").textContent="0"; nextQuestion();
+}
+function endGame(){
+  if(!running)return;
+  running=false; locked=true; clearInterval(timer); timer=null;
+  $("time").textContent="0"; $("timeBar").style.width="0%";
+  $("quizScreen").style.display="none";
+  $("resultScreen").style.display="block";
+  const acc=answered?Math.round(correct/answered*100):0;
+  $("finalScore").textContent=correct;
+  $("answeredStat").textContent=answered;
+  $("wrongStat").textContent=wrong;
+  $("accuracyStat").textContent=acc+"%";
+  $("resultText").textContent=
+    correct>=15?"Odlično! Veoma brz i tačan rezultat.":
+    correct>=10?"Vrlo dobro! Probaj ponovo i obori rekord.":
+    correct>=6?"Dobro! Još malo brzine i ponavljanja.":
+    "Ponovi gradivo i pokušaj ponovo.";
+  saveBest(correct);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("startBtn").addEventListener("click",startGame);
+$("againBtn").addEventListener("click",startGame);
+$("skipBtn").addEventListener("click",skip);
+loadBest();
+</script>
+</body>
+</html>
