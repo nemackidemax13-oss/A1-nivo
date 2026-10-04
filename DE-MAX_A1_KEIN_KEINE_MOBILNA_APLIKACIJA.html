@@ -45,7 +45,7 @@ h1{font-size:29px;line-height:1.05;margin:7px 0 7px}
 .hero p{margin:0;font-size:14px;line-height:1.5}
 .nav{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(3,1fr);
   gap:8px;
   position:sticky;
   top:8px;
@@ -224,6 +224,56 @@ h2{font-size:20px;margin:0 0 11px}
   background:linear-gradient(90deg,var(--red),#ff6b7d);
   transition:.25s;
 }
+.choice-card{
+  background:#f8faff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:15px;
+}
+.choice-qnum{
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+.choice-sentence{
+  font-size:21px;
+  font-weight:1000;
+  line-height:1.35;
+  margin:7px 0 4px;
+}
+.choice-sr{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:13px;
+}
+.choice-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.choice-btn{
+  border:2px solid #e3e9f2;
+  background:#fff;
+  border-radius:14px;
+  padding:13px 8px;
+  font-size:18px;
+  font-weight:1000;
+  color:#263044;
+  cursor:pointer;
+}
+.choice-btn.correct{
+  border-color:#22a36a;
+  background:#eaf8f1;
+  color:#087044;
+}
+.choice-btn.wrong{
+  border-color:#e63946;
+  background:#fff0f2;
+  color:#b00020;
+}
+.choice-btn:disabled{cursor:default}
 .footer{
   text-align:center;
   font-size:12px;
@@ -244,12 +294,13 @@ h2{font-size:20px;margin:0 0 11px}
   <header class="hero">
     <div class="brand">DE-MAX • NEMAČKI JEZIK • A1</div>
     <h1>Negation: kein / keine</h1>
-    <p>Samo Nominativ • nemački izgovor • jedna vežba slaganja rečenice</p>
+    <p>Samo Nominativ • nemački izgovor • slaganje rečenice • izbor između 2 odgovora</p>
   </header>
 
   <nav class="nav">
     <button class="active" data-view="learn">📘 Nominativ</button>
-    <button data-view="exercise">🧩 Složi rečenicu</button>
+    <button data-view="exercise">🧩 Složi</button>
+    <button data-view="choice">✅ Izaberi</button>
   </nav>
 
   <main>
@@ -329,6 +380,30 @@ h2{font-size:20px;margin:0 0 11px}
           <button class="btn secondary" onclick="resetSentence()">↻ Počni ponovo</button>
           <button class="btn primary" onclick="checkSentence()">✓ Proveri</button>
           <button class="btn primary" id="nextBtn" onclick="nextSentence()" disabled>Sledeće →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="choice" class="view hidden">
+      <div class="section">
+        <div class="exercise-head">
+          <h2 style="margin:0">✅ Izaberi tačan odgovor</h2>
+          <div class="score" id="choiceScore">0 / 0</div>
+        </div>
+        <div class="instruction">Učenik ima samo <b>dva odgovora</b>. Samo jedan je tačan.</div>
+
+        <div class="choice-card">
+          <div class="choice-qnum" id="choiceQnum"></div>
+          <div class="choice-sentence" id="choiceSentence"></div>
+          <div class="choice-sr" id="choiceSr"></div>
+          <div class="choice-buttons" id="choiceButtons"></div>
+          <div class="feedback" id="choiceFeedback"></div>
+          <div class="progress"><span id="choiceProgress"></span></div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn secondary" onclick="speakChoice()">🔊 Izgovori</button>
+          <button class="btn primary" id="choiceNextBtn" onclick="nextChoice()" disabled>Sledeće →</button>
         </div>
       </div>
     </section>
@@ -482,6 +557,102 @@ function restart(){
   renderTask();
 }
 
+
+const choiceTasks = [
+  {q:"Das ist ___ Mann.", sr:"To nije muškarac.", a:"kein", opts:["kein","keine"]},
+  {q:"Das ist ___ Frau.", sr:"To nije žena.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Kind.", sr:"To nije dete.", a:"kein", opts:["kein","keine"]},
+  {q:"Das sind ___ Kinder.", sr:"To nisu deca.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Lehrer.", sr:"To nije nastavnik.", a:"kein", opts:["kein","keine"]},
+  {q:"Das ist ___ Lehrerin.", sr:"To nije nastavnica.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Haus.", sr:"To nije kuća.", a:"kein", opts:["kein","keine"]},
+  {q:"Das sind ___ Häuser.", sr:"To nisu kuće.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Tisch.", sr:"To nije sto.", a:"kein", opts:["kein","keine"]},
+  {q:"Das ist ___ Lampe.", sr:"To nije lampa.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Buch.", sr:"To nije knjiga.", a:"kein", opts:["kein","keine"]},
+  {q:"Das sind ___ Bücher.", sr:"To nisu knjige.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Apfel.", sr:"To nije jabuka.", a:"kein", opts:["kein","keine"]},
+  {q:"Das ist ___ Banane.", sr:"To nije banana.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Brot.", sr:"To nije hleb.", a:"kein", opts:["kein","keine"]},
+  {q:"Das sind ___ Brötchen.", sr:"To nisu zemičke.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Hund.", sr:"To nije pas.", a:"kein", opts:["kein","keine"]},
+  {q:"Das ist ___ Katze.", sr:"To nije mačka.", a:"keine", opts:["kein","keine"]},
+  {q:"Das ist ___ Auto.", sr:"To nije auto.", a:"kein", opts:["kein","keine"]},
+  {q:"Das sind ___ Autos.", sr:"To nisu automobili.", a:"keine", opts:["kein","keine"]}
+];
+
+let choiceIndex=0;
+let choiceCorrect=0;
+let choiceAnswered=false;
+
+function renderChoice(){
+  choiceAnswered=false;
+  const x=choiceTasks[choiceIndex];
+  document.getElementById("choiceQnum").textContent="Pitanje "+(choiceIndex+1)+" od "+choiceTasks.length;
+  document.getElementById("choiceSentence").textContent=x.q;
+  document.getElementById("choiceSr").textContent=x.sr;
+  document.getElementById("choiceFeedback").textContent="";
+  document.getElementById("choiceButtons").innerHTML=x.opts.map(o =>
+    '<button class="choice-btn" onclick="chooseChoice(this,\''+o+'\')">'+o+'</button>'
+  ).join("");
+  document.getElementById("choiceScore").textContent=choiceCorrect+" / "+choiceIndex;
+  document.getElementById("choiceProgress").style.width=(choiceIndex/choiceTasks.length*100)+"%";
+  document.getElementById("choiceNextBtn").disabled=true;
+  document.getElementById("choiceNextBtn").textContent=choiceIndex===choiceTasks.length-1 ? "Rezultat" : "Sledeće →";
+}
+
+function chooseChoice(btn,value){
+  if(choiceAnswered) return;
+  choiceAnswered=true;
+  const x=choiceTasks[choiceIndex];
+  document.querySelectorAll(".choice-btn").forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===x.a) b.classList.add("correct");
+  });
+  const fb=document.getElementById("choiceFeedback");
+  if(value===x.a){
+    choiceCorrect++;
+    fb.textContent="✅ Tačno!";
+    fb.style.color="#087044";
+  }else{
+    btn.classList.add("wrong");
+    fb.textContent="❌ Tačan odgovor je: "+x.a;
+    fb.style.color="#b00020";
+  }
+  document.getElementById("choiceScore").textContent=choiceCorrect+" / "+(choiceIndex+1);
+  document.getElementById("choiceProgress").style.width=((choiceIndex+1)/choiceTasks.length*100)+"%";
+  document.getElementById("choiceNextBtn").disabled=false;
+  speakText(x.q.replace("___",x.a));
+}
+
+function speakChoice(){
+  const x=choiceTasks[choiceIndex];
+  speakText(x.q.replace("___",x.a));
+}
+
+function nextChoice(){
+  if(!choiceAnswered) return;
+  if(choiceIndex<choiceTasks.length-1){
+    choiceIndex++;
+    renderChoice();
+  }else{
+    const pct=Math.round(choiceCorrect/choiceTasks.length*100);
+    document.getElementById("choiceQnum").textContent="ZAVRŠENO";
+    document.getElementById("choiceSentence").textContent="Rezultat: "+choiceCorrect+" / "+choiceTasks.length;
+    document.getElementById("choiceSr").textContent=pct>=90 ? "Odlično! Kein / keine je savladano." : pct>=70 ? "Vrlo dobro! Ponovi još nekoliko primera." : "Ponovi pravilo i pokušaj ponovo.";
+    document.getElementById("choiceButtons").innerHTML='<button class="btn primary" style="grid-column:1/-1" onclick="restartChoice()">↻ Ponovi vežbu</button>';
+    document.getElementById("choiceFeedback").textContent=pct+"% tačnih odgovora";
+    document.getElementById("choiceFeedback").style.color="#172033";
+    document.getElementById("choiceNextBtn").disabled=true;
+  }
+}
+
+function restartChoice(){
+  choiceIndex=0;
+  choiceCorrect=0;
+  renderChoice();
+}
+
 document.querySelectorAll(".nav button").forEach(btn=>{
   btn.addEventListener("click",()=>{
     stopSpeech();
@@ -494,6 +665,7 @@ document.querySelectorAll(".nav button").forEach(btn=>{
 });
 
 renderTask();
+renderChoice();
 </script>
 </body>
 </html>
