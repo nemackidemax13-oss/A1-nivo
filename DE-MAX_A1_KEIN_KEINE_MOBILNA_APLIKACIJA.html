@@ -1,140 +1,242 @@
 <!DOCTYPE html>
 <html lang="sr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#d90429" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#d90429">
 <title>DE-MAX A1 – kein / keine</title>
 <style>
-  :root{
-    --red:#d90429;
-    --red2:#ef233c;
-    --blue:#1565c0;
-    --blue2:#0d47a1;
-    --ink:#172033;
-    --muted:#657084;
-    --bg:#f4f7fb;
-    --card:#ffffff;
-    --line:#e5eaf2;
-    --green:#0b8f55;
-    --shadow:0 12px 28px rgba(25,40,72,.10);
-    --radius:22px;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:linear-gradient(180deg,#fff 0,#f7f9fc 180px,var(--bg) 100%);
-    color:var(--ink);
-  }
-  button{font:inherit}
-  .app{
-    width:min(760px,100%);
-    margin:0 auto;
-    min-height:100vh;
-    padding:14px 14px 36px;
-  }
-  .hero{
-    position:relative;
-    overflow:hidden;
-    border-radius:26px;
-    padding:22px 20px;
-    background:linear-gradient(135deg,#ed1735,#c90024);
-    color:white;
-    box-shadow:0 14px 34px rgba(217,4,41,.25);
-    margin-bottom:14px;
-  }
-  .hero:after{
-    content:"";
-    position:absolute;
-    width:180px;height:180px;border-radius:50%;
-    background:rgba(255,255,255,.10);
-    right:-60px;top:-70px;
-  }
-  .brand{font-size:13px;font-weight:900;letter-spacing:1.1px;opacity:.9}
-  h1{font-size:30px;line-height:1.05;margin:8px 0 6px}
-  .hero p{margin:0;max-width:560px;font-size:15px;line-height:1.5;opacity:.96}
-  .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .pill{
-    display:inline-flex;align-items:center;gap:7px;
-    padding:8px 11px;border-radius:999px;
-    font-size:12px;font-weight:800;background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.28);
-  }
-  .nav{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-    position:sticky;top:8px;z-index:10;
-    margin:10px 0 14px;
-    padding:7px;border-radius:18px;
-    background:rgba(255,255,255,.90);
-    backdrop-filter:blur(12px);
-    box-shadow:var(--shadow);
-    border:1px solid rgba(229,234,242,.8);
-  }
-  .nav button{
-    border:0;border-radius:13px;padding:10px 8px;background:transparent;
-    font-size:13px;font-weight:900;color:#5d6778;cursor:pointer;
-  }
-  .nav button.active{background:#ffe9ed;color:var(--red)}
-  .section{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:18px;margin-bottom:14px;box-shadow:var(--shadow);
-  }
-  .section h2{
-    font-size:20px;margin:0 0 12px;display:flex;align-items:center;gap:8px;
-  }
-  .lead{font-size:15px;line-height:1.65;margin:0;color:#30394a}
-  .red{color:var(--red);font-weight:900}
-  .blue{color:var(--blue);font-weight:900}
-  .tag{display:inline-block;padding:2px 8px;border-radius:8px;color:white;font-weight:900;margin:0 2px}
-  .tag.redbg{background:var(--red)}
-  .tag.bluebg{background:var(--blue)}
-  .gender-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
-  .gender{border:1px solid #f0cbd2;border-radius:18px;overflow:hidden;background:#fff7f8}
-  .gender .top{padding:13px;text-align:center;background:linear-gradient(180deg,#fff,#fff3f5)}
-  .gender .symbol{font-size:28px;color:var(--red);font-weight:900}
-  .gender .title{font-weight:900;font-size:15px}
-  .gender .sub{font-size:12px;color:var(--muted);margin-top:2px}
-  .gender .word{padding:12px;text-align:center;background:linear-gradient(135deg,#ef233c,#d90429);color:#fff;font-size:27px;font-weight:1000;font-style:italic}
-  .gender .word.blueword{background:linear-gradient(135deg,#1976d2,#0d47a1)}
-  .gender .meaning{font-size:12px;margin-top:2px;font-style:normal;font-weight:800;opacity:.95}
-  .tip{margin-top:14px;padding:13px;border-radius:15px;background:#f8fafc;border:1px solid var(--line);font-size:14px;line-height:1.55}
-  .audio-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .btn{border:0;border-radius:14px;padding:11px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
-  .btn.primary{background:var(--red);color:white}
-  .btn.secondary{background:#edf3fb;color:var(--blue2)}
-  .btn.full{width:100%}
-  .btn:active{transform:scale(.98)}
-  .speaker{font-size:17px}
-  .examples{display:grid;gap:10px}
-  .ex{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:16px;background:#fbfcfe}
-  .de{font-weight:900;font-size:16px;line-height:1.35}
-  .sr{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4}
-  .speak{width:44px;height:44px;border-radius:50%;border:0;background:#e9f2ff;color:var(--blue2);font-size:20px;cursor:pointer;display:grid;place-items:center}
-  .speak.playing{background:var(--blue);color:#fff}
-  .quiz-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
-  .score{padding:7px 10px;border-radius:999px;background:#eef9f3;color:var(--green);font-size:12px;font-weight:900;white-space:nowrap}
-  .qbox{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fbfcff}
-  .qnum{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.5px}
-  .question{font-size:21px;font-weight:1000;margin:7px 0 4px}
-  .translation{font-size:13px;color:var(--muted);margin-bottom:13px}
-  .answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  .ans{border:2px solid #e8edf5;background:#fff;border-radius:14px;padding:13px 8px;font-weight:1000;font-size:17px;cursor:pointer;color:#263044}
-  .ans.correct{border-color:#22a36a;background:#eaf8f1;color:#087044}
-  .ans.wrong{border-color:#e63946;background:#fff0f2;color:#b00020}
-  .feedback{min-height:22px;font-size:13px;font-weight:800;margin-top:10px}
-  .progress{height:8px;background:#edf1f6;border-radius:99px;overflow:hidden;margin-top:12px}
-  .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),#ff6b7d);transition:.3s}
-  .mini-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;font-size:13px;margin-top:12px}
-  .mini-table th,.mini-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
-  .mini-table tr:last-child td{border-bottom:0}
-  .mini-table th{background:#f5f7fa;font-size:12px}
-  .foot{text-align:center;color:#8a94a6;font-size:12px;padding:8px 8px 0}
-  .hidden{display:none}
-  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);padding:10px 14px;border-radius:999px;background:#172033;color:white;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:30}
-  .toast.show{opacity:1;bottom:28px}
-  @media (max-width:430px){.app{padding:10px 10px 26px}.hero{padding:19px 16px;border-radius:22px}h1{font-size:27px}.section{padding:15px;border-radius:19px}.gender-grid{gap:8px}.gender .word{font-size:25px}.answers{grid-template-columns:1fr}.nav button{font-size:12px}}
+:root{
+  --red:#d90429;
+  --red2:#ef233c;
+  --blue:#1565c0;
+  --blue2:#0d47a1;
+  --ink:#172033;
+  --muted:#687386;
+  --bg:#f4f7fb;
+  --card:#fff;
+  --line:#e5eaf2;
+  --green:#118a55;
+  --shadow:0 12px 28px rgba(25,40,72,.10);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(180deg,#fff 0,#f8f9fc 180px,var(--bg) 100%);
+}
+button{font:inherit}
+.app{
+  width:min(760px,100%);
+  margin:auto;
+  min-height:100vh;
+  padding:12px 12px 34px;
+}
+.hero{
+  color:#fff;
+  padding:22px 18px;
+  border-radius:25px;
+  background:linear-gradient(135deg,#ef233c,#c90024);
+  box-shadow:0 14px 34px rgba(217,4,41,.24);
+}
+.brand{font-size:12px;font-weight:900;letter-spacing:1px;opacity:.94}
+h1{font-size:29px;line-height:1.05;margin:7px 0 7px}
+.hero p{margin:0;font-size:14px;line-height:1.5}
+.nav{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  position:sticky;
+  top:8px;
+  z-index:10;
+  margin:12px 0;
+  padding:7px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(10px);
+  border-radius:17px;
+  box-shadow:var(--shadow);
+}
+.nav button{
+  border:0;
+  border-radius:12px;
+  padding:11px 8px;
+  font-weight:900;
+  color:#5e6879;
+  background:transparent;
+}
+.nav button.active{background:#ffe9ed;color:var(--red)}
+.section{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:21px;
+  padding:17px;
+  margin-bottom:13px;
+  box-shadow:var(--shadow);
+}
+h2{font-size:20px;margin:0 0 11px}
+.lead{font-size:15px;line-height:1.63;margin:0;color:#30394a}
+.tag{
+  display:inline-block;
+  color:#fff;
+  padding:2px 8px;
+  border-radius:8px;
+  font-weight:900;
+}
+.redbg{background:var(--red)}
+.bluebg{background:var(--blue)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin-top:14px;
+}
+.gender{
+  overflow:hidden;
+  border:1px solid #f0cbd2;
+  border-radius:17px;
+  background:#fff8f9;
+}
+.top{
+  padding:12px 8px;
+  text-align:center;
+  background:linear-gradient(180deg,#fff,#fff2f4);
+}
+.symbol{font-size:27px;color:var(--red);font-weight:900}
+.title{font-size:15px;font-weight:900}
+.sub{font-size:12px;color:var(--muted);margin-top:2px}
+.word{
+  padding:12px 7px;
+  text-align:center;
+  color:#fff;
+  background:linear-gradient(135deg,#ef233c,#d90429);
+  font-size:26px;
+  font-weight:1000;
+  font-style:italic;
+}
+.word.blue{background:linear-gradient(135deg,#1976d2,#0d47a1)}
+.meaning{font-size:12px;font-style:normal;margin-top:2px}
+.tip{
+  margin-top:14px;
+  background:#f8fafc;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+  font-size:14px;
+  line-height:1.55;
+}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:11px 14px;
+  font-weight:900;
+  cursor:pointer;
+}
+.primary{background:var(--red);color:#fff}
+.secondary{background:#edf3fb;color:var(--blue2)}
+.hidden{display:none}
+
+.exercise-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.score{
+  background:#eef9f3;
+  color:var(--green);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:900;
+}
+.instruction{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:10px;
+}
+.srbox{
+  background:#f7f9fd;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+.answer-zone{
+  min-height:62px;
+  border:2px dashed #d7deea;
+  border-radius:15px;
+  padding:9px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin-bottom:11px;
+  background:#fcfdff;
+}
+.words{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.wordbtn{
+  border:1px solid #dbe2ed;
+  background:white;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:900;
+  color:#263044;
+  box-shadow:0 4px 10px rgba(25,40,72,.06);
+}
+.wordbtn.used{
+  opacity:.35;
+  pointer-events:none;
+}
+.answer-chip{
+  border:0;
+  background:#e9f2ff;
+  color:#0d47a1;
+  border-radius:11px;
+  padding:9px 11px;
+  font-weight:900;
+}
+.feedback{
+  min-height:22px;
+  margin-top:11px;
+  font-size:13px;
+  font-weight:900;
+}
+.progress{
+  height:8px;
+  background:#edf1f6;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:12px;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--red),#ff6b7d);
+  transition:.25s;
+}
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#8c96a7;
+  padding-top:7px;
+}
+@media(max-width:430px){
+  .app{padding:10px 10px 28px}
+  .hero{padding:19px 15px}
+  h1{font-size:27px}
+  .section{padding:15px}
+  .word{font-size:24px}
+}
 </style>
 </head>
 <body>
@@ -142,81 +244,256 @@
   <header class="hero">
     <div class="brand">DE-MAX • NEMAČKI JEZIK • A1</div>
     <h1>Negation: kein / keine</h1>
-    <p>Jasno pravilo, nemački izgovor i kratke vežbe prilagođene mobilnom telefonu.</p>
-    <div class="pillrow"><span class="pill">🔊 nemački izgovor</span><span class="pill">📱 mobilni prikaz</span><span class="pill">✅ A1 vežbe</span></div>
+    <p>Samo Nominativ • nemački izgovor • jedna vežba slaganja rečenice</p>
   </header>
+
   <nav class="nav">
-    <button class="active" data-view="learn">📘 Pravilo</button>
-    <button data-view="examples">🔊 Primeri</button>
-    <button data-view="quiz">🧠 Vežba</button>
+    <button class="active" data-view="learn">📘 Nominativ</button>
+    <button data-view="exercise">🧩 Složi rečenicu</button>
   </nav>
+
   <main>
     <section id="learn" class="view">
       <div class="section">
-        <h2>ℹ️ Osnovno pravilo</h2>
-        <p class="lead">U nemačkom jeziku često koristimo <span class="tag redbg">nicht</span> i <span class="tag bluebg">kein</span> / <span class="tag redbg">keine</span>. <b>Kein / keine</b> koristimo kada negiramo imenicu koja bi inače stajala sa <b>ein / eine</b> ili bez člana.</p>
-        <div class="gender-grid">
-          <div class="gender"><div class="top"><div class="symbol">♂</div><div class="title">maskulin</div><div class="sub">muški rod</div></div><div class="word blueword">kein<div class="meaning">nema / nijedan</div></div></div>
-          <div class="gender"><div class="top"><div class="symbol">♀</div><div class="title">feminin</div><div class="sub">ženski rod</div></div><div class="word">keine<div class="meaning">nema / nijedna</div></div></div>
-          <div class="gender"><div class="top"><div class="symbol">○</div><div class="title">neutral</div><div class="sub">srednji rod</div></div><div class="word blueword">kein<div class="meaning">nema / nijedno</div></div></div>
-          <div class="gender"><div class="top"><div class="symbol">👥</div><div class="title">Plural</div><div class="sub">množina</div></div><div class="word">keine<div class="meaning">nema / nijedni</div></div></div>
+        <h2>ℹ️ Kein / keine u Nominativu</h2>
+        <p class="lead">
+          <span class="tag bluebg">kein</span> / <span class="tag redbg">keine</span>
+          koristimo kada negiramo imenicu. Na A1 nivou zapamti oblike prema rodu imenice:
+        </p>
+
+        <div class="grid">
+          <div class="gender">
+            <div class="top">
+              <div class="symbol">♂</div>
+              <div class="title">maskulin</div>
+              <div class="sub">muški rod</div>
+            </div>
+            <div class="word blue">kein<div class="meaning">der Mann → kein Mann</div></div>
+          </div>
+
+          <div class="gender">
+            <div class="top">
+              <div class="symbol">♀</div>
+              <div class="title">feminin</div>
+              <div class="sub">ženski rod</div>
+            </div>
+            <div class="word">keine<div class="meaning">die Frau → keine Frau</div></div>
+          </div>
+
+          <div class="gender">
+            <div class="top">
+              <div class="symbol">○</div>
+              <div class="title">neutral</div>
+              <div class="sub">srednji rod</div>
+            </div>
+            <div class="word blue">kein<div class="meaning">das Kind → kein Kind</div></div>
+          </div>
+
+          <div class="gender">
+            <div class="top">
+              <div class="symbol">👥</div>
+              <div class="title">Plural</div>
+              <div class="sub">množina</div>
+            </div>
+            <div class="word">keine<div class="meaning">die Kinder → keine Kinder</div></div>
+          </div>
         </div>
-        <div class="tip">💡 <b>Zapamti:</b> u nominativu: <span class="blue">der → kein</span>, <span class="red">die → keine</span>, <span class="blue">das → kein</span>, <span class="red">die (Plural) → keine</span>.</div>
-        <div class="audio-bar">
-          <button class="btn primary" onclick="speakText('kein, keine. der Mann: kein Mann. die Frau: keine Frau. das Kind: kein Kind. die Kinder: keine Kinder.')"><span class="speaker">🔊</span> Poslušaj pravilo</button>
+
+        <div class="tip">
+          💡 <b>Zapamti:</b> der → <b>kein</b>, die → <b>keine</b>, das → <b>kein</b>, die (Plural) → <b>keine</b>.
+        </div>
+
+        <div class="btnrow">
+          <button class="btn primary" onclick="speakText('der Mann, kein Mann. die Frau, keine Frau. das Kind, kein Kind. die Kinder, keine Kinder.')">🔊 Poslušaj</button>
           <button class="btn secondary" onclick="stopSpeech()">⏹ Zaustavi</button>
         </div>
       </div>
-      <div class="section">
-        <h2>📌 Važan A1 dodatak</h2>
-        <p class="lead">U <b>Akkusativu</b> se kod muškog roda <b>kein</b> menja u <b>keinen</b>.</p>
-        <table class="mini-table">
-          <tr><th>Rod</th><th>Nominativ</th><th>Akkusativ</th></tr>
-          <tr><td>der / maskulin</td><td><b>kein</b></td><td><b>keinen</b></td></tr>
-          <tr><td>die / feminin</td><td><b>keine</b></td><td><b>keine</b></td></tr>
-          <tr><td>das / neutral</td><td><b>kein</b></td><td><b>kein</b></td></tr>
-          <tr><td>Plural</td><td><b>keine</b></td><td><b>keine</b></td></tr>
-        </table>
-      </div>
     </section>
-    <section id="examples" class="view hidden">
-      <div class="section"><h2>🔊 Primeri sa izgovorom</h2><div class="examples" id="exampleList"></div><div class="audio-bar"><button class="btn primary full" onclick="playAllExamples()">▶ Pusti sve primere</button></div></div>
-    </section>
-    <section id="quiz" class="view hidden">
+
+    <section id="exercise" class="view hidden">
       <div class="section">
-        <div class="quiz-head"><h2 style="margin:0">🧠 Izaberi tačan odgovor</h2><div class="score" id="score">0 / 0</div></div>
-        <div class="qbox"><div class="qnum" id="qnum"></div><div class="question" id="question"></div><div class="translation" id="qtranslation"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><div class="progress"><span id="progressBar"></span></div></div>
-        <div class="audio-bar"><button class="btn secondary" onclick="speakCurrent()">🔊 Izgovori rečenicu</button><button class="btn primary" id="nextBtn" onclick="nextQuestion()" disabled>Sledeće →</button></div>
+        <div class="exercise-head">
+          <h2 style="margin:0">🧩 Složi rečenicu</h2>
+          <div class="score" id="score">0 / 0</div>
+        </div>
+
+        <div class="instruction">Dodirni reči pravilnim redosledom.</div>
+        <div class="srbox" id="srText"></div>
+        <div class="answer-zone" id="answerZone"></div>
+        <div class="words" id="wordBank"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="progress"><span id="progressBar"></span></div>
+
+        <div class="btnrow">
+          <button class="btn secondary" onclick="undoWord()">↶ Vrati reč</button>
+          <button class="btn secondary" onclick="resetSentence()">↻ Počni ponovo</button>
+          <button class="btn primary" onclick="checkSentence()">✓ Proveri</button>
+          <button class="btn primary" id="nextBtn" onclick="nextSentence()" disabled>Sledeće →</button>
+        </div>
       </div>
     </section>
   </main>
-  <div class="foot">DE-MAX • A1 • kein / keine • mobilna vežba</div>
+
+  <div class="footer">DE-MAX • A1 • kein / keine • Nominativ</div>
 </div>
-<div class="toast" id="toast"></div>
+
 <script>
-const examples = [
-  ["Das ist kein Mann.", "To nije muškarac."], ["Das ist keine Frau.", "To nije žena."], ["Das ist kein Kind.", "To nije dete."], ["Das sind keine Kinder.", "To nisu deca."], ["Ich habe keinen Bruder.", "Nemam brata."], ["Ich habe keine Schwester.", "Nemam sestru."], ["Wir haben kein Auto.", "Nemamo auto."], ["Sie haben keine Zeit.", "Oni / Vi nemate vremena."], ["Er trinkt keinen Kaffee.", "On ne pije kafu."], ["Sie kauft keine Banane.", "Ona ne kupuje bananu."], ["Ich brauche kein Brot.", "Ne treba mi hleb."], ["Wir kaufen keine Äpfel.", "Ne kupujemo jabuke."]
+const tasks = [
+  {sr:"To nije muškarac.", de:"Das ist kein Mann."},
+  {sr:"To nije žena.", de:"Das ist keine Frau."},
+  {sr:"To nije dete.", de:"Das ist kein Kind."},
+  {sr:"To nisu deca.", de:"Das sind keine Kinder."},
+  {sr:"Ovo nije knjiga.", de:"Das ist kein Buch."},
+  {sr:"Ovo nije torba.", de:"Das ist keine Tasche."},
+  {sr:"Ovo nije auto.", de:"Das ist kein Auto."},
+  {sr:"To nisu jabuke.", de:"Das sind keine Äpfel."}
 ];
-const quiz = [
-  {q:"Das ist ___ Mann.", sr:"To nije muškarac.", a:"kein", opts:["kein","keine"]}, {q:"Das ist ___ Frau.", sr:"To nije žena.", a:"keine", opts:["kein","keine"]}, {q:"Das ist ___ Kind.", sr:"To nije dete.", a:"kein", opts:["kein","keine"]}, {q:"Das sind ___ Kinder.", sr:"To nisu deca.", a:"keine", opts:["kein","keine"]}, {q:"Ich habe ___ Bruder.", sr:"Nemam brata.", a:"keinen", opts:["kein","keinen"]}, {q:"Ich habe ___ Schwester.", sr:"Nemam sestru.", a:"keine", opts:["keine","keinen"]}, {q:"Wir haben ___ Auto.", sr:"Nemamo auto.", a:"kein", opts:["kein","keine"]}, {q:"Sie haben ___ Zeit.", sr:"Nemaju vremena.", a:"keine", opts:["kein","keine"]}, {q:"Er trinkt ___ Kaffee.", sr:"On ne pije kafu.", a:"keinen", opts:["keinen","keine"]}, {q:"Wir kaufen ___ Äpfel.", sr:"Ne kupujemo jabuke.", a:"keine", opts:["kein","keine"]}
-];
-let voices = []; let current = 0, correct = 0, answered = false;
-function loadVoices(){ voices = speechSynthesis.getVoices(); }
-if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
-function germanVoice(){ return voices.find(v => /^de-DE$/i.test(v.lang)) || voices.find(v => /^de/i.test(v.lang)) || null; }
-function speakText(text, rate=0.9){ if(!('speechSynthesis' in window)){ toast("Izgovor nije podržan u ovom pregledaču."); return; } speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "de-DE"; const v = germanVoice(); if(v) u.voice = v; u.rate = rate; u.pitch = 1; speechSynthesis.speak(u); }
-function stopSpeech(){ if('speechSynthesis' in window) speechSynthesis.cancel(); }
-function renderExamples(){ document.getElementById("exampleList").innerHTML = examples.map((e,i)=>`<div class="ex"><div><div class="de">${e[0]}</div><div class="sr">${e[1]}</div></div><button class="speak" aria-label="Izgovori" onclick="speakText(${JSON.stringify(e[0])})">🔊</button></div>`).join(""); }
-async function playAllExamples(){ stopSpeech(); let i=0; function next(){ if(i>=examples.length) return; const u = new SpeechSynthesisUtterance(examples[i][0]); u.lang="de-DE"; const v=germanVoice(); if(v)u.voice=v; u.rate=.88; u.onend=()=>{i++; setTimeout(next,260);}; speechSynthesis.speak(u); } next(); }
-function renderQuestion(){ answered=false; document.getElementById("nextBtn").disabled=true; const x=quiz[current]; document.getElementById("qnum").textContent=`Pitanje ${current+1} od ${quiz.length}`; document.getElementById("question").textContent=x.q; document.getElementById("qtranslation").textContent=x.sr; document.getElementById("feedback").textContent=""; document.getElementById("answers").innerHTML=x.opts.map(o=>`<button class="ans" onclick="chooseAnswer(this,'${o}')">${o}</button>`).join(""); document.getElementById("score").textContent=`${correct} / ${current}`; document.getElementById("progressBar").style.width=`${(current/quiz.length)*100}%`; }
-function chooseAnswer(btn,value){ if(answered) return; answered=true; const x=quiz[current]; document.querySelectorAll(".ans").forEach(b=>{ b.disabled=true; if(b.textContent===x.a) b.classList.add("correct"); }); if(value===x.a){ correct++; document.getElementById("feedback").textContent="✅ Tačno! Odlično."; document.getElementById("feedback").style.color="#087044"; } else { btn.classList.add("wrong"); document.getElementById("feedback").textContent=`❌ Tačan odgovor je: ${x.a}`; document.getElementById("feedback").style.color="#b00020"; } const full = x.q.replace("___", x.a); speakText(full); document.getElementById("score").textContent=`${correct} / ${current+1}`; document.getElementById("progressBar").style.width=`${((current+1)/quiz.length)*100}%`; document.getElementById("nextBtn").disabled=false; if(current===quiz.length-1) document.getElementById("nextBtn").textContent="Rezultat"; }
-function nextQuestion(){ if(!answered) return; if(current < quiz.length-1){ current++; renderQuestion(); } else { showResult(); } }
-function showResult(){ const pct=Math.round(correct/quiz.length*100); document.getElementById("qnum").textContent="ZAVRŠENO"; document.getElementById("question").textContent=`Rezultat: ${correct} / ${quiz.length}`; document.getElementById("qtranslation").textContent= pct>=90 ? "Odlično! Pravilo je savladano." : pct>=70 ? "Vrlo dobro! Ponovi još nekoliko primera." : "Ponovi pravilo i pokušaj ponovo."; document.getElementById("answers").innerHTML=`<button class="btn primary full" onclick="restartQuiz()">↻ Ponovi vežbu</button>`; document.getElementById("feedback").textContent=`${pct}% tačnih odgovora`; document.getElementById("feedback").style.color="#172033"; document.getElementById("nextBtn").disabled=true; document.getElementById("nextBtn").textContent="Sledeće →"; }
-function restartQuiz(){ current=0; correct=0; answered=false; renderQuestion(); }
-function speakCurrent(){ const x=quiz[current]; const text=x.q.replace("___", x.a); speakText(text); }
-function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200); }
-document.querySelectorAll(".nav button").forEach(btn=>{ btn.addEventListener("click",()=>{ stopSpeech(); document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden")); document.getElementById(btn.dataset.view).classList.remove("hidden"); window.scrollTo({top:0,behavior:"smooth"}); }); });
-renderExamples(); renderQuestion();
+
+let voices=[];
+let index=0;
+let score=0;
+let picked=[];
+let checked=false;
+
+function loadVoices(){ voices=speechSynthesis.getVoices(); }
+if("speechSynthesis" in window){
+  loadVoices();
+  speechSynthesis.onvoiceschanged=loadVoices;
+}
+function germanVoice(){
+  return voices.find(v=>/^de-DE$/i.test(v.lang)) || voices.find(v=>/^de/i.test(v.lang)) || null;
+}
+function speakText(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="de-DE";
+  const v=germanVoice();
+  if(v) u.voice=v;
+  u.rate=.9;
+  speechSynthesis.speak(u);
+}
+function stopSpeech(){
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+}
+
+function shuffledWords(sentence){
+  const arr=sentence.replace(/[.?!]/g,"").split(" ");
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+let currentWords=[];
+
+function renderTask(){
+  checked=false;
+  picked=[];
+  currentWords=shuffledWords(tasks[index].de);
+  document.getElementById("srText").textContent=tasks[index].sr;
+  document.getElementById("answerZone").innerHTML="";
+  document.getElementById("feedback").textContent="";
+  document.getElementById("wordBank").innerHTML=currentWords.map((w,i)=>
+    '<button class="wordbtn" id="w'+i+'" onclick="pickWord('+i+')">'+w+'</button>'
+  ).join("");
+  document.getElementById("score").textContent=score+" / "+index;
+  document.getElementById("progressBar").style.width=(index/tasks.length*100)+"%";
+  document.getElementById("nextBtn").disabled=true;
+  document.getElementById("nextBtn").textContent=index===tasks.length-1 ? "Rezultat" : "Sledeće →";
+}
+
+function pickWord(i){
+  if(checked) return;
+  const btn=document.getElementById("w"+i);
+  if(btn.classList.contains("used")) return;
+  btn.classList.add("used");
+  picked.push({i,word:currentWords[i]});
+  renderPicked();
+}
+
+function renderPicked(){
+  document.getElementById("answerZone").innerHTML=picked.map((x,n)=>
+    '<button class="answer-chip" onclick="removePicked('+n+')">'+x.word+'</button>'
+  ).join("");
+}
+
+function removePicked(n){
+  if(checked) return;
+  const item=picked.splice(n,1)[0];
+  document.getElementById("w"+item.i).classList.remove("used");
+  renderPicked();
+}
+
+function undoWord(){
+  if(checked || picked.length===0) return;
+  removePicked(picked.length-1);
+}
+
+function resetSentence(){
+  if(checked) return;
+  picked.forEach(x=>document.getElementById("w"+x.i).classList.remove("used"));
+  picked=[];
+  renderPicked();
+  document.getElementById("feedback").textContent="";
+}
+
+function checkSentence(){
+  if(checked) return;
+  const built=picked.map(x=>x.word).join(" ");
+  const correct=tasks[index].de.replace(/[.?!]/g,"");
+  const fb=document.getElementById("feedback");
+
+  if(built===correct){
+    checked=true;
+    score++;
+    fb.textContent="✅ Tačno! "+tasks[index].de;
+    fb.style.color="#087044";
+    document.getElementById("score").textContent=score+" / "+(index+1);
+    document.getElementById("progressBar").style.width=((index+1)/tasks.length*100)+"%";
+    document.getElementById("nextBtn").disabled=false;
+    speakText(tasks[index].de);
+  }else{
+    fb.textContent="❌ Redosled nije tačan. Pokušaj ponovo.";
+    fb.style.color="#b00020";
+  }
+}
+
+function nextSentence(){
+  if(!checked) return;
+  if(index<tasks.length-1){
+    index++;
+    renderTask();
+  }else{
+    const pct=Math.round(score/tasks.length*100);
+    document.getElementById("srText").textContent="Vežba završena";
+    document.getElementById("answerZone").innerHTML='<b>Rezultat: '+score+' / '+tasks.length+' ('+pct+'%)</b>';
+    document.getElementById("wordBank").innerHTML='<button class="btn primary" onclick="restart()">↻ Ponovi vežbu</button>';
+    document.getElementById("feedback").textContent=pct>=80 ? "Odlično!" : "Ponovi pravilo i pokušaj još jednom.";
+    document.getElementById("feedback").style.color="#172033";
+    document.getElementById("nextBtn").disabled=true;
+  }
+}
+
+function restart(){
+  index=0;
+  score=0;
+  renderTask();
+}
+
+document.querySelectorAll(".nav button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    stopSpeech();
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
+    document.getElementById(btn.dataset.view).classList.remove("hidden");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+
+renderTask();
 </script>
 </body>
 </html>
