@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V97 baza 1000 A1 dijaloga</title>
+<title>De-Max A1 Usmeni • V98 prirodni dijalog i fleksibilan izbor osobe</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -2088,8 +2088,8 @@ body{padding-bottom:92px}
 
         <div class="roleChoiceHelp">
           <b>🎤 Odgovorite glasom:</b>
-          <div>„Ich wähle die Frau.“ / „Ich wähle den Mann.“</div>
-          <div>Možete reći i ulogu sa slike, npr. „Ich wähle die Verkäuferin.“</div>
+          <div>„Ich wähle die Kundin.“ / „Ich wähle den Kunden.“ / „Ich wähle die Verkäuferin.“ / „Ich wähle den Verkäufer.“</div>
+          <div>Prihvata i: „die Frau links“, „die Frau rechts“, kao i samo „links“ ili „rechts“.</div>
         </div>
 
         <div class="rolegrid roleReferenceGrid" id="roleGrid"></div>
@@ -2114,7 +2114,7 @@ body{padding-bottom:92px}
         <button class="btn blue" id="finishChatAnswerBtn" onclick="finishCurrentChatSpeech()">✓ POTVRDI ODGOVOR</button>
       </div>
       <div class="transcript" id="chatText" style="display:none">Odgovor učenika.</div>
-      <div class="dialogExamHint" id="dialogExamHint" style="display:none">Dijalog ima tačno 16 rečenica: 8 pitanja aplikacije + 8 Vaših odgovora. Aktivna je DE-MAX A1 baza od <b>1000 dijaloških stavki</b> — 25 za svaku od 40 scena, sa više prihvatljivih odgovora. Tokom govora se ne prikazuju tekst, prevod ni ispravke. Sve se analizira u pozadini i prikazuje tek u završnom rezultatu.</div>
+      <div class="dialogExamHint" id="dialogExamHint" style="display:none">Aktivna je DE-MAX A1 baza od <b>1000 dijaloških stavki</b>. Kandidat može <b>odgovarati ili sam postaviti pitanje prema slici</b>; aplikacija odgovara kao druga osoba iz te situacije i prirodno nastavlja razgovor. Tekst, prevod i ispravke ostaju skriveni do završnog rezultata.</div>
       <div id="dialogScore"></div>
     </div>
   </section>
@@ -3659,6 +3659,19 @@ function expectedSpeechHints(){
     (topicRetryState.answers||[]).forEach(a=>words(a).forEach(w=>base.push(w)));
     return [...new Set(base)];
   }
+  if(recMode==="roleChoice"){
+    const base=[
+      "ich waehle die kundin","ich waehle den kunden","ich waehle die verkaeuferin","ich waehle den verkaeufer",
+      "die frau links","die frau rechts","frau links","frau rechts","links","rechts",
+      "kundin","kunde","kunden","verkaeuferin","verkaeufer","frau","mann"
+    ];
+    (selectedScene?.roles||[]).forEach(r=>{
+      base.push(r);
+      roleAliases(r).forEach(a=>base.push(a));
+      base.push(roleChoiceExample(r));
+    });
+    return [...new Set(base.filter(Boolean))];
+  }
   if(recMode==="chat"){
     const q=(dialogCurrentQuestion?.[0]||(dialogQuestionPool[dialogIndex]?.[0])||((DIALOGS[String(selectedScene?.id)]||[])[dialogIndex]?.[0])||"");
     const base=["ich","ja","nein","bitte","danke"];
@@ -3692,6 +3705,13 @@ function alternativeRank(text,confidence){
     if(scene)rank+=90;
     if(/\bich\s+(?:waehle|wahle|nehme)\b/.test(t))rank+=18;
     if(/\b(?:bild|nummer|szene)\b/.test(t))rank+=12;
+  }
+
+  if(recMode==="roleChoice"){
+    if(detectRoleFromSpeech(text))rank+=95;
+    if(/\b(?:links|rechts)\b/.test(t))rank+=28;
+    if(/\b(?:kundin|kunde|kunden|verkaeuferin|verkaeufer)\b/.test(t))rank+=30;
+    if(/\bich\s+(?:waehle|wahle)\b/.test(t))rank+=15;
   }
 
   // Česte Web-Speech zamene: biramo kandidat prema kontekstu, a ne samo prema prvom rezultatu browsera.
@@ -6556,21 +6576,61 @@ function roleAliases(role){
 }
 function detectRoleFromSpeech(txt){
   if(!selectedScene)return null;
-  const t=normalizeRoleSpeech(txt);
+  let t=normalizeRoleSpeech(txt)
+    .replace(/\bich\s+(?:waehle|wahle|nehme|moechte)\b/g," ")
+    .replace(/\b(?:die|den|der|das|eine|einen|ein)\b/g," ")
+    .replace(/\s+/g," ")
+    .trim();
 
-  // Najpre konkretna uloga sa slike.
-  for(const role of selectedScene.roles||[]){
-    const specific=roleAliases(role).filter(a=>a!=="frau" && a!=="mann");
-    if(specific.some(a=>t.includes(a)))return role;
+  const roles=selectedScene.roles||[];
+  if(!roles.length)return null;
+
+  // Leva/desna osoba: prva i druga uloga prate redosled osoba na prikazanoj slici.
+  if(/\b(?:links|linke|linken|linker)\b/.test(t))return roles[0]||null;
+  if(/\b(?:rechts|rechte|rechten|rechter)\b/.test(t))return roles[1]||roles[0]||null;
+
+  // Tačne tražene uloge imaju prednost, da se npr. Verkäufer ne pomeša sa Verkäuferin.
+  const exactGroups=[
+    ["kundin",["kundin"]],
+    ["kunde",["kunde","kunden"]],
+    ["verkaeuferin",["verkaeuferin"]],
+    ["verkaeufer",["verkaeufer"]]
+  ];
+  for(const [canonical,forms] of exactGroups){
+    const heard=forms.some(x=>(" "+t+" ").includes(" "+x+" "));
+    if(!heard)continue;
+
+    const exact=roles.find(r=>normalizeRoleSpeech(r)===canonical);
+    if(exact)return exact;
+
+    const family=roles.find(r=>{
+      const rr=normalizeRoleSpeech(r);
+      if(canonical==="kundin")return /kundin|reisende|patientin/.test(rr);
+      if(canonical==="kunde")return /kunde|gast|fahrgast|reisender|patient/.test(rr) && !/in$/.test(rr);
+      if(canonical==="verkaeuferin")return /verkaeuferin|kassiererin|apothekerin|bibliothekarin/.test(rr);
+      if(canonical==="verkaeufer")return /verkaeufer|kassierer|apotheker|bibliothekar/.test(rr) && !/in$/.test(rr);
+      return false;
+    });
+    if(family)return family;
   }
 
-  // Zatim opšti izbor: Frau / Mann.
+  // Konkretna uloga sa slike.
+  for(const role of roles){
+    const rn=normalizeRoleSpeech(role);
+    if((" "+t+" ").includes(" "+rn+" "))return role;
+  }
+  // Prihvatljivi sinonimi uloge.
+  for(const role of roles){
+    const aliases=roleAliases(role).filter(a=>a!=="frau"&&a!=="mann");
+    if(aliases.some(a=>(" "+t+" ").includes(" "+a+" ")))return role;
+  }
+
   if(/\bfrau\b/.test(t)){
-    const fem=(selectedScene.roles||[]).find(r=>roleArticle(r)==="die");
+    const fem=roles.find(r=>roleArticle(r)==="die");
     if(fem)return fem;
   }
   if(/\bmann\b/.test(t)){
-    const masc=(selectedScene.roles||[]).find(r=>roleArticle(r)==="den");
+    const masc=roles.find(r=>roleArticle(r)==="den");
     if(masc)return masc;
   }
   return null;
@@ -6593,7 +6653,7 @@ function completeRoleChoice(txt){
   const mic=document.getElementById("micRole");
 
   if(!role){
-    if(out)out.innerHTML=`<div class="roleChoiceError">⚠️ Nisam prepoznao koju osobu birate. Recite, na primer: <b>„Ich wähle die Frau.“</b>, <b>„Ich wähle den Mann.“</b> ili izgovorite jednu od prikazanih uloga.</div>`;
+    if(out)out.innerHTML=`<div class="roleChoiceError">⚠️ Nisam prepoznao osobu. Recite npr. <b>„Ich wähle die Kundin.“</b>, <b>„Ich wähle den Kunden.“</b>, <b>„Ich wähle die Verkäuferin.“</b>, <b>„Ich wähle den Verkäufer.“</b>, <b>„die Frau links“</b>, <b>„die Frau rechts“</b> ili samo <b>„links/rechts“</b>.</div>`;
     if(mic){mic.disabled=false;mic.textContent="🎤 PONOVI IZBOR OSOBE";}
     setTimeout(()=>speakText("Bitte wählen Sie eine Person. Sagen Sie: Ich wähle ..."),350);
     return;
@@ -7361,6 +7421,79 @@ function buildDialogQuestionPool(sceneId){
   const picked=[first,...candidates.slice(0,DIALOG_MAX_TURNS-1)];
   try{localStorage.setItem(storageKey,JSON.stringify(picked.map(q=>dialogNorm(q&&q[0]||""))))}catch(e){}
   return picked;
+}
+
+/* ===== V98 • PRIRODNI DVOSMERNI A1 DIJALOG ===== */
+function looksLikeCandidateQuestion(text){
+  const x=dialogNorm(text);
+  if(!x)return false;
+  return /^(was|wie|wo|wohin|woher|wann|warum|wer|wen|wem|welche|welcher|welches|wieviel|wie viel|wie viele|haben sie|brauchen sie|moechten sie|koennen sie|kann ich|darf ich|soll ich|ist|sind|gibt es|zahlen sie|kostet|was kostet)\b/.test(x);
+}
+function candidateQuestionAnswer(sceneId,text){
+  const rows=A1_DIALOG_1000_DB[String(sceneId)]||[];
+  const qn=dialogNorm(text);
+  if(!qn)return "";
+
+  const exact=rows.find(r=>dialogNorm(r?.[0]||"")===qn);
+  if(exact && Array.isArray(exact[2]) && exact[2].length)return exact[2][0];
+
+  const qt=speechCompareTokens(text);
+  let best=null,bestScore=0;
+  for(const r of rows){
+    const rt=speechCompareTokens(r?.[0]||"");
+    if(!qt.length||!rt.length)continue;
+    const rs=new Set(rt);
+    const hits=qt.filter(w=>rs.has(w)).length;
+    const score=hits/Math.max(1,Math.min(qt.length,rt.length));
+    if(score>bestScore){bestScore=score;best=r}
+  }
+  if(bestScore>=.58 && best && Array.isArray(best[2]) && best[2].length)return best[2][0];
+
+  const sid=Number(sceneId);
+  const scene=SCENES.find(s=>Number(s.id)===sid);
+  if(/was moechten sie kaufen/.test(qn)){
+    const m=a1DialogModelsForQuestion(sid,"Was möchten Sie kaufen?");
+    return m[0]||"Ich möchte etwas kaufen.";
+  }
+  if(/was moechten sie trinken/.test(qn))return sid===11?"Ich möchte einen Kaffee.":"Ich möchte Wasser.";
+  if(/wie viel|wie viele/.test(qn)){
+    const m=a1DialogModelsForQuestion(sid,text);
+    return m[0]||"Zwei, bitte.";
+  }
+  if(/wie moechten sie bezahlen|zahlen sie/.test(qn))return "Ich möchte mit Karte bezahlen.";
+  if(/brauchen sie eine tuete/.test(qn))return "Ja, bitte. Ich brauche eine Tüte.";
+  if(/haben sie reserviert/.test(qn))return "Ja, ich habe reserviert.";
+  if(/fuer wie viele naechte/.test(qn))return "Für zwei Nächte, bitte.";
+  if(/fuer wie viele personen/.test(qn))return "Für zwei Personen, bitte.";
+  if(/haben sie schmerzen|was fehlt ihnen/.test(qn))return "Ich habe Kopfschmerzen.";
+  if(/seit wann/.test(qn))return "Seit gestern.";
+  if(/wohin/.test(qn))return "Ich fahre in die Stadt.";
+  if(/wann/.test(qn))return "Heute um zehn Uhr.";
+  if(/wo sind sie/.test(qn))return "Ich bin "+(scene?.de||"hier")+".";
+  if(/was machen sie hier/.test(qn))return "Ich bin hier und spreche mit Ihnen.";
+  if(/brauchen sie hilfe/.test(qn))return "Nein, danke. Im Moment nicht.";
+  if(/ist alles in ordnung/.test(qn))return "Ja, alles ist in Ordnung.";
+  return "";
+}
+function naturalDialogFollowUpFromAnswer(sceneId,question,answer){
+  const specific=makeSmartDialogFollowUp(sceneId,question,answer);
+  if(specific)return specific;
+
+  const x=dialogNorm(answer);
+  const rows=A1_DIALOG_1000_DB[String(sceneId)]||[];
+  const patterns=[];
+  if(/brot|broetchen|pizza/.test(x))patterns.push(/welch|wie viel|noch etwas|tuete|bezahlen/);
+  if(/jacke|kleid|hose|schuhe/.test(x))patterns.push(/groesse|farbe|anprobieren|bezahlen/);
+  if(/kaffee|tee|wasser|cappuccino/.test(x))patterns.push(/milch|zucker|essen|bezahlen/);
+  if(/zimmer|reservier/.test(x))patterns.push(/naechte|personen|fruehstueck|wlan/);
+  if(/schmerz|fieber|krank|husten/.test(x))patterns.push(/seit wann|fieber|medikament|allerg/);
+  if(/fahrkarte|zug|bus|flug|reise/.test(x))patterns.push(/wann|gepaeck|sitzplatz|information/);
+
+  for(const re of patterns){
+    const row=rows.find(r=>re.test(dialogNorm(r?.[0]||"")) && !shouldSkipBaseDialogQuestion(r?.[0]||""));
+    if(row)return row;
+  }
+  return null;
 }
 
 function dialogBridgeForAnswer(txt){
@@ -8927,6 +9060,47 @@ function submitChatAnswer(){
     return;
   }
 
+  // Kandidat može i sam postaviti A1 pitanje prema slici.
+  if(looksLikeCandidateQuestion(txt)){
+    const appAnswer=candidateQuestionAnswer(selectedScene?.id,txt);
+    if(appAnswer){
+      const analysis=analyzeStudentAnswer("Pitanje kandidata prema slici",txt,[],{context:"dialog-question"});
+      if(analysis.semantic){analysis.semantic.ok=true;analysis.semantic.score=100;analysis.semantic.msg=""}
+      if(analysis.complete){analysis.complete.ok=true;analysis.complete.score=100;analysis.complete.msg=""}
+      analysis.status=(analysis.grammar?.serious||[]).length?"wrong":((analysis.grammar?.minor||[]).length?"minor":"good");
+
+      const sc=scoreText(txt,[...expectedSpeechHints(),...speechCompareTokens(appAnswer)]);
+      dialogAttemptHistory.push({text:txt,score:sc,analysis});
+      recordExamAnswer(`dialog:${dialogTurnCount}`,txt,"Pitanje kandidata prema slici",txt,analysis,"dialog-question");
+      dialogScores.push(sc);
+      dialogAnswers.push({
+        qde:txt,qsr:"Pitanje kandidata",text:txt,score:sc,analysis,appAnswer,
+        attempts:dialogAttemptHistory.slice(),repeated:false,followup:true,candidateAsked:true
+      });
+
+      dialogLastStudentText=txt;
+      dialogTurnCount++;
+      updateExamProgress();
+
+      if(dialogTurnCount>=DIALOG_MAX_TURNS){
+        dialogClosingText=appAnswer+" Vielen Dank. Auf Wiedersehen!";
+        finishDialog(txt);
+        return;
+      }
+
+      dialogPendingBridge=appAnswer;
+      dialogIndex++;
+      dialogCurrentQuestion=null;
+      dialogFollowUpActive=false;
+      dialogFollowUpQuestion=null;
+      dialogRepeatCount=0;
+      dialogAttemptHistory=[];
+      advancePastAnsweredDialogQuestions();
+      setTimeout(()=>askDialogQ(),100);
+      return;
+    }
+  }
+
   const explicitRoleModels=Array.isArray(q[2])?q[2].filter(Boolean):[];
   const suggestions=dialogSuggestedAnswers(q[0],txt,explicitRoleModels).slice(0,2);
   const analysis=analyzeStudentAnswer(q[0],txt,suggestions,{context:"dialog"});
@@ -8967,7 +9141,7 @@ function submitChatAnswer(){
       return;
     }
 
-    dialogPendingBridge="";
+    dialogPendingBridge=dialogBridgeForAnswer(txt);
     if(dialogFollowUpActive){
       dialogFollowUpActive=false;
       dialogFollowUpQuestion=null;
@@ -8975,13 +9149,14 @@ function submitChatAnswer(){
       dialogRepeatCount=0;
       dialogAttemptHistory=[];
       advancePastAnsweredDialogQuestions();
-      setTimeout(()=>askDialogQ(),120);
+      setTimeout(()=>askDialogQ(),100);
       return;
     }
 
     const follow=(answerCanBeStored(analysis) && !explicitRoleModels.length)
-      ? makeSmartDialogFollowUp(selectedScene.id,q[0],txt)
+      ? naturalDialogFollowUpFromAnswer(selectedScene.id,q[0],txt)
       : null;
+
     dialogIndex++;
     advancePastAnsweredDialogQuestions();
     dialogRepeatCount=0;
@@ -8992,12 +9167,11 @@ function submitChatAnswer(){
       dialogFollowUpQuestion=follow;
       dialogFollowUpActive=true;
     }
-    setTimeout(()=>askDialogQ(),120);
+    setTimeout(()=>askDialogQ(),100);
   };
 
   continueNext();
 }
-
 function dialogFinalAttemptsHtml(a,i){
   const attempts=a.attempts||[{text:a.text,score:a.score}];
   const bakeryModel=Number(selectedScene?.id)===2?bakeryAnswerBox(a.qde,a.text):"";
@@ -9031,7 +9205,7 @@ function finishDialog(lastStudentText=""){
     <div class="dialogClosingIcon">👋</div>
     <div class="dialogClosingDe">${esc(dialogClosingText)}</div>
     <div class="dialogClosingSr">${niceDay?"Hvala, takođe! Doviđenja!":"Hvala puno. Doviđenja!"}</div>
-    <small>Završeno je tačno 16 rečenica: 8 pitanja aplikacije + 8 odgovora učenika.</small>
+    <small>Završen je prirodan A1 dijalog prema izabranoj slici i ulozi.</small>
   </div>`;
 
   dialogScore.innerHTML=`<div class="btnrow"><button class="btn blue nextBtn" type="button" onclick="finishExam()">Prikaži završni rezultat →</button></div>`;
