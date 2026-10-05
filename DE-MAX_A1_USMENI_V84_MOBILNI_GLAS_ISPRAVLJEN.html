@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V90 potvrda govora i pažljivo slušanje</title>
+<title>De-Max A1 Usmeni • V91 mobilni stabilno i slobodno predstavljanje</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -828,6 +828,35 @@ body{min-height:100dvh}
   }
 }
 
+
+
+/* ===== V91 • MOBILNI STABILAN EKRAN, BEZ AUTOMATSKOG SKAKANJA ===== */
+@media(max-width:600px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden;scroll-behavior:auto!important}
+  .app{width:100%;max-width:100%;padding:3px 6px 74px!important}
+  .top{position:static!important;top:auto!important;padding:4px 0 5px!important}
+  .heroBrand{border-radius:15px!important;padding:8px 9px!important}
+  .logoMark{width:36px!important;height:36px!important;border-radius:11px!important;font-size:15px!important}
+  .logoWord{font-size:20px!important}
+  .mainTitle{font-size:15px!important;margin-top:2px!important}
+  .heroSub{font-size:9px!important;margin-top:3px!important}
+  .heroInfoBar{display:none!important}
+  .card{margin:4px 0!important;padding:9px!important;border-radius:15px!important}
+  .stepNo{width:34px!important;height:34px!important;border-radius:11px!important;font-size:14px!important}
+  .stepTitle h2{font-size:16px!important}
+  .stepTitle small{font-size:10px!important}
+  .autoQuestion,.prompt{margin-top:7px!important;padding:9px!important;border-radius:14px!important}
+  .autoQuestion .qde,.prompt .de{font-size:16px!important}
+  .autoQuestion .qsr,.prompt .sr{font-size:12px!important}
+  .listenStatus{margin-top:7px!important;padding:6px 8px!important;font-size:11px!important}
+  .liveStudentTranscript{min-height:72px!important;max-height:24dvh!important;overflow-y:auto!important;overscroll-behavior:contain;padding:9px!important;margin-top:7px!important}
+  .voiceTopicGrid{max-height:38dvh!important;overflow-y:auto!important;overscroll-behavior:contain}
+  .chat{max-height:48dvh!important;overflow-y:auto!important;overscroll-behavior:contain;padding-right:2px}
+  .btnrow{margin-top:7px!important;gap:6px!important}
+  .btn{padding:9px 10px!important;min-height:42px}
+  .flowHint{margin-top:6px!important;padding:7px 8px!important}
+  .bottom{width:calc(100% - 8px)!important;bottom:4px!important;border-radius:12px!important;padding:4px!important}
+}
 
 /* ===== V35: TEME → OPIS → DIJALOG ===== */
 .pictureChoiceIntro{
@@ -2606,10 +2635,10 @@ function renderCurrentTopicPresentation(){
         </div>
         <div class="review examPrivate" id="tr_${k}"></div>
       </div>
-      <div class="flowHint"><b>Redosled:</b> prvo predstavljate sve četiri teme. Tek nakon toga aplikacija počinje sa pitanjima.</div>
+      <div class="flowHint"><b>Slobodno govorite:</b> odgovor može biti formulisan na više načina. Aplikacija čuva ono što kažete i ne menja Vaše predstavljanje u unapred zadati model.</div>
     </div>`;
   const card=document.getElementById(`presentCard_${k}`);
-  if(card)card.scrollIntoView({behavior:"smooth",block:"start"});
+  if(card && !mobileSpeechClient())card.scrollIntoView({behavior:"smooth",block:"start"});
   speakText(qde,()=>{
     const st=document.getElementById("topicPresentStatus");
     if(st){st.textContent="🎤 Govorite — predstavite temu";st.classList.add("live")}
@@ -2653,6 +2682,11 @@ function topicPresentationModels(k,heard=""){
   return shuffledCopy([...new Set(unique)]).slice(0,2);
 }
 function showTopicPresentationCorrection(k,heard){
+  if(k && heard){
+    topicAnswers[k]=exactTopicTranscript(heard);
+    finishTopicPresentation(k);
+    return;
+  }
   const answers=topicPresentationModels(k,heard);
   topicMainRetryState={k,answers,retryText:""};
   const card=document.getElementById(`presentCard_${k}`);
@@ -2681,42 +2715,57 @@ function showTopicPresentationCorrection(k,heard){
 
 function finishTopicPresentation(k){
   if(!topicPresentationFlow || selectedTopics[topicPresentationIndex]!==k)return;
-  const txt=(topicAnswers[k]||cleanTranscript(document.getElementById("t_"+k),"Recite 1–4 rečenice o ovoj temi.")).trim();
+
+  const el=document.getElementById("t_"+k);
+  const txt=exactTopicTranscript(topicAnswers[k] || (el?.textContent||""));
   const st=document.getElementById("topicPresentStatus");
+
   if(!txt || words(txt).length<2){
-    if(st){st.textContent="⚠️ Recite najmanje jednu kratku rečenicu o temi — pokušajte ponovo";st.classList.remove("live")}
-    setTimeout(()=>{currentTopic=k;toggleRec("topic")},700);
+    if(st){st.textContent="⚠️ Nisam dovoljno čuo odgovor — pokušajte ponovo";st.classList.remove("live")}
+    setTimeout(()=>{currentTopic=k;if(!rec)toggleRec("topic")},350);
     return;
   }
 
-  const sc=scoreText(txt,TOPICS[k].keywords||[]);
-  topicMainScores[k]=sc;
+  topicAnswers[k]=txt;
+
+  // Slobodno predstavljanje: ne poredi sa jednim modelom i ne prepravljaj učenikovu rečenicu.
+  const baseAnalysis=analyzeStudentAnswer(
+    `Sprechen Sie bitte über das Thema ${k}.`,
+    txt,
+    [],
+    {topic:k,freePresentation:true}
+  );
+  const a={
+    ...baseAnalysis,
+    status:"good",
+    original:txt,
+    corrected:txt,
+    semantic:{...(baseAnalysis.semantic||{}),ok:true,score:100,msg:""},
+    complete:{...(baseAnalysis.complete||{}),ok:true,score:100,msg:""},
+    explanations:[]
+  };
+  if(a.scores)a.scores.understanding=100;
+
+  topicMainScores[k]=scoreText(txt,TOPICS[k]?.keywords||[]);
   const hiddenReview=document.getElementById("tr_"+k);
-  if(hiddenReview)hiddenReview.innerHTML=answerReviewHtml(txt,sc,"Predstavljanje teme: "+k);
+  if(hiddenReview)hiddenReview.innerHTML="";
 
-  // Prihvati sopstveni smislen odgovor; korekciju traži samo za ozbiljnu grešku
-  // ili kada sadržaj uopšte nije o izabranoj temi.
-  const gram=strictGrammarAssessment(txt);
-  const models=topicPresentationModels(k,txt);
-  const a=analyzeStudentAnswer(`Sprechen Sie bitte über das Thema ${k}.`,txt,models,{topic:k});
-  const validHobbyPresentation=(k==="Hobbys" && hobbyListIsGrammaticallyValid(txt));
-  const totallyWrong=!a.semantic.ok || (gram.serious.length>0 && !validHobbyPresentation);
+  if(st){st.textContent="✓ Odgovor je prihvaćen onako kako ga je učenik rekao.";st.classList.remove("live")}
+  const confirmBtn=document.getElementById("confirmTopicSpeechBtn");
+  if(confirmBtn)confirmBtn.textContent="✓ ODGOVOR PRIHVAĆEN";
 
-  if(totallyWrong){
-    // V73: pogrešan odgovor se NIKADA ne prihvata, ni posle prethodne korekcije.
-    topicMainCorrectionShown[k]=true;
-    if(st){st.textContent="⚠️ Odgovor je pogrešan — ne priznaje se. Ponovite jedan od tačnih modela.";st.classList.remove("live")}
-    recordExamAnswer(`main:${k}:wrong:${Date.now()}`,`Sprechen Sie bitte über das Thema ${k}.`,`Govorite o temi ${TOPICS[k]?.sr||k}.`,txt,a,"topic-main-wrong");
-    showTopicPresentationCorrection(k,txt);
-    return;
-  }
+  recordExamAnswer(
+    `main:${k}`,
+    `Sprechen Sie bitte über das Thema ${k}.`,
+    `Govorite o temi ${TOPICS[k]?.sr||k}.`,
+    txt,
+    a,
+    "topic-main-free"
+  );
 
-  if(st){st.textContent=a.status==="minor"?"✓ Potvrđeno. Odgovor je smislen i prihvaćen.":"✓ Potvrđeno. Sehr gut! Ihre Antwort ist richtig.";st.classList.remove("live")}
-  const confirmBtn=document.getElementById("confirmTopicSpeechBtn");if(confirmBtn)confirmBtn.textContent="✓ ODGOVOR POTVRĐEN";
-  recordExamAnswer(`main:${k}`,`Sprechen Sie bitte über das Thema ${k}.`,`Govorite o temi ${TOPICS[k]?.sr||k}.`,txt,a,"topic-main");
   updateExamProgress();
   topicPresentationIndex++;
-  speakText("Sehr gut! Ihre Antwort ist richtig.",()=>setTimeout(()=>renderCurrentTopicPresentation(),180));
+  setTimeout(()=>renderCurrentTopicPresentation(),120);
 }
 function confirmTopics(){
   if(selectedTopics.length!==4)return;
@@ -2764,7 +2813,7 @@ function renderTopicQuestion(k,i,isAuto=false){
   topicUnderstandingAttempts[`q:${k}#${i}`]=0;
   topicQuestionState[k]=i; currentTopic=`${k}#${i}`;
   box.innerHTML=`<div class="questionBox"><div class="autoQuestion ${i===1?'secondQuestion':''}"><div class="qde">${i+1}. ${esc(q[0])}</div><div class="qsr">🇷🇸 ${esc(q[1])}</div><div class="listenStatus" id="listen_${k}_${i}">🔊 Slušajte pitanje...</div><div class="transcript liveStudentTranscript" id="qa_${k}_${i}">Odgovor učenika.</div><div class="examPrivate" id="qscore_${k}_${i}"></div></div></div>`;
-  if(card)card.scrollIntoView({behavior:"smooth",block:"start"});
+  if(card && !mobileSpeechClient())card.scrollIntoView({behavior:"smooth",block:"start"});
   speakText(q[0],()=>{
     const st=document.getElementById(`listen_${k}_${i}`);if(st){st.textContent="🎤 Govorite — slušam odgovor";st.classList.add("live")}
     currentTopic=`${k}#${i}`; if(!rec)toggleRec('topicQ');
@@ -2783,7 +2832,7 @@ function silenceMsForMode(mode){
   if(mode==="topicRetry")return 5500;
   if(mode==="topicMainRetry")return 5800;
   if(mode==="roleChoice")return 5800;
-  if(mode==="topic")return 9000;
+  if(mode==="topic")return 6000;
   if(mode==="intro")return 7000;
   if(mode==="topicChoice")return 9000;
   return 6000;
@@ -3731,7 +3780,7 @@ function setupRec(){
       // Kada učenik prestane da govori i odgovor je tačan:
       // "Gut." -> odmah sledeće pitanje -> mikrofon se ponovo automatski uključuje.
       sayGut(()=>{
-        if(block)block.scrollIntoView({behavior:"smooth",block:"start"});
+        if(block && !mobileSpeechClient())block.scrollIntoView({behavior:"smooth",block:"start"});
         const q="Sie haben hier verschiedene Themen. Sie sollen vier Themen auswählen. Welche Themen wählen Sie?";
         speakText(q,()=>{
           const st=document.getElementById("topicChoiceStatus");
@@ -3752,28 +3801,21 @@ function setupRec(){
       evaluateTopicChoice(txt);
     }
     if(endedMode==="topic" && endedTopic && !endedTopic.includes("#")){
-      const heard=(topicAnswers[endedTopic]||cleanTranscript(document.getElementById("t_"+endedTopic),"Recite 1–4 rečenice o ovoj temi.")).trim();
+      const heard=exactTopicTranscript(topicAnswers[endedTopic] || (document.getElementById("t_"+endedTopic)?.textContent||""));
       const confirmBtn=document.getElementById("confirmTopicSpeechBtn");
       if(confirmBtn)confirmBtn.textContent="✓ GOVOR JE ZAVRŠEN";
-      const key=`main:${endedTopic}`;
-      const notUnderstood=recognitionUncertain || !heard || words(heard).length<2;
-      if(notUnderstood){
-        topicUnderstandingAttempts[key]=(topicUnderstandingAttempts[key]||0)+1;
-        const st=document.getElementById("topicPresentStatus");
-        if(topicUnderstandingAttempts[key]===1){
-          topicAnswers[endedTopic]="";
-          const el=document.getElementById("t_"+endedTopic);if(el)el.textContent="🎙️ Ponovite odgovor.";
-          if(st){st.textContent="⚠️ Nisam Vas dobro razumeo — pokušajte još jednom";st.classList.remove("live")}
-          setTimeout(()=>{const p=correctionRepeatPrompt();speakText(p,()=>{currentTopic=endedTopic;toggleRec("topic")})},450);
-        }else{
-          topicMainCorrectionShown[endedTopic]=true;
-          if(st){st.textContent="⚠️ Ni drugi pokušaj nije dovoljno jasan — izaberite tačan model";st.classList.remove("live")}
-          showTopicPresentationCorrection(endedTopic,heard);
-        }
-      }else{
-        topicUnderstandingAttempts[key]=0;
-        finishTopicPresentation(endedTopic);
+      const st=document.getElementById("topicPresentStatus");
+
+      if(!heard || words(heard).length<2){
+        if(st){st.textContent="⚠️ Nisam dovoljno čuo odgovor — pokušajte ponovo";st.classList.remove("live")}
+        topicAnswers[endedTopic]="";
+        setTimeout(()=>{currentTopic=endedTopic;if(!rec)toggleRec("topic")},350);
+        return;
       }
+
+      topicUnderstandingAttempts[`main:${endedTopic}`]=0;
+      topicAnswers[endedTopic]=heard;
+      finishTopicPresentation(endedTopic);
     }
     if(endedMode==="pic"){
       const pbtn=document.getElementById("micPic");
@@ -4013,11 +4055,14 @@ function toggleRec(mode){
   lastSpeechMode=mode;
   try{rec.start()}catch(e){}
 }
+function exactTopicTranscript(text){
+  return String(text||"").replace(/\s+/g," ").trim();
+}
 function renderRecTarget(){
-  const finalShown=formatSpeechForMode(finalText,recMode);
-  const interimShown=recMode==="intro"
-    ? formatGermanTranscript(interimText)
-    : formatGermanTranscript(interimText);
+  const finalShown=recMode==="topic" ? exactTopicTranscript(finalText) : formatSpeechForMode(finalText,recMode);
+  const interimShown=recMode==="topic"
+    ? exactTopicTranscript(interimText)
+    : (recMode==="intro" ? formatGermanTranscript(interimText) : formatGermanTranscript(interimText));
   const content=esc(finalShown)+` <span class="interim">${esc(interimShown)}</span>`;
   if(recMode==="intro") introText.innerHTML=content;
   if(recMode==="topicChoice"){topicChoiceText.innerHTML=content;topicChoiceAnswer=formatGermanTranscript((finalText+" "+interimText).trim());updateVoiceTopicHighlights(topicChoiceAnswer)}
@@ -4037,7 +4082,11 @@ function renderRecTarget(){
     chatText.classList.add("dialogLiveTranscript");
     chatText.innerHTML=content || "🎙️ Slušam…";
   }
-  if(recMode==="topic" && currentTopic){document.getElementById("t_"+currentTopic).innerHTML=content;topicAnswers[currentTopic]=formatGermanTranscript((finalText+" "+interimText).trim())}
+  if(recMode==="topic" && currentTopic){
+    const el=document.getElementById("t_"+currentTopic);
+    if(el){el.innerHTML=content;el.scrollTop=el.scrollHeight;}
+    topicAnswers[currentTopic]=exactTopicTranscript((finalText+" "+interimText).trim());
+  }
   if(recMode==="topicQ" && currentTopic){
     const [k,i]=currentTopic.split("#");document.getElementById(`qa_${k}_${i}`).innerHTML=content;
     topicQAnswers[currentTopic]=formatGermanTranscript((finalText+" "+interimText).trim());
@@ -4059,7 +4108,7 @@ function renderRecTarget(){
   if(recMode==="topicChoice")renderLiveTranslationFor(topicChoiceText,live);
   if(recMode==="pic")renderLiveTranslationFor(picText,live);
   if(recMode==="chat")renderLiveTranslationFor(chatText,live);
-  if(recMode==="topic" && currentTopic)renderLiveTranslationFor(document.getElementById("t_"+currentTopic),live);
+  // V91: bez live prevoda tokom slobodnog predstavljanja teme — brži prikaz i bez menjanja sadržaja.
   if(recMode==="topicMainRetry" && topicMainRetryState)renderLiveTranslationFor(document.getElementById("t_"+topicMainRetryState.k),live);
   if(recMode==="topicQ" && currentTopic){
     const [k,i]=currentTopic.split("#");
@@ -5961,7 +6010,7 @@ function selectScene(id){
   if(window.dialogScore)dialogScore.innerHTML="";
   updateExamProgress();
   const task=document.getElementById("pictureTaskDe");
-  if(task)task.scrollIntoView({behavior:"smooth",block:"start"});
+  if(task && !mobileSpeechClient())task.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function renderSceneView(){
   if(!selectedScene || !pictureChoiceMade || !window.sceneView)return;
@@ -7961,7 +8010,7 @@ function requestDialogRepeat(countAsAttempt=true,suggestedAnswers=null,negative=
 }
 
 function addBubble(kind,de,sr,fix=""){
-  const d=document.createElement("div");d.className="bubble "+kind;d.innerHTML=`<b>${esc(de)}</b><div class="tr">${esc(sr||"")}</div>${fix?`<div class="fix">${esc(fix)}</div>`:""}`;chat.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"nearest"});
+  const d=document.createElement("div");d.className="bubble "+kind;d.innerHTML=`<b>${esc(de)}</b><div class="tr">${esc(sr||"")}</div>${fix?`<div class="fix">${esc(fix)}</div>`:""}`;chat.appendChild(d);if(mobileSpeechClient()){chat.scrollTop=chat.scrollHeight}else d.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 const SR_HINTS={
   "ich möchte":"želeo/želela bih","ich brauche":"treba mi","ich habe":"imam","ich bin":"ja sam","danke":"hvala",
@@ -8622,7 +8671,7 @@ function evaluateTopicChoice(txt){
       if(choiceBlock)choiceBlock.classList.add("examStageHidden");
       startSelectedTopicPresentations();
       const tw=document.getElementById("topicWork");
-      if(tw)tw.scrollIntoView({behavior:"smooth",block:"start"});
+      if(tw && !mobileSpeechClient())tw.scrollIntoView({behavior:"smooth",block:"start"});
     },850);
   }else{
     selectedTopics=[];
