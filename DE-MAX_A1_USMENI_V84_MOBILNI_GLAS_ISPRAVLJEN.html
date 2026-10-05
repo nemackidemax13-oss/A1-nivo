@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V95 glasovni ili ručni izbor slike</title>
+<title>De-Max A1 Usmeni • V96 automatski mikrofon za izbor slike</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -2034,7 +2034,7 @@ body{padding-bottom:92px}
           <button class="btn green mic" id="micPictureChoice" type="button" onclick="startPictureChoiceRecording()">🎤 IZABERI SLIKU GLASOM</button>
           <button class="btn blue" id="confirmPictureChoiceBtn" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI IZBOR</button>
         </div>
-        <div class="listenStatus" id="pictureChoiceVoiceStatus">Možete izgovoriti naziv prikazane slike ili je ručno pritisnuti.</div>
+        <div class="listenStatus" id="pictureChoiceVoiceStatus">🎤 Mikrofon će se automatski uključiti. Možete izgovoriti naziv slike ili je odmah ručno pritisnuti.</div>
         <div class="pictureChoiceTitle">🖼️ TEME ZA OPIS SLIKE <span>40 situacija</span></div>
         <div class="sceneGrid pictureTopicGrid" id="sceneGrid"></div>
       </div>
@@ -2635,7 +2635,9 @@ function go(id,btn){
     pictureChoiceMade=false;
     showPictureChoiceStage();
     renderScenes();
-    setTimeout(()=>speakText("Wählen Sie bitte ein Bild. Sie können das Bild sagen oder antippen."),250);
+    setTimeout(()=>speakText("Wählen Sie bitte ein Bild. Sie können das Bild sagen oder antippen.",()=>{
+      if(!pictureChoiceMade && !rec)setTimeout(()=>startPictureChoiceRecording(),180);
+    }),250);
   }
   if(id==="s3"){
     dialogActive=false;
@@ -6161,7 +6163,7 @@ function startPictureChoiceRecording(){
   try{speechSynthesis.cancel()}catch(e){}
   pictureChoiceAnswer="";
   const st=document.getElementById("pictureChoiceVoiceStatus");
-  if(st)st.textContent="🎤 Recite naziv slike, npr. „Ich wähle die Bäckerei.“";
+  if(st)st.textContent="🔴 Mikrofon je uključen — recite naziv slike, npr. „Ich wähle die Bäckerei.“, ili ručno pritisnite sliku.";
   if(!rec)toggleRec("pictureChoice");
 }
 function completePictureChoiceSpeech(text){
@@ -6201,16 +6203,23 @@ function backToPictureChoices(){
   selectedRole=null;
   showPictureChoiceStage();
   const mic=document.getElementById("micPictureChoice");
-  if(mic){mic.disabled=false;mic.textContent="🎤 IZABERI SLIKU GLASOM";}
+  if(mic){mic.disabled=false;mic.textContent="🎤 MIKROFON ZA IZBOR SLIKE";}
   const st=document.getElementById("pictureChoiceVoiceStatus");
-  if(st)st.textContent="Možete izgovoriti naziv prikazane slike ili je ručno pritisnuti.";
+  if(st)st.textContent="🎤 Mikrofon se automatski uključuje. Recite naziv slike ili je ručno pritisnite.";
   renderScenes();
   window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>{
+    if(!pictureChoiceMade && !rec)startPictureChoiceRecording();
+  },220);
 }
 function selectScene(id,fromVoice=false){
   if(rec && recMode==="pictureChoice"){
     clearSpeechSilence();
     window.__demaxStopRequested=true;
+    // Ručni klik ima apsolutnu prednost nad glasovnim izborom.
+    // Pre abortiranja uklanjamo mode da onend ne može naknadno promeniti ručno izabranu sliku.
+    if(!fromVoice)recMode=null;
+    pictureChoiceAnswer="";
     try{rec.abort()}catch(e){try{rec.stop()}catch(_){}}
     rec=null;
     setCandidateSpeechDock(false,"pictureChoice");
