@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V88 mobilni stabilno</title>
+<title>De-Max A1 Usmeni • V89 mobilni izbor tema</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -1845,7 +1845,7 @@ body{padding-bottom:92px}
         <div class="qsr">🇷🇸 Ovde imate različite teme. Treba da izaberete četiri teme. Koje teme birate?</div>
         <div class="voiceTopicIntro"><b>🎯 IZABERITE 4 TEME GLASOM</b><span class="voiceTopicCounter" id="topicVoiceCounter">0/4 izabrane</span></div>
         <div class="voiceTopicGrid" id="topicVoiceGrid"></div>
-        <div class="voiceOnlyHint"><b>🎤 Izbor glasom:</b> npr. „Ich wähle Sprachen, Hobbys, Familie und Beruf.“ Kartice se označavaju automatski dok govorite.<br><b>1️⃣ Prvo predstavljanje tema:</b> učenik redom govori o svakoj od 4 izabrane teme u <b>1–4 rečenice</b>.<br><b>2️⃣ Zatim pitanja:</b> aplikacija postavlja tačno <b>5 različitih pitanja po temi</b> (ukupno 20). Pitanja se pamte u ovom pregledaču i pri narednim pokretanjima biraju se nova dok se baza ne iscrpi.</div>
+        <div class="voiceOnlyHint"><b>🎤 Izbor glasom:</b> prihvata: „Ich wähle vier Themen: Sprachen, Hobbys, Familie und Beruf.“, „Ich wähle Sprachen, Hobbys, Familie und Beruf.“ ili „Ich habe vier Themen ausgewählt: Sprachen, Hobbys, Familie und Beruf.“ Kartice se označavaju automatski dok govorite.<br><b>1️⃣ Prvo predstavljanje tema:</b> učenik redom govori o svakoj od 4 izabrane teme u <b>1–4 rečenice</b>.<br><b>2️⃣ Zatim pitanja:</b> aplikacija postavlja tačno <b>5 različitih pitanja po temi</b> (ukupno 20). Pitanja se pamte u ovom pregledaču i pri narednim pokretanjima biraju se nova dok se baza ne iscrpi.</div>
         <div class="listenStatus" id="topicChoiceStatus">🔊 Slušajte pitanje...</div>
         <div class="transcript liveStudentTranscript" id="topicChoiceText">Ovde će se pojaviti odgovor učenika.</div>
         <div class="review examPrivate" id="topicChoiceReview"></div>
@@ -2745,13 +2745,17 @@ function silenceMsForMode(mode){
   if(mode==="roleChoice")return 5800;
   if(mode==="topic")return 7200;
   if(mode==="intro")return 7000;
-  if(mode==="topicChoice")return 6200;
+  if(mode==="topicChoice")return 9000;
   return 6000;
 }
 function armSpeechSilence(){
   if(!rec || !heardSpeech || !["intro","topicChoice","topic","topicQ","topicRetry","topicMainRetry","chat","pic","picRetry","roleChoice"].includes(recMode))return;
   clearSpeechSilence();
   const mode=recMode;
+  const topicChoiceCount=(mode==="topicChoice" && typeof detectTopicsFromSpeech==="function")
+    ? detectTopicsFromSpeech(topicChoiceAnswer||formatGermanTranscript((finalText+" "+interimText).trim())).length
+    : 0;
+  const waitMs=(mode==="topicChoice" && topicChoiceCount===4)?2800:silenceMsForMode(mode);
   speechSilenceTimer=setTimeout(()=>{
     if(rec && recMode===mode){
       if(mode==="intro"){const btn=document.getElementById("micIntro");if(btn)btn.textContent="✓ Predstavljanje završeno"}
@@ -2762,7 +2766,7 @@ function armSpeechSilence(){
       window.__demaxStopRequested=true;
       try{rec.stop()}catch(e){}
     }
-  },silenceMsForMode(mode));
+  },waitMs);
 }
 
 function normalizedGerman(s){return (s||"").toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss")}
@@ -3287,7 +3291,7 @@ function expectedSpeechHints(){
     DEMAX_A1_EXTRA_QA.filter(x=>/PREDSTAVLJANJE/i.test(x.section)).slice(0,30).forEach(x=>base.push(x.a));
     return [...new Set(base.filter(Boolean))];
   }
-  if(recMode==="topicChoice")return ["ich waehle","sprachen","hobbys","sport","familie","beruf","lieblingsessen","freunde","freizeit","tiere","lieblingsgetrank","lieblingslied","urlaub","musik","wohnort","bucher","film","lieblingsfarbe"];
+  if(recMode==="topicChoice")return ["ich waehle","ich wahle","ich waehle vier themen","ich habe vier themen ausgewaehlt","ich habe vier themen ausgewahlt","vier themen","sprachen","hobbys","sport","familie","beruf","lieblingsessen","freunde","freizeit","tiere","lieblingsgetrank","lieblingsgetraenk","lieblingslied","urlaub","musik","wohnort","bucher","buecher","film","lieblingsfarbe","lieblingskleidung"];
   if(recMode==="topic" && currentTopic && !currentTopic.includes("#")){
     const k=currentTopic;
     const base=[...(TOPICS[k]?.keywords||[])];
@@ -3411,7 +3415,14 @@ function alternativeRank(text,confidence){
   // Česte Web-Speech zamene: biramo kandidat prema kontekstu, a ne samo prema prvom rezultatu browsera.
   if(/\bich spreche\b/.test(t))rank+=16;
   if(/\bich nenne\s+(deutsch|englisch|serbisch|bosnisch)\b/.test(t))rank-=18;
-  if(/\bich waehle\b/.test(t) && recMode==="topicChoice")rank+=14;
+  if(recMode==="topicChoice"){
+    const topicCount=(typeof detectTopicsFromSpeech==="function")?detectTopicsFromSpeech(text).length:0;
+    rank+=topicCount*28;
+    if(topicCount===4)rank+=80;
+    if(/\bich (?:waehle|wahle)\b/.test(t))rank+=20;
+    if(/\b(?:vier|4) themen\b/.test(t))rank+=16;
+    if(/\bich habe (?:vier|4) themen (?:ausgewaehlt|ausgewahlt)\b/.test(t))rank+=28;
+  }
 
   if(recMode==="chat"){
     const q=normalizedGerman((dialogCurrentQuestion?.[0]||currentDialogQuestion?.()?.[0]||"")+" "+(selectedScene?.de||""));
@@ -3527,11 +3538,15 @@ function setupRec(){
         ranked.push({cand,rank:alternativeRank(cand.transcript,cand.confidence||0)});
       }
       ranked.sort((a,b)=>b.rank-a.rank);
-      const best=mobileASR ? result[0] : (ranked[0]?.cand||result[0]);
+      const best=(recMode==="topicChoice")
+        ? (ranked[0]?.cand||result[0])
+        : (mobileASR ? result[0] : (ranked[0]?.cand||result[0]));
       const tx=String(best?.transcript||"").trim();
-      recognitionBestAlternatives=mobileASR
-        ? Array.from(result).slice(0,3).map(x=>x.transcript)
-        : ranked.slice(0,5).map(x=>x.cand.transcript);
+      recognitionBestAlternatives=(recMode==="topicChoice")
+        ? ranked.slice(0,5).map(x=>x.cand.transcript)
+        : (mobileASR
+          ? Array.from(result).slice(0,3).map(x=>x.transcript)
+          : ranked.slice(0,5).map(x=>x.cand.transcript));
 
       if(result.isFinal){
         if(mobileASR){
@@ -8454,36 +8469,65 @@ function evaluateIntro(){
   introScore=scoreText(txt,["ich","heiße","name","bin","jahre","komme","wohne","spreche","hobby"]);
   introReview.innerHTML=answerReviewHtml(txt,introScore,"Predstavljanje");
 }
+function normalizeTopicChoiceSpeech(text){
+  let t=String(text||"").toLocaleLowerCase("de-DE")
+    .replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
+    .replace(/[^a-z0-9]+/g," ").replace(/\s+/g," ").trim();
+
+  // Prihvati prirodne uvode učenika i izdvoji samo nazive tema.
+  // Primeri:
+  // "Ich wähle vier Themen: Sprachen, Hobbys, Familie und Beruf."
+  // "Ich wähle Sprachen, Hobbys, Familie und Beruf."
+  // "Ich habe vier Themen ausgewählt: Sprachen, Hobbys, Familie und Beruf."
+  t=t
+    .replace(/\bich habe (?:vier|4) themen ausgewahlt\b/g," ")
+    .replace(/\bich (?:wahle|waehle)(?: (?:vier|4) themen)?\b/g," ")
+    .replace(/\b(?:vier|4) themen\b/g," ")
+    .replace(/\b(?:meine themen sind|die themen sind|das sind)\b/g," ")
+    .replace(/\s+/g," ").trim();
+  return t;
+}
 function detectTopicsFromSpeech(text){
-  const t=(text||"").toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss");
+  const t=normalizeTopicChoiceSpeech(text);
   const aliases={
     Sprachen:["sprachen","sprache"],
     Hobbys:["hobbys","hobbies","hobby"],
     Sport:["sport"],
     Familie:["familie"],
-    Beruf:["beruf","arbeit"],
+    Beruf:["beruf","arbeit","job"],
     Lieblingsessen:["lieblingsessen","lieblings essen"],
     Freunde:["freunde","freund","freundin"],
     Freizeit:["freizeit"],
     Tiere:["tiere","tier","haustier"],
-    Lieblingsgetränk:["lieblingsgetrank","lieblings getrank","getrank"],
+    Lieblingsgetränk:["lieblingsgetrank","lieblings getrank","lieblingsgetraenk","lieblings getraenk","getrank","getraenk"],
     Lieblingslied:["lieblingslied","lieblings lied"],
     Urlaub:["urlaub","ferien"],
     Musik:["musik"],
     Wohnort:["wohnort","wohnen"],
-    Bücher:["bucher","buch"],
+    Bücher:["bucher","buecher","buch"],
     Film:["film","filme","kino"],
     Lieblingsfarbe:["lieblingsfarbe","lieblings farbe","farbe"],
     Lieblingskleidung:["lieblingskleidung","lieblings kleidung","kleidung","kleid"]
   };
-  const found=[];
+
+  // Čuvamo redosled kojim je učenik izgovorio teme.
+  const hay=" "+t+" ";
+  const matches=[];
   for(const [topic,terms] of Object.entries(aliases)){
-    if(terms.some(term=>t.includes(term)) && !found.includes(topic))found.push(topic);
+    let pos=Infinity;
+    for(const raw of terms){
+      const term=String(raw||"").trim();
+      if(!term)continue;
+      const i=hay.indexOf(" "+term+" ");
+      if(i>=0 && i<pos)pos=i;
+    }
+    if(Number.isFinite(pos))matches.push({topic,pos});
   }
-  return found;
+  matches.sort((a,b)=>a.pos-b.pos);
+  return matches.map(x=>x.topic);
 }
 function evaluateTopicChoice(txt){
-  const sc=scoreText(txt,["wahle","sprachen","hobbys","sport","familie","beruf","lieblingsessen","freunde","freizeit","tiere","lieblingsgetrank","lieblingslied","urlaub","musik","wohnort","bucher","film","lieblingsfarbe","lieblingskleidung","kleidung","kleid"]);
+  const sc=scoreText(txt,["wahle","waehle","vier","themen","ausgewahlt","ausgewaehlt","sprachen","hobbys","sport","familie","beruf","lieblingsessen","freunde","freizeit","tiere","lieblingsgetrank","lieblingsgetraenk","lieblingslied","urlaub","musik","wohnort","bucher","buecher","film","lieblingsfarbe","lieblingskleidung","kleidung","kleid"]);
   topicChoiceScore=sc;
   topicChoiceReview.innerHTML=answerReviewHtml(txt,sc,"Izbor četiri teme");
   const detected=detectTopicsFromSpeech(txt);
