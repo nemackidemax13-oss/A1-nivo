@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V93 brzi usmeni ispit bez live teksta</title>
+<title>De-Max A1 Usmeni • V94 siguran završni rezultat</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -8873,7 +8873,7 @@ function finishDialog(lastStudentText=""){
     <small>Završeno je tačno 16 rečenica: 8 pitanja aplikacije + 8 odgovora učenika.</small>
   </div>`;
 
-  dialogScore.innerHTML=`<div class="btnrow"><button class="btn blue nextBtn" onclick="finishExam(false)">Prikaži završni rezultat →</button></div>`;
+  dialogScore.innerHTML=`<div class="btnrow"><button class="btn blue nextBtn" type="button" onclick="finishExam()">Prikaži završni rezultat →</button></div>`;
   updateExamProgress();
   speakText(dialogClosingText);
 }
@@ -8882,119 +8882,183 @@ function finalQuestionReview(qde,qsr,text,sc,label,exampleAnswer=""){
   const model=exampleAnswer?`<div style="margin-top:9px;border:1px solid #cfe0f4;background:#f6fbff;border-radius:14px;padding:10px 11px"><div style="font-size:10px;font-weight:1000;color:#d71920;letter-spacing:.5px">💡 PRIMER ODGOVORA</div><div style="margin-top:5px;font-weight:850;color:#17324d;line-height:1.45">${esc(exampleAnswer)}</div><div class="answerSr">🇷🇸 ${esc(learningTranslate(exampleAnswer))}</div></div>`:"";
   return `<div class="finalQuestion"><div class="fqde">${esc(qde)}</div><div class="fqsr">🇷🇸 ${esc(qsr)}</div>${answerReviewHtml(text,sc,label)}${model}</div>`;
 }
+function safeResultTranslate(text){
+  try{return learningTranslate(String(text||""))||"—"}catch(e){return "Prevod nije dostupan za ovu rečenicu."}
+}
+function resultStatusLabel(status){
+  if(status==="wrong")return "Greška";
+  if(status==="misunderstood")return "Nerazumljivo / nepotpuno";
+  if(status==="minor")return "Manja greška";
+  return "Tačno";
+}
+function resultErrorCard(r,no){
+  try{
+    const said=String(r?.finalText||r?.attempts?.[r.attempts.length-1]?.text||"").trim();
+    const corrected=String(r?.corrected||said).trim();
+    const explanations=Array.isArray(r?.explanations)?r.explanations.filter(Boolean):[];
+    const status=String(r?.finalStatus||"unknown");
+    const changed=corrected && said && normalizedGerman(corrected)!==normalizedGerman(said);
+    const hasIssue=status!=="good" || changed || explanations.length>0;
+    if(!hasIssue)return "";
+
+    return `<div class="finalQuestion resultErrorItem">
+      <div class="fqde">${no}. ${esc(r?.question||"Odgovor kandidata")}</div>
+      ${r?.qsr?`<div class="fqsr">🇷🇸 ${esc(r.qsr)}</div>`:""}
+      <div class="answerPanel userPanel">
+        <div class="label">🎙️ KANDIDAT JE REKAO</div>
+        <div class="text">${esc(formatGermanTranscript(said||"—"))}</div>
+        ${said?`<div class="translation"><b>🇷🇸 Prevod:</b> ${esc(safeResultTranslate(said))}</div>`:""}
+      </div>
+      ${changed?`<div class="answerPanel fixPanel">
+        <div class="label">✅ ISPRAVLJENO</div>
+        <div class="text">${esc(formatGermanTranscript(corrected))}</div>
+        <div class="translation"><b>🇷🇸 Prevod ispravke:</b> ${esc(safeResultTranslate(corrected))}</div>
+      </div>`:""}
+      <div class="correctionNotes">
+        <div class="correctionNote">${esc(resultStatusLabel(status))}</div>
+        ${explanations.slice(0,4).map(x=>`<div class="correctionNote">• ${esc(x)}</div>`).join("")}
+      </div>
+    </div>`;
+  }catch(e){
+    return `<div class="correctionNote">⚠️ Jedan odgovor nije mogao detaljno da se prikaže, ali je uračunat u rezultat.</div>`;
+  }
+}
 function finishExam(){
   setCandidateSpeechDock(false,recMode);
-  const records=Object.values(examQuestionRecords);
-  const totalRecorded=records.length;
-  const goodRecorded=records.filter(r=>r.finalStatus==="good").length;
-  const lastAttempts=records.map(r=>r.attempts?.[r.attempts.length-1]).filter(Boolean);
-  const avgCat=name=>{
-    const vals=records.map(r=>Number(r.scores?.[name])).filter(Number.isFinite);
-    return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
-  };
-  const catPron=avgCat("pronunciation"),catGram=avgCat("grammar"),catVocab=avgCat("vocabulary"),
-        catUnderstand=avgCat("understanding"),catFlu=avgCat("fluency");
-  const fiveOverall=Math.round((catPron+catGram+catVocab+catUnderstand+catFlu)/5)||0;
+  try{if(rec){window.__demaxStopRequested=true;rec.stop()}}catch(e){}
 
-  const grammarMsgs=[];
-  records.forEach(r=>(r.explanations||[]).forEach(x=>{
-    if(/glagol|gramat|dativ|akuzativ|član|množ|red|veznik|zamen|pridev|padež/i.test(x))grammarMsgs.push(x);
-  }));
-  const grammarFreq={};
-  grammarMsgs.forEach(x=>grammarFreq[x]=(grammarFreq[x]||0)+1);
-  const commonGrammar=Object.entries(grammarFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const report=document.getElementById("finalReport");
+  if(!report)return;
 
-  const pronWords=[...new Set(records.flatMap(r=>r.pronunciationWords||[]))].slice(0,12);
-  const practiceSentences=records.filter(r=>r.finalStatus!=="good" || (r.attempts||[]).length>1)
-    .map(r=>r.corrected).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).slice(0,10);
+  try{
+    if(!stage1Score.overall)evaluateStage1();
+    const dialogAvg=averageScores(dialogScores);
 
-  const smartSummaryHtml=`<div class="smartFinalSummary">
-    <div class="smartFinalHead">🧠 Analiza razgovora / ispita</div>
-    <div class="smartSummaryGrid">
-      <div><b>${totalRecorded}</b><span>Sačuvanih pitanja</span></div>
-      <div><b>${goodRecorded}</b><span>Dobrih završnih odgovora</span></div>
-      <div><b>${fiveOverall}%</b><span>Ukupna procena 5 kategorija</span></div>
-    </div>
-    <div class="smartMetrics final">
-      <span>Izgovor <b>${catPron}%</b></span>
-      <span>Gramatika <b>${catGram}%</b></span>
-      <span>Vokabular <b>${catVocab}%</b></span>
-      <span>Razumevanje <b>${catUnderstand}%</b></span>
-      <span>Tečnost <b>${catFlu}%</b></span>
-    </div>
-    <div class="summaryList"><b>Najčešće gramatičke greške:</b>
-      ${commonGrammar.length?commonGrammar.map(([x,n])=>`<div>• ${esc(x)} <small>(${n}×)</small></div>`).join(""):"<div>• Nema ponavljanih jasnih gramatičkih grešaka.</div>"}
-    </div>
-    <div class="summaryList"><b>Reči za proveru izgovora:</b>
-      ${pronWords.length?pronWords.map(w=>`<button class="miniListen" onclick="speakText('${String(w).replace(/'/g,"\\'")}')">🔊 ${esc(w)}</button>`).join(" "):"<span>Nema izdvojenih reči.</span>"}
-    </div>
-    <div class="summaryList"><b>Rečenice za ponovno vežbanje:</b>
-      ${practiceSentences.length?practiceSentences.map(x=>`<div class="practiceLine">${esc(x)} <button class="miniListen" onclick="playGermanEncoded('${encodedSpeech(x)}')">🔊</button></div>`).join(""):"<div>Nema obaveznih rečenica za ponavljanje.</div>"}
-    </div>
-    <div class="asrLimitNote">Napomena: browser SpeechRecognition ne daje pouzdanu fonemsku ocenu za svaki glas (ä, ö, ü, ch, sch, sp, st, z, r, ei, ie, eu/äu). Zato se izgovor procenjuje konzervativno iz pouzdanosti prepoznavanja i reči sa tim glasovima, a ne kao laboratorijska fonetska analiza.</div>
-  </div>`;
-  try{if(rec)rec.stop()}catch(e){}
-  if(!stage1Score.overall)evaluateStage1();
-  const dialogAvg=averageScores(dialogScores);
-  const s1=stage1Score.overall||0, s2=pictureScore.overall||0, s3=dialogAvg.overall||0;
-  const p1=sectionPoints(s1,10), p2=sectionPoints(s2,7.5), p3=sectionPoints(s3,7.5);
-  const total=Math.round((p1+p2+p3)*10)/10;
-  const passed=total>=12;
-  const grade=simulationGrade(total);
-  const overall=Math.round((s1+s2+s3)/3);
-  const pron=Math.round(((stage1Score.pron||0)+(pictureScore.pron||0)+(dialogAvg.pron||0))/3);
+    const s1=Number(stage1Score?.overall)||0;
+    const s2=Number(pictureScore?.overall)||0;
+    const s3=Number(dialogAvg?.overall)||0;
+    const p1=sectionPoints(s1,10);
+    const p2=sectionPoints(s2,7.5);
+    const p3=sectionPoints(s3,7.5);
+    const total=Math.round((p1+p2+p3)*10)/10;
+    const passed=total>=12;
+    const grade=simulationGrade(total);
+    const overall=Math.round((s1+s2+s3)/3);
 
-  const introTxt=introAnswerRaw||"";
-  const introHtml=finalQuestionReview(introPrompt.textContent||"Predstavljanje",introSr.textContent||"Predstavite se.",introTxt,introScore,"Predstavljanje");
-  const choiceQ="Sie haben hier verschiedene Themen. Sie sollen vier Themen auswählen. Welche Themen wählen Sie?";
-  const choiceSr="Ovde imate različite teme. Treba da izaberete četiri teme. Koje teme birate?";
-  const choiceHtml=finalQuestionReview(choiceQ,choiceSr,topicChoiceAnswer||"",topicChoiceScore||scoreText(topicChoiceAnswer||"",[]),"Izbor četiri teme");
-  let topicHtml="";
-  for(const k of selectedTopics){
-    const qs=getTopicExamQuestions(k);
-    topicHtml+=`<div style="margin-top:12px;font-weight:1000;color:#0b5ed7">${esc(k)} • ${esc(TOPICS[k]?.sr||"")}</div>`;
-    const mainTxt=topicAnswers[k]||"";
-    const mainSc=topicMainScores[k]||scoreText(mainTxt,TOPICS[k]?.keywords||[]);
-    topicHtml+=finalQuestionReview(
-      `Sprechen Sie bitte über das Thema ${k}.`,
-      `Govorite o temi „${TOPICS[k]?.sr||k}“.`,
-      mainTxt,mainSc,`Tema ${k} • slobodno predstavljanje`,""
-    );
-    qs.forEach((q,i)=>{const key=`${k}#${i}`;const txt=topicQAnswers[key]||"";const sc=topicQScores[key]||scoreText(txt,TOPICS[k]?.keywords||[]);topicHtml+=finalQuestionReview(q[0],q[1],txt,sc,`Tema ${k} • pitanje ${i+1}/5`,q[2]||"")});
+    const records=Object.values(examQuestionRecords||{});
+    const goodRecorded=records.filter(r=>r?.finalStatus==="good").length;
+    const totalRecorded=records.length;
+
+    const avgCat=name=>{
+      const vals=records.map(r=>Number(r?.scores?.[name])).filter(Number.isFinite);
+      return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+    };
+    const catPron=avgCat("pronunciation");
+    const catGram=avgCat("grammar");
+    const catVocab=avgCat("vocabulary");
+    const catUnderstand=avgCat("understanding");
+    const catFlu=avgCat("fluency");
+
+    const issueRecords=records.filter(r=>{
+      const said=String(r?.finalText||"").trim();
+      const corrected=String(r?.corrected||said).trim();
+      const changed=corrected&&said&&normalizedGerman(corrected)!==normalizedGerman(said);
+      return r?.finalStatus!=="good" || changed || (Array.isArray(r?.explanations)&&r.explanations.length>0);
+    });
+
+    let errorsHtml=issueRecords.map((r,i)=>resultErrorCard(r,i+1)).filter(Boolean).join("");
+
+    // Opis slike nije deo examQuestionRecords, zato ga proveravamo posebno.
+    const picTxt=String(pictureAnswerRaw||"").trim();
+    const picErrs=pictureScore?.corr?.errs||[];
+    const picFixed=String(pictureScore?.corr?.fixed||picTxt).trim();
+    const picChanged=picTxt&&picFixed&&normalizedGerman(picTxt)!==normalizedGerman(picFixed);
+    if(picTxt && (picErrs.length || picChanged)){
+      errorsHtml+=`<div class="finalQuestion resultErrorItem">
+        <div class="fqde">Opis slike</div>
+        <div class="answerPanel userPanel">
+          <div class="label">🎙️ KANDIDAT JE REKAO</div>
+          <div class="text">${esc(formatGermanTranscript(picTxt))}</div>
+          <div class="translation"><b>🇷🇸 Prevod:</b> ${esc(safeResultTranslate(picTxt))}</div>
+        </div>
+        ${picChanged?`<div class="answerPanel fixPanel">
+          <div class="label">✅ ISPRAVLJENO</div>
+          <div class="text">${esc(formatGermanTranscript(picFixed))}</div>
+          <div class="translation"><b>🇷🇸 Prevod ispravke:</b> ${esc(safeResultTranslate(picFixed))}</div>
+        </div>`:""}
+        ${picErrs.length?`<div class="correctionNotes">${picErrs.map(x=>`<div class="correctionNote">• ${esc(x)}</div>`).join("")}</div>`:""}
+      </div>`;
+    }
+
+    const issuesCount=issueRecords.length + ((picTxt&&(picErrs.length||picChanged))?1:0);
+
+    report.innerHTML=`
+      <div class="examVerdict ${passed?'pass':'fail'}">
+        <div class="accuracyText">DE-MAX A1 • SIMULACIJA ISPITA</div>
+        <div class="pts">${total.toFixed(1)} / 25</div>
+        <div class="status">${passed?'✓ POLOŽIO':'✕ NIJE POLOŽIO'}</div>
+        <div class="grade">Konačna simulaciona ocena: <b>${grade.n} — ${grade.label}</b> • prag za prolaz: <b>12/25</b></div>
+      </div>
+
+      <div class="scorebox" style="margin-top:12px">
+        <div class="scoregrid">
+          <div class="score"><b>${p1.toFixed(1)}/10</b><small>1. Teme • ${s1}%</small></div>
+          <div class="score"><b>${p2.toFixed(1)}/7.5</b><small>2. Opis slike • ${s2}%</small></div>
+          <div class="score"><b>${p3.toFixed(1)}/7.5</b><small>3. Dijalog • ${s3}%</small></div>
+        </div>
+        <div class="scoregrid" style="margin-top:8px">
+          <div class="score"><b>${overall}%</b><small>Ukupna procena</small></div>
+          <div class="score"><b>${goodRecorded}/${totalRecorded||0}</b><small>Tačni završni odgovori</small></div>
+          <div class="score"><b>${issuesCount}</b><small>Odgovori za proveru</small></div>
+        </div>
+      </div>
+
+      <div class="smartFinalSummary">
+        <div class="smartFinalHead">📊 Pregled znanja</div>
+        <div class="smartMetrics final">
+          <span>Izgovor <b>${catPron}%</b></span>
+          <span>Gramatika <b>${catGram}%</b></span>
+          <span>Vokabular <b>${catVocab}%</b></span>
+          <span>Razumevanje <b>${catUnderstand}%</b></span>
+          <span>Tečnost <b>${catFlu}%</b></span>
+        </div>
+      </div>
+
+      <div class="finalSection">
+        <div class="finalSectionHead">
+          <b>Greške i ispravke</b>
+          <span class="pointsBadge">${issuesCount} za proveru</span>
+        </div>
+        ${errorsHtml || '<div class="sectionCompleteOnly">✓ Nisu pronađene jasne greške koje zahtevaju ispravku.</div>'}
+      </div>
+    `;
+
+    setProgressPart(1,100);
+    setProgressPart(2,pictureCompleted?100:0);
+    setProgressPart(3,dialogCompleted?100:0);
+    const opt=document.getElementById("overallProgressText");
+    if(opt)opt.textContent="Simulacija završena";
+
+    go("s4",document.querySelector('[data-sec="s4"]'));
+  }catch(err){
+    // Fallback: rezultat mora da se pojavi čak i ako pojedinačna analiza zakaže.
+    const dialogAvg=averageScores(dialogScores);
+    const s1=Number(stage1Score?.overall)||0;
+    const s2=Number(pictureScore?.overall)||0;
+    const s3=Number(dialogAvg?.overall)||0;
+    const p1=sectionPoints(s1,10),p2=sectionPoints(s2,7.5),p3=sectionPoints(s3,7.5);
+    const total=Math.round((p1+p2+p3)*10)/10;
+    const passed=total>=12;
+    report.innerHTML=`<div class="examVerdict ${passed?'pass':'fail'}">
+      <div class="accuracyText">DE-MAX A1 • SIMULACIJA ISPITA</div>
+      <div class="pts">${total.toFixed(1)} / 25</div>
+      <div class="status">${passed?'✓ POLOŽIO':'✕ NIJE POLOŽIO'}</div>
+      <div class="grade">Teme: <b>${p1.toFixed(1)}/10</b> • Slika: <b>${p2.toFixed(1)}/7.5</b> • Dijalog: <b>${p3.toFixed(1)}/7.5</b></div>
+    </div>
+    <div class="correctionNote" style="margin-top:12px">Rezultat je prikazan. Detaljna analiza jednog odgovora nije mogla da se učita, ali bodovi su sačuvani.</div>`;
+    go("s4",document.querySelector('[data-sec="s4"]'));
   }
-
-  const picTxt=pictureAnswerRaw||"";
-  const picVisual=selectedScene?`<div class="pic" style="margin-bottom:10px">${selectedScene.svg}</div>`:"";
-  const picHtml=`${picVisual}${answerReviewHtml(picTxt,pictureScore,"Opis izabrane slike")}`;
-
-  const dialogHtml=(dialogAnswers.length?dialogAnswers.map((a,i)=>`<div class="finalQuestion"><div class="fqde">${i+1}. ${esc(a.qde)}</div><div class="fqsr">🇷🇸 ${esc(a.qsr)}</div>${dialogFinalAttemptsHtml(a,i)}</div>`).join(""):`<div class="flowHint">Nema sačuvanih odgovora iz dijaloga.</div>`)+(dialogClosingText?`<div class="dialogFinalClosing"><b>👋 Završetak dijaloga:</b> ${esc(dialogClosingText)}</div>`:"");
-
-  finalReport.innerHTML=`
-  <div class="examVerdict ${passed?'pass':'fail'}">
-    <div class="accuracyText">DE-MAX A1 • SIMULACIJA ISPITA</div>
-    <div class="pts">${total.toFixed(1)} / 25</div>
-    <div class="status">${passed?'✓ POLOŽIO':'✕ NIJE POLOŽIO'}</div>
-    <div class="grade">Konačna simulaciona ocena: <b>${grade.n} — ${grade.label}</b> • prag za prolaz: <b>12/25</b></div>
-  </div>
-  <div class="scorebox" style="margin-top:12px"><div class="scoregrid">
-    <div class="score"><b>${p1.toFixed(1)}/10</b><small>1. Teme • ${s1}%</small></div>
-    <div class="score"><b>${p2.toFixed(1)}/7.5</b><small>2. Opis slike • ${s2}%</small></div>
-    <div class="score"><b>${p3.toFixed(1)}/7.5</b><small>3. Dijalog • ${s3}%</small></div>
-  </div><div class="scoregrid" style="margin-top:8px">
-    <div class="score"><b>${overall}%</b><small>Ukupna procena</small></div>
-    <div class="score"><b>${pron}%</b><small>Prosečan izgovor</small></div>
-    <div class="score"><b>12 / 25</b><small>Prag za prolaz</small></div>
-  </div><div class="simNote">Bodovanje 10 + 7.5 + 7.5 = 25 bodova i ocena 1–5 predstavljaju DE-MAX simulacionu skalu za vežbanje. Za prolaz je potrebno najmanje 12/25 bodova.</div></div>
-
-  ${smartSummaryHtml}
-  <div class="finalSection"><div class="finalSectionHead"><b>1. Predstavljanje i teme</b><span class="pointsBadge">${p1.toFixed(1)} / 10 bodova</span></div>${introHtml}${choiceHtml}${topicHtml}</div>
-  <div class="finalSection"><div class="finalSectionHead"><b>2. Opis slike</b><span class="pointsBadge">${p2.toFixed(1)} / 7.5 bodova</span></div>${picHtml}</div>
-  <div class="finalSection"><div class="finalSectionHead"><b>3. Dijalog</b><span class="pointsBadge">${p3.toFixed(1)} / 7.5 bodova</span></div>${dialogHtml}</div>`;
-  setProgressPart(1,100);setProgressPart(2,pictureScore.overall?100:0);setProgressPart(3,100);
-  const opt=document.getElementById("overallProgressText");if(opt)opt.textContent="Simulacija završena";
-  go("s4",document.querySelector('[data-sec="s4"]'));
 }
-
 function resetExam(){location.reload()}
 renderTopics();pictureChoiceMade=false;renderScenes();showPictureChoiceStage();choosePicturePrompt(false);renderRoles();renderDialogScene();chooseRolePrompt();tick();updateExamProgress();
 
