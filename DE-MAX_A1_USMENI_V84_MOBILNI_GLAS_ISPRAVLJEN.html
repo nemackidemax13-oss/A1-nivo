@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V92 tačan govor i mobilni bez klizača</title>
+<title>De-Max A1 Usmeni • V93 brzi usmeni ispit bez live teksta</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -915,6 +915,79 @@ body{min-height:100dvh}
   .btn{padding:9px 10px!important;min-height:42px}
   .flowHint{margin-top:6px!important;padding:7px 8px!important}
   .bottom{width:calc(100% - 8px)!important;bottom:4px!important;border-radius:12px!important;padding:4px!important}
+}
+
+
+/* ===== V93 • BRZI ISPIT: NEMA LIVE TEKSTA/PREVODA, STABILNA POTVRDA ===== */
+.examStarted .liveStudentTranscript,
+.examStarted #chatText,
+.examStarted .liveSrTranslation,
+.examStarted .roleChoiceLive{
+  display:none!important;
+}
+.candidateSpeechDock{
+  display:none;
+}
+@media(max-width:600px){
+  body.speechDockActive{
+    padding-bottom:150px!important;
+  }
+  .candidateSpeechDock.active{
+    position:fixed;
+    left:50%;
+    bottom:82px;
+    transform:translateX(-50%);
+    width:min(430px,calc(100% - 16px));
+    z-index:80;
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:10px;
+    border:2px solid #0b5ed7;
+    background:rgba(255,255,255,.98);
+    border-radius:17px;
+    padding:10px 11px;
+    box-shadow:0 14px 35px rgba(18,54,88,.22);
+    backdrop-filter:blur(10px);
+  }
+  .candidateSpeechDock .dockInfo{min-width:0}
+  .candidateSpeechDock .dockMode{
+    display:block;
+    color:#0b5ed7;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:.55px;
+    text-transform:uppercase;
+  }
+  .candidateSpeechDock .dockStatus{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:4px;
+    color:#17324d;
+    font-size:13px;
+    font-weight:950;
+    line-height:1.25;
+  }
+  .candidateSpeechDock .dockDot{
+    width:9px;height:9px;border-radius:50%;
+    background:#e53935;
+    box-shadow:0 0 0 5px rgba(229,57,53,.12);
+    flex:0 0 auto;
+    animation:dockPulse 1.15s ease-in-out infinite;
+  }
+  .candidateSpeechDock .dockConfirm{
+    border:0;
+    border-radius:12px;
+    background:#0b5ed7;
+    color:#fff;
+    min-height:44px;
+    padding:8px 11px;
+    font-size:11px;
+    font-weight:1000;
+    white-space:nowrap;
+  }
+  @keyframes dockPulse{50%{opacity:.45;transform:scale(.82)}}
 }
 
 /* ===== V35: TEME → OPIS → DIJALOG ===== */
@@ -1921,9 +1994,10 @@ body{padding-bottom:92px}
         <div class="prompt"><div class="de"><span id="introPrompt">Guten Tag. Können Sie sich bitte vorstellen?</span></div><div class="sr" id="introSr">Dobar dan. Možete li da se predstavite?</div></div>
         <div class="btnrow">
           <button class="btn green mic" id="micIntro" onclick="startIntroRecording()">🎤 Snimi predstavljanje</button>
+          <button class="btn blue" id="confirmIntroSpeechBtn" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI ODGOVOR</button>
           <button class="btn ghost" onclick="newIntroPrompt()">🔄 Drugo uvodno pitanje</button>
         </div>
-        <div class="note" style="margin-top:7px"><b>Simulacija ispita:</b> govorite glasom. Vaš nemački tekst i prevod na srpski prikazuju se radi učenja, dok bodovi, greške i konačna procena ostaju skriveni do završnog rezultata.</div>
+        <div class="note" style="margin-top:7px"><b>Simulacija ispita:</b> govorite prirodno. Tokom ispita se ne prikazuju Vaš tekst, prevod, greške ni ispravke. Sve se čuva u pozadini i prikazuje tek u završnom rezultatu.</div>
         <div class="transcript liveStudentTranscript" id="introText">Ovde će se pojaviti govor učenika.</div>
         <div class="review examPrivate" id="introReview"></div><div id="introSavedStatus"></div>
       </div>
@@ -1933,7 +2007,7 @@ body{padding-bottom:92px}
         <div class="qsr">🇷🇸 Ovde imate različite teme. Treba da izaberete četiri teme. Koje teme birate?</div>
         <div class="voiceTopicIntro"><b>🎯 IZABERITE 4 TEME GLASOM</b><span class="voiceTopicCounter" id="topicVoiceCounter">0/4 izabrane</span></div>
         <div class="voiceTopicGrid" id="topicVoiceGrid"></div>
-        <div class="voiceOnlyHint"><b>🎤 Izbor glasom:</b> prihvata: „Ich wähle vier Themen: Sprachen, Hobbys, Familie und Beruf.“, „Ich wähle Sprachen, Hobbys, Familie und Beruf.“ ili „Ich habe vier Themen ausgewählt: Sprachen, Hobbys, Familie und Beruf.“ Kartice se označavaju automatski dok govorite.<br><b>1️⃣ Prvo predstavljanje tema:</b> učenik redom govori o svakoj od 4 izabrane teme u <b>1–4 rečenice</b>.<br><b>2️⃣ Zatim pitanja:</b> aplikacija postavlja tačno <b>5 različitih pitanja po temi</b> (ukupno 20). Pitanja se pamte u ovom pregledaču i pri narednim pokretanjima biraju se nova dok se baza ne iscrpi.</div>
+        <div class="voiceOnlyHint"><b>🎤 Izbor glasom:</b> prihvata: „Ich wähle vier Themen: Sprachen, Hobbys, Familie und Beruf.“, „Ich wähle Sprachen, Hobbys, Familie und Beruf.“ ili „Ich habe vier Themen ausgewählt: Sprachen, Hobbys, Familie und Beruf.“ Kartice tema se mogu označiti u pozadini, bez prikaza Vašeg izgovorenog teksta.<br><b>1️⃣ Prvo predstavljanje tema:</b> učenik redom govori o svakoj od 4 izabrane teme u <b>1–4 rečenice</b>.<br><b>2️⃣ Zatim pitanja:</b> aplikacija postavlja tačno <b>5 različitih pitanja po temi</b> (ukupno 20). Pitanja se pamte u ovom pregledaču i pri narednim pokretanjima biraju se nova dok se baza ne iscrpi.</div>
         <div class="listenStatus" id="topicChoiceStatus">🔊 Slušajte pitanje...</div>
         <div class="transcript liveStudentTranscript" id="topicChoiceText">Ovde će se pojaviti odgovor učenika.</div>
         <div class="btnrow">
@@ -2017,6 +2091,7 @@ body{padding-bottom:92px}
 
         <div class="btnrow roleVoiceButtons">
           <button class="btn red mic" id="micRole" onclick="startRoleChoiceRecording()">🎤 IZABERI OSOBU GLASOM</button>
+          <button class="btn blue" id="confirmRoleSpeechBtn" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI ODGOVOR</button>
         </div>
 
         <div class="roleChoiceHeard" id="roleChoiceHeard"></div>
@@ -2031,10 +2106,10 @@ body{padding-bottom:92px}
       <div class="chat" id="chat"></div>
       <div class="btnrow" id="chatControls" style="display:none">
         <button class="btn green mic" id="micChat" onclick="toggleRec('chat')">🎤 Odgovori glasom</button>
-        <button class="btn ghost" id="finishChatAnswerBtn" onclick="finishCurrentChatSpeech()">✓ Završi odgovor sada</button>
+        <button class="btn blue" id="finishChatAnswerBtn" onclick="finishCurrentChatSpeech()">✓ POTVRDI ODGOVOR</button>
       </div>
       <div class="transcript" id="chatText" style="display:none">Odgovor učenika.</div>
-      <div class="dialogExamHint" id="dialogExamHint" style="display:none">Dijalog ima tačno 16 rečenica: 8 pitanja aplikacije + 8 Vaših odgovora. Dok govorite, tekst se prikazuje ispod pitanja. Bodovi i procenat ostaju skriveni do kraja. Ako odgovor nije jasan ili ne znate odgovor, aplikacija daje tačne modele koje treba da ponovite.</div>
+      <div class="dialogExamHint" id="dialogExamHint" style="display:none">Dijalog ima tačno 16 rečenica: 8 pitanja aplikacije + 8 Vaših odgovora. Tokom govora se ne prikazuju tekst, prevod ni ispravke. Sve se analizira u pozadini i prikazuje tek u završnom rezultatu.</div>
       <div id="dialogScore"></div>
     </div>
   </section>
@@ -2047,6 +2122,14 @@ body{padding-bottom:92px}
       <div class="note">Napomena: procena izgovora koristi pouzdanost prepoznavanja govora koju browser dostavlja. Za fonetsku procenu po glasovima potreban je poseban govorni AI servis.</div>
     </div>
   </section>
+</div>
+
+<div class="candidateSpeechDock" id="candidateSpeechDock" aria-live="polite">
+  <div class="dockInfo">
+    <span class="dockMode" id="candidateSpeechMode">Govor kandidata</span>
+    <span class="dockStatus"><span class="dockDot"></span><span id="candidateSpeechStatus">Pažljivo slušam kandidata…</span></span>
+  </div>
+  <button class="dockConfirm" id="candidateSpeechConfirm" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI</button>
 </div>
 
 <div class="navLockToast" id="navLockToast" aria-live="polite"></div>
@@ -2338,6 +2421,7 @@ let topicPresentationIndex=0, topicPresentationFlow=false;
 let topicChoiceAnswer="", topicChoiceScore=null, introCompleted=false, topicChoiceCompleted=false;
 let introCorrectionState=null;
 let rec=null, recMode=null, finalText="", interimText="", lastConfidence=.82;
+let introAnswerRaw="", pictureAnswerRaw="", chatAnswerRaw="";
 let recognitionUncertain=false, recognitionUncertainReason="", recognitionBestAlternatives=[];
 let pictureRetryState=null;
 let introScore={content:0,grammar:0,pron:0,overall:0,corr:{fixed:"",errs:[]}};
@@ -2775,56 +2859,49 @@ function showTopicPresentationCorrection(k,heard){
 function finishTopicPresentation(k){
   if(!topicPresentationFlow || selectedTopics[topicPresentationIndex]!==k)return;
 
-  const el=document.getElementById("t_"+k);
-  const txt=exactTopicTranscript(topicAnswers[k] || (el?.textContent||""));
+  const txt=exactTopicTranscript(topicAnswers[k]||"");
   const st=document.getElementById("topicPresentStatus");
 
   if(!txt || words(txt).length<2){
     if(st){st.textContent="⚠️ Nisam dovoljno čuo odgovor — pokušajte ponovo";st.classList.remove("live")}
-    setTimeout(()=>{currentTopic=k;if(!rec)toggleRec("topic")},350);
+    setTimeout(()=>{currentTopic=k;if(!rec)toggleRec("topic")},300);
     return;
   }
 
   topicAnswers[k]=txt;
-
-  // Slobodno predstavljanje: ne poredi sa jednim modelom i ne prepravljaj učenikovu rečenicu.
-  const baseAnalysis=analyzeStudentAnswer(
+  const analysis=analyzeStudentAnswer(
     `Sprechen Sie bitte über das Thema ${k}.`,
     txt,
     [],
     {topic:k,freePresentation:true}
   );
-  const a={
-    ...baseAnalysis,
-    status:"good",
-    original:txt,
-    corrected:txt,
-    semantic:{...(baseAnalysis.semantic||{}),ok:true,score:100,msg:""},
-    complete:{...(baseAnalysis.complete||{}),ok:true,score:100,msg:""},
-    explanations:[]
-  };
-  if(a.scores)a.scores.understanding=100;
+  if(analysis.semantic){analysis.semantic.ok=true;analysis.semantic.score=100;analysis.semantic.msg=""}
+  if(analysis.complete){analysis.complete.ok=true;analysis.complete.score=100;analysis.complete.msg=""}
+  const serious=(analysis.grammar?.serious||[]).length;
+  const minor=(analysis.grammar?.minor||[]).length+(analysis.natural?.issues||[]).length;
+  const vocab=(analysis.vocab?.issues||[]).length;
+  analysis.status=(serious||vocab)?"wrong":(minor?"minor":"good");
 
   topicMainScores[k]=scoreText(txt,TOPICS[k]?.keywords||[]);
   const hiddenReview=document.getElementById("tr_"+k);
   if(hiddenReview)hiddenReview.innerHTML="";
 
-  if(st){st.textContent="✓ Odgovor je prihvaćen onako kako ga je učenik rekao.";st.classList.remove("live")}
+  if(st){st.textContent="✓ Odgovor je sačuvan — procena se prikazuje na kraju.";st.classList.remove("live")}
   const confirmBtn=document.getElementById("confirmTopicSpeechBtn");
-  if(confirmBtn)confirmBtn.textContent="✓ ODGOVOR PRIHVAĆEN";
+  if(confirmBtn)confirmBtn.textContent="✓ ODGOVOR SAČUVAN";
 
   recordExamAnswer(
     `main:${k}`,
     `Sprechen Sie bitte über das Thema ${k}.`,
     `Govorite o temi ${TOPICS[k]?.sr||k}.`,
     txt,
-    a,
+    analysis,
     "topic-main-free"
   );
 
   updateExamProgress();
   topicPresentationIndex++;
-  setTimeout(()=>renderCurrentTopicPresentation(),550);
+  setTimeout(()=>renderCurrentTopicPresentation(),180);
 }
 function confirmTopics(){
   if(selectedTopics.length!==4)return;
@@ -2871,7 +2948,7 @@ function renderTopicQuestion(k,i,isAuto=false){
   const q=qs[i];
   topicUnderstandingAttempts[`q:${k}#${i}`]=0;
   topicQuestionState[k]=i; currentTopic=`${k}#${i}`;
-  box.innerHTML=`<div class="questionBox"><div class="autoQuestion ${i===1?'secondQuestion':''}"><div class="qde">${i+1}. ${esc(q[0])}</div><div class="qsr">🇷🇸 ${esc(q[1])}</div><div class="listenStatus" id="listen_${k}_${i}">🔊 Slušajte pitanje...</div><div class="transcript liveStudentTranscript" id="qa_${k}_${i}">Odgovor učenika.</div><div class="examPrivate" id="qscore_${k}_${i}"></div></div></div>`;
+  box.innerHTML=`<div class="questionBox"><div class="autoQuestion ${i===1?'secondQuestion':''}"><div class="qde">${i+1}. ${esc(q[0])}</div><div class="qsr">🇷🇸 ${esc(q[1])}</div><div class="listenStatus" id="listen_${k}_${i}">🔊 Slušajte pitanje...</div><div class="transcript liveStudentTranscript" id="qa_${k}_${i}">Odgovor učenika.</div><div class="btnrow"><button class="btn blue" id="confirmTopicQBtn" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI ODGOVOR</button></div><div class="examPrivate" id="qscore_${k}_${i}"></div></div></div>`;
   if(card && !mobileSpeechClient())card.scrollIntoView({behavior:"smooth",block:"start"});
   speakText(q[0],()=>{
     const st=document.getElementById(`listen_${k}_${i}`);if(st){st.textContent="🎤 Govorite — slušam odgovor";st.classList.add("live")}
@@ -3767,6 +3844,7 @@ function setupRec(){
     window.__demaxStopRequested=true;
     clearSpeechSilence();
     renderRecTarget();
+    setCandidateSpeechDock(false,recMode);
     if(e.error!=="no-speech")alert("Mikrofon/prepoznavanje govora: "+e.error+". Otvorite aplikaciju preko HTTPS-a u Chrome/Edge browseru.");
   };
   r.onend=()=>{
@@ -3796,39 +3874,27 @@ function setupRec(){
     clearSpeechSilence();
     heardSpeech=false;
     rec=null;
+    setCandidateSpeechDock(false,endedMode);
     if(endedMode==="intro"){
       const btn=document.getElementById("micIntro");
       if(btn){btn.classList.remove("live");btn.textContent="🎤 Ponovi predstavljanje";}
-      const txt=punctuateIntroGermanText((finalText+" "+interimText).trim() || cleanTranscript(introText,"Ovde će se pojaviti govor učenika."));
-      if(introText)introText.textContent=txt;
+      const raw=exactTopicTranscript(introAnswerRaw || (finalText+" "+interimText).trim());
+      const txt=punctuateIntroGermanText(raw);
+      introAnswerRaw=txt;
 
-      // Ne prelazi na teme ako predstavljanje nije jasno, relevantno ili gramatički/morfološki tačno.
-      if(!introAnswerIsCorrect(txt)){
-        introCompleted=false;
-        introWrongAttempts++;
+      if(!txt || words(txt).length<2){
         const saved=document.getElementById("introSavedStatus");
-        if(saved){
-          if(introWrongAttempts===1){
-            saved.innerHTML=`<div class="retryAnswerBox"><div class="retryTitle">⚠️ Pokušajte još jednom.</div><div class="smartSaid"><b>🎙️ Učenik je rekao:</b> ${esc(txt)}</div><div class="smartSr"><b>🇷🇸 Prevod izgovorene rečenice:</b> ${esc(learningTranslate(txt))}</div><div class="retryHelp">Tačan odgovor se neće prikazati posle prve greške.</div></div>`;
-          }else saved.innerHTML="";
-        }
-        if(introWrongAttempts===1){
-          const q=introCurrentPrompt()?.[0] || "Können Sie sich bitte vorstellen?";
-          setTimeout(()=>speakText(q,()=>{if(!rec)toggleRec("intro")}),350);
-        }else{
-          setTimeout(()=>repeatIntroWithHelp(txt),350);
-        }
+        if(saved)saved.innerHTML='<div class="examSaved"><b>⚠️ Odgovor nije dovoljno jasno zabeležen.</b><small>Ponovite odgovor. Tekst i greške se ne prikazuju tokom ispita.</small></div>';
+        setTimeout(()=>speakText("Bitte wiederholen Sie.",()=>{if(!rec)toggleRec("intro")}),300);
         return;
       }
 
-      introWrongAttempts=0;
-      introCorrectionState=null;
       introCompleted=true;
-      evaluateIntro();
+      introScore=scoreText(txt,["ich","heiße","name","bin","jahre","komme","wohne","spreche","hobby"]);
       const introA=analyzeStudentAnswer(introCurrentPrompt()?.[0]||"Predstavljanje",txt,[],{context:"intro"});
       recordExamAnswer("intro",introCurrentPrompt()?.[0]||"Predstavljanje",introCurrentPrompt()?.[1]||"Predstavite se.",txt,introA,"intro");
       const introSaved=document.getElementById("introSavedStatus");
-      if(introSaved)introSaved.innerHTML=`<div class="examSaved"><b>✓ Gut! Predstavljanje je tačno i sačuvano.</b><small>Možete nastaviti na izbor tema.</small></div>`;
+      if(introSaved)introSaved.innerHTML='<div class="examSaved"><b>✓ Odgovor je sačuvan.</b><small>Procena, tekst, prevod i eventualne greške vide se tek na kraju.</small></div>';
       updateExamProgress();
       const introStage=document.getElementById("introStage");
       if(introStage)introStage.classList.add("examStageHidden");
@@ -3836,17 +3902,14 @@ function setupRec(){
       if(block){block.hidden=false;block.classList.remove("examStageHidden");}
       renderTopics([],false);
 
-      // Kada učenik prestane da govori i odgovor je tačan:
-      // "Gut." -> odmah sledeće pitanje -> mikrofon se ponovo automatski uključuje.
-      sayGut(()=>{
-        if(block && !mobileSpeechClient())block.scrollIntoView({behavior:"smooth",block:"start"});
+      setTimeout(()=>{
         const q="Sie haben hier verschiedene Themen. Sie sollen vier Themen auswählen. Welche Themen wählen Sie?";
         speakText(q,()=>{
           const st=document.getElementById("topicChoiceStatus");
           if(st){st.textContent="🎤 Govorite — navedite četiri teme";st.classList.add("live")}
           if(!rec)toggleRec("topicChoice");
         });
-      });
+      },180);
     }
     if(endedMode==="topicChoice"){
       const txt=(topicChoiceAnswer||cleanTranscript(document.getElementById("topicChoiceText"),"Ovde će se pojaviti odgovor učenika.")).trim();
@@ -3874,10 +3937,11 @@ function setupRec(){
 
       topicUnderstandingAttempts[`main:${endedTopic}`]=0;
       topicAnswers[endedTopic]=heard;
-      renderFinishedTopicSpeech(document.getElementById("t_"+endedTopic),heard);
       finishTopicPresentation(endedTopic);
     }
     if(endedMode==="pic"){
+      pictureAnswerRaw=exactTopicTranscript(pictureAnswerRaw || (finalText+" "+interimText).trim());
+      if(window.picText)picText.textContent=pictureAnswerRaw;
       const pbtn=document.getElementById("micPic");
       if(pbtn){pbtn.classList.remove("live");pbtn.textContent="✓ CEO OPIS JE SASLUŠAN";}
       const cbtn=document.getElementById("confirmPicSpeechBtn");
@@ -3914,18 +3978,11 @@ function setupRec(){
     }
 
     if(endedMode==="chat" && dialogActive){
-      const heard=cleanTranscript(chatText,"Odgovor učenika.");
+      const heard=exactTopicTranscript(chatAnswerRaw || (finalText+" "+interimText).trim());
+      chatAnswerRaw=heard;
+      if(window.chatText){chatText.textContent=heard;chatText.style.display="none";}
       const mic=document.getElementById("micChat");if(mic){mic.classList.remove("live");mic.textContent="🎤 Odgovori glasom"}
-      const exactDialogOffered=dialogCorrectionAnswers?.length &&
-        clearlyMatchesOfferedAnswer(heard,dialogCorrectionAnswers) &&
-        strictGrammarAssessment(heard).serious.length===0;
-      if(recognitionUncertain && !exactDialogOffered && dialogRepeatCount<2){
-        dialogRepeatCount++;
-        requestDialogRepeat(true);
-        return;
-      }
       if(!heard || words(heard).length<1){
-        chatText.textContent="Odgovor učenika.";
         if(dialogRepeatCount<2)dialogRepeatCount++;
         requestDialogRepeat(false);
         return;
@@ -3961,17 +4018,10 @@ function setupRec(){
       const q=getTopicExamQuestions(k)[idx]||[];
       const heard=exactTopicTranscript(topicQAnswers[endedTopic]||"");
       const st=document.getElementById(`listen_${k}_${idx}`);
-      const answerEl=document.getElementById(`qa_${k}_${idx}`);
-      if(heard)renderFinishedTopicSpeech(answerEl,heard);
-      if(st){st.classList.remove("live");st.textContent=heard?"✓ Odgovor je saslušan i prikazan tačno kako je prepoznat.":"⚠️ Nisam dovoljno jasno čuo odgovor"}
 
-      const attemptKey=`q:${k}#${idx}`;
-      const hasSentence=!!heard && words(heard).length>=2;
-
-      if(!hasSentence){
-        topicUnderstandingAttempts[attemptKey]=(topicUnderstandingAttempts[attemptKey]||0)+1;
-        if(st)st.textContent="⚠️ Nisam čuo ceo odgovor — ponovite";
-        speakText("Ich habe Ihre Antwort nicht gut verstanden. Bitte wiederholen Sie.",()=>{
+      if(!heard || words(heard).length<2){
+        if(st){st.classList.remove("live");st.textContent="⚠️ Nisam dovoljno jasno čuo odgovor — ponovite";}
+        speakText("Bitte wiederholen Sie.",()=>{
           currentTopic=endedTopic;if(!rec)toggleRec("topicQ");
         });
         return;
@@ -3979,47 +4029,16 @@ function setupRec(){
 
       const models=modelAnswersForQuestion(k,idx,heard).slice(0,2);
       const analysis=analyzeStudentAnswer(q[0]||"",heard,models,{topic:k});
-
-      // Ako je transkript smislen i gramatički prihvatljiv, čuvamo ga čak i kada
-      // browser prijavi nižu sigurnost. Ne tražimo nepotrebno ponavljanje.
-      if(recognitionUncertain && answerCanBeStored(analysis)){
-        analysis.status="minor";
-        analysis.semantic.ok=true;
-      }
-
       recordExamAnswer(`topic:${k}:${idx}`,q[0]||"",q[1]||"",heard,analysis,"topic");
 
-      if(answerCanBeStored(analysis)){
-        topicUnderstandingAttempts[attemptKey]=0;
-        topicWrongAttempts[attemptKey]=0;
-        topicQAnswers[endedTopic]=heard;
-        const sc=scoreText(heard,TOPICS[k].keywords||[]);
-        topicQScores[endedTopic]=sc;
-        applyConditionalTopicBranch(k,idx,heard);
+      topicUnderstandingAttempts[`q:${k}#${idx}`]=0;
+      topicQAnswers[endedTopic]=heard;
+      const sc=scoreText(heard,TOPICS[k].keywords||[]);
+      topicQScores[endedTopic]=sc;
+      applyConditionalTopicBranch(k,idx,heard);
 
-        const box=document.getElementById("q_"+k);
-        if(box){
-          const old=document.getElementById("topicAnswerFeedback");
-          if(old)old.remove();
-          box.insertAdjacentHTML("beforeend",`<div id="topicAnswerFeedback">${answerFeedbackPanel(q[0]||"",heard,analysis,[],{k,i:idx})}</div>`);
-        }
-        const praise=acceptedAnswerPraise(analysis);
-        if(st)st.textContent=`✓ Odgovor je zapamćen. ${praise}`;
-        speakText(praise,()=>scheduleTopicNext(k,idx,180));
-        return;
-      }
-
-      // V77: prvi stvarno pogrešan odgovor -> učenik pokušava još jednom bez prikazanog rešenja.
-      // Tek posle drugog pogrešnog pokušaja prikazujemo tačne modele za ponavljanje.
-      topicWrongAttempts[attemptKey]=(topicWrongAttempts[attemptKey]||0)+1;
-      if(topicWrongAttempts[attemptKey]===1){
-        if(st)st.textContent="⚠️ Odgovor još nije tačan — pokušajte još jednom";
-        showFirstTopicWrongRetry(k,idx,heard,analysis);
-        return;
-      }
-
-      if(st)st.textContent="⚠️ Drugi pokušaj je netačan — ponovite jedan od tačnih odgovora";
-      showTopicRetry(k,idx,heard,analysis);
+      if(st){st.classList.remove("live");st.textContent="✓ Odgovor je sačuvan — procena se prikazuje na kraju."}
+      scheduleTopicNext(k,idx,120);
       return;
     }
 
@@ -4069,6 +4088,39 @@ function setupRec(){
   };
   return r;
 }
+function speechModeLabel(mode){
+  if(mode==="intro")return "Predstavljanje";
+  if(mode==="topicChoice")return "Izbor četiri teme";
+  if(mode==="topic")return currentTopic&&!currentTopic.includes("#") ? "Tema: "+currentTopic : "Predstavljanje teme";
+  if(mode==="topicQ")return currentTopic&&currentTopic.includes("#") ? "Odgovor na pitanje teme" : "Pitanje teme";
+  if(mode==="pic")return "Opis slike";
+  if(mode==="roleChoice")return "Izbor osobe za dijalog";
+  if(mode==="chat")return "Dijalog";
+  if(mode==="picRetry"||mode==="topicRetry"||mode==="topicMainRetry")return "Ponovljeni odgovor";
+  return "Govor kandidata";
+}
+function setCandidateSpeechDock(active,mode=recMode){
+  const dock=document.getElementById("candidateSpeechDock");
+  if(!dock)return;
+  dock.classList.toggle("active",!!active);
+  document.body.classList.toggle("speechDockActive",!!active);
+  const label=document.getElementById("candidateSpeechMode");
+  const status=document.getElementById("candidateSpeechStatus");
+  const btn=document.getElementById("candidateSpeechConfirm");
+  if(label)label.textContent=speechModeLabel(mode);
+  if(status)status.textContent=active?"Pažljivo slušam kandidata…":"Odgovor je zabeležen.";
+  if(btn){btn.disabled=!active;btn.textContent=active?"✓ POTVRDI":"✓ SAČUVANO";}
+}
+function confirmActiveSpeech(){
+  if(!rec)return;
+  clearSpeechSilence();
+  window.__demaxStopRequested=true;
+  const status=document.getElementById("candidateSpeechStatus");
+  const btn=document.getElementById("candidateSpeechConfirm");
+  if(status)status.textContent="Potvrđujem odgovor…";
+  if(btn){btn.disabled=true;btn.textContent="✓ POTVRĐUJEM";}
+  try{rec.stop()}catch(e){}
+}
 function toggleRec(mode){
   if(!started)startExam();
   if(rec){
@@ -4081,12 +4133,13 @@ function toggleRec(mode){
   recMode=mode;finalText="";interimText="";heardSpeech=false;recognitionUncertain=false;recognitionUncertainReason="";recognitionBestAlternatives=[];clearSpeechSilence();
   if(mode==="topicChoice"){topicChoiceAnswer="";renderTopics([],false);const t=document.getElementById("topicChoiceText");if(t)t.textContent="Slušam odgovor učenika...";const b=document.getElementById("confirmTopicChoiceBtn");if(b)b.textContent="✓ POTVRDI ŠTA SAM REKAO"}
   if(mode==="chat" && window.chatText){
-    chatText.style.display="block";
-    chatText.classList.add("dialogLiveTranscript");
-    chatText.textContent="🎙️ Slušam… govorite.";
+    chatAnswerRaw="";
+    chatText.style.display="none";
+    chatText.textContent="Odgovor učenika.";
   }
   rec=setupRec();
-  if(!rec){alert("Ovaj browser nema podršku za prepoznavanje govora. Koristite Chrome/Edge i HTTPS.");return}
+  if(!rec){setCandidateSpeechDock(false,mode);alert("Ovaj browser nema podršku za prepoznavanje govora. Koristite Chrome/Edge i HTTPS.");return}
+  setCandidateSpeechDock(true,mode);
   let targetBtn = mode==="pic"?micPic:mode==="chat"?micChat:mode==="intro"?micIntro:mode==="roleChoice"?document.getElementById("micRole"):null;
   if(mode==="picRetry"){
     const st=document.getElementById("pictureRetryListening");
@@ -4099,8 +4152,7 @@ function toggleRec(mode){
   if(mode==="topicQ" && currentTopic && currentTopic.includes("#")){
     const [tk,ti]=currentTopic.split("#");
     targetBtn=document.getElementById(`qmic_${tk}_${ti}`);
-    const el=document.getElementById(`qa_${tk}_${ti}`);
-    if(el){el.classList.add("topicListeningOnly");el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi."}
+    // V93: nema prikaza učenikovog teksta tokom govora.
   }
   if(mode==="topic"){
     const b=document.getElementById("confirmTopicSpeechBtn");if(b)b.textContent="✓ POTVRDI ODGOVOR";
@@ -4139,66 +4191,23 @@ function renderFinishedTopicSpeech(el,text){
   </div>`;
 }
 function renderRecTarget(){
-  const finalShown=recMode==="topic" ? exactTopicTranscript(finalText) : formatSpeechForMode(finalText,recMode);
-  const interimShown=recMode==="topic"
-    ? exactTopicTranscript(interimText)
-    : (recMode==="intro" ? formatGermanTranscript(interimText) : formatGermanTranscript(interimText));
-  const content=esc(finalShown)+` <span class="interim">${esc(interimShown)}</span>`;
-  if(recMode==="intro") introText.innerHTML=content;
-  if(recMode==="topicChoice"){topicChoiceText.innerHTML=content;topicChoiceAnswer=formatGermanTranscript((finalText+" "+interimText).trim());updateVoiceTopicHighlights(topicChoiceAnswer)}
-  if(recMode==="pic") picText.innerHTML=content;
-  if(recMode==="picRetry" && pictureRetryState){
-    pictureRetryState.retryText=formatGermanTranscript((finalText+" "+interimText).trim());
-    const st=document.getElementById("pictureRetryListening");
-    if(st)st.textContent="🔴 Pažljivo slušam ponavljanje...";
+  // V93: tokom govora ništa ne crtamo niti prevodimo.
+  // Samo čuvamo najnoviji prepoznati tekst u memoriji.
+  const raw=exactTopicTranscript((finalText+" "+interimText).trim());
+
+  if(recMode==="intro")introAnswerRaw=raw;
+  if(recMode==="topicChoice"){
+    topicChoiceAnswer=raw;
+    updateVoiceTopicHighlights(raw);
   }
-  if(recMode==="roleChoice"){
-    roleChoiceAnswer=formatGermanTranscript((finalText+" "+interimText).trim());
-    const out=document.getElementById("roleChoiceHeard");
-    if(out)out.innerHTML=`<div class="roleChoiceLive">🎙️ ${content}</div>`;
-  }
-  if(recMode==="chat"){
-    chatText.style.display="block";
-    chatText.classList.add("dialogLiveTranscript");
-    chatText.innerHTML=content || "🎙️ Slušam…";
-  }
-  if(recMode==="topic" && currentTopic){
-    topicAnswers[currentTopic]=exactTopicTranscript((finalText+" "+interimText).trim());
-    const el=document.getElementById("t_"+currentTopic);
-    if(el && !el.classList.contains("topicListeningOnly")){
-      el.classList.add("topicListeningOnly");
-      el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi.";
-    }
-  }
-  if(recMode==="topicQ" && currentTopic){
-    topicQAnswers[currentTopic]=exactTopicTranscript((finalText+" "+interimText).trim());
-    const [k,i]=currentTopic.split("#");
-    const el=document.getElementById(`qa_${k}_${i}`);
-    if(el && !el.classList.contains("topicListeningOnly")){
-      el.classList.add("topicListeningOnly");
-      el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi.";
-    }
-  }
-  if(recMode==="topicRetry" && topicRetryState){
-    topicRetryState.retryText=formatGermanTranscript((finalText+" "+interimText).trim());
-    const st=document.getElementById("topicRetryListening");
-    if(st)st.textContent="🔴 Slušam ponavljanje...";
-  }
-  if(recMode==="topicMainRetry" && topicMainRetryState){
-    topicMainRetryState.retryText=formatGermanTranscript((finalText+" "+interimText).trim());
-    const el=document.getElementById(`t_${topicMainRetryState.k}`);
-    if(el)el.innerHTML=content;
-    const st=document.getElementById("topicMainRetryListening");
-    if(st)st.textContent="🔴 Slušam ponavljanje jednog tačnog modela...";
-  }
-  const live=formatSpeechForMode((finalText+" "+interimText).trim(),recMode);
-  if(recMode==="intro")renderLiveTranslationFor(introText,live);
-  if(recMode==="topicChoice")renderLiveTranslationFor(topicChoiceText,live);
-  if(recMode==="pic")renderLiveTranslationFor(picText,live);
-  if(recMode==="chat")renderLiveTranslationFor(chatText,live);
-  // V91: bez live prevoda tokom slobodnog predstavljanja teme — brži prikaz i bez menjanja sadržaja.
-  if(recMode==="topicMainRetry" && topicMainRetryState)renderLiveTranslationFor(document.getElementById("t_"+topicMainRetryState.k),live);
-  // V92: odgovori na pitanja teme se prevode tek nakon završetka govora.
+  if(recMode==="pic")pictureAnswerRaw=raw;
+  if(recMode==="picRetry" && pictureRetryState)pictureRetryState.retryText=raw;
+  if(recMode==="roleChoice")roleChoiceAnswer=raw;
+  if(recMode==="chat")chatAnswerRaw=raw;
+  if(recMode==="topic" && currentTopic)topicAnswers[currentTopic]=raw;
+  if(recMode==="topicQ" && currentTopic)topicQAnswers[currentTopic]=raw;
+  if(recMode==="topicRetry" && topicRetryState)topicRetryState.retryText=raw;
+  if(recMode==="topicMainRetry" && topicMainRetryState)topicMainRetryState.retryText=raw;
 }
 function words(t){return (t.toLowerCase().match(/[a-zäöüß]+/g)||[])}
 function normalizeSpeechMatchText(t){
@@ -6080,6 +6089,7 @@ function selectScene(id){
   pictureChoiceMade=true;
   selectedRole=null;
   pictureScore={content:0,grammar:0,pron:0,overall:0,corr:{fixed:"",errs:[]}};
+  pictureAnswerRaw="";
   if(window.picSavedStatus)picSavedStatus.innerHTML="";
   if(window.picText)picText.textContent="Ovde će se pojaviti opis slike.";
   const pbtn=document.getElementById("micPic");
@@ -6227,10 +6237,11 @@ function pictureAnswerLooksAcceptable(txt,sc){
 function completePictureAnswer(txt,sc){
   pictureScore=sc;
   pictureCompleted=true;
-  picText.textContent=txt;
+  pictureAnswerRaw=exactTopicTranscript(txt);
+  picText.textContent=pictureAnswerRaw;
   picScore.innerHTML=answerReviewHtml(txt,pictureScore,"2. deo • Opis slike");
   const st=document.getElementById("picSavedStatus");
-  if(st)st.innerHTML=`<div class="pictureTransition pictureWaiting"><span class="waitSpinner">✓</span><b>Opis je tačan i sačuvan.</b><small>Nema potrebe za ponavljanjem. Prelazimo na dijalog sa istom slikom.</small></div>`;
+  if(st)st.innerHTML=`<div class="pictureTransition pictureWaiting"><span class="waitSpinner">✓</span><b>Opis je sačuvan.</b><small>Procena, tekst, prevod i eventualne greške prikazaće se na kraju. Prelazimo na dijalog.</small></div>`;
   updateExamProgress();
   renderRoles();
   renderDialogScene();
@@ -6264,12 +6275,12 @@ function showPictureRetry(heard){
 function evaluatePicture(showNext=true){
   if(!pictureChoiceMade || !selectedScene){alert("Prvo izaberite temu/sliku.");return}
 
-  // Analiza tek NAKON završetka celog govora.
-  const txt=cleanTranscript(picText,"Ovde će se pojaviti opis slike.");
+  const txt=exactTopicTranscript(pictureAnswerRaw || (window.picText?.textContent||""));
+  pictureAnswerRaw=txt;
 
   if(!txt || words(txt).length<2){
     const st=document.getElementById("picSavedStatus");
-    if(st)st.innerHTML=`<div class="pictureTransition pictureNeedSpeech">⚠️ Nisam čuo dovoljno opisa. Pokušajte ponovo i opišite sliku do kraja.</div>`;
+    if(st)st.innerHTML='<div class="pictureTransition pictureNeedSpeech">⚠️ Nisam čuo dovoljno opisa. Pokušajte ponovo.</div>';
     const pbtn=document.getElementById("micPic");
     if(pbtn)pbtn.textContent="🎤 PONOVI OPIS SLIKE";
     return;
@@ -6277,19 +6288,6 @@ function evaluatePicture(showNext=true){
 
   const keys=pictureScoringKeywords(selectedScene);
   const sc=scoreText(txt,keys);
-
-  // Niska pouzdanost mikrofona sama po sebi NE prekida i NE obara opis.
-  // Ocenjujemo ono što je zabeleženo tek nakon celog odgovora.
-  const gram=strictGrammarAssessment(txt);
-  const acceptable=pictureAnswerLooksAcceptable(txt,sc);
-  if(!acceptable){
-    pictureScore=sc;
-    picScore.innerHTML=answerReviewHtml(txt,pictureScore,"2. deo • Opis slike — analiza posle završetka");
-    showPictureRetry(txt);
-    return;
-  }
-
-  // Ako je opis gramatički prihvatljiv, ne prekidaj učenika dodatnom korekcijom.
   completePictureAnswer(txt,sc);
 }
 const ROLE_PROMPTS=[
@@ -6435,7 +6433,7 @@ function completeRoleChoice(txt){
   roleChoiceCompleted=true;
   renderRoles();
 
-  if(out)out.innerHTML=`<div class="roleChoiceSaved"><b>✓ Odgovor je zabeležen:</b> ${esc(roleChoiceAnswer)}<small>Izabrana uloga: <strong>${esc(selectedRole)}</strong></small></div>`;
+  if(out)out.innerHTML=`<div class="roleChoiceSaved"><b>✓ Izbor je zabeležen.</b><small>Izabrana uloga: <strong>${esc(selectedRole)}</strong></small></div>`;
   if(mic){mic.disabled=true;mic.textContent="✓ OSOBA JE IZABRANA";}
   if(wait)wait.hidden=false;
 
@@ -7510,9 +7508,9 @@ function askDialogQ(){
 
   const bridge=dialogPendingBridge||"";
   chat.innerHTML=`<div class="dialogCurrent">${bridge?`<div class="dialogBridge">${esc(bridge)}<span class="dialogBridgeSr">🇷🇸 ${esc(learningTranslate(bridge))}</span></div>`:""}<div class="qno">${qLabel}</div><div class="qde">${esc(q[0])}</div><div class="qsr">🇷🇸 ${esc(q[1])}</div></div>`;
-  chatText.textContent="🎙️ Vaš odgovor će se ovde ispisivati dok govorite.";
-  chatText.style.display="block";
-  chatText.classList.add("dialogLiveTranscript");
+  chatAnswerRaw="";
+  chatText.textContent="Odgovor učenika.";
+  chatText.style.display="none";
 
   const mic=document.getElementById("micChat");
   if(mic){mic.textContent="🎤 Pripremite se…";mic.disabled=true}
@@ -8042,36 +8040,19 @@ function dialogAnswerNeedsRepeat(q,text,sc){
 function requestDialogRepeat(countAsAttempt=true,suggestedAnswers=null,negative=false,originalText="",analysis=null){
   if(!dialogActive)return;
   const q=dialogCurrentQuestion||currentDialogQuestion();
-  dialogCorrectionAnswers=Array.isArray(suggestedAnswers)?suggestedAnswers.slice(0,2):[];
-  chatText.textContent="🎙️ Ponovljeni odgovor će se ovde ispisivati.";
-  chatText.style.display="block";
-  chatText.classList.add("dialogLiveTranscript");
+  chatAnswerRaw="";
+  if(window.chatText){chatText.textContent="Odgovor učenika.";chatText.style.display="none";}
 
   const turn=Math.min(DIALOG_MAX_TURNS,dialogTurnCount+1);
   const qLabel=dialogFollowUpActive
     ? `DIJALOG • REČENICE ${turn*2-1}–${turn*2} OD ${DIALOG_TOTAL_SENTENCES} • NASTAVAK`
     : `DIJALOG • REČENICE ${turn*2-1}–${turn*2} OD ${DIALOG_TOTAL_SENTENCES}`;
 
-  const a=analysis || (originalText
-    ? analyzeStudentAnswer(q[0],originalText,dialogCorrectionAnswers,{context:"dialog"})
-    : null);
-
-  const hasModels=dialogCorrectionAnswers.length>0;
-  const feedback=a
-    ? (hasModels
-      ? answerFeedbackPanel(q[0],originalText,a,dialogCorrectionAnswers,{})
-      : `<div class="smartFeedback wrong"><div class="smartFeedbackTitle">⚠️ Odgovor još nije tačan — pokušajte još jednom.</div><div class="smartSaid"><b>🎙️ Učenik je rekao:</b> ${esc(a.original||originalText||"")}</div><div class="smartSr"><b>🇷🇸 Prevod izgovorene rečenice:</b> ${esc(learningTranslate(a.original||originalText||""))}</div></div>`)
-    :"";
-  const bakeryHelp=(hasModels && Number(selectedScene?.id)===2)?bakeryAnswerBox(q[0],""):"";
-
   chat.innerHTML=`<div class="dialogCurrent">
     <div class="qno">${qLabel}</div>
-    <div class="qde">${esc(q[0])}</div>
-    <div class="qsr">🇷🇸 ${esc(q[1])}</div>
-    ${feedback}
-    <div class="dialogRepeatNotice"><b>Bitte wiederholen Sie.</b><span>${hasModels?"Drugi pokušaj nije tačan. Ponovite jedan od ponuđenih tačnih odgovora.":"Pokušajte još jednom svojim rečima. Tačan model će se prikazati tek ako i drugi pokušaj bude pogrešan."}</span></div>
-    ${hasModels?dialogCorrectionHtml(dialogCorrectionAnswers,negative):""}
-    ${bakeryHelp}
+    <div class="qde">${esc(q?.[0]||"")}</div>
+    <div class="qsr">🇷🇸 ${esc(q?.[1]||"")}</div>
+    <div class="dialogRepeatNotice"><b>Bitte wiederholen Sie.</b><span>Nisam dovoljno jasno čuo odgovor. Ponovite ga; tekst i ispravke ostaju skriveni do završnog rezultata.</span></div>
   </div>`;
 
   const mic=document.getElementById("micChat");
@@ -8079,15 +8060,9 @@ function requestDialogRepeat(countAsAttempt=true,suggestedAnswers=null,negative=
   const fb=document.getElementById("finishChatAnswerBtn");
   if(fb)fb.disabled=true;
 
-  const spoken=a && !a.semantic.ok
-    ?"Bitte beantworten Sie die Frage noch einmal."
-    : a?.status==="minor"
-      ?"Gut. Ihre Antwort ist verständlich, aber Sie können sie noch verbessern."
-      :"Bitte wiederholen Sie.";
-
-  speakText(spoken,()=>{
+  speakText("Bitte wiederholen Sie.",()=>{
     const m=document.getElementById("micChat");
-    if(m){m.disabled=false;m.textContent="🔴 Ponovite odgovor — slušam ceo odgovor"}
+    if(m){m.disabled=false;m.textContent="🔴 Ponovite odgovor"}
     const f=document.getElementById("finishChatAnswerBtn");
     if(f)f.disabled=false;
     if(dialogActive && !rec)toggleRec("chat");
@@ -8675,12 +8650,13 @@ function repeatIntroWithHelp(heard){
 }
 
 function evaluateIntro(){
-  const txt=punctuateIntroGermanText(cleanTranscript(introText,"Ovde će se pojaviti govor učenika."));
+  const txt=punctuateIntroGermanText(introAnswerRaw||"");
   if(!txt)return;
-  if(introText)introText.textContent=txt;
+  introAnswerRaw=txt;
   introScore=scoreText(txt,["ich","heiße","name","bin","jahre","komme","wohne","spreche","hobby"]);
-  introReview.innerHTML=answerReviewHtml(txt,introScore,"Predstavljanje");
+  if(introReview)introReview.innerHTML=answerReviewHtml(txt,introScore,"Predstavljanje");
 }
+
 function normalizeTopicChoiceSpeech(text){
   let t=String(text||"").toLocaleLowerCase("de-DE")
     .replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
@@ -8781,10 +8757,7 @@ function finishCurrentChatSpeech(){
 }
 function submitChatAnswer(){
   if(!dialogActive)return;
-  const txt=cleanTranscript(chatText,"Odgovor učenika.")
-    .replace(/^🎙️\s*(Slušam… govorite\.|Vaš odgovor će se ovde ispisivati dok govorite\.|Ponovljeni odgovor će se ovde ispisivati\.)$/i,"")
-    .trim();
-
+  const txt=exactTopicTranscript(chatAnswerRaw || (window.chatText?.textContent||""));
   const q=dialogCurrentQuestion||currentDialogQuestion();
   if(!q)return;
 
@@ -8793,33 +8766,10 @@ function submitChatAnswer(){
     return;
   }
 
-  const exactDialogOffered=dialogCorrectionAnswers?.length &&
-    clearlyMatchesOfferedAnswer(txt,dialogCorrectionAnswers) &&
-    strictGrammarAssessment(txt).serious.length===0;
-
   const explicitRoleModels=Array.isArray(q[2])?q[2].filter(Boolean):[];
   const suggestions=dialogSuggestedAnswers(q[0],txt,explicitRoleModels).slice(0,2);
   const analysis=analyzeStudentAnswer(q[0],txt,suggestions,{context:"dialog"});
   const strictDialogOk=strictDialogAnswerFits(q[0],txt,suggestions,explicitRoleModels.length>0);
-
-  if(exactDialogOffered && strictDialogOk){
-    analysis.semantic.ok=true;
-    analysis.complete.ok=true;
-    if(analysis.status==="wrong" || analysis.status==="misunderstood")analysis.status="good";
-  }
-
-  // V79: kod konkretne uloge/scenarija, semantiku određuju modeli baš te uloge.
-  if(explicitRoleModels.length && strictDialogOk && strictGrammarAssessment(txt).serious.length===0){
-    analysis.semantic.ok=true;
-    analysis.semantic.score=100;
-    analysis.semantic.msg="";
-    analysis.complete.ok=true;
-    analysis.complete.score=100;
-    analysis.complete.msg="";
-    if(analysis.status==="wrong" || analysis.status==="misunderstood")analysis.status="good";
-  }
-
-  // V73: čak i gramatički lepa rečenica se odbija ako ne odgovara pitanju.
   if(!strictDialogOk){
     analysis.semantic.ok=false;
     analysis.semantic.score=18;
@@ -8827,37 +8777,21 @@ function submitChatAnswer(){
     analysis.status="wrong";
   }
 
-  // Ako je mikrofon manje siguran, ali je sadržaj smislen i nema ozbiljne greške,
-  // odgovor se ipak čuva. Sam STT confidence ne tera učenika na ponavljanje.
-  if(recognitionUncertain && answerCanBeStored(analysis)){
-    analysis.status="minor";
-    analysis.semantic.ok=true;
-  }
   const sc=scoreText(txt,expectedSpeechHints());
   dialogAttemptHistory.push({text:txt,score:sc,analysis});
   recordExamAnswer(`dialog:${dialogTurnCount}`,q[0],q[1],txt,analysis,"dialog");
 
-  chatText.style.display="block";
-  chatText.classList.add("dialogLiveTranscript");
-
-  if(answerNeedsCorrection(analysis)){
-    dialogRepeatCount++;
-    const showModels=dialogRepeatCount>=2;
-    requestDialogRepeat(true,showModels?suggestions:null,/^\s*nein\b/i.test(txt),txt,analysis);
-    return;
-  }
-
   dialogCorrectionAnswers=[];
   dialogScores.push(sc);
   dialogAnswers.push({
-    qde:q[0],qsr:q[1],text:analysis.original,score:sc,analysis,
+    qde:q[0],qsr:q[1],text:txt,score:sc,analysis,
     attempts:dialogAttemptHistory.slice(),
     repeated:dialogAttemptHistory.length>1,
     followup:dialogFollowUpActive
   });
 
-  rememberDialogContext(q[0],analysis.original);
-  dialogLastStudentText=analysis.original;
+  rememberDialogContext(q[0],txt);
+  dialogLastStudentText=txt;
   dialogTurnCount++;
   updateExamProgress();
 
@@ -8866,14 +8800,13 @@ function submitChatAnswer(){
   const finishBtn=document.getElementById("finishChatAnswerBtn");
   if(finishBtn)finishBtn.disabled=true;
 
-  const continueAfterPraise=()=>{
+  const continueNext=()=>{
     if(dialogTurnCount>=DIALOG_MAX_TURNS){
-      setTimeout(()=>finishDialog(analysis.original),160);
+      finishDialog(txt);
       return;
     }
 
-    dialogPendingBridge=explicitRoleModels.length?"":dialogBridgeForAnswer(analysis.original);
-
+    dialogPendingBridge="";
     if(dialogFollowUpActive){
       dialogFollowUpActive=false;
       dialogFollowUpQuestion=null;
@@ -8881,11 +8814,13 @@ function submitChatAnswer(){
       dialogRepeatCount=0;
       dialogAttemptHistory=[];
       advancePastAnsweredDialogQuestions();
-      setTimeout(()=>askDialogQ(),160);
+      setTimeout(()=>askDialogQ(),120);
       return;
     }
 
-    const follow=explicitRoleModels.length?null:makeSmartDialogFollowUp(selectedScene.id,q[0],analysis.original);
+    const follow=(answerCanBeStored(analysis) && !explicitRoleModels.length)
+      ? makeSmartDialogFollowUp(selectedScene.id,q[0],txt)
+      : null;
     dialogIndex++;
     advancePastAnsweredDialogQuestions();
     dialogRepeatCount=0;
@@ -8896,13 +8831,10 @@ function submitChatAnswer(){
       dialogFollowUpQuestion=follow;
       dialogFollowUpActive=true;
     }
-    setTimeout(()=>askDialogQ(),160);
+    setTimeout(()=>askDialogQ(),120);
   };
 
-  // Feedback se ne daje tokom govora, tek sada kada je ceo odgovor završen.
-  chat.innerHTML+=answerFeedbackPanel(q[0],analysis.original,analysis,[],{});
-  const praise=acceptedAnswerPraise(analysis);
-  speakText(praise,continueAfterPraise);
+  continueNext();
 }
 
 function dialogFinalAttemptsHtml(a,i){
@@ -8951,6 +8883,7 @@ function finalQuestionReview(qde,qsr,text,sc,label,exampleAnswer=""){
   return `<div class="finalQuestion"><div class="fqde">${esc(qde)}</div><div class="fqsr">🇷🇸 ${esc(qsr)}</div>${answerReviewHtml(text,sc,label)}${model}</div>`;
 }
 function finishExam(){
+  setCandidateSpeechDock(false,recMode);
   const records=Object.values(examQuestionRecords);
   const totalRecorded=records.length;
   const goodRecorded=records.filter(r=>r.finalStatus==="good").length;
@@ -9011,7 +8944,7 @@ function finishExam(){
   const overall=Math.round((s1+s2+s3)/3);
   const pron=Math.round(((stage1Score.pron||0)+(pictureScore.pron||0)+(dialogAvg.pron||0))/3);
 
-  const introTxt=cleanTranscript(introText,"Ovde će se pojaviti govor učenika.");
+  const introTxt=introAnswerRaw||"";
   const introHtml=finalQuestionReview(introPrompt.textContent||"Predstavljanje",introSr.textContent||"Predstavite se.",introTxt,introScore,"Predstavljanje");
   const choiceQ="Sie haben hier verschiedene Themen. Sie sollen vier Themen auswählen. Welche Themen wählen Sie?";
   const choiceSr="Ovde imate različite teme. Treba da izaberete četiri teme. Koje teme birate?";
@@ -9030,7 +8963,7 @@ function finishExam(){
     qs.forEach((q,i)=>{const key=`${k}#${i}`;const txt=topicQAnswers[key]||"";const sc=topicQScores[key]||scoreText(txt,TOPICS[k]?.keywords||[]);topicHtml+=finalQuestionReview(q[0],q[1],txt,sc,`Tema ${k} • pitanje ${i+1}/5`,q[2]||"")});
   }
 
-  const picTxt=cleanTranscript(picText,"Ovde će se pojaviti opis slike.");
+  const picTxt=pictureAnswerRaw||"";
   const picVisual=selectedScene?`<div class="pic" style="margin-bottom:10px">${selectedScene.svg}</div>`:"";
   const picHtml=`${picVisual}${answerReviewHtml(picTxt,pictureScore,"Opis izabrane slike")}`;
 
