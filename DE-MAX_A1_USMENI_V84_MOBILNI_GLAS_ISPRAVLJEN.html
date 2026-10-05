@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V94 siguran završni rezultat</title>
+<title>De-Max A1 Usmeni • V95 glasovni ili ručni izbor slike</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -2028,8 +2028,13 @@ body{padding-bottom:92px}
         <div class="pictureChoiceIntro">
           <div class="pictureChoiceBadge">1. IZABERITE SLIKU</div>
           <div class="pictureChoiceDe">Wählen Sie bitte ein Bild.</div>
-          <div class="pictureChoiceSr">🇷🇸 <b>Izaberite jednu temu/sliku. Nakon izbora prikazaće se samo ta slika i zadatak za opis.</b></div>
+          <div class="pictureChoiceSr">🇷🇸 <b>Izaberite sliku glasom ili ručno. Možete reći: „Ich wähle die Bäckerei.“, „Ich wähle das Hotel.“ ili „Ich wähle Bild zwei.“</b></div>
         </div>
+        <div class="btnrow pictureChoiceVoiceActions">
+          <button class="btn green mic" id="micPictureChoice" type="button" onclick="startPictureChoiceRecording()">🎤 IZABERI SLIKU GLASOM</button>
+          <button class="btn blue" id="confirmPictureChoiceBtn" type="button" onclick="confirmActiveSpeech()">✓ POTVRDI IZBOR</button>
+        </div>
+        <div class="listenStatus" id="pictureChoiceVoiceStatus">Možete izgovoriti naziv prikazane slike ili je ručno pritisnuti.</div>
         <div class="pictureChoiceTitle">🖼️ TEME ZA OPIS SLIKE <span>40 situacija</span></div>
         <div class="sceneGrid pictureTopicGrid" id="sceneGrid"></div>
       </div>
@@ -2422,6 +2427,7 @@ let topicChoiceAnswer="", topicChoiceScore=null, introCompleted=false, topicChoi
 let introCorrectionState=null;
 let rec=null, recMode=null, finalText="", interimText="", lastConfidence=.82;
 let introAnswerRaw="", pictureAnswerRaw="", chatAnswerRaw="";
+let pictureChoiceAnswer="";
 let recognitionUncertain=false, recognitionUncertainReason="", recognitionBestAlternatives=[];
 let pictureRetryState=null;
 let introScore={content:0,grammar:0,pron:0,overall:0,corr:{fixed:"",errs:[]}};
@@ -2629,7 +2635,7 @@ function go(id,btn){
     pictureChoiceMade=false;
     showPictureChoiceStage();
     renderScenes();
-    setTimeout(()=>speakText("Wählen Sie bitte ein Bild."),250);
+    setTimeout(()=>speakText("Wählen Sie bitte ein Bild. Sie können das Bild sagen oder antippen."),250);
   }
   if(id==="s3"){
     dialogActive=false;
@@ -2968,13 +2974,14 @@ function silenceMsForMode(mode){
   if(mode==="topicRetry")return 5500;
   if(mode==="topicMainRetry")return 5800;
   if(mode==="roleChoice")return 5800;
+  if(mode==="pictureChoice")return 4500;
   if(mode==="topic")return 6000;
   if(mode==="intro")return 7000;
   if(mode==="topicChoice")return 9000;
   return 6000;
 }
 function armSpeechSilence(){
-  if(!rec || !heardSpeech || !["intro","topicChoice","topic","topicQ","topicRetry","topicMainRetry","chat","pic","picRetry","roleChoice"].includes(recMode))return;
+  if(!rec || !heardSpeech || !["intro","topicChoice","pictureChoice","topic","topicQ","topicRetry","topicMainRetry","chat","pic","picRetry","roleChoice"].includes(recMode))return;
   clearSpeechSilence();
   const mode=recMode;
   const topicChoiceCount=(mode==="topicChoice" && typeof detectTopicsFromSpeech==="function")
@@ -3527,6 +3534,11 @@ function expectedSpeechHints(){
     return [...new Set(base.filter(Boolean))];
   }
   if(recMode==="topicChoice")return ["ich waehle","ich wahle","ich waehle vier themen","ich habe vier themen ausgewaehlt","ich habe vier themen ausgewahlt","vier themen","sprachen","hobbys","sport","familie","beruf","lieblingsessen","freunde","freizeit","tiere","lieblingsgetrank","lieblingsgetraenk","lieblingslied","urlaub","musik","wohnort","bucher","buecher","film","lieblingsfarbe","lieblingskleidung"];
+  if(recMode==="pictureChoice"){
+    const base=["ich waehle","ich wahle","ich nehme","bild","nummer","szene"];
+    try{SCENES.forEach(s=>pictureSceneAliases(s).forEach(a=>base.push(a)))}catch(e){}
+    return [...new Set(base.filter(Boolean))];
+  }
   if(recMode==="topic" && currentTopic && !currentTopic.includes("#")){
     const k=currentTopic;
     const base=[...(TOPICS[k]?.keywords||[])];
@@ -3646,6 +3658,13 @@ function alternativeRank(text,confidence){
   let rank=conf*100;
   const hints=expectedSpeechHints().map(normalizedGerman);
   for(const h of hints)if(h && t.includes(h))rank+=10;
+
+  if(recMode==="pictureChoice"){
+    const scene=detectPictureSceneFromSpeech(text);
+    if(scene)rank+=90;
+    if(/\bich\s+(?:waehle|wahle|nehme)\b/.test(t))rank+=18;
+    if(/\b(?:bild|nummer|szene)\b/.test(t))rank+=12;
+  }
 
   // Česte Web-Speech zamene: biramo kandidat prema kontekstu, a ne samo prema prvom rezultatu browsera.
   if(/\bich spreche\b/.test(t))rank+=16;
@@ -3773,11 +3792,11 @@ function setupRec(){
         ranked.push({cand,rank:alternativeRank(cand.transcript,cand.confidence||0)});
       }
       ranked.sort((a,b)=>b.rank-a.rank);
-      const best=(recMode==="topicChoice")
+      const best=(recMode==="topicChoice" || recMode==="pictureChoice")
         ? (ranked[0]?.cand||result[0])
         : (mobileASR ? result[0] : (ranked[0]?.cand||result[0]));
       const tx=String(best?.transcript||"").trim();
-      recognitionBestAlternatives=(recMode==="topicChoice")
+      recognitionBestAlternatives=(recMode==="topicChoice" || recMode==="pictureChoice")
         ? ranked.slice(0,5).map(x=>x.cand.transcript)
         : (mobileASR
           ? Array.from(result).slice(0,3).map(x=>x.transcript)
@@ -3830,6 +3849,7 @@ function setupRec(){
         const st=document.getElementById("introRetryListening");if(st)st.textContent="🔴 Slušam Vaš novi odgovor...";
       }
       if(recMode==="topicChoice"){const st=document.getElementById("topicChoiceStatus");if(st){st.textContent="🔴 Slušam... navedite četiri teme";st.classList.add("live")}}
+      if(recMode==="pictureChoice"){const st=document.getElementById("pictureChoiceVoiceStatus");if(st)st.textContent="🔴 Slušam... recite naziv ili broj slike"}
       if(recMode==="topic"){const st=document.getElementById("topicPresentStatus");if(st){st.textContent="🔴 Slušam... govorite o temi";st.classList.add("live")}}
       if(recMode==="topicRetry"){const st=document.getElementById("topicRetryListening");if(st)st.textContent="🔴 Slušam ponavljanje..."}
       if(recMode==="roleChoice"){const m=document.getElementById("micRole");if(m){m.textContent="🔴 SLUŠAM... IZABERITE OSOBU";m.classList.add("live")}}
@@ -3938,6 +3958,18 @@ function setupRec(){
       topicUnderstandingAttempts[`main:${endedTopic}`]=0;
       topicAnswers[endedTopic]=heard;
       finishTopicPresentation(endedTopic);
+    }
+    if(endedMode==="pictureChoice"){
+      const heard=exactTopicTranscript(pictureChoiceAnswer || (finalText+" "+interimText).trim());
+      const mic=document.getElementById("micPictureChoice");
+      if(mic){mic.classList.remove("live");mic.textContent="🎤 IZABERI SLIKU GLASOM";}
+      if(!heard || words(heard).length<1){
+        const st=document.getElementById("pictureChoiceVoiceStatus");
+        if(st)st.textContent="⚠️ Nisam čuo izbor. Ponovite naziv slike ili je ručno pritisnite.";
+        return;
+      }
+      completePictureChoiceSpeech(heard);
+      return;
     }
     if(endedMode==="pic"){
       pictureAnswerRaw=exactTopicTranscript(pictureAnswerRaw || (finalText+" "+interimText).trim());
@@ -4091,6 +4123,7 @@ function setupRec(){
 function speechModeLabel(mode){
   if(mode==="intro")return "Predstavljanje";
   if(mode==="topicChoice")return "Izbor četiri teme";
+  if(mode==="pictureChoice")return "Izbor slike";
   if(mode==="topic")return currentTopic&&!currentTopic.includes("#") ? "Tema: "+currentTopic : "Predstavljanje teme";
   if(mode==="topicQ")return currentTopic&&currentTopic.includes("#") ? "Odgovor na pitanje teme" : "Pitanje teme";
   if(mode==="pic")return "Opis slike";
@@ -4132,6 +4165,7 @@ function toggleRec(mode){
   window.__demaxUnexpectedEndCount=0;
   recMode=mode;finalText="";interimText="";heardSpeech=false;recognitionUncertain=false;recognitionUncertainReason="";recognitionBestAlternatives=[];clearSpeechSilence();
   if(mode==="topicChoice"){topicChoiceAnswer="";renderTopics([],false);const t=document.getElementById("topicChoiceText");if(t)t.textContent="Slušam odgovor učenika...";const b=document.getElementById("confirmTopicChoiceBtn");if(b)b.textContent="✓ POTVRDI ŠTA SAM REKAO"}
+  if(mode==="pictureChoice"){pictureChoiceAnswer="";const b=document.getElementById("micPictureChoice");if(b)b.textContent="🔴 SLUŠAM IZBOR SLIKE..."}
   if(mode==="chat" && window.chatText){
     chatAnswerRaw="";
     chatText.style.display="none";
@@ -4140,7 +4174,7 @@ function toggleRec(mode){
   rec=setupRec();
   if(!rec){setCandidateSpeechDock(false,mode);alert("Ovaj browser nema podršku za prepoznavanje govora. Koristite Chrome/Edge i HTTPS.");return}
   setCandidateSpeechDock(true,mode);
-  let targetBtn = mode==="pic"?micPic:mode==="chat"?micChat:mode==="intro"?micIntro:mode==="roleChoice"?document.getElementById("micRole"):null;
+  let targetBtn = mode==="pic"?micPic:mode==="chat"?micChat:mode==="intro"?micIntro:mode==="roleChoice"?document.getElementById("micRole"):mode==="pictureChoice"?document.getElementById("micPictureChoice"):null;
   if(mode==="picRetry"){
     const st=document.getElementById("pictureRetryListening");
     if(st)st.textContent="🔴 Pažljivo slušam ponavljanje...";
@@ -4200,6 +4234,7 @@ function renderRecTarget(){
     topicChoiceAnswer=raw;
     updateVoiceTopicHighlights(raw);
   }
+  if(recMode==="pictureChoice")pictureChoiceAnswer=raw;
   if(recMode==="pic")pictureAnswerRaw=raw;
   if(recMode==="picRetry" && pictureRetryState)pictureRetryState.retryText=raw;
   if(recMode==="roleChoice")roleChoiceAnswer=raw;
@@ -6057,9 +6092,94 @@ function choosePicturePrompt(speak=false){
   return p;
 }
 
+function normalizePictureChoiceSpeech(text){
+  return String(text||"").toLocaleLowerCase("de-DE")
+    .replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss")
+    .replace(/[^a-z0-9]+/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function germanNumberToSceneId(t){
+  const nums={
+    eins:1,eine:1,einen:1,zwei:2,drei:3,vier:4,fuenf:5,sechs:6,sieben:7,acht:8,neun:9,zehn:10,
+    elf:11,zwoelf:12,dreizehn:13,vierzehn:14,fuenfzehn:15,sechzehn:16,siebzehn:17,achtzehn:18,neunzehn:19,zwanzig:20,
+    einundzwanzig:21,zweiundzwanzig:22,dreiundzwanzig:23,vierundzwanzig:24,fuenfundzwanzig:25,sechsundzwanzig:26,
+    siebenundzwanzig:27,achtundzwanzig:28,neunundzwanzig:29,dreissig:30,einunddreissig:31,zweiunddreissig:32,
+    dreiunddreissig:33,vierunddreissig:34,fuenfunddreissig:35,sechsunddreissig:36,siebenunddreissig:37,
+    achtunddreissig:38,neununddreissig:39,vierzig:40
+  };
+  const digit=t.match(/\b(?:bild|nummer|szene)\s*(\d{1,2})\b/);
+  if(digit){
+    const n=Number(digit[1]);
+    if(n>=1&&n<=40)return n;
+  }
+  for(const [word,n] of Object.entries(nums)){
+    if(new RegExp("\\b(?:bild|nummer|szene)?\\s*"+word+"\\b").test(t))return n;
+  }
+  return 0;
+}
+function pictureSceneAliases(scene){
+  const aliases=[];
+  let de=normalizePictureChoiceSpeech(scene?.de||"")
+    .replace(/^(?:in der|im|in dem|am|an der|auf dem|auf der|neben dem|zu)\s+/,"")
+    .trim();
+  if(de)aliases.push(de);
+  const byId={
+    1:["natur"],2:["baeckerei","backerei"],3:["werkstatt","werkstaat"],4:["wohnung"],5:["kueche","kuche"],
+    6:["boutique","butique"],7:["apotheke"],8:["metzgerei"],9:["bibliothek"],10:["schule"],11:["cafe"],
+    12:["garten"],13:["supermarkt"],14:["wald"],15:["hotel"],16:["buchladen"],17:["blumenladen"],18:["zug"],
+    19:["wartezimmer"],20:["zimmer"],21:["fitnessstudio"],22:["buero","buro"],23:["krankenhaus"],24:["schwimmbad"],
+    25:["park"],26:["schuhladen"],27:["auto"],28:["bus"],29:["kino"],30:["zu hause","hause"],31:["fluss"],
+    32:["bahnhof"],33:["strand"],34:["flughafen"],35:["meer"],36:["see"],37:["markt"],38:["strasse"],39:["rezeption"],40:["kasse"]
+  };
+  (byId[Number(scene?.id)]||[]).forEach(a=>aliases.push(normalizePictureChoiceSpeech(a)));
+  return [...new Set(aliases.filter(Boolean))];
+}
+function detectPictureSceneFromSpeech(text){
+  const original=normalizePictureChoiceSpeech(text);
+  const num=germanNumberToSceneId(original);
+  if(num)return SCENES.find(s=>Number(s.id)===num)||null;
+
+  const t=original
+    .replace(/\bich\s+(?:waehle|wahle|nehme|moechte)\b/g," ")
+    .replace(/\b(?:das|die|den|der|ein|eine|einen|bild|szene)\b/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+  const hay=" "+t+" ";
+  let best=null,bestLen=0;
+  for(const scene of SCENES){
+    for(const alias of pictureSceneAliases(scene)){
+      if(alias && hay.includes(" "+alias+" ") && alias.length>bestLen){
+        best=scene;bestLen=alias.length;
+      }
+    }
+  }
+  return best;
+}
+function startPictureChoiceRecording(){
+  if(pictureChoiceMade)return;
+  try{speechSynthesis.cancel()}catch(e){}
+  pictureChoiceAnswer="";
+  const st=document.getElementById("pictureChoiceVoiceStatus");
+  if(st)st.textContent="🎤 Recite naziv slike, npr. „Ich wähle die Bäckerei.“";
+  if(!rec)toggleRec("pictureChoice");
+}
+function completePictureChoiceSpeech(text){
+  const scene=detectPictureSceneFromSpeech(text);
+  const st=document.getElementById("pictureChoiceVoiceStatus");
+  const mic=document.getElementById("micPictureChoice");
+  if(!scene){
+    if(st)st.textContent="⚠️ Nisam prepoznao sliku. Recite naziv sa kartice ili je ručno pritisnite.";
+    if(mic){mic.disabled=false;mic.textContent="🎤 PONOVI IZBOR SLIKE";}
+    return;
+  }
+  if(st)st.textContent="✓ Izabrana slika: "+scene.de;
+  if(mic){mic.disabled=true;mic.textContent="✓ SLIKA JE IZABRANA";}
+  selectScene(scene.id,true);
+}
 function renderScenes(){
   if(!window.sceneGrid)return;
-  sceneGrid.innerHTML=SCENES.map(s=>`<button class="sceneBtn ${pictureChoiceMade&&selectedScene&&selectedScene.id===s.id?'sel':''}" onclick="selectScene(${s.id})"><b>${s.id}. ${esc(s.de)}</b><span>${esc(s.sr)}</span></button>`).join("");
+  sceneGrid.innerHTML=SCENES.map(s=>`<button type="button" class="sceneBtn ${pictureChoiceMade&&selectedScene&&selectedScene.id===s.id?'sel':''}" onclick="selectScene(${s.id},false)" aria-label="Izaberi sliku ${s.id}: ${esc(s.de)}"><b>${s.id}. ${esc(s.de)}</b><span>${esc(s.sr)}</span></button>`).join("");
   if(pictureChoiceMade)renderSceneView();
 }
 function showPictureChoiceStage(){
@@ -6075,14 +6195,26 @@ function showPictureDescriptionStage(){
   if(desc)desc.hidden=false;
 }
 function backToPictureChoices(){
-  if(rec){try{rec.stop()}catch(e){}}
+  if(rec){window.__demaxStopRequested=true;try{rec.stop()}catch(e){}}
   pictureChoiceMade=false;
+  pictureChoiceAnswer="";
   selectedRole=null;
   showPictureChoiceStage();
+  const mic=document.getElementById("micPictureChoice");
+  if(mic){mic.disabled=false;mic.textContent="🎤 IZABERI SLIKU GLASOM";}
+  const st=document.getElementById("pictureChoiceVoiceStatus");
+  if(st)st.textContent="Možete izgovoriti naziv prikazane slike ili je ručno pritisnuti.";
   renderScenes();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function selectScene(id){
+function selectScene(id,fromVoice=false){
+  if(rec && recMode==="pictureChoice"){
+    clearSpeechSilence();
+    window.__demaxStopRequested=true;
+    try{rec.abort()}catch(e){try{rec.stop()}catch(_){}}
+    rec=null;
+    setCandidateSpeechDock(false,"pictureChoice");
+  }
   pictureCompleted=false;
   dialogCompleted=false;
   selectedScene=SCENES.find(s=>s.id===id);
@@ -6090,6 +6222,9 @@ function selectScene(id){
   selectedRole=null;
   pictureScore={content:0,grammar:0,pron:0,overall:0,corr:{fixed:"",errs:[]}};
   pictureAnswerRaw="";
+  pictureChoiceAnswer="";
+  const voiceStatus=document.getElementById("pictureChoiceVoiceStatus");
+  if(voiceStatus && !fromVoice)voiceStatus.textContent="✓ Slika je ručno izabrana.";
   if(window.picSavedStatus)picSavedStatus.innerHTML="";
   if(window.picText)picText.textContent="Ovde će se pojaviti opis slike.";
   const pbtn=document.getElementById("micPic");
