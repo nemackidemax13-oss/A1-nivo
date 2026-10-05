@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V89 mobilni izbor tema</title>
+<title>De-Max A1 Usmeni • V90 potvrda govora i pažljivo slušanje</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -1848,6 +1848,9 @@ body{padding-bottom:92px}
         <div class="voiceOnlyHint"><b>🎤 Izbor glasom:</b> prihvata: „Ich wähle vier Themen: Sprachen, Hobbys, Familie und Beruf.“, „Ich wähle Sprachen, Hobbys, Familie und Beruf.“ ili „Ich habe vier Themen ausgewählt: Sprachen, Hobbys, Familie und Beruf.“ Kartice se označavaju automatski dok govorite.<br><b>1️⃣ Prvo predstavljanje tema:</b> učenik redom govori o svakoj od 4 izabrane teme u <b>1–4 rečenice</b>.<br><b>2️⃣ Zatim pitanja:</b> aplikacija postavlja tačno <b>5 različitih pitanja po temi</b> (ukupno 20). Pitanja se pamte u ovom pregledaču i pri narednim pokretanjima biraju se nova dok se baza ne iscrpi.</div>
         <div class="listenStatus" id="topicChoiceStatus">🔊 Slušajte pitanje...</div>
         <div class="transcript liveStudentTranscript" id="topicChoiceText">Ovde će se pojaviti odgovor učenika.</div>
+        <div class="btnrow">
+          <button class="btn blue" id="confirmTopicChoiceBtn" type="button" onclick="confirmTopicChoiceSpeech()">✓ POTVRDI ŠTA SAM REKAO</button>
+        </div>
         <div class="review examPrivate" id="topicChoiceReview"></div>
         <div id="topicChoiceDetected" class="examPrivate"></div><div id="topicChoiceSavedStatus"></div>
       </div>
@@ -1892,10 +1895,10 @@ body{padding-bottom:92px}
 
         <div class="pictureSpeakBox">
           <div class="pictureSpeakTitle">🎤 Kada ste spremni, počnite da opisujete sliku</div>
-          <div class="pictureSpeakHint">Pritisnite „POČNI OPIS“. Dok govorite, aplikacija ispisuje prepoznati nemački tekst ispod slike. Bodovi, procenat i analiza ostaju skriveni do završnog rezultata. Ako nešto pogrešite, dobićete tačne modele za vežbu.</div>
+          <div class="pictureSpeakHint">Pritisnite „POČNI OPIS“. Aplikacija pažljivo sluša ceo opis i neće Vas prekinuti zbog kratke pauze. Kada prestanete da govorite dovoljno dugo, odgovor se automatski potvrđuje. Možete i sami pritisnuti „POTVRDI OPIS“ čim završite.</div>
           <div class="btnrow pictureActions">
             <button class="btn green mic pictureMicBtn" id="micPic" onclick="startPictureDescription()">🎤 POČNI OPIS</button>
-            <button class="btn blue pictureFinishBtn" onclick="evaluatePicture()">✓ ZAVRŠI OPIS</button>
+            <button class="btn blue pictureFinishBtn" id="confirmPicSpeechBtn" onclick="confirmPictureDescription()">✓ POTVRDI OPIS</button>
           </div>
         </div>
 
@@ -2524,6 +2527,39 @@ function updateVoiceTopicHighlights(txt){
   renderTopics(detected,false);
   return detected;
 }
+function confirmTopicChoiceSpeech(){
+  const st=document.getElementById("topicChoiceStatus");
+  if(rec && recMode==="topicChoice"){
+    clearSpeechSilence();
+    window.__demaxStopRequested=true;
+    if(st){st.textContent="✓ Potvrđujem izbor tema...";st.classList.remove("live")}
+    const b=document.getElementById("confirmTopicChoiceBtn");
+    if(b)b.textContent="✓ POTVRĐUJEM...";
+    try{rec.stop()}catch(e){}
+    return;
+  }
+  const txt=(topicChoiceAnswer||cleanTranscript(document.getElementById("topicChoiceText"),"Ovde će se pojaviti odgovor učenika.")).trim();
+  if(!txt){
+    if(st)st.textContent="⚠️ Prvo izgovorite četiri teme.";
+    return;
+  }
+  evaluateTopicChoice(txt);
+}
+function confirmTopicPresentationSpeech(k){
+  k=k||((currentTopic&&!currentTopic.includes("#"))?currentTopic:"");
+  if(!k)return;
+  const st=document.getElementById("topicPresentStatus");
+  if(rec && recMode==="topic"){
+    clearSpeechSilence();
+    window.__demaxStopRequested=true;
+    if(st){st.textContent="✓ Potvrđujem ceo odgovor...";st.classList.remove("live")}
+    const b=document.getElementById("confirmTopicSpeechBtn");
+    if(b)b.textContent="✓ POTVRĐUJEM...";
+    try{rec.stop()}catch(e){}
+    return;
+  }
+  finishTopicPresentation(k);
+}
 function clearTopics(){
   selectedTopics=[];topicExamQs={};topicMainCorrectionShown={};topicUnderstandingAttempts={};topicMainRetryState=null;topicAnswers={};topicMainScores={};topicQAnswers={};topicQScores={};topicQuestionState={};
   topicPresentationIndex=0;topicPresentationFlow=false;autoTopicFlow=false;
@@ -2565,6 +2601,9 @@ function renderCurrentTopicPresentation(){
         <div class="qsr">🇷🇸 ${esc(qsr)}</div>
         <div class="listenStatus" id="topicPresentStatus">🔊 Slušajte zadatak...</div>
         <div class="transcript liveStudentTranscript" id="t_${k}">Recite 1–4 rečenice o ovoj temi.</div>
+        <div class="btnrow">
+          <button class="btn blue" id="confirmTopicSpeechBtn" type="button" onclick="confirmTopicPresentationSpeech('${k}')">✓ POTVRDI ODGOVOR</button>
+        </div>
         <div class="review examPrivate" id="tr_${k}"></div>
       </div>
       <div class="flowHint"><b>Redosled:</b> prvo predstavljate sve četiri teme. Tek nakon toga aplikacija počinje sa pitanjima.</div>
@@ -2672,7 +2711,8 @@ function finishTopicPresentation(k){
     return;
   }
 
-  if(st){st.textContent=a.status==="minor"?"✓ Gut! Odgovor je smislen i prihvaćen.":"✓ Sehr gut! Ihre Antwort ist richtig.";st.classList.remove("live")}
+  if(st){st.textContent=a.status==="minor"?"✓ Potvrđeno. Odgovor je smislen i prihvaćen.":"✓ Potvrđeno. Sehr gut! Ihre Antwort ist richtig.";st.classList.remove("live")}
+  const confirmBtn=document.getElementById("confirmTopicSpeechBtn");if(confirmBtn)confirmBtn.textContent="✓ ODGOVOR POTVRĐEN";
   recordExamAnswer(`main:${k}`,`Sprechen Sie bitte über das Thema ${k}.`,`Govorite o temi ${TOPICS[k]?.sr||k}.`,txt,a,"topic-main");
   updateExamProgress();
   topicPresentationIndex++;
@@ -2736,14 +2776,14 @@ let heardSpeech=false;
 function clearSpeechSilence(){if(speechSilenceTimer){clearTimeout(speechSilenceTimer);speechSilenceTimer=null}}
 function silenceMsForMode(mode){
   // V88: mobilni učenik dobija dovoljno vremena; kratka pauza ne završava odgovor.
-  if(mode==="pic")return 11000;
+  if(mode==="pic")return 13000;
   if(mode==="picRetry")return 6500;
   if(mode==="chat")return 6000;
   if(mode==="topicQ")return 5800;
   if(mode==="topicRetry")return 5500;
   if(mode==="topicMainRetry")return 5800;
   if(mode==="roleChoice")return 5800;
-  if(mode==="topic")return 7200;
+  if(mode==="topic")return 9000;
   if(mode==="intro")return 7000;
   if(mode==="topicChoice")return 9000;
   return 6000;
@@ -2759,9 +2799,19 @@ function armSpeechSilence(){
   speechSilenceTimer=setTimeout(()=>{
     if(rec && recMode===mode){
       if(mode==="intro"){const btn=document.getElementById("micIntro");if(btn)btn.textContent="✓ Predstavljanje završeno"}
+      if(mode==="topic"){
+        const st=document.getElementById("topicPresentStatus");
+        if(st){st.textContent="✓ Učenik je završio govor — potvrđujem ceo odgovor";st.classList.remove("live")}
+        const b=document.getElementById("confirmTopicSpeechBtn");
+        if(b)b.textContent="✓ ODGOVOR JE POTVRĐEN";
+      }
       if(mode==="pic"){
         const btn=document.getElementById("micPic");
-        if(btn)btn.textContent="✓ OPIS ZAVRŠEN — ANALIZIRAM";
+        if(btn)btn.textContent="✓ OPIS ZAVRŠEN — OBRAĐUJEM";
+        const saved=document.getElementById("picSavedStatus");
+        if(saved)saved.innerHTML='<div class="pictureTransition pictureWaiting"><span class="waitSpinner">✓</span><b>Govor je završen.</b><small>Učitavam ceo opis i pripremam razgovor.</small></div>';
+        const b=document.getElementById("confirmPicSpeechBtn");
+        if(b)b.textContent="✓ OPIS JE POTVRĐEN";
       }
       window.__demaxStopRequested=true;
       try{rec.stop()}catch(e){}
@@ -3703,6 +3753,8 @@ function setupRec(){
     }
     if(endedMode==="topic" && endedTopic && !endedTopic.includes("#")){
       const heard=(topicAnswers[endedTopic]||cleanTranscript(document.getElementById("t_"+endedTopic),"Recite 1–4 rečenice o ovoj temi.")).trim();
+      const confirmBtn=document.getElementById("confirmTopicSpeechBtn");
+      if(confirmBtn)confirmBtn.textContent="✓ GOVOR JE ZAVRŠEN";
       const key=`main:${endedTopic}`;
       const notUnderstood=recognitionUncertain || !heard || words(heard).length<2;
       if(notUnderstood){
@@ -3725,7 +3777,11 @@ function setupRec(){
     }
     if(endedMode==="pic"){
       const pbtn=document.getElementById("micPic");
-      if(pbtn){pbtn.classList.remove("live");pbtn.textContent="✓ OPIS JE ZAVRŠEN";}
+      if(pbtn){pbtn.classList.remove("live");pbtn.textContent="✓ CEO OPIS JE SASLUŠAN";}
+      const cbtn=document.getElementById("confirmPicSpeechBtn");
+      if(cbtn)cbtn.textContent="✓ OPIS JE POTVRĐEN";
+      const saved=document.getElementById("picSavedStatus");
+      if(saved)saved.innerHTML='<div class="pictureTransition pictureWaiting"><span class="waitSpinner">✓</span><b>Ceo opis je saslušan.</b><small>Obrađujem odgovor i, ako je u redu, odmah učitavam dijalog sa istom slikom.</small></div>';
       evaluatePicture(false);
     }
     if(endedMode==="picRetry" && pictureRetryState){
@@ -3919,7 +3975,7 @@ function toggleRec(mode){
   window.__demaxStopRequested=false;
   window.__demaxUnexpectedEndCount=0;
   recMode=mode;finalText="";interimText="";heardSpeech=false;recognitionUncertain=false;recognitionUncertainReason="";recognitionBestAlternatives=[];clearSpeechSilence();
-  if(mode==="topicChoice"){topicChoiceAnswer="";renderTopics([],false);const t=document.getElementById("topicChoiceText");if(t)t.textContent="Slušam odgovor učenika..."}
+  if(mode==="topicChoice"){topicChoiceAnswer="";renderTopics([],false);const t=document.getElementById("topicChoiceText");if(t)t.textContent="Slušam odgovor učenika...";const b=document.getElementById("confirmTopicChoiceBtn");if(b)b.textContent="✓ POTVRDI ŠTA SAM REKAO"}
   if(mode==="chat" && window.chatText){
     chatText.style.display="block";
     chatText.classList.add("dialogLiveTranscript");
@@ -3938,6 +3994,13 @@ function toggleRec(mode){
   }
   if(mode==="topicQ" && currentTopic && currentTopic.includes("#")){
     const [tk,ti]=currentTopic.split("#"); targetBtn=document.getElementById(`qmic_${tk}_${ti}`);
+  }
+  if(mode==="topic"){
+    const b=document.getElementById("confirmTopicSpeechBtn");if(b)b.textContent="✓ POTVRDI ODGOVOR";
+  }
+  if(mode==="pic"){
+    const b=document.getElementById("confirmPicSpeechBtn");if(b)b.textContent="✓ POTVRDI OPIS";
+    const saved=document.getElementById("picSavedStatus");if(saved)saved.innerHTML="";
   }
   if(targetBtn){
     targetBtn.classList.add("live");
@@ -5821,6 +5884,19 @@ function startPictureDescription(){
   if(!rec)toggleRec("pic");
   else toggleRec("pic");
 }
+function confirmPictureDescription(){
+  const b=document.getElementById("confirmPicSpeechBtn");
+  const saved=document.getElementById("picSavedStatus");
+  if(rec && recMode==="pic"){
+    clearSpeechSilence();
+    window.__demaxStopRequested=true;
+    if(b)b.textContent="✓ POTVRĐUJEM CEO OPIS...";
+    if(saved)saved.innerHTML='<div class="pictureTransition pictureWaiting"><span class="waitSpinner">✓</span><b>Potvrđujem opis.</b><small>Zaustavljam mikrofon i čuvam sve što je učenik rekao.</small></div>';
+    try{rec.stop()}catch(e){}
+    return;
+  }
+  evaluatePicture(false);
+}
 
 function choosePicturePrompt(speak=false){
   let next=0;
@@ -5874,6 +5950,8 @@ function selectScene(id){
   if(window.picText)picText.textContent="Ovde će se pojaviti opis slike.";
   const pbtn=document.getElementById("micPic");
   if(pbtn){pbtn.classList.remove("live");pbtn.textContent="🎤 POČNI OPIS";}
+  const cbtn=document.getElementById("confirmPicSpeechBtn");
+  if(cbtn)cbtn.textContent="✓ POTVRDI OPIS";
   showPictureDescriptionStage();
   renderScenes();
   renderSceneView();
@@ -8534,7 +8612,8 @@ function evaluateTopicChoice(txt){
   const out=document.getElementById("topicChoiceDetected");
   if(detected.length===4){
     selectedTopics=detected;topicExamQs={};renderTopics(selectedTopics,true);topicChoiceCompleted=true;
-    if(out)out.innerHTML=`<div class="choiceDetected">✓ Prepoznate 4 teme: ${detected.map(x=>esc(x)).join(" • ")}</div>`;
+    if(out)out.innerHTML=`<div class="choiceDetected">✓ Potvrđeno. Prepoznate 4 teme: ${detected.map(x=>esc(x)).join(" • ")}</div>`;
+    const cb=document.getElementById("confirmTopicChoiceBtn");if(cb)cb.textContent="✓ IZBOR TEMA POTVRĐEN";
     const st=document.getElementById("topicChoiceStatus");if(st){st.textContent="✓ 4/4 teme su prepoznate";st.classList.remove("live")}
     const saved=document.getElementById("topicChoiceSavedStatus");if(saved)saved.innerHTML=`<div class="examSaved"><b>✓ Četiri teme su prepoznate glasom.</b><small>Prvo ćete predstaviti svaku temu, a zatim sledi po 5 različitih pitanja iz baze.</small></div>`;
     updateExamProgress();
