@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0b5ed7">
-<title>De-Max A1 Usmeni • V91 mobilni stabilno i slobodno predstavljanje</title>
+<title>De-Max A1 Usmeni • V92 tačan govor i mobilni bez klizača</title>
 <style>
 :root{--blue:#0b5ed7;--blue2:#3d8bfd;--red:#e53935;--ink:#17324d;--muted:#6f8294;--line:#dce8f5;--bg:#f5f9fe;--card:#fff;--green:#138a44;--amber:#c98500;--shadow:0 12px 30px rgba(29,77,125,.10)}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -830,7 +830,50 @@ body{min-height:100dvh}
 
 
 
-/* ===== V91 • MOBILNI STABILAN EKRAN, BEZ AUTOMATSKOG SKAKANJA ===== */
+/* ===== V92 • MOBILNI BEZ UNUTRAŠNJIH KLIZAČA ===== */
+.topicFinalSpeech{
+  display:grid;
+  gap:7px;
+  margin-top:7px;
+}
+.topicFinalDe,.topicFinalSr{
+  border-radius:13px;
+  padding:9px 10px;
+  line-height:1.42;
+}
+.topicFinalDe{
+  background:#f7fbff;
+  border:2px solid #b9d8f6;
+  color:#17324d;
+}
+.topicFinalSr{
+  background:#fffaf1;
+  border:1px solid #efdcae;
+  color:#654c16;
+}
+.topicFinalSpeech .speechLabel{
+  display:block;
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  opacity:.72;
+  margin-bottom:4px;
+}
+.topicFinalSpeech .speechText{
+  display:block;
+  font-size:15px;
+  font-weight:850;
+}
+.topicListeningOnly{
+  min-height:54px!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#0b5ed7!important;
+  background:#f4f9ff!important;
+}
 @media(max-width:600px){
   html,body{width:100%;max-width:100%;overflow-x:hidden;scroll-behavior:auto!important}
   .app{width:100%;max-width:100%;padding:3px 6px 74px!important}
@@ -849,9 +892,25 @@ body{min-height:100dvh}
   .autoQuestion .qde,.prompt .de{font-size:16px!important}
   .autoQuestion .qsr,.prompt .sr{font-size:12px!important}
   .listenStatus{margin-top:7px!important;padding:6px 8px!important;font-size:11px!important}
-  .liveStudentTranscript{min-height:72px!important;max-height:24dvh!important;overflow-y:auto!important;overscroll-behavior:contain;padding:9px!important;margin-top:7px!important}
-  .voiceTopicGrid{max-height:38dvh!important;overflow-y:auto!important;overscroll-behavior:contain}
-  .chat{max-height:48dvh!important;overflow-y:auto!important;overscroll-behavior:contain;padding-right:2px}
+  .liveStudentTranscript{
+    min-height:58px!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:9px!important;
+    margin-top:7px!important;
+  }
+  .voiceTopicGrid{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .chat{
+    max-height:none!important;
+    overflow:visible!important;
+    padding-right:0!important;
+  }
+  .topicFinalSpeech{gap:6px!important}
+  .topicFinalDe,.topicFinalSr{padding:8px 9px!important}
+  .topicFinalSpeech .speechText{font-size:14px!important}
   .btnrow{margin-top:7px!important;gap:6px!important}
   .btn{padding:9px 10px!important;min-height:42px}
   .flowHint{margin-top:6px!important;padding:7px 8px!important}
@@ -2765,7 +2824,7 @@ function finishTopicPresentation(k){
 
   updateExamProgress();
   topicPresentationIndex++;
-  setTimeout(()=>renderCurrentTopicPresentation(),120);
+  setTimeout(()=>renderCurrentTopicPresentation(),550);
 }
 function confirmTopics(){
   if(selectedTopics.length!==4)return;
@@ -3815,6 +3874,7 @@ function setupRec(){
 
       topicUnderstandingAttempts[`main:${endedTopic}`]=0;
       topicAnswers[endedTopic]=heard;
+      renderFinishedTopicSpeech(document.getElementById("t_"+endedTopic),heard);
       finishTopicPresentation(endedTopic);
     }
     if(endedMode==="pic"){
@@ -3899,9 +3959,11 @@ function setupRec(){
       const [k,idxRaw]=endedTopic.split("#");
       const idx=Number(idxRaw);
       const q=getTopicExamQuestions(k)[idx]||[];
-      const heard=(topicQAnswers[endedTopic]||"").trim();
+      const heard=exactTopicTranscript(topicQAnswers[endedTopic]||"");
       const st=document.getElementById(`listen_${k}_${idx}`);
-      if(st){st.classList.remove("live");st.textContent=heard?"✓ Ceo odgovor je saslušan i analiziran":"⚠️ Nisam dovoljno jasno čuo odgovor"}
+      const answerEl=document.getElementById(`qa_${k}_${idx}`);
+      if(heard)renderFinishedTopicSpeech(answerEl,heard);
+      if(st){st.classList.remove("live");st.textContent=heard?"✓ Odgovor je saslušan i prikazan tačno kako je prepoznat.":"⚠️ Nisam dovoljno jasno čuo odgovor"}
 
       const attemptKey=`q:${k}#${idx}`;
       const hasSentence=!!heard && words(heard).length>=2;
@@ -3930,8 +3992,8 @@ function setupRec(){
       if(answerCanBeStored(analysis)){
         topicUnderstandingAttempts[attemptKey]=0;
         topicWrongAttempts[attemptKey]=0;
-        topicQAnswers[endedTopic]=analysis.original;
-        const sc=scoreText(analysis.original,TOPICS[k].keywords||[]);
+        topicQAnswers[endedTopic]=heard;
+        const sc=scoreText(heard,TOPICS[k].keywords||[]);
         topicQScores[endedTopic]=sc;
         applyConditionalTopicBranch(k,idx,heard);
 
@@ -4035,10 +4097,15 @@ function toggleRec(mode){
     if(st)st.textContent="🔴 Slušam jednu od dve tačne rečenice...";
   }
   if(mode==="topicQ" && currentTopic && currentTopic.includes("#")){
-    const [tk,ti]=currentTopic.split("#"); targetBtn=document.getElementById(`qmic_${tk}_${ti}`);
+    const [tk,ti]=currentTopic.split("#");
+    targetBtn=document.getElementById(`qmic_${tk}_${ti}`);
+    const el=document.getElementById(`qa_${tk}_${ti}`);
+    if(el){el.classList.add("topicListeningOnly");el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi."}
   }
   if(mode==="topic"){
     const b=document.getElementById("confirmTopicSpeechBtn");if(b)b.textContent="✓ POTVRDI ODGOVOR";
+    const el=currentTopic?document.getElementById("t_"+currentTopic):null;
+    if(el){el.classList.add("topicListeningOnly");el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi."}
   }
   if(mode==="pic"){
     const b=document.getElementById("confirmPicSpeechBtn");if(b)b.textContent="✓ POTVRDI OPIS";
@@ -4057,6 +4124,19 @@ function toggleRec(mode){
 }
 function exactTopicTranscript(text){
   return String(text||"").replace(/\s+/g," ").trim();
+}
+function renderFinishedTopicSpeech(el,text){
+  if(!el)return;
+  const oldLive=document.getElementById(`${el.id}_sr_live`);
+  if(oldLive)oldLive.remove();
+  const exact=exactTopicTranscript(text);
+  if(!exact){el.textContent="Odgovor nije prepoznat.";return}
+  const sr=learningTranslate(exact);
+  el.classList.remove("topicListeningOnly");
+  el.innerHTML=`<div class="topicFinalSpeech">
+    <div class="topicFinalDe"><span class="speechLabel">🇩🇪 Učenik je rekao</span><span class="speechText">${esc(exact)}</span></div>
+    <div class="topicFinalSr"><span class="speechLabel">🇷🇸 Prevod</span><span class="speechText">${esc(sr)}</span></div>
+  </div>`;
 }
 function renderRecTarget(){
   const finalShown=recMode==="topic" ? exactTopicTranscript(finalText) : formatSpeechForMode(finalText,recMode);
@@ -4083,13 +4163,21 @@ function renderRecTarget(){
     chatText.innerHTML=content || "🎙️ Slušam…";
   }
   if(recMode==="topic" && currentTopic){
-    const el=document.getElementById("t_"+currentTopic);
-    if(el){el.innerHTML=content;el.scrollTop=el.scrollHeight;}
     topicAnswers[currentTopic]=exactTopicTranscript((finalText+" "+interimText).trim());
+    const el=document.getElementById("t_"+currentTopic);
+    if(el && !el.classList.contains("topicListeningOnly")){
+      el.classList.add("topicListeningOnly");
+      el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi.";
+    }
   }
   if(recMode==="topicQ" && currentTopic){
-    const [k,i]=currentTopic.split("#");document.getElementById(`qa_${k}_${i}`).innerHTML=content;
-    topicQAnswers[currentTopic]=formatGermanTranscript((finalText+" "+interimText).trim());
+    topicQAnswers[currentTopic]=exactTopicTranscript((finalText+" "+interimText).trim());
+    const [k,i]=currentTopic.split("#");
+    const el=document.getElementById(`qa_${k}_${i}`);
+    if(el && !el.classList.contains("topicListeningOnly")){
+      el.classList.add("topicListeningOnly");
+      el.textContent="🎙️ Slušam učenika… odgovor će se prikazati kada završi.";
+    }
   }
   if(recMode==="topicRetry" && topicRetryState){
     topicRetryState.retryText=formatGermanTranscript((finalText+" "+interimText).trim());
@@ -4110,10 +4198,7 @@ function renderRecTarget(){
   if(recMode==="chat")renderLiveTranslationFor(chatText,live);
   // V91: bez live prevoda tokom slobodnog predstavljanja teme — brži prikaz i bez menjanja sadržaja.
   if(recMode==="topicMainRetry" && topicMainRetryState)renderLiveTranslationFor(document.getElementById("t_"+topicMainRetryState.k),live);
-  if(recMode==="topicQ" && currentTopic){
-    const [k,i]=currentTopic.split("#");
-    renderLiveTranslationFor(document.getElementById(`qa_${k}_${i}`),live);
-  }
+  // V92: odgovori na pitanja teme se prevode tek nakon završetka govora.
 }
 function words(t){return (t.toLowerCase().match(/[a-zäöüß]+/g)||[])}
 function normalizeSpeechMatchText(t){
