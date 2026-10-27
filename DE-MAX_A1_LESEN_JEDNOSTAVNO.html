@@ -412,7 +412,13 @@ sound(t.lines[i][0],()=>{
 function previousStep(kind,step){
 if(kind==='home'||kind==='stats'){homePage=Math.max(0,Math.min(Math.ceil(lessons.length/size())-1,homePage+step))}
 else if(kind==='texts'){lessonPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts.length/size())-1,lessonPage+step))}
-else if(kind==='read'){stopAudio();focused=-1;readerPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].lines.length/readerSize())-1,readerPage+step))}
+else if(kind==='read'){
+ const lastPage=Math.max(0,Math.ceil(lessons[lesson].texts[text].lines.length/readerSize())-1);
+ const previousPage=readerPage;
+ stopAudio();focused=-1;
+ readerPage=Math.max(0,Math.min(lastPage,readerPage+step));
+ if(step>0&&readerPage>previousPage){speakWhole(readerPage*readerSize());return}
+}
 else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].questions.length-1,question+step))}
 else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
 render()
