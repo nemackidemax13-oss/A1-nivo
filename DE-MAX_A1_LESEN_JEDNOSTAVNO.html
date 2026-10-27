@@ -153,6 +153,40 @@ button:disabled{opacity:.32;cursor:default}
 .home-lesson .item-title{font-size:11px}
 }
 
+
+/* Svi tekstovi izabrane lekcije prikazani istovremeno, bez skrolovanja. */
+.texts-screen{gap:10px;padding:11px 14px max(11px,env(safe-area-inset-bottom))}
+.texts-screen .lesson-plain{font-size:21px;padding:4px 2px 0}
+.texts-screen .row-head h2{font-size:17px}
+.text-list{grid-template-rows:repeat(var(--perpage),minmax(0,1fr));gap:8px}
+.text-item{min-height:0;padding:6px 10px;gap:10px;border-radius:13px}
+.text-item .emoji{height:41px;width:41px;min-width:41px;border-radius:11px;font-size:21px}
+.text-item .item-content{display:flex;flex-direction:column;justify-content:center;gap:2px}
+.text-item .item-number{font-size:9px}
+.text-item .item-title{display:block;font-size:14px;line-height:1.18;margin:0}
+.text-item .chev{font-size:21px}
+.texts-back{width:100%;flex:none;min-height:44px}
+@media(max-height:690px){
+.texts-screen{gap:7px;padding:8px 12px}
+.texts-screen .lesson-plain{font-size:18px;padding:2px 2px 0}
+.texts-screen .row-head h2{font-size:15px}
+.text-list{gap:5px}
+.text-item{padding:4px 9px;gap:8px}
+.text-item .emoji{height:33px;width:33px;min-width:33px;font-size:18px}
+.text-item .item-title{font-size:12px}
+.text-item .item-number{font-size:8px}
+}
+@media(max-height:530px){
+.texts-screen{gap:5px;padding:6px 10px}
+.texts-screen .lesson-plain{font-size:16px}
+.text-item{padding:2px 8px}
+.text-item .emoji{height:29px;width:29px;min-width:29px;font-size:16px}
+.text-item .item-content{flex-direction:row;align-items:center;gap:7px}
+.text-item .item-number{white-space:nowrap}
+.text-item .item-title{font-size:11px}
+.texts-back{min-height:38px}
+}
+
 @media(min-width:550px){#app{border-radius:0}}
 </style>
 </head>
@@ -191,11 +225,12 @@ return '<main class="screen home-screen"><section class="hero home-hero"><small>
 lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
 '</div></main>'}
 function texts(){
-const l=lessons[lesson],n=size(),p=Math.max(0,Math.ceil(l.texts.length/n)-1);lessonPage=Math.min(lessonPage,p);
-return '<main class="screen"><section class="lesson-plain">Lekcija '+(lesson+1)+'</section>'+
+const l=lessons[lesson];
+return '<main class="screen texts-screen"><section class="lesson-plain">Lekcija '+(lesson+1)+'</section>'+
 '<div class="row-head"><h2>Izaberi tekst</h2><span class="count">'+l.texts.length+' tekstova</span></div>'+
-'<div class="card-list" style="--perpage:'+n+'">'+l.texts.slice(lessonPage*n,(lessonPage+1)*n).map((t,j)=>{const ti=lessonPage*n+j;return '<button class="item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(t.title)+'</span><span class="item-detail">'+t.lines.length+' rečenica · '+t.questions.length+' pitanja'+(progress.done[id(lesson,ti)]?' · ✅':'')+'</span></span><span class="chev">›</span></button>'}).join('')+'</div>'+
-'<div class="pager"><button class="lesson-back" data-a="textsback">← Nazad</button><span>'+(lessonPage+1)+' / '+(p+1)+'</span><button data-a="following" data-kind="texts" '+(lessonPage>=p?'disabled':'')+'>Sledeće →</button></div>'+'<div class="notice">Izaberi tekst koji želiš da čitaš.</div></main>'}
+'<div class="card-list text-list" style="--perpage:'+l.texts.length+'">'+
+l.texts.map((t,ti)=>'<button class="item text-item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title">'+escapeHTML(t.title)+'</span></span><span class="chev">›</span></button>').join('')+
+'</div><button class="action red texts-back" data-a="back">← Nazad</button></main>'}
 function read(){
 const t=lessons[lesson].texts[text],n=readerSize(),pages=Math.ceil(t.lines.length/n);
 readerPage=Math.min(readerPage,pages-1);
