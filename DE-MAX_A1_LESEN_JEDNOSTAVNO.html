@@ -88,6 +88,9 @@ button:disabled{opacity:.32;cursor:default}
 .sound{border:0;background:#eaf1fc;color:#2058a4;min-width:39px;min-height:39px;border-radius:12px;font-size:19px;align-self:flex-start;display:grid;place-items:center}
 .sr{font-size:clamp(12px,3.35vw,15px);line-height:1.35;margin:9px 0 0 30px;color:#758398;border-top:1px dashed #ecdee0;padding-top:7px}
 .read-footer{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;flex:none}
+.read-footer-single{display:block}
+.read-footer-single .action{width:100%}
+.pager .read-back{background:var(--red);color:#fff;border-color:var(--red)}
 .action{border:0;border-radius:14px;font-size:13px;font-weight:900;padding:0 10px;min-height:49px}
 .action.green{background:var(--green);color:#fff}
 .action.red{background:var(--red);color:white}
@@ -281,8 +284,9 @@ return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCI
 '<div class="audio"><button class="play" data-a="play">'+(playing?'■ Stop':'▶ Slušaj tekst')+'</button><button class="repeat" data-a="repeat" aria-label="Ponovi izgovor rečenice">↻ Ponovi</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
 '<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><span>DE / SR</span></div>'+
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
-'<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+pager(readerPage,pages,'read')+
-'<div class="read-footer"><button class="action white" data-a="words">📚 Reči</button><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
+'<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+
+'<div class="pager"><button class="read-back" data-a="readback">← Nazad</button><span>'+(readerPage+1)+' / '+pages+'</span><button data-a="following" data-kind="read" '+(readerPage>=pages-1?'disabled':'')+'>Sledeće →</button></div>'+
+'<div class="read-footer read-footer-single"><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
 function optionList(q){
 const order=q.options.map((o,i)=>({label:o,index:i}));
 const shift=(lesson*2+text+question+1)%order.length;
@@ -358,6 +362,7 @@ document.addEventListener('click',e=>{
 const b=e.target.closest('[data-a]');if(!b)return;
 const a=b.dataset.a;
 if(a==='back')back();
+else if(a==='readback'){if(readerPage>0){previousStep('read',-1)}else back()}
 else if(a==='textsback'){if(lessonPage>0){lessonPage--;render()}else back()}
 else if(a==='lesson'){lesson=Number(b.dataset.l);lessonPage=0;page='texts';render()}
 else if(a==='read')openText(Number(b.dataset.t));
