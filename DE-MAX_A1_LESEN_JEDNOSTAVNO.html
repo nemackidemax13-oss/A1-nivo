@@ -262,6 +262,25 @@ button:disabled{opacity:.32;cursor:default}
 .home-lesson:focus-visible,.text-item:focus-visible{outline:3px solid #45d29a;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.home-lesson,.text-item{transition:none}}
 
+
+/* Kratko uputstvo na početnoj, umesto starog naslova. */
+.home-hero{padding:11px 14px;min-height:0}
+.home-hero .home-instruction{
+ display:block;max-width:none;margin:0!important;
+ font-family:"Manrope",system-ui,-apple-system,sans-serif;
+ font-size:13px;line-height:1.36;letter-spacing:-.15px;
+ color:#fff;font-weight:700;overflow-wrap:normal;
+}
+.home-hero .home-instruction span{color:#ffda99;font-weight:800}
+@media(max-height:690px){
+ .home-hero{padding:8px 11px}
+ .home-hero .home-instruction{font-size:11.5px;line-height:1.28}
+}
+@media(max-height:530px){
+ .home-hero{padding:6px 9px}
+ .home-hero .home-instruction{font-size:10.5px;line-height:1.24}
+}
+
 </style>
 </head>
 <body>
@@ -294,7 +313,7 @@ function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
 return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
 function home(){
-return '<main class="screen home-screen"><section class="hero home-hero"><small><span class="hero-kicker">DE-MAX A1 · NEMAČKI IZGOVOR</span><span class="hero-detail">✦ Vežbaj čitanje rečenica</span></small><h1>Slušaj i ponovi <em>izgovor rečenica</em></h1></section>'+
+return '<main class="screen home-screen"><section class="hero home-hero"><p class="home-instruction">Izaberi lekciju, zatim tekstove, slušaj rečenice i ponavljaj izgovor! <span>Tako ćeš uvežbati da čitaš!</span></p></section>'+
 '<div class="row-head home-heading"><h2>Izaberi lekciju</h2><span class="count">7 lekcija · 40 tekstova</span></div>'+
 '<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
 lessons.map((l,i)=>'<button class="item home-lesson '+(selectedLesson===i?'is-selected':'')+'" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
