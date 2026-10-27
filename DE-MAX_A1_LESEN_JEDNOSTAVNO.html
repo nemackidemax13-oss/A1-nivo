@@ -170,6 +170,7 @@ button:disabled{opacity:.32;cursor:default}
 .text-item .item-content{display:flex;flex-direction:column;justify-content:center;gap:2px}
 .text-item .item-number{font-size:9px}
 .text-item .item-title{display:block;font-size:14px;line-height:1.18;margin:0}
+.text-item .item-subtitle{display:block;font-size:10.5px;line-height:1.2;color:#7a8ba2;font-weight:600;margin-top:2px;overflow-wrap:anywhere}
 .text-item .chev{font-size:21px}
 .texts-back{width:100%;flex:none;min-height:44px}
 @media(max-height:690px){
@@ -180,6 +181,7 @@ button:disabled{opacity:.32;cursor:default}
 .text-item{padding:4px 9px;gap:8px}
 .text-item .emoji{height:33px;width:33px;min-width:33px;font-size:18px}
 .text-item .item-title{font-size:12px}
+.text-item .item-subtitle{font-size:10px;margin-top:1px;line-height:1.15}
 .text-item .item-number{font-size:8px}
 }
 @media(max-height:530px){
@@ -187,7 +189,8 @@ button:disabled{opacity:.32;cursor:default}
 .texts-screen .lesson-plain{font-size:16px}
 .text-item{padding:2px 8px}
 .text-item .emoji{height:29px;width:29px;min-width:29px;font-size:16px}
-.text-item .item-content{flex-direction:row;align-items:center;gap:7px}
+.text-item .item-content{flex-direction:column;align-items:flex-start;gap:0}
+.text-item .item-subtitle{font-size:9px;margin-top:1px;line-height:1.1}
 .text-item .item-number{white-space:nowrap}
 .text-item .item-title{font-size:11px}
 .texts-back{min-height:38px}
@@ -265,12 +268,13 @@ return '<main class="screen home-screen"><section class="hero home-hero"><small>
 '<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
 lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
 '</div></main>'}
+const textTitleTranslations=[["Zdravo, ja sam Amir!","Dobro jutro na kursu","Moja nova komšinica","Razgovor u parku","Vidimo se sutra!"],["Ovo je moja porodica","Njegov bicikl i njena torba","Naš kurs nemačkog jezika","Tvoja soba, moja soba","Vaša porodica i naša porodica"],["Moj doručak","U supermarketu","U kafiću","Večera kod kuće","Na pijaci","Šta želiš da jedeš?"],["Moj stan","U prodavnici nameštaja","Bicikl","Moja odeća","U bašti","Učionica"],["Moja dnevna rutina","Moja sedmica","Važan termin","Na železničkoj stanici","Lepa nedelja","Raspored časova"],["Kakvo je vreme danas?","Četiri godišnja doba","Moj otac je građevinski radnik","U bolnici","Zanimanja u gradu","Vremenska prognoza"],["Moji hobiji","Moje omiljeno jelo","Moj najbolji prijatelj","Naša porodica u Beču","Koje jezike govoriš?","Moje slobodno vreme u Berlinu"]];
 function texts(){
 const l=lessons[lesson];
 return '<main class="screen texts-screen"><section class="lesson-plain">Lekcija '+(lesson+1)+'</section>'+
 '<div class="row-head"><h2>Izaberi tekst</h2><span class="count">'+l.texts.length+' tekstova</span></div>'+
 '<div class="card-list text-list" style="--perpage:'+l.texts.length+'">'+
-l.texts.map((t,ti)=>'<button class="item text-item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title">'+escapeHTML(t.title)+'</span></span><span class="chev">›</span></button>').join('')+
+l.texts.map((t,ti)=>'<button class="item text-item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title">'+escapeHTML(t.title)+'</span><span class="item-subtitle">'+escapeHTML(textTitleTranslations[lesson][ti])+'</span></span><span class="chev">›</span></button>').join('')+
 '</div><button class="action red texts-back" data-a="back">← Nazad</button></main>'}
 function read(){
 const t=lessons[lesson].texts[text],n=readerSize(),pages=Math.ceil(t.lines.length/n);
