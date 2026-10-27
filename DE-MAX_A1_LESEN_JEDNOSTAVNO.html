@@ -299,13 +299,13 @@ try{const old=JSON.parse(localStorage.getItem(STORE));if(old&&typeof old==='obje
 let page='home',lesson=0,text=0,homePage=0,lessonPage=0,readerPage=0,question=0,wordPage=0;
 let selectedLesson=-1,selectedText=-1;
 let focused=-1,lastLine=0,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
-let nextSentenceTimer=null,waitingForRepeat=false;
+let waitingForRepeat=false;
 const app=document.getElementById('app');
 const toastBox=document.getElementById('toast');
 function save(){try{localStorage.setItem(STORE,JSON.stringify(progress))}catch(e){}}
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function size(){return window.innerHeight<670?2:3}
-function readerSize(){return window.innerHeight<735?1:2}
+function readerSize(){return 1}
 function wordSize(){return window.innerHeight<690?3:4}
 function id(l,t){return l+'-'+t}
 function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
@@ -338,8 +338,8 @@ const i=start+j,active=focused===i;
 return '<div class="sentence '+(active?'active':'')+'" data-a="focus" data-i="'+i+'" role="button" tabindex="0"><div class="sentence-top"><span class="sent-n">'+String(i+1).padStart(2,'0')+'</span><span class="de">'+escapeHTML(line[0])+'</span><button class="sound" data-a="speakline" data-i="'+i+'" aria-label="Poslušaj rečenicu">🔊</button></div>'+
 '<p class="sr">'+escapeHTML(line[1])+'</p></div>'}).join('');
 return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+' / '+lessons[lesson].texts.length+'</span><h1>'+escapeHTML(t.title)+'</h1><p>'+t.lines.length+' rečenica · Prevod se prikazuje ispod svake rečenice</p></div>'+
-'<div class="audio"><button class="play" data-a="play">'+(playing?'■ Stop':'▶ Slušaj tekst')+'</button><button class="repeat" data-a="repeat" aria-label="Ponovi izgovor rečenice">↻ Ponovi</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
-'<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><span class="'+(waitingForRepeat?'repeat-pause':'')+'">'+(waitingForRepeat?'Pauza 3 s · ponovi naglas':'DE / SR')+'</span></div>'+
+'<div class="audio"><button class="play" data-a="play">'+(playing?'■ Stop':'▶ Slušaj rečenicu')+'</button><button class="repeat" data-a="repeat" aria-label="Ponovi izgovor rečenice">↻ Ponovi</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
+'<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><span class="'+(waitingForRepeat?'repeat-pause':'')+'">'+(waitingForRepeat?'Ponovi naglas · zatim Sledeće':'DE / SR')+'</span></div>'+
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+
 '<div class="pager"><button class="read-back" data-a="readback">← Nazad</button><span>'+(readerPage+1)+' / '+pages+'</span><button data-a="following" data-kind="read" '+(readerPage>=pages-1?'disabled':'')+'>Sledeće →</button></div>'+
@@ -383,7 +383,7 @@ return '<main class="screen"><div class="feature"><div><span class="eyebrow">MOJ
 pager(homePage,p,'stats')+'<div class="notice">Nema Google Drive povezivanja. Napredak ostaje lokalno.</div></main>'}
 function render(){app.innerHTML=top()+(page==='home'?home():page==='texts'?texts():page==='read'?read():page==='quiz'?quiz():page==='words'?words():stats())}
 function notify(s){toastBox.textContent=s;toastBox.style.display='block';clearTimeout(notify.t);notify.t=setTimeout(()=>{toastBox.style.display='none'},2200)}
-function stopAudio(){speechSerial++;playing=false;waitingForRepeat=false;if(nextSentenceTimer!==null){clearTimeout(nextSentenceTimer);nextSentenceTimer=null}try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(e){}}
+function stopAudio(){speechSerial++;playing=false;waitingForRepeat=false;try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(e){}}
 function sound(phrase,after){
 if(!('speechSynthesis' in window)){notify('Izgovor nije podržan u ovom pregledaču.');return}
 const serial=++speechSerial;
@@ -395,18 +395,11 @@ u.onerror=()=>{if(serial===speechSerial){playing=false;render()}};
 window.speechSynthesis.speak(u)}
 function speakWhole(i){
 const t=lessons[lesson].texts[text];
-if(nextSentenceTimer!==null){clearTimeout(nextSentenceTimer);nextSentenceTimer=null}
-if(i>=t.lines.length){playing=false;waitingForRepeat=false;focused=-1;render();return}
-waitingForRepeat=false;playing=true;focused=i;lastLine=i;readerPage=Math.floor(i/readerSize());render();
+if(i<0||i>=t.lines.length){playing=false;waitingForRepeat=false;render();return}
+waitingForRepeat=false;playing=true;focused=i;lastLine=i;readerPage=i;render();
 sound(t.lines[i][0],()=>{
  if(page!=='read'||!playing)return;
- if(i+1>=t.lines.length){playing=false;waitingForRepeat=false;focused=-1;render();return}
- waitingForRepeat=true;render();
- const serial=speechSerial;
- nextSentenceTimer=setTimeout(()=>{
-  nextSentenceTimer=null;
-  if(serial===speechSerial&&page==='read'&&playing)speakWhole(i+1);
- },3000);
+ playing=false;waitingForRepeat=true;render();
 });
 }
 function previousStep(kind,step){
@@ -451,7 +444,7 @@ else if(a==='repeat'){
   focused=Math.min(toRepeat,lines.length-1);lastLine=focused;render();
   sound(lines[focused][0]);
 }
-else if(a==='play'){if(playing){stopAudio();render()}else{speakWhole(0)}}
+else if(a==='play'){if(playing){stopAudio();render()}else{speakWhole(readerPage*readerSize())}}
 else if(a==='speed'){stopAudio();voiceRate=voiceRate===.75?.9:voiceRate===.9?1.07:.75;render()}
 else if(a==='words'){stopAudio();wordPage=0;page='words';render()}
 else if(a==='speakword'){stopAudio();sound(b.dataset.word)}
