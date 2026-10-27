@@ -171,11 +171,15 @@ return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCI
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+pager(readerPage,pages,'read')+
 '<div class="read-footer"><button class="action white" data-a="words">📚 Reči</button><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
 function optionList(q){
-return q.options.map((o,i)=>{
+const order=q.options.map((o,i)=>({label:o,index:i}));
+const shift=(lesson*2+text+question+1)%order.length;
+const rotated=order.slice(shift).concat(order.slice(0,shift));
+return rotated.map((o,pos)=>{
+const i=o.index;
 let c=answers[question]===i?'chosen':'';
 if(graded&&i===q.correct)c='correct';
 else if(graded&&answers[question]===i&&i!==q.correct)c='wrong';
-return '<button class="option '+c+'" data-a="answer" data-i="'+i+'" '+(graded?'disabled':'')+'><i>'+String.fromCharCode(65+i)+'</i><span>'+escapeHTML(o)+'</span></button>'
+return '<button class="option '+c+'" data-a="answer" data-i="'+i+'" '+(graded?'disabled':'')+'><i>'+String.fromCharCode(65+pos)+'</i><span>'+escapeHTML(o.label)+'</span></button>';
 }).join('')}
 function quiz(){
 const t=lessons[lesson].texts[text],qs=t.questions;
