@@ -149,7 +149,7 @@ main{padding:13px}
     <div class="rule">
       Veznik <b>denn</b> spaja dve glavne rečenice. Posle <b>denn</b> red reči ostaje kao u glavnoj rečenici:
       <div class="formula">Hauptsatz 1, <span class="denn">denn</span> Hauptsatz 2.</div>
-      Glagol i u drugoj rečenici ostaje na <b>2. mestu</b>.
+      Glagol i u drugoj rečenici ostaje na <b>2. mestu</b>.<div style="margin-top:6px;font-size:13px">Zarez ispred „denn“ i tačka na kraju dodaju se automatski.</div>
     </div>
   </section>
 
@@ -240,10 +240,8 @@ let chosen=[];
 let remaining=[];
 
 function tokenize(sentence){
-  return sentence
-    .replace(",", "")
-    .split(/\s+/)
-    .filter(Boolean);
+  // Interpunkcija se dodaje automatski; učenik bira samo reči.
+  return sentence.replace(/[,.!?;:]/g, " ").trim().split(/\s+/).filter(Boolean);
 }
 
 function shuffle(arr){
@@ -255,10 +253,10 @@ function shuffle(arr){
   return a;
 }
 function normalize(s){
-  return s.toLowerCase().trim()
-    .replace(/\s+/g," ")
-    .replace(/\s+([,.!?])/g,"$1")
-    .replace(/[.]+$/,"");
+  // Poredi se redosled reči, a ne zarez/tačka koje učenik ne može da izabere.
+  return s.normalize("NFC").toLocaleLowerCase("de-DE")
+    .replace(/[,.!?;:]/g," ")
+    .trim().replace(/\s+/g," ");
 }
 function speak(text){
   if(!("speechSynthesis" in window)) return;
@@ -326,11 +324,17 @@ function draw(){
   const bank=document.getElementById("bank");
   build.innerHTML="";
   bank.innerHTML="";
+  // Stari rezultat nestaje čim učenik izmeni rečenicu.
+  document.getElementById("feedback").textContent="";
+  document.getElementById("solution").style.display="none";
+  document.getElementById("translation").style.display="none";
 
   chosen.forEach((w,i)=>{
     const b=document.createElement("button");
     b.className="word"+(w.toLowerCase().replace(/[,.!?]/g,"")==="denn"?" denn":"");
-    b.textContent=w;
+    b.textContent=w
+      +(chosen[i+1] && chosen[i+1].toLowerCase()==="denn" ? "," : "")
+      +(remaining.length===0 && i===chosen.length-1 ? "." : "");
     b.onclick=()=>{
       remaining.push(w);
       chosen.splice(i,1);
@@ -353,15 +357,20 @@ function draw(){
 }
 function checkAnswer(){
   const it=items[index];
-  let text=chosen.join(" ");
-  text=text.replace(/\s+([,.!?])/g,"$1");
-
-  const ok=normalize(text)===normalize(it.answer);
-  correct[index]=ok;
-
   const fb=document.getElementById("feedback");
   const sol=document.getElementById("solution");
   const tr=document.getElementById("translation");
+
+  if(remaining.length>0){
+    fb.innerHTML='<span class="bad">Složi sve reči, pa klikni „Proveri“.</span>';
+    sol.style.display="none";
+    tr.style.display="none";
+    return;
+  }
+
+  const ok=normalize(chosen.join(" "))===normalize(it.answer);
+  // Jednom tačno rešen primer ostaje uračunat u napredak.
+  if(ok) correct[index]=true;
 
   if(ok){
     fb.innerHTML='<span class="good">✓ Tačno! Odlično složena rečenica.</span>';
