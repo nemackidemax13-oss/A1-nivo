@@ -66,9 +66,10 @@ button:disabled{opacity:.32;cursor:default}
 .read-title h1{font-size:23px;letter-spacing:-.6px;line-height:1.16;margin:5px 0 2px;color:var(--navy)}
 .read-title p{color:var(--muted);font-size:11px;margin:0}
 .audio{background:#102f68;border-radius:16px;color:#fff;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:9px;flex:none}
-.audio button{border:0;min-height:39px;border-radius:11px;font-size:12px;font-weight:900;padding:0 12px}
-.audio .play{background:#fff;color:#143a75;flex:1}
-.audio .speed{color:#fff;background:#31518a;min-width:85px}
+.audio button{border:0;min-height:39px;border-radius:11px;font-size:11px;font-weight:900;padding:0 8px;white-space:nowrap}
+.audio .play{background:#fff;color:#143a75;flex:1;min-width:0}
+.audio .repeat{background:#e4f5ff;color:#123f80;flex:none}
+.audio .speed{color:#fff;background:#31518a;min-width:72px}
 .tools{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:none}
 .tools span{font-size:11px;font-weight:900;color:#71839d;letter-spacing:.4px}
 .tools button{border:1px solid #d8e7dd;border-radius:12px;background:#e8f9ef;color:#087a5d;min-height:37px;padding:0 12px;font-size:12px;font-weight:900}
@@ -109,6 +110,7 @@ button:disabled{opacity:.32;cursor:default}
 .barrow strong{font-size:13px}.barrow span{font-size:11px;color:var(--muted)}
 .full{width:100%}
 .notice{font-size:11px;color:#6d819a;text-align:center;line-height:1.4}
+@media(max-width:360px){.audio{gap:5px;padding:8px}.audio button{padding:0 6px;font-size:10px}.audio .speed{min-width:63px}}
 @media(max-height:760px){.screen{gap:8px;padding-top:10px;padding-bottom:10px}.top{height:60px}.hero{padding:13px 16px}.hero h1{font-size:21px;margin:5px 0}.hero p{font-size:11px}.stat{padding:7px 2px}.h1{font-size:22px}.feature{padding:10px}.item{padding:7px 10px}.emoji{height:44px;width:44px;min-width:44px}.item-title{font-size:14px}.sentence{padding:10px 12px}.de{font-size:clamp(17px,4.5vw,21px)}.pager{height:45px}.pager button{height:42px}.action{min-height:44px}.question-card{padding:12px}.question-text{font-size:19px}.option{min-height:48px;padding:9px}}
 @media(max-height:620px){.hero{padding:10px}.hero h1{font-size:19px}.hero p{display:none}.stats{gap:5px}.stat strong{font-size:17px}.stat small{font-size:9px}.screen{gap:7px;padding:8px 12px}.read-title h1{font-size:19px}.sentence{padding:9px 11px}.sr{font-size:12px}.de{font-size:17px}.audio{padding:6px 9px}.option{min-height:43px}.feature{padding:9px}.feature h2{font-size:18px}.question-text{margin:0}.word-card{padding:7px}}
 @media(min-width:550px){#app{border-radius:0}}
@@ -126,7 +128,7 @@ const STORE='demax_a1_lesen_jednostavno_v1';
 let progress={done:{},results:{},last:{l:0,t:0}};
 try{const old=JSON.parse(localStorage.getItem(STORE));if(old&&typeof old==='object')progress=Object.assign(progress,old)}catch(e){}
 let page='home',lesson=0,text=0,homePage=0,lessonPage=0,readerPage=0,question=0,wordPage=0;
-let translate=false,focused=-1,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
+let translate=false,focused=-1,lastLine=0,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
 const app=document.getElementById('app');
 const toastBox=document.getElementById('toast');
 function save(){try{localStorage.setItem(STORE,JSON.stringify(progress))}catch(e){}}
@@ -144,7 +146,7 @@ const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
 return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
 function home(){
 const n=size(),p=Math.max(0,Math.ceil(lessons.length/n)-1);homePage=Math.min(homePage,p);
-return '<main class="screen"><section class="hero"><small>A1 · UČENJE PO LEKCIJAMA</small><h1>Čitaj. Slušaj.<br><em>Razumi nemački.</em></h1><p>Jedna rečenica po koraku. Kratki tekstovi i pitanja.</p></section>'+
+return '<main class="screen"><section class="hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR</small><h1>Slušaj i ponovi<br><em>izgovor rečenica.</em></h1><p>Izaberi tekst, poslušaj nemački i ponovi svaku rečenicu.</p></section>'+
 '<div class="stats"><div class="stat"><strong>7</strong><small>lekcija</small></div><div class="stat"><strong>40</strong><small>tekstova</small></div><div class="stat"><strong>'+readCount()+'</strong><small>urađeno</small></div></div>'+
 '<div class="row-head"><h2>Izaberi lekciju</h2><span class="count">A1</span></div>'+
 '<div class="card-list" style="--perpage:'+n+'">'+lessons.slice(homePage*n,homePage*n+n).map((l,j)=>listLesson(l,homePage*n+j)).join('')+'</div>'+
@@ -165,7 +167,7 @@ const i=start+j,active=focused===i;
 return '<div class="sentence '+(active?'active':'')+'" data-a="focus" data-i="'+i+'" role="button" tabindex="0"><div class="sentence-top"><span class="sent-n">'+String(i+1).padStart(2,'0')+'</span><span class="de">'+escapeHTML(line[0])+'</span><button class="sound" data-a="speakline" data-i="'+i+'" aria-label="Poslušaj rečenicu">🔊</button></div>'+
 (translate||active?'<p class="sr">'+escapeHTML(line[1])+'</p>':'')+'</div>'}).join('');
 return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+' / '+lessons[lesson].texts.length+'</span><h1>'+escapeHTML(t.title)+'</h1><p>'+t.lines.length+' rečenica · Klikni rečenicu za prevod</p></div>'+
-'<div class="audio"><button class="play" data-a="play">'+(playing?'■ Zaustavi':'▶ Slušaj ceo tekst')+'</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
+'<div class="audio"><button class="play" data-a="play">'+(playing?'■ Stop':'▶ Slušaj tekst')+'</button><button class="repeat" data-a="repeat" aria-label="Ponovi izgovor rečenice">↻ Ponovi</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
 '<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><button data-a="translate">'+(translate?'✓ Sakrij prevod':'🌐 SR prevod')+'</button></div>'+
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+pager(readerPage,pages,'read')+
@@ -221,7 +223,7 @@ u.onerror=()=>{if(serial===speechSerial){playing=false;render()}};
 window.speechSynthesis.speak(u)}
 function speakWhole(i){
 const t=lessons[lesson].texts[text];if(i>=t.lines.length){playing=false;focused=-1;render();return}
-playing=true;focused=i;readerPage=Math.floor(i/readerSize());render();
+playing=true;focused=i;lastLine=i;readerPage=Math.floor(i/readerSize());render();
 sound(t.lines[i][0],()=>{if(page==='read'&&playing)speakWhole(i+1)});
 }
 function previousStep(kind,step){
@@ -232,7 +234,7 @@ else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].
 else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
 render()
 }
-function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;translate=false;focused=-1;answers={};graded=false;page='read';render()}
+function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;translate=false;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
 function back(){
 stopAudio();
 if(page==='home')return;
@@ -251,7 +253,15 @@ else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previou
 else if(a==='stats'){homePage=0;page='stats';render()}
 else if(a==='focus'){focused=Number(b.dataset.i);render()}
 else if(a==='translate'){translate=!translate;render()}
-else if(a==='speakline'){e.stopPropagation();stopAudio();focused=Number(b.dataset.i);render();sound(lessons[lesson].texts[text].lines[focused][0])}
+else if(a==='speakline'){e.stopPropagation();stopAudio();focused=Number(b.dataset.i);lastLine=focused;render();sound(lessons[lesson].texts[text].lines[focused][0])}
+else if(a==='repeat'){
+  stopAudio();
+  const lines=lessons[lesson].texts[text].lines;
+  const pageStart=readerPage*readerSize();
+  const toRepeat=focused>=0&&Math.floor(focused/readerSize())===readerPage?focused:pageStart;
+  focused=Math.min(toRepeat,lines.length-1);lastLine=focused;render();
+  sound(lines[focused][0]);
+}
 else if(a==='play'){if(playing){stopAudio();render()}else{speakWhole(0)}}
 else if(a==='speed'){stopAudio();voiceRate=voiceRate===.75?.9:voiceRate===.9?1.07:.75;render()}
 else if(a==='words'){stopAudio();wordPage=0;page='words';render()}
