@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102d60">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>DE-MAX LESEN · A1 · Jednostavna verzija</title>
+<style>
+:root{--navy:#102d60;--navy2:#193d7b;--red:#e43e50;--green:#0b9773;--ink:#12294a;--muted:#71829b;--line:#e0e7f2;--paper:#fff;--bg:#f3f6fb}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#dce5f2}
+button{font:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:3px solid #82b3ff;outline-offset:2px}
+button:disabled{opacity:.32;cursor:default}
+#app{height:100%;height:100dvh;max-width:500px;margin:auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 32px rgba(14,30,56,.13)}
+.top{height:66px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:#fff;border-bottom:1px solid var(--line)}
+.mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ed4a5d,#c92846);color:white;font-size:20px;letter-spacing:-1.5px;display:grid;place-items:center;font-weight:950}
+.brand{text-align:right;margin-left:auto}
+.brand strong{font-size:19px;letter-spacing:-.6px;color:var(--navy);display:block;line-height:1.16}
+.brand strong span{color:var(--red)}
+.brand small{display:block;font-size:10px;letter-spacing:1.1px;font-weight:900;color:#75859d;margin-top:3px}
+.back{border:0;color:#fff;background:var(--red);min-height:43px;padding:0 14px;border-radius:13px;font-weight:900;font-size:13px;display:flex;align-items:center;gap:7px}
+.screen{flex:1;min-height:0;padding:15px 16px max(15px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.1px;color:#7587a0;font-weight:900}
+.h1{font-size:25px;line-height:1.15;font-weight:950;color:var(--navy);letter-spacing:-.8px;margin:4px 0 0}
+.sub{font-size:12px;color:var(--muted);line-height:1.35;margin:4px 0 0}
+.hero{background:linear-gradient(125deg,#0d2a5d,#2354a0);padding:20px;border-radius:22px;color:#fff;flex:none;position:relative;overflow:hidden}
+.hero::after{content:"📖";position:absolute;font-size:65px;right:13px;top:13px;transform:rotate(12deg);opacity:.55}
+.hero small{color:#bcdcf9;font-size:10px;font-weight:950;letter-spacing:1.4px}
+.hero h1{font-size:25px;letter-spacing:-1px;line-height:1.14;margin:7px 0}
+.hero h1 em{font-style:normal;color:#ffcf7c}
+.hero p{font-size:12px;line-height:1.4;max-width:235px;color:#dfebff;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:none}
+.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:9px 3px;text-align:center}
+.stat strong{display:block;font-size:20px;font-weight:950;color:var(--navy);line-height:1.15}
+.stat small{font-size:10px;color:var(--muted);font-weight:800}
+.row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none}
+.row-head h2{font-size:19px;line-height:1.1;letter-spacing:-.5px;margin:0;font-weight:900;color:var(--navy)}
+.count{font-size:11px;color:var(--muted);font-weight:900}
+.card-list{display:grid;grid-template-rows:repeat(var(--perpage),minmax(0,1fr));gap:9px;flex:1;min-height:0}
+.item{min-height:0;width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;color:var(--ink);box-shadow:0 5px 16px rgba(24,55,96,.035)}
+.emoji{width:52px;min-width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#edf3ff;font-size:25px}
+.item:nth-child(2n) .emoji{background:#fff1e8}.item:nth-child(3n) .emoji{background:#e8f8f1}
+.item-content{flex:1;min-width:0}
+.item-number{font-size:10px;color:#8898ae;letter-spacing:1px;font-weight:900}
+.item-title{font-size:15px;font-weight:900;line-height:1.3;margin:4px 0;overflow-wrap:anywhere}
+.item-detail{font-size:11px;color:var(--muted);line-height:1.3}
+.chev{font-size:24px;color:#8fa0b6;flex:none}
+.meter{width:100%;height:5px;border-radius:50px;background:#ebeff5;overflow:hidden;margin-top:7px}
+.meter>i{display:block;height:100%;background:var(--green);border-radius:50px}
+.pager{height:49px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;flex:none}
+.pager button{height:44px;border:1px solid #dae3f0;background:#fff;border-radius:13px;font-size:12px;font-weight:900;color:var(--navy)}
+.pager button:last-child{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pager span{font-size:12px;color:#7385a1;font-weight:900;white-space:nowrap;min-width:44px;text-align:center}
+.secondary-action{border:1px solid #dce4ef;background:#fff;border-radius:13px;min-height:44px;color:var(--navy);font-weight:850;font-size:12px}
+.progress-link{border:0;background:transparent;color:#2b649e;font-size:12px;font-weight:850;min-height:30px;align-self:flex-start;padding:0 3px}
+.feature{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;gap:12px;flex:none}
+.feature h2{font-size:22px;font-weight:950;letter-spacing:-.7px;margin:4px 0;color:var(--navy)}
+.feature p{font-size:12px;line-height:1.4;color:var(--muted);margin:0}
+.feature .glyph{font-size:32px}
+.progress-track{height:6px;border-radius:99px;background:#e1e8f1;flex:none;overflow:hidden}
+.progress-track i{display:block;height:100%;background:var(--green);transition:width .15s}
+.read-title{flex:none}
+.read-title h1{font-size:23px;letter-spacing:-.6px;line-height:1.16;margin:5px 0 2px;color:var(--navy)}
+.read-title p{color:var(--muted);font-size:11px;margin:0}
+.audio{background:#102f68;border-radius:16px;color:#fff;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:9px;flex:none}
+.audio button{border:0;min-height:39px;border-radius:11px;font-size:12px;font-weight:900;padding:0 12px}
+.audio .play{background:#fff;color:#143a75;flex:1}
+.audio .speed{color:#fff;background:#31518a;min-width:85px}
+.tools{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:none}
+.tools span{font-size:11px;font-weight:900;color:#71839d;letter-spacing:.4px}
+.tools button{border:1px solid #d8e7dd;border-radius:12px;background:#e8f9ef;color:#087a5d;min-height:37px;padding:0 12px;font-size:12px;font-weight:900}
+.read-cards{flex:1;min-height:0;display:grid;grid-template-rows:repeat(var(--sentences),minmax(0,1fr));gap:10px}
+.sentence{display:flex;flex-direction:column;justify-content:center;background:#fff;border:2px solid #e2e9f4;border-radius:19px;padding:14px 16px;position:relative;min-height:0;overflow:hidden;text-align:left;color:var(--ink)}
+.sentence.active{border-color:var(--red);background:#fff9fa}
+.sentence-top{display:flex;align-items:center;gap:9px}
+.sent-n{color:#9caac0;font-size:12px;font-weight:950;min-width:21px;align-self:flex-start;margin-top:4px}
+.de{font-size:clamp(18px,4.7vw,22px);font-weight:780;line-height:1.5;flex:1;min-width:0;overflow-wrap:anywhere}
+.sound{border:0;background:#eaf1fc;color:#2058a4;min-width:39px;min-height:39px;border-radius:12px;font-size:19px;align-self:flex-start;display:grid;place-items:center}
+.sr{font-size:clamp(12px,3.35vw,15px);line-height:1.35;margin:9px 0 0 30px;color:#758398;border-top:1px dashed #ecdee0;padding-top:7px}
+.read-footer{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;flex:none}
+.action{border:0;border-radius:14px;font-size:13px;font-weight:900;padding:0 10px;min-height:49px}
+.action.green{background:var(--green);color:#fff}
+.action.red{background:var(--red);color:white}
+.action.white{background:#fff;color:var(--navy);border:1px solid #dce5f1}
+.question-card{display:flex;flex-direction:column;justify-content:center;flex:1;min-height:0;border:1px solid var(--line);background:#fff;border-radius:21px;padding:18px 15px;gap:10px}
+.question-card .eyebrow{color:#d74754}
+.question-text{font-size:clamp(19px,5vw,24px);font-weight:900;line-height:1.35;letter-spacing:-.3px;color:var(--navy);margin:4px 0 8px}
+.option{border:2px solid #e2e9f3;border-radius:14px;padding:12px;min-height:56px;background:#fff;text-align:left;display:flex;align-items:center;gap:12px;color:#244067;font-weight:800;font-size:14px}
+.option i{font-style:normal;width:27px;height:27px;flex:none;border-radius:9px;background:#f0f4fb;display:grid;place-items:center;font-size:12px}
+.option.chosen{border-color:#387ed0;background:#edf5ff}
+.option.correct{border-color:#1aa77c;background:#eafbf3}
+.option.wrong{border-color:#e75c69;background:#fff0f1}
+.result{flex:1;min-height:0;background:#fff;border-radius:21px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center}
+.result .medal{font-size:54px}
+.result strong{font-size:51px;font-weight:950;color:#0b9971;line-height:1.2}
+.result h2{font-size:21px;color:var(--navy);margin:12px 0}
+.result p{font-size:13px;color:var(--muted);line-height:1.5}
+.word-list{flex:1;display:grid;grid-template-rows:repeat(var(--words),minmax(0,1fr));gap:9px;min-height:0}
+.word-card{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:10px 12px;min-height:0}
+.word-card button{border:0;width:43px;height:43px;flex:none;border-radius:13px;background:#eaf1fb;color:#205caa;font-size:18px}
+.word-card div{min-width:0}
+.word-card strong{display:block;font-size:15px;color:var(--navy);margin-bottom:5px}
+.word-card small{display:block;font-size:12px;color:var(--muted)}
+.barrows{display:flex;flex-direction:column;gap:12px;min-height:0;flex:1}
+.barrows .barrow{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:14px;border:1px solid var(--line);padding:10px 13px}
+.barrow strong{font-size:13px}.barrow span{font-size:11px;color:var(--muted)}
+.full{width:100%}
+.notice{font-size:11px;color:#6d819a;text-align:center;line-height:1.4}
+@media(max-height:760px){.screen{gap:8px;padding-top:10px;padding-bottom:10px}.top{height:60px}.hero{padding:13px 16px}.hero h1{font-size:21px;margin:5px 0}.hero p{font-size:11px}.stat{padding:7px 2px}.h1{font-size:22px}.feature{padding:10px}.item{padding:7px 10px}.emoji{height:44px;width:44px;min-width:44px}.item-title{font-size:14px}.sentence{padding:10px 12px}.de{font-size:clamp(17px,4.5vw,21px)}.pager{height:45px}.pager button{height:42px}.action{min-height:44px}.question-card{padding:12px}.question-text{font-size:19px}.option{min-height:48px;padding:9px}}
+@media(max-height:620px){.hero{padding:10px}.hero h1{font-size:19px}.hero p{display:none}.stats{gap:5px}.stat strong{font-size:17px}.stat small{font-size:9px}.screen{gap:7px;padding:8px 12px}.read-title h1{font-size:19px}.sentence{padding:9px 11px}.sr{font-size:12px}.de{font-size:17px}.audio{padding:6px 9px}.option{min-height:43px}.feature{padding:9px}.feature h2{font-size:18px}.question-text{margin:0}.word-card{padding:7px}}
+@media(min-width:550px){#app{border-radius:0}}
+</style>
+</head>
+<body>
+<div id="app"><div class="top"><div class="mark">DM</div><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></div></div>
+<div id="toast" role="status" aria-live="polite" style="position:fixed;bottom:13px;left:50%;transform:translateX(-50%);z-index:60;max-width:90%;background:#163668;color:#fff;border-radius:12px;font-size:12px;font-weight:800;padding:11px 15px;display:none"></div>
+<script src="./DE-MAX_A1_LESEN_DATA.js"></script>
+<script>
+(function(){
+'use strict';
+const lessons=window.DEMAX_A1_LESEN||[];
+const STORE='demax_a1_lesen_jednostavno_v1';
+let progress={done:{},results:{},last:{l:0,t:0}};
+try{const old=JSON.parse(localStorage.getItem(STORE));if(old&&typeof old==='object')progress=Object.assign(progress,old)}catch(e){}
+let page='home',lesson=0,text=0,homePage=0,lessonPage=0,readerPage=0,question=0,wordPage=0;
+let translate=false,focused=-1,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
+const app=document.getElementById('app');
+const toastBox=document.getElementById('toast');
+function save(){try{localStorage.setItem(STORE,JSON.stringify(progress))}catch(e){}}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function size(){return window.innerHeight<670?2:3}
+function readerSize(){return window.innerHeight<735?1:2}
+function wordSize(){return window.innerHeight<690?3:4}
+function id(l,t){return l+'-'+t}
+function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
+function percent(n,d){return d?Math.round(100*n/d):0}
+function top(){return '<header class="top">'+(page==='home'?'<div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button>')+'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></header>'}
+function pager(p,pages,kind){return '<div class="pager"><button data-a="previous" data-kind="'+kind+'" '+(p===0?'disabled':'')+'>← Prethodno</button><span>'+(p+1)+' / '+pages+'</span><button data-a="following" data-kind="'+kind+'" '+(p>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
+function listLesson(l,i){
+const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
+return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
+function home(){
+const n=size(),p=Math.max(0,Math.ceil(lessons.length/n)-1);homePage=Math.min(homePage,p);
+return '<main class="screen"><section class="hero"><small>A1 · UČENJE PO LEKCIJAMA</small><h1>Čitaj. Slušaj.<br><em>Razumi nemački.</em></h1><p>Jedna rečenica po koraku. Kratki tekstovi i pitanja.</p></section>'+
+'<div class="stats"><div class="stat"><strong>7</strong><small>lekcija</small></div><div class="stat"><strong>40</strong><small>tekstova</small></div><div class="stat"><strong>'+readCount()+'</strong><small>urađeno</small></div></div>'+
+'<div class="row-head"><h2>Izaberi lekciju</h2><span class="count">A1</span></div>'+
+'<div class="card-list" style="--perpage:'+n+'">'+lessons.slice(homePage*n,homePage*n+n).map((l,j)=>listLesson(l,homePage*n+j)).join('')+'</div>'+
+pager(homePage,p+1,'home')+
+'<button class="progress-link" data-a="stats">📈 Moj napredak</button></main>'}
+function texts(){
+const l=lessons[lesson],n=size(),p=Math.max(0,Math.ceil(l.texts.length/n)-1);lessonPage=Math.min(lessonPage,p);
+return '<main class="screen"><section class="feature"><div><span class="eyebrow">LEKCIJA '+(lesson+1)+' OD 7</span><h2>'+escapeHTML(l.sr)+'</h2><p>'+escapeHTML(l.desc)+'</p></div><span class="glyph">'+l.icon+'</span></section>'+
+'<div class="row-head"><h2>Izaberi tekst</h2><span class="count">'+l.texts.length+' tekstova</span></div>'+
+'<div class="card-list" style="--perpage:'+n+'">'+l.texts.slice(lessonPage*n,(lessonPage+1)*n).map((t,j)=>{const ti=lessonPage*n+j;return '<button class="item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(t.title)+'</span><span class="item-detail">'+t.lines.length+' rečenica · '+t.questions.length+' pitanja'+(progress.done[id(lesson,ti)]?' · ✅':'')+'</span></span><span class="chev">›</span></button>'}).join('')+'</div>'+
+pager(lessonPage,p+1,'texts')+'<div class="notice">Izaberi tekst koji želiš da čitaš.</div></main>'}
+function read(){
+const t=lessons[lesson].texts[text],n=readerSize(),pages=Math.ceil(t.lines.length/n);
+readerPage=Math.min(readerPage,pages-1);
+const start=readerPage*n,finish=Math.min(t.lines.length,start+n);
+const cards=t.lines.slice(start,finish).map((line,j)=>{
+const i=start+j,active=focused===i;
+return '<div class="sentence '+(active?'active':'')+'" data-a="focus" data-i="'+i+'" role="button" tabindex="0"><div class="sentence-top"><span class="sent-n">'+String(i+1).padStart(2,'0')+'</span><span class="de">'+escapeHTML(line[0])+'</span><button class="sound" data-a="speakline" data-i="'+i+'" aria-label="Poslušaj rečenicu">🔊</button></div>'+
+(translate||active?'<p class="sr">'+escapeHTML(line[1])+'</p>':'')+'</div>'}).join('');
+return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+' / '+lessons[lesson].texts.length+'</span><h1>'+escapeHTML(t.title)+'</h1><p>'+t.lines.length+' rečenica · Klikni rečenicu za prevod</p></div>'+
+'<div class="audio"><button class="play" data-a="play">'+(playing?'■ Zaustavi':'▶ Slušaj ceo tekst')+'</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
+'<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><button data-a="translate">'+(translate?'✓ Sakrij prevod':'🌐 SR prevod')+'</button></div>'+
+'<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
+'<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+pager(readerPage,pages,'read')+
+'<div class="read-footer"><button class="action white" data-a="words">📚 Reči</button><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
+function optionList(q){
+return q.options.map((o,i)=>{
+let c=answers[question]===i?'chosen':'';
+if(graded&&i===q.correct)c='correct';
+else if(graded&&answers[question]===i&&i!==q.correct)c='wrong';
+return '<button class="option '+c+'" data-a="answer" data-i="'+i+'" '+(graded?'disabled':'')+'><i>'+String.fromCharCode(65+i)+'</i><span>'+escapeHTML(o)+'</span></button>'
+}).join('')}
+function quiz(){
+const t=lessons[lesson].texts[text],qs=t.questions;
+if(graded){
+const score=qs.filter((q,i)=>answers[i]===q.correct).length;
+return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · '+escapeHTML(t.title)+'</span><h1>Rezultat testa</h1></div>'+
+'<div class="result"><div class="medal">'+(score===qs.length?'🏆':'📘')+'</div><strong>'+percent(score,qs.length)+'%</strong><h2>'+score+' od '+qs.length+' tačno</h2><p>'+(score===qs.length?'Odlično! Razumeo/la si ceo tekst.':'Pročitaj tekst ponovo i pokušaj da popraviš rezultat.')+'</p></div>'+
+'<div class="read-footer"><button class="action white" data-a="retry">↻ Ponovi test</button><button class="action green" data-a="nexttext">Sledeći tekst →</button></div></main>'
+}
+const q=qs[question];
+return '<main class="screen"><div class="read-title"><span class="eyebrow">PROVERA ZNANJA · '+escapeHTML(t.title)+'</span><h1>Pitanje '+(question+1)+' od '+qs.length+'</h1></div>'+
+'<div class="progress-track"><i style="width:'+percent(question+1,qs.length)+'%"></i></div>'+
+'<div class="question-card"><span class="eyebrow">IZABERI JEDAN ODGOVOR</span><div class="question-text">'+escapeHTML(q.q)+'</div>'+optionList(q)+'</div>'+
+pager(question,qs.length,'quiz')+
+'<button class="action green full" data-a="grade">✓ Proveri odgovore</button></main>'
+}
+function words(){
+const t=lessons[lesson].texts[text],n=wordSize(),pages=Math.ceil(t.words.length/n);wordPage=Math.min(wordPage,pages-1);
+return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+'</span><h1>Reči iz teksta</h1><p>Dodirni 🔊 da čuješ nemački izgovor.</p></div>'+
+'<div class="word-list" style="--words:'+n+'">'+t.words.slice(wordPage*n,(wordPage+1)*n).map(w=>'<div class="word-card"><button data-a="speakword" data-word="'+escapeHTML(w[0])+'" aria-label="Izgovori reč">🔊</button><div><strong>'+escapeHTML(w[0])+'</strong><small>'+escapeHTML(w[1])+'</small></div></div>').join('')+'</div>'+
+pager(wordPage,pages,'words')+'<button class="action green full" data-a="quiz">✓ Provera znanja</button></main>'}
+function stats(){
+const n=size(),p=Math.ceil(lessons.length/n);homePage=Math.min(homePage,p-1);
+return '<main class="screen"><div class="feature"><div><span class="eyebrow">MOJ NAPREDAK</span><h2>'+readCount()+' / 40 tekstova</h2><p>Rezultati se čuvaju samo na ovom uređaju.</p></div><span class="glyph">📈</span></div>'+
+'<div class="row-head"><h2>Po lekcijama</h2><span class="count">'+percent(readCount(),40)+'%</span></div>'+
+'<div class="card-list" style="--perpage:'+n+'">'+lessons.slice(homePage*n,homePage*n+n).map((l,j)=>listLesson(l,homePage*n+j)).join('')+'</div>'+
+pager(homePage,p,'stats')+'<div class="notice">Nema Google Drive povezivanja. Napredak ostaje lokalno.</div></main>'}
+function render(){app.innerHTML=top()+(page==='home'?home():page==='texts'?texts():page==='read'?read():page==='quiz'?quiz():page==='words'?words():stats())}
+function notify(s){toastBox.textContent=s;toastBox.style.display='block';clearTimeout(notify.t);notify.t=setTimeout(()=>{toastBox.style.display='none'},2200)}
+function stopAudio(){speechSerial++;playing=false;try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(e){}}
+function sound(phrase,after){
+if(!('speechSynthesis' in window)){notify('Izgovor nije podržan u ovom pregledaču.');return}
+const serial=++speechSerial;
+try{window.speechSynthesis.cancel()}catch(e){}
+const u=new SpeechSynthesisUtterance(phrase);u.lang='de-DE';u.rate=voiceRate;
+const voices=window.speechSynthesis.getVoices();const v=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('de'));if(v)u.voice=v;
+u.onend=()=>{if(serial===speechSerial&&after)after()};
+u.onerror=()=>{if(serial===speechSerial){playing=false;render()}};
+window.speechSynthesis.speak(u)}
+function speakWhole(i){
+const t=lessons[lesson].texts[text];if(i>=t.lines.length){playing=false;focused=-1;render();return}
+playing=true;focused=i;readerPage=Math.floor(i/readerSize());render();
+sound(t.lines[i][0],()=>{if(page==='read'&&playing)speakWhole(i+1)});
+}
+function previousStep(kind,step){
+if(kind==='home'||kind==='stats'){homePage=Math.max(0,Math.min(Math.ceil(lessons.length/size())-1,homePage+step))}
+else if(kind==='texts'){lessonPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts.length/size())-1,lessonPage+step))}
+else if(kind==='read'){stopAudio();focused=-1;readerPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].lines.length/readerSize())-1,readerPage+step))}
+else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].questions.length-1,question+step))}
+else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
+render()
+}
+function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;translate=false;focused=-1;answers={};graded=false;page='read';render()}
+function back(){
+stopAudio();
+if(page==='home')return;
+if(page==='texts'||page==='stats')page='home';
+else if(page==='read')page='texts';
+else if(page==='quiz'||page==='words')page='read';
+render()
+}
+document.addEventListener('click',e=>{
+const b=e.target.closest('[data-a]');if(!b)return;
+const a=b.dataset.a;
+if(a==='back')back();
+else if(a==='lesson'){lesson=Number(b.dataset.l);lessonPage=0;page='texts';render()}
+else if(a==='read')openText(Number(b.dataset.t));
+else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previous'?-1:1);
+else if(a==='stats'){homePage=0;page='stats';render()}
+else if(a==='focus'){focused=Number(b.dataset.i);render()}
+else if(a==='translate'){translate=!translate;render()}
+else if(a==='speakline'){e.stopPropagation();stopAudio();focused=Number(b.dataset.i);render();sound(lessons[lesson].texts[text].lines[focused][0])}
+else if(a==='play'){if(playing){stopAudio();render()}else{speakWhole(0)}}
+else if(a==='speed'){stopAudio();voiceRate=voiceRate===.75?.9:voiceRate===.9?1.07:.75;render()}
+else if(a==='words'){stopAudio();wordPage=0;page='words';render()}
+else if(a==='speakword'){stopAudio();sound(b.dataset.word)}
+else if(a==='quiz'){stopAudio();question=0;page='quiz';render()}
+else if(a==='answer'){answers[question]=Number(b.dataset.i);render()}
+else if(a==='grade'){
+const qs=lessons[lesson].texts[text].questions,missing=qs.findIndex((q,i)=>answers[i]===undefined);
+if(missing>=0){question=missing;render();notify('Izaberi odgovor na svako pitanje.');return}
+const score=qs.filter((q,i)=>answers[i]===q.correct).length;
+const k=id(lesson,text),pct=percent(score,qs.length);
+progress.results[k]={best:Math.max(pct,(progress.results[k]||{}).best||0),last:pct};
+progress.done[k]=true;save();graded=true;render()
+}
+else if(a==='retry'){answers={};graded=false;question=0;render()}
+else if(a==='nexttext'){
+if(text+1<lessons[lesson].texts.length)openText(text+1);
+else if(lesson+1<lessons.length){lesson++;lessonPage=0;openText(0)}
+else{page='home';render();notify('Bravo, završio/la si sve tekstove!')}
+}
+});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset&&e.target.dataset.a==='focus'){e.preventDefault();focused=Number(e.target.dataset.i);render()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio()}});
+if(!lessons.length){app.innerHTML='<div style="padding:20px">Tekstovi nisu učitani. Proveri internet i osveži stranicu.</div>';return}
+render();
+})();
+</script>
+</body></html>
