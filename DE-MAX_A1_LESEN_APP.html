@@ -215,7 +215,7 @@ body{padding:0!important}
  .hero-title{font-size:20px}.hero-description,.book-illustration,.hero-badge{display:none}
  .stat-mini{padding:5px}.reader-head .lead{display:none}
  .read-panel-note{display:none}.player-info{display:none}
- .sentence:nth-child(2){display:none}
+
 }
 
 </style>
@@ -265,7 +265,7 @@ var t=L[lessonIndex].texts[textIndex];if(i<0||i>=t.lines.length){speaking=false;
 var token=++speechToken;try{speechSynthesis.cancel()}catch(e){}
 speaking=true;focus=i;updateAudioUI();var u=new SpeechSynthesisUtterance(t.lines[i][0]);u.lang='de-DE';u.rate=rate;u.pitch=1;
 var voices=speechSynthesis.getVoices();var voice=voices.find(function(v){return /^de(-|_)/i.test(v.lang)})||voices.find(function(v){return /^de/i.test(v.lang)});if(voice)u.voice=voice;
-u.onstart=function(){if(token===speechToken){focus=i;updateAudioUI();if(continuous&&sentencePage!==Math.floor(i/2)){sentencePage=Math.floor(i/2);render(true)}}};
+u.onstart=function(){if(token===speechToken){focus=i;updateAudioUI();if(continuous&&sentencePage!==Math.floor(i/sentenceSize())){sentencePage=Math.floor(i/sentenceSize());render(true)}}};
 u.onend=function(){if(token!==speechToken)return;if(continuous && i+1<t.lines.length){speakAt(i+1,true)}else{speaking=false;updateAudioUI()}};
 u.onerror=function(){if(token===speechToken){speaking=false;updateAudioUI()}};
 speechSynthesis.speak(u)}
@@ -274,6 +274,7 @@ var arr=[['home','home','Početna'],['library','grid','Tekstovi'],['stats','char
 return '<nav class="bottom-nav" aria-label="Glavna navigacija">'+arr.map(function(x){return '<button class="nav-item '+(active===x[0]?'active':'')+'" data-action="goto" data-view="'+x[0]+'"><span class="navicon">'+svg(x[1])+'</span>'+x[2]+'</button>'}).join('')+'</nav>'}
 function topBar(){return '<header class="topbar"><div class="logo">DM</div><div class="brand"><div><div class="brand-name">DE-MAX <span style="color:#e74758">LESEN</span></div><div class="brand-sub">DEUTSCH A1 · TUTIN</div></div></div></header>'}
 function pageSize(){return window.innerHeight&&window.innerHeight<710?2:3}
+function sentenceSize(){return window.innerHeight&&window.innerHeight<610?1:2}
 function pager(page,total,prefix){
 var pages=Math.max(1,Math.ceil(total/pageSize()));
 return '<div class="page-controls"><button class="pagebtn" data-action="'+prefix+'-prev" '+(page<=0?'disabled':'')+'>← Prethodno</button><span class="page-n">'+(page+1)+' / '+pages+'</span><button class="pagebtn" data-action="'+prefix+'-next" '+(page>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
@@ -307,7 +308,7 @@ return '<header class="reader-top"><button class="back-button back-red" data-act
 '</div></main>'}
 
 function readPanel(t){
-var size=2,from=sentencePage*size,total=t.lines.length,pages=Math.ceil(total/size);
+var size=sentenceSize(),from=sentencePage*size,total=t.lines.length,pages=Math.ceil(total/size);
 sentencePage=Math.min(sentencePage,pages-1);from=sentencePage*size;
 var content='<section class="player"><div class="player-title">🎧 NEMAČKI IZGOVOR</div><div class="player-info">Slušaj i prati rečenice</div><div class="player-actions"><button class="player-main" id="play-all" data-action="play">'+svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst')+'</button><button class="player-small" data-action="rate">'+(rate===.75?'Sporo':rate===.88?'Normalno':'Brzo')+'</button></div></section>';
 content+='<div class="reader-tools"><span class="eyebrow">ČITANJE: '+(from+1)+'–'+Math.min(from+size,total)+' / '+total+'</span><button class="toggle '+(showTranslations?'active':'')+'" data-action="translate">'+(showTranslations?'✓ Prevod uključen':'SR prevod')+'</button></div>';
@@ -398,7 +399,7 @@ else if(a==='home-prev'||a==='home-next'){homePage=Math.max(0,Math.min(Math.ceil
 else if(a==='lesson-prev'||a==='lesson-next'){lessonPageNum=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts.length/pageSize())-1,lessonPageNum+(a==='lesson-next'?1:-1)));render()}
 else if(a==='stats-prev'||a==='stats-next'){statsPageNum=Math.max(0,Math.min(Math.ceil(L.length/pageSize())-1,statsPageNum+(a==='stats-next'?1:-1)));render()}
 else if(a==='library-prev'||a==='library-next'){libraryPageNum=Math.max(0,Math.min(Math.ceil(libraryMatches().length/pageSize())-1,libraryPageNum+(a==='library-next'?1:-1)));render()}
-else if(a==='sentence-prev'||a==='sentence-next'){stopSpeak();sentencePage=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts[textIndex].lines.length/2)-1,sentencePage+(a==='sentence-next'?1:-1)));focus=-1;render()}
+else if(a==='sentence-prev'||a==='sentence-next'){stopSpeak();sentencePage=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts[textIndex].lines.length/sentenceSize())-1,sentencePage+(a==='sentence-next'?1:-1)));focus=-1;render()}
 else if(a==='question-prev'||a==='question-next'){questionPage=Math.max(0,Math.min(L[lessonIndex].texts[textIndex].questions.length-1,questionPage+(a==='question-next'?1:-1)));render()}
 else if(a==='word-prev'||a==='word-next'){wordPage=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts[textIndex].words.length/3)-1,wordPage+(a==='word-next'?1:-1)));render()}
 else if(a==='backup'){try{var blob=new Blob([JSON.stringify({app:'DE-MAX-A1-LESEN',version:1,date:new Date().toISOString(),progress:progress},null,2)],{type:'application/json'});var url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='DE-MAX_A1_LESEN_napredak.json';link.click();setTimeout(function(){URL.revokeObjectURL(url)},3000);toast('Rezervna kopija je preuzeta.')}catch(err){toast('Preuzimanje nije uspelo.')}}
