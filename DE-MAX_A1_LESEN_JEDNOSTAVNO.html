@@ -232,6 +232,36 @@ button:disabled{opacity:.32;cursor:default}
  .home-hero small{font-size:7.5px}
 }
 
+
+/* Zelena interakcija za izbor lekcije i teksta. */
+.home-lesson,.text-item{
+  transition:background-color .14s ease,border-color .14s ease,box-shadow .14s ease,transform .12s ease;
+}
+@media(hover:hover) and (pointer:fine){
+  .home-lesson:hover,.text-item:hover{
+    background:#e0f8e9;border-color:#17a471;box-shadow:0 4px 12px rgba(8,136,86,.13);
+  }
+  .home-lesson:hover .item-title,.text-item:hover .item-title{color:#087d53}
+  .home-lesson:hover .chev,.text-item:hover .chev{color:#087d53}
+  .home-lesson:hover .emoji,.text-item:hover .emoji{background:#bdeed1}
+}
+.home-lesson:active,.text-item:active,
+.home-lesson.is-selected,.text-item.is-selected{
+  background:#0d9767!important;border-color:#087b54!important;color:#fff!important;
+  box-shadow:0 5px 14px rgba(7,120,77,.2)!important;
+}
+.home-lesson:active .item-number,.text-item:active .item-number,
+.home-lesson.is-selected .item-number,.text-item.is-selected .item-number{color:#e1fff0!important}
+.home-lesson:active .item-title,.text-item:active .item-title,
+.home-lesson.is-selected .item-title,.text-item.is-selected .item-title{color:#fff!important}
+.text-item:active .item-subtitle,.text-item.is-selected .item-subtitle{color:#dcffec!important}
+.home-lesson:active .chev,.text-item:active .chev,
+.home-lesson.is-selected .chev,.text-item.is-selected .chev{color:#f5fff9!important}
+.home-lesson:active .emoji,.text-item:active .emoji,
+.home-lesson.is-selected .emoji,.text-item.is-selected .emoji{background:#38b98d!important}
+.home-lesson:focus-visible,.text-item:focus-visible{outline:3px solid #45d29a;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.home-lesson,.text-item{transition:none}}
+
 </style>
 </head>
 <body>
@@ -246,6 +276,7 @@ const STORE='demax_a1_lesen_jednostavno_v1';
 let progress={done:{},results:{},last:{l:0,t:0}};
 try{const old=JSON.parse(localStorage.getItem(STORE));if(old&&typeof old==='object')progress=Object.assign(progress,old)}catch(e){}
 let page='home',lesson=0,text=0,homePage=0,lessonPage=0,readerPage=0,question=0,wordPage=0;
+let selectedLesson=-1,selectedText=-1;
 let focused=-1,lastLine=0,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
 const app=document.getElementById('app');
 const toastBox=document.getElementById('toast');
@@ -266,7 +297,7 @@ function home(){
 return '<main class="screen home-screen"><section class="hero home-hero"><small><span class="hero-kicker">DE-MAX A1 · NEMAČKI IZGOVOR</span><span class="hero-detail">✦ Vežbaj čitanje rečenica</span></small><h1>Slušaj i ponovi <em>izgovor rečenica</em></h1></section>'+
 '<div class="row-head home-heading"><h2>Izaberi lekciju</h2><span class="count">7 lekcija · 40 tekstova</span></div>'+
 '<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
-lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
+lessons.map((l,i)=>'<button class="item home-lesson '+(selectedLesson===i?'is-selected':'')+'" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
 '</div></main>'}
 const textTitleTranslations=[["Zdravo, ja sam Amir!","Dobro jutro na kursu","Moja nova komšinica","Razgovor u parku","Vidimo se sutra!"],["Ovo je moja porodica","Njegov bicikl i njena torba","Naš kurs nemačkog jezika","Tvoja soba, moja soba","Vaša porodica i naša porodica"],["Moj doručak","U supermarketu","U kafiću","Večera kod kuće","Na pijaci","Šta želiš da jedeš?"],["Moj stan","U prodavnici nameštaja","Bicikl","Moja odeća","U bašti","Učionica"],["Moja dnevna rutina","Moja sedmica","Važan termin","Na železničkoj stanici","Lepa nedelja","Raspored časova"],["Kakvo je vreme danas?","Četiri godišnja doba","Moj otac je građevinski radnik","U bolnici","Zanimanja u gradu","Vremenska prognoza"],["Moji hobiji","Moje omiljeno jelo","Moj najbolji prijatelj","Naša porodica u Beču","Koje jezike govoriš?","Moje slobodno vreme u Berlinu"]];
 function texts(){
@@ -274,7 +305,7 @@ const l=lessons[lesson];
 return '<main class="screen texts-screen"><section class="lesson-plain">Lekcija '+(lesson+1)+'</section>'+
 '<div class="row-head"><h2>Izaberi tekst</h2><span class="count">'+l.texts.length+' tekstova</span></div>'+
 '<div class="card-list text-list" style="--perpage:'+l.texts.length+'">'+
-l.texts.map((t,ti)=>'<button class="item text-item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title">'+escapeHTML(t.title)+'</span><span class="item-subtitle">'+escapeHTML(textTitleTranslations[lesson][ti])+'</span></span><span class="chev">›</span></button>').join('')+
+l.texts.map((t,ti)=>'<button class="item text-item '+(selectedLesson===lesson&&selectedText===ti?'is-selected':'')+'" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title">'+escapeHTML(t.title)+'</span><span class="item-subtitle">'+escapeHTML(textTitleTranslations[lesson][ti])+'</span></span><span class="chev">›</span></button>').join('')+
 '</div><button class="action red texts-back" data-a="back">← Nazad</button></main>'}
 function read(){
 const t=lessons[lesson].texts[text],n=readerSize(),pages=Math.ceil(t.lines.length/n);
@@ -353,7 +384,7 @@ else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].
 else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
 render()
 }
-function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
+function openText(t){stopAudio();text=t;selectedLesson=lesson;selectedText=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
 function back(){
 stopAudio();
 if(page==='home')return;
@@ -368,7 +399,7 @@ const a=b.dataset.a;
 if(a==='back')back();
 else if(a==='readback'){if(readerPage>0){previousStep('read',-1)}else back()}
 else if(a==='textsback'){if(lessonPage>0){lessonPage--;render()}else back()}
-else if(a==='lesson'){lesson=Number(b.dataset.l);lessonPage=0;page='texts';render()}
+else if(a==='lesson'){const nextLesson=Number(b.dataset.l);if(selectedLesson!==nextLesson)selectedText=-1;lesson=nextLesson;selectedLesson=lesson;lessonPage=0;page='texts';render()}
 else if(a==='read')openText(Number(b.dataset.t));
 else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previous'?-1:1);
 else if(a==='focus'){focused=Number(b.dataset.i);render()}
