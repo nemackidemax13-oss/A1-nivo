@@ -317,7 +317,7 @@ function words(){
 const t=lessons[lesson].texts[text],n=wordSize(),pages=Math.ceil(t.words.length/n);wordPage=Math.min(wordPage,pages-1);
 return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+'</span><h1>Reči iz teksta</h1><p>Dodirni 🔊 da čuješ nemački izgovor.</p></div>'+
 '<div class="word-list" style="--words:'+n+'">'+t.words.slice(wordPage*n,(wordPage+1)*n).map(w=>'<div class="word-card"><button data-a="speakword" data-word="'+escapeHTML(w[0])+'" aria-label="Izgovori reč">🔊</button><div><strong>'+escapeHTML(w[0])+'</strong><small>'+escapeHTML(w[1])+'</small></div></div>').join('')+'</div>'+
-pager(wordPage,pages,'words')+'<button class="action green full" data-a="quiz">✓ Provera znanja</button></main>'}
+pager(wordPage,pages,'words')+'</main>'}
 function stats(){
 const n=size(),p=Math.ceil(lessons.length/n);homePage=Math.min(homePage,p-1);
 return '<main class="screen"><div class="feature"><div><span class="eyebrow">MOJ NAPREDAK</span><h2>'+readCount()+' / 40 tekstova</h2><p>Rezultati se čuvaju samo na ovom uređaju.</p></div><span class="glyph">📈</span></div>'+
