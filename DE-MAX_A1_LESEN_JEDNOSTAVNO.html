@@ -128,7 +128,7 @@ const STORE='demax_a1_lesen_jednostavno_v1';
 let progress={done:{},results:{},last:{l:0,t:0}};
 try{const old=JSON.parse(localStorage.getItem(STORE));if(old&&typeof old==='object')progress=Object.assign(progress,old)}catch(e){}
 let page='home',lesson=0,text=0,homePage=0,lessonPage=0,readerPage=0,question=0,wordPage=0;
-let translate=false,focused=-1,lastLine=0,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
+let focused=-1,lastLine=0,answers={},graded=false,playing=false,voiceRate=.9,speechSerial=0;
 const app=document.getElementById('app');
 const toastBox=document.getElementById('toast');
 function save(){try{localStorage.setItem(STORE,JSON.stringify(progress))}catch(e){}}
@@ -165,10 +165,10 @@ const start=readerPage*n,finish=Math.min(t.lines.length,start+n);
 const cards=t.lines.slice(start,finish).map((line,j)=>{
 const i=start+j,active=focused===i;
 return '<div class="sentence '+(active?'active':'')+'" data-a="focus" data-i="'+i+'" role="button" tabindex="0"><div class="sentence-top"><span class="sent-n">'+String(i+1).padStart(2,'0')+'</span><span class="de">'+escapeHTML(line[0])+'</span><button class="sound" data-a="speakline" data-i="'+i+'" aria-label="Poslušaj rečenicu">🔊</button></div>'+
-(translate||active?'<p class="sr">'+escapeHTML(line[1])+'</p>':'')+'</div>'}).join('');
-return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+' / '+lessons[lesson].texts.length+'</span><h1>'+escapeHTML(t.title)+'</h1><p>'+t.lines.length+' rečenica · Klikni rečenicu za prevod</p></div>'+
+'<p class="sr">'+escapeHTML(line[1])+'</p></div>'}).join('');
+return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCIJA '+(lesson+1)+' · TEKST '+(text+1)+' / '+lessons[lesson].texts.length+'</span><h1>'+escapeHTML(t.title)+'</h1><p>'+t.lines.length+' rečenica · Prevod se prikazuje ispod svake rečenice</p></div>'+
 '<div class="audio"><button class="play" data-a="play">'+(playing?'■ Stop':'▶ Slušaj tekst')+'</button><button class="repeat" data-a="repeat" aria-label="Ponovi izgovor rečenice">↻ Ponovi</button><button class="speed" data-a="speed">'+(voiceRate===.75?'Sporo':voiceRate===.9?'Normalno':'Brzo')+'</button></div>'+
-'<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><button data-a="translate">'+(translate?'✓ Sakrij prevod':'🌐 SR prevod')+'</button></div>'+
+'<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><span>DE / SR</span></div>'+
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+pager(readerPage,pages,'read')+
 '<div class="read-footer"><button class="action white" data-a="words">📚 Reči</button><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
@@ -234,7 +234,7 @@ else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].
 else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
 render()
 }
-function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;translate=false;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
+function openText(t){stopAudio();text=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
 function back(){
 stopAudio();
 if(page==='home')return;
@@ -252,7 +252,6 @@ else if(a==='read')openText(Number(b.dataset.t));
 else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previous'?-1:1);
 else if(a==='stats'){homePage=0;page='stats';render()}
 else if(a==='focus'){focused=Number(b.dataset.i);render()}
-else if(a==='translate'){translate=!translate;render()}
 else if(a==='speakline'){e.stopPropagation();stopAudio();focused=Number(b.dataset.i);lastLine=focused;render();sound(lessons[lesson].texts[text].lines[focused][0])}
 else if(a==='repeat'){
   stopAudio();
