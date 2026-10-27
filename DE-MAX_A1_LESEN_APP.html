@@ -122,12 +122,108 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
 @media(min-width:570px){body{padding:16px 0}.app{border-radius:27px;min-height:calc(100vh - 32px);overflow:hidden}.bottom-nav{bottom:0;border-radius:20px 20px 0 0}}
 @media(max-width:360px){.content,.reader-body{padding-left:13px;padding-right:13px}.home-hero{padding-left:15px}.book-illustration{width:96px;right:4px}.hero-title{font-size:30px}.lesson-card{gap:9px}.lesson-icon{width:44px;height:50px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* DE-MAX LESEN V2: bez vertikalnog skrolovanja; navigacija po stranicama */
+html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
+body{padding:0!important}
+.app{height:100vh;height:100dvh;min-height:0;max-height:100dvh;overflow:hidden!important;border-radius:0!important}
+.topbar{height:62px;min-height:62px;padding:8px 15px;position:relative;flex:none}
+.topbar .brand{text-align:right;margin-left:auto;gap:0}
+.topbar .brand-name{font-size:17px}
+.topbar .brand-sub{font-size:10px}
+.home-hero{height:145px;min-height:145px;padding:14px 18px 12px}
+.hero-title{font-size:24px;margin:5px 0;line-height:1.1}
+.hero-description{font-size:11px;margin:0 0 8px;line-height:1.25;max-width:270px}
+.hero-button{min-height:36px;padding:8px 11px;font-size:11px}
+.hero-badge{padding:7px 9px;font-size:10px}
+.book-illustration{width:90px;top:25px;right:10px}
+.content{height:calc(100dvh - 132px);padding:11px 15px 8px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.home-content{height:calc(100dvh - 277px)}
+.overview{margin-bottom:9px;gap:7px;flex:none}
+.stat-mini{padding:7px 5px;border-radius:12px}.stat-mini strong{font-size:19px}.stat-mini small{font-size:9px}
+.section-heading{margin:7px 1px 10px;flex:none}.section-heading h2{font-size:18px}
+.lesson-card{min-height:68px;flex:none;padding:8px 10px;margin-bottom:7px;border-radius:14px;gap:10px}
+.lesson-icon{width:43px;height:43px;border-radius:12px;font-size:21px}
+.lesson-title{font-size:13px;margin:2px 0}.lesson-sub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-meta .tinybar{margin-top:5px}
+.bottom-nav{position:absolute;transform:none;left:0;width:100%;height:70px;min-height:70px}
+.page-controls{display:flex;align-items:center;justify-content:space-between;gap:9px;flex:none;margin-top:6px}
+.page-controls .page-n{color:#667c9b;font-size:11px;font-weight:900;white-space:nowrap}
+.pagebtn{height:35px;min-width:88px;border:1px solid #d8e4f2;border-radius:11px;color:#163969;background:#fff;font-weight:850;font-size:11px;padding:6px 10px}
+.pagebtn:disabled{opacity:.35}
+.callout{display:none}
+.backbar{height:58px;padding:9px 16px;display:flex;align-items:center;gap:9px}
+.mini-brand{text-align:right;margin-left:auto}.mini-brand strong{display:block;color:#0a2e67;font-size:14px;letter-spacing:-.4px}
+.mini-brand small{display:block;color:#7f92a9;font-size:9px;font-weight:850;letter-spacing:1.1px;margin-top:2px}
+.back-red,.btn.back-red{background:#e64050!important;border-color:#e64050!important;color:#fff!important}
+.knowledge,.btn.knowledge{background:#129a70!important;border-color:#129a70!important;color:#fff!important}
+.back-button{border:0;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;display:flex;align-items:center;gap:5px;min-height:42px;white-space:nowrap}
+.lesson-cover{height:123px;margin:0 15px 10px;padding:13px 16px;border-radius:17px}
+.lesson-cover h1{font-size:20px;margin:5px 0}.lesson-cover p{font-size:11px;line-height:1.3;max-width:270px}
+.lesson-cover .cover-icon{font-size:28px;top:18px}
+.section-list{height:calc(100dvh - 58px - 123px - 10px - 70px);overflow:hidden;padding:0 15px 7px;display:flex;flex-direction:column}
+.story-card{min-height:64px;flex:none;padding:9px 11px;margin-bottom:8px;border-radius:14px}
+.story-num{width:35px;height:37px}.story-title{font-size:13px}.story-sub{font-size:10px}
+.reader-top{height:61px;padding:7px 13px;position:relative;top:auto}
+.reader-body{height:calc(100dvh - 61px);padding:13px 14px 12px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.reader-head{margin-bottom:7px;flex:none}.reader-head h1{font-size:23px;margin:4px 0;line-height:1.13}
+.reader-head .lead{font-size:10px}.eyebrow{font-size:9px}
+.tabbar{margin:7px 0 10px;padding:4px;flex:none}.tab{padding:9px 3px;font-size:11px}
+.player{padding:11px 13px;margin-bottom:8px;border-radius:13px;flex:none}
+.player-title{font-size:9px}.player-info{font-size:12px;margin-top:4px}
+.player-actions{margin-top:6px}.player-main,.player-small{min-height:36px;padding:7px 10px}
+.reader-tools{margin-bottom:4px;flex:none}.toggle{font-size:10px;padding:7px 9px}
+.tip{font-size:10px;margin:4px 2px 8px;line-height:1.35}
+.sentences-page{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start}
+.sentence{min-height:0;flex:none;margin-bottom:7px;padding:11px 9px;border-radius:12px}
+.sent-main{font-size:14px;line-height:1.42}
+.sent-sr{font-size:11px;margin-top:5px;padding-top:4px}
+.sent-speak{width:32px;height:32px}
+.read-pager{margin-top:auto;flex:none;padding:5px 0}
+.reader-footer{display:grid;grid-template-columns:1fr 1.2fr;gap:9px;flex:none;margin-top:auto;padding-top:8px}
+.reader-footer .btn{min-height:42px}
+.qcard{padding:13px;box-shadow:none;border-radius:14px;margin:0;flex:none}
+.qtitle{font-size:14px;margin:6px 0 8px}.option{min-height:42px;margin-top:7px;font-size:12px;padding:8px 10px}
+.quiz-panel{display:flex;flex-direction:column;flex:1;min-height:0}
+.quiz-panel .page-sub{margin-bottom:9px}
+.quiz-panel .qcard{margin-top:5px}
+.quiz-panel .read-pager{margin-top:auto}
+.quiz-summary-mini{background:#e7f8f0;padding:9px 12px;border:1px solid #c4edda;border-radius:12px;font-size:12px;font-weight:850;color:#118465;margin-top:9px;flex:none}
+.words-panel{flex:1;display:flex;flex-direction:column;min-height:0}
+.words-panel .page-sub{margin-bottom:7px}.wordcard{padding:8px 10px;border-radius:12px;min-height:56px}
+.words-page{display:grid;gap:6px;align-content:start}
+.wordcard .circlebtn{height:34px;width:34px;border-radius:10px}
+.word-de{font-size:13px}.word-sr{font-size:11px}
+.search-field{margin:0 0 7px;flex:none;padding:10px}
+.library-select{border:1px solid #dfe6f0;background:#fff;color:#1b416f;border-radius:10px;min-height:39px;width:100%;margin:0 0 8px;padding:7px;font-size:12px;font-weight:850}
+.progress-big{padding:13px;margin-bottom:9px;flex:none}.progress-big strong{font-size:27px}.progress-big .bar{margin-top:9px}
+.panel{box-shadow:none}
+.stats-actions{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:auto;font-size:10px}
+.stats-actions .btn{min-height:36px;font-size:10px}
+@media(max-height:715px){
+ .home-hero{height:130px;min-height:130px}.home-content{height:calc(100dvh - 262px)}
+ .hero-description{max-width:260px}
+ .lesson-card{min-height:62px;margin-bottom:5px;padding:6px 9px}
+ .lesson-icon{width:39px;height:39px}.section-heading{margin:4px 1px 7px}
+ .reader-body{padding:9px 12px 8px}.reader-head h1{font-size:20px}
+ .player{padding:8px 11px}.tabbar{margin:5px 0 7px}.tab{padding:7px 3px}
+ .sentence{padding:8px}.sent-main{font-size:13px}
+ .lesson-cover{height:112px}.section-list{height:calc(100dvh - 58px - 112px - 10px - 70px)}
+}
+@media(max-height:610px){
+ .home-hero{height:106px;min-height:106px}.home-content{height:calc(100dvh - 238px)}
+ .hero-title{font-size:20px}.hero-description,.book-illustration,.hero-badge{display:none}
+ .stat-mini{padding:5px}.reader-head .lead{display:none}
+ .read-panel-note{display:none}.player-info{display:none}
+ .sentence:nth-child(2){display:none}
+}
+
 </style>
 <script src="./DE-MAX_A1_LESEN_DATA.js" defer></script>
 <script defer>
 (function(){
 'use strict';
-var L=[],view='home',lessonIndex=0,textIndex=0,tab='lesen',focus=-1,showTranslations=false,rate=0.88,answers={},submitted=false,filter='all',search='',speaking=false,speechToken=0,installPrompt=null;
+var L=[],view='home',lessonIndex=0,textIndex=0,tab='lesen',focus=-1,showTranslations=false,rate=0.88,answers={},submitted=false,filter='all',search='',speaking=false,speechToken=0,installPrompt=null,homePage=0,lessonPageNum=0,libraryPageNum=0,statsPageNum=0,sentencePage=0,questionPage=0,wordPage=0;
 var STORE='demax_a1_lesen_progress_v1';
 function readStore(){try{return JSON.parse(localStorage.getItem(STORE))||{}}catch(e){return {}}}
 var progress=Object.assign({done:{},results:{},bookmarks:[],words:[],last:null},readStore());
@@ -159,7 +255,7 @@ function key(l,t){return l+'-'+t}
 function isFav(l,t){return progress.bookmarks.indexOf(key(l,t))>=0}
 function wordKey(l,t,w){return key(l,t)+'-'+w}
 function percentage(n,d){return d?Math.round(n/d*100):0}
-function scrollTop(){window.scrollTo(0,0)}
+function scrollTop(){/* Bez vertikalnog skrolovanja */}
 function toast(message){var el=document.getElementById('toast');if(!el)return;el.textContent=message;el.classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(function(){el.classList.remove('visible')},2400)}
 function stopSpeak(){speechToken++;speaking=false;if('speechSynthesis' in window){try{speechSynthesis.cancel()}catch(e){}}updateAudioUI()}
 function updateAudioUI(){var b=document.getElementById('play-all');if(b)b.innerHTML=svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst');document.querySelectorAll('.sentence').forEach(function(el){el.classList.toggle('active',Number(el.dataset.index)===focus)})}
@@ -169,48 +265,91 @@ var t=L[lessonIndex].texts[textIndex];if(i<0||i>=t.lines.length){speaking=false;
 var token=++speechToken;try{speechSynthesis.cancel()}catch(e){}
 speaking=true;focus=i;updateAudioUI();var u=new SpeechSynthesisUtterance(t.lines[i][0]);u.lang='de-DE';u.rate=rate;u.pitch=1;
 var voices=speechSynthesis.getVoices();var voice=voices.find(function(v){return /^de(-|_)/i.test(v.lang)})||voices.find(function(v){return /^de/i.test(v.lang)});if(voice)u.voice=voice;
-u.onstart=function(){if(token===speechToken){focus=i;updateAudioUI();var line=document.querySelector('.sentence[data-index="'+i+'"]');if(line && continuous)line.scrollIntoView({behavior:'smooth',block:'center'})}};
+u.onstart=function(){if(token===speechToken){focus=i;updateAudioUI();if(continuous&&sentencePage!==Math.floor(i/2)){sentencePage=Math.floor(i/2);render(true)}}};
 u.onend=function(){if(token!==speechToken)return;if(continuous && i+1<t.lines.length){speakAt(i+1,true)}else{speaking=false;updateAudioUI()}};
 u.onerror=function(){if(token===speechToken){speaking=false;updateAudioUI()}};
 speechSynthesis.speak(u)}
-function navBar(active){var arr=[['home','home','Početna'],['library','grid','Tekstovi'],['saved','heart','Sačuvano'],['stats','chart','Napredak']];return '<nav class="bottom-nav" aria-label="Glavna navigacija">'+arr.map(function(x){return '<button class="nav-item '+(active===x[0]?'active':'')+'" data-action="goto" data-view="'+x[0]+'"><span class="navicon">'+svg(x[1])+'</span>'+x[2]+'</button>'}).join('')+'</nav>'}
-function topBar(){return '<header class="topbar"><div class="brand"><div class="logo">DM</div><div><div class="brand-name">DE-MAX <span style="color:#e74758">LESEN</span></div><div class="brand-sub">DEUTSCH A1 · TUTIN</div></div></div><button class="circlebtn" data-action="goto" data-view="library" aria-label="Pretraga tekstova">'+svg('search')+'</button></header>'}
+function navBar(active){
+var arr=[['home','home','Početna'],['library','grid','Tekstovi'],['stats','chart','Napredak']];
+return '<nav class="bottom-nav" aria-label="Glavna navigacija">'+arr.map(function(x){return '<button class="nav-item '+(active===x[0]?'active':'')+'" data-action="goto" data-view="'+x[0]+'"><span class="navicon">'+svg(x[1])+'</span>'+x[2]+'</button>'}).join('')+'</nav>'}
+function topBar(){return '<header class="topbar"><div class="logo">DM</div><div class="brand"><div><div class="brand-name">DE-MAX <span style="color:#e74758">LESEN</span></div><div class="brand-sub">DEUTSCH A1 · TUTIN</div></div></div></header>'}
+function pageSize(){return window.innerHeight&&window.innerHeight<710?2:3}
+function pager(page,total,prefix){
+var pages=Math.max(1,Math.ceil(total/pageSize()));
+return '<div class="page-controls"><button class="pagebtn" data-action="'+prefix+'-prev" '+(page<=0?'disabled':'')+'>← Prethodno</button><span class="page-n">'+(page+1)+' / '+pages+'</span><button class="pagebtn" data-action="'+prefix+'-next" '+(page>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
+
 function pctLesson(i){var d=L[i].texts.filter(function(_,t){return !!progress.done[key(i,t)]}).length;return percentage(d,L[i].texts.length)}
 function lessonCard(l,i){var done=l.texts.filter(function(_,t){return !!progress.done[key(i,t)]}).length;return '<button class="lesson-card" data-action="lesson" data-l="'+i+'"><span class="lesson-icon '+l.gradient+'">'+l.icon+'</span><span class="lesson-meta"><span class="eyebrow">LEKCIJA '+(i+1)+'</span><div class="lesson-title">'+esc(l.sr)+'</div><div class="lesson-sub">'+esc(l.topic)+'</div><div class="tinybar"><i style="width:'+pctLesson(i)+'%"></i></div></span><span style="display:flex;align-items:center;gap:4px;flex-direction:column"><span class="lesson-count">'+done+'/'+l.texts.length+'</span><span class="lesson-arrow">'+svg('chevron','sm')+'</span></span></button>'}
 function home(){
 var next=progress.last&&L[progress.last.l]&&L[progress.last.l].texts[progress.last.t]?progress.last:{l:0,t:0};
-return topBar()+'<section class="home-hero"><div class="hero-eyebrow">DE-MAX • LESETRAINER A1</div><div class="hero-title">Čitaj. Slušaj.<br><span class="accent">Razumi nemački.</span></div><p class="hero-description">Od prvog pozdrava do pravih priča. Kratki tekstovi, nemački izgovor, prevod i interaktivna pitanja.</p><div class="book-illustration"><svg viewBox="0 0 130 140" width="100%" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="10" width="91" height="118" rx="14" fill="#ffe7b2" transform="rotate(8 65 70)"/><rect x="14" y="7" width="91" height="118" rx="12" fill="#ff7980" transform="rotate(-7 60 70)"/><rect x="27" y="20" width="82" height="108" rx="11" fill="#f8fbff" stroke="#c1daf9" stroke-width="2"/><path d="M42 45Q55 40 65 45 Q78 40 94 45V102Q78 96 65 102Q55 96 42 102Z" fill="#d3e5ff" stroke="#3567aa" stroke-width="2"/><path d="M65 45V102M48 58H60M70 58H88M48 68H60M70 68H88M48 78H60M70 78H88" stroke="#779fd5" stroke-width="2.5" stroke-linecap="round"/><circle cx="91" cy="29" r="15" fill="#ffcb6a"/><text x="91" y="35" text-anchor="middle" fill="#1c4b88" font-size="14" font-weight="bold">A1</text></svg></div><div class="hero-bottom"><button class="hero-button" data-action="open" data-l="'+next.l+'" data-t="'+next.t+'">'+svg('play','sm')+(progress.last?'Nastavi čitanje':'Počni da čitaš')+'</button><span class="hero-badge">40 tekstova ✨</span></div></section>'+
-'<main class="content"><div class="overview"><div class="stat-mini"><strong>7</strong><small>lekcija</small></div><div class="stat-mini"><strong>40</strong><small>tekstova</small></div><div class="stat-mini"><strong>'+doneCount()+'</strong><small>završeno</small></div></div><div class="section-heading"><h2>Izaberi lekciju</h2><span class="hint">A1 · po gradivu</span></div>'+L.map(lessonCard).join('')+
-'<div class="callout"><span class="callout-icon">🎧</span><div><strong>Vežbaj svojim tempom</strong><p>Slušaj na nemačkom, dodirni rečenicu za prevod i proveri razumevanje.</p></div></div></main>'+navBar('home')}
+var size=pageSize(),pages=Math.ceil(L.length/size);homePage=Math.min(homePage,pages-1);
+return topBar()+'<section class="home-hero"><div class="hero-eyebrow">DE-MAX · LESETRAINER A1</div><div class="hero-title">Čitaj. Slušaj.<br><span class="accent">Razumi nemački.</span></div><p class="hero-description">Čitanje, izgovor, prevod i pitanja po lekcijama.</p><div class="book-illustration">📖</div><div class="hero-bottom"><button class="hero-button" data-action="open" data-l="'+next.l+'" data-t="'+next.t+'">'+svg('play','sm')+(progress.last?'Nastavi čitanje':'Počni da čitaš')+'</button><span class="hero-badge">40 tekstova ✨</span></div></section>'+
+'<main class="content home-content"><div class="overview"><div class="stat-mini"><strong>7</strong><small>lekcija</small></div><div class="stat-mini"><strong>40</strong><small>tekstova</small></div><div class="stat-mini"><strong>'+doneCount()+'</strong><small>završeno</small></div></div><div class="section-heading"><h2>Izaberi lekciju</h2><span class="hint">A1 · po gradivu</span></div>'+
+L.slice(homePage*size,(homePage+1)*size).map(function(l,i){return lessonCard(l,homePage*size+i)}).join('')+pager(homePage,L.length,'home')+'</main>'+navBar('home')}
+
 function storyCard(l,t){var item=L[l].texts[t],done=progress.done[key(l,t)];return '<button class="story-card" data-action="open" data-l="'+l+'" data-t="'+t+'"><span class="story-num">'+String(t+1).padStart(2,'0')+'</span><span class="story-meta"><span class="story-title">'+esc(item.title)+'</span><span class="story-sub">'+item.lines.length+' rečenica · 3 pitanja · '+esc(L[l].sr)+'</span></span>'+(done?'<span class="pill done">'+svg('check','sm')+' Gotovo</span>':svg('chevron','sm'))+'</button>'}
-function lessonPage(){var l=L[lessonIndex];return '<div class="backbar"><button class="circlebtn" data-action="goto" data-view="home" aria-label="Nazad">'+svg('arrow')+'</button><span class="backlabel">Sve lekcije</span></div><div class="lesson-cover"><span class="eyebrow" style="color:#a9dafa">LEKCIJA '+(lessonIndex+1)+' / 7</span><span class="cover-icon">'+l.icon+'</span><h1>'+esc(l.sr)+'</h1><p>'+esc(l.desc)+'</p><div style="margin-top:14px;font-size:11px;font-weight:850;color:#b6d6ff">'+l.texts.length+' tekstova · '+pctLesson(lessonIndex)+'% završeno</div></div><main class="section-list"><div class="section-heading"><h2>Tekstovi</h2><span class="hint">Čitaj redom ili biraj</span></div>'+l.texts.map(function(t,i){return storyCard(lessonIndex,i)}).join('')+'</main>'+navBar('home')}
-function reader(){var t=L[lessonIndex].texts[textIndex],total=t.lines.length;
-var tabs=[['lesen','📖 Tekst'],['quiz','✓ Pitanja'],['words','✦ Reči']];
-var title='<div class="reader-head"><span class="eyebrow">TEKST '+(textIndex+1)+' / '+L[lessonIndex].texts.length+' · '+esc(L[lessonIndex].sr)+'</span><h1>'+esc(t.title)+'</h1><div class="lead">'+total+' rečenica · '+t.questions.length+' pitanja · nemački A1</div></div>';
-return '<header class="reader-top"><button class="circlebtn" data-action="backlesson" aria-label="Nazad na lekciju">'+svg('arrow')+'</button><div class="reader-cent">DE-MAX LESEN <small>LEKCIJA '+(lessonIndex+1)+' / 7</small></div><button class="circlebtn '+(isFav(lessonIndex,textIndex)?'on':'')+'" data-action="fav" aria-label="Sačuvaj tekst">'+svg('heart')+'</button></header>'+
-'<main class="reader-body">'+title+'<nav class="tabbar" aria-label="Delovi vežbe">'+tabs.map(function(x){return '<button class="tab '+(tab===x[0]?'active':'')+'" data-action="tab" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</nav>'+
+function lessonPage(){
+var l=L[lessonIndex],size=pageSize();lessonPageNum=Math.min(lessonPageNum,Math.ceil(l.texts.length/size)-1);
+return '<div class="backbar"><button class="back-button back-red" data-action="goto" data-view="home">'+svg('arrow','sm')+' Nazad</button><div class="mini-brand"><strong>DE-MAX LESEN</strong><small>DEUTSCH A1 · TUTIN</small></div></div>'+
+'<div class="lesson-cover"><span class="eyebrow" style="color:#a9dafa">LEKCIJA '+(lessonIndex+1)+' / 7</span><span class="cover-icon">'+l.icon+'</span><h1>'+esc(l.sr)+'</h1><p>'+esc(l.desc)+'</p></div>'+
+'<main class="section-list"><div class="section-heading"><h2>Tekstovi</h2><span class="hint">'+l.texts.length+' tekstova</span></div>'+
+l.texts.slice(lessonPageNum*size,(lessonPageNum+1)*size).map(function(t,i){return storyCard(lessonIndex,lessonPageNum*size+i)}).join('')+
+pager(lessonPageNum,l.texts.length,'lesson')+'</main>'+navBar('home')}
+function reader(){
+var t=L[lessonIndex].texts[textIndex],tabs=[['lesen','📖 Tekst'],['quiz','✓ Pitanja'],['words','✦ Reči']];
+return '<header class="reader-top"><button class="back-button back-red" data-action="backlesson">'+svg('arrow','sm')+' Nazad</button><div class="mini-brand"><strong>DE-MAX LESEN</strong><small>DEUTSCH A1 · TUTIN</small></div></header>'+
+'<main class="reader-body"><div class="reader-head"><span class="eyebrow">LEKCIJA '+(lessonIndex+1)+' · TEKST '+(textIndex+1)+' / '+L[lessonIndex].texts.length+'</span><h1>'+esc(t.title)+'</h1><div class="lead">'+t.lines.length+' rečenica · '+t.questions.length+' pitanja</div></div>'+
+'<nav class="tabbar" aria-label="Vežbe">'+tabs.map(function(x){return '<button class="tab '+(tab===x[0]?'active':'')+'" data-action="tab" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</nav>'+
 (tab==='lesen'?readPanel(t):tab==='quiz'?quizPanel(t):wordPanel(t))+
-'<div class="divider"></div><div class="reader-bottom-actions"><button class="btn light" data-action="prev" '+(!hasPrev()?'disabled':'')+'>'+svg('arrow','sm')+' Prethodni</button><button class="btn navy" data-action="next">Sledeći '+svg('chevron','sm')+'</button></div></main>'}
+'<div class="reader-footer"><button class="btn back-red" data-action="backlesson">'+svg('arrow','sm')+' Nazad</button>'+
+(tab==='quiz'?'<button class="btn knowledge" data-action="'+(submitted?'retry':questionPage<t.questions.length-1?'question-next':'grade')+'">'+svg('check','sm')+(submitted?'Ponovi test':questionPage<t.questions.length-1?'Sledeće pitanje':'Proveri odgovore')+'</button>':
+'<button class="btn knowledge" data-action="tab" data-tab="quiz">'+svg('check','sm')+' Provera znanja</button>')+
+'</div></main>'}
+
 function readPanel(t){
-return '<section class="player"><div class="player-title">🎧 NEMAČKI IZGOVOR</div><div class="player-info">Slušaj tekst i prati rečenice</div><div class="player-actions"><button class="player-main" id="play-all" data-action="play">'+svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst')+'</button><button class="player-small" data-action="rate" aria-label="Brzina izgovora">'+(rate===.75?'Sporo':rate===.88?'Normalno':'Brzo')+'</button></div></section>'+
-'<div class="reader-tools"><span class="eyebrow">NEMAČKI TEKST</span><button class="toggle '+(showTranslations?'active':'')+'" data-action="translate">'+(showTranslations?'✓ Prevod uključen':'Prikaži SR prevod')+'</button></div>'+
-'<div class="tip">Dodirni rečenicu za njen prevod ili zvučnik da je čuješ.</div>'+
-t.lines.map(function(line,i){var active=i===focus;var visible=showTranslations||active;return '<div class="sentence '+(active?'active':'')+'" data-action="focus" data-index="'+i+'" tabindex="0" role="button" aria-label="Rečenica '+(i+1)+': '+esc(line[0])+'"><span class="sent-num">'+String(i+1).padStart(2,'0')+'</span><div class="sent-main">'+esc(line[0])+'<div class="sent-sr '+(visible?'':'hidden')+'">'+esc(line[1])+'</div></div><button class="sent-speak" data-action="line" data-index="'+i+'" aria-label="Slušaj rečenicu">'+svg('speaker','sm')+'</button></div>'}).join('')+
-'<div class="reader-bottom-actions"><button class="btn '+(progress.done[key(lessonIndex,textIndex)]?'success':'light')+'" data-action="done">'+svg('check','sm')+(progress.done[key(lessonIndex,textIndex)]?'Pročitano ✓':'Označi pročitano')+'</button><button class="btn primary" data-action="tab" data-tab="quiz">Proveri znanje '+svg('chevron','sm')+'</button></div>'}
+var size=2,from=sentencePage*size,total=t.lines.length,pages=Math.ceil(total/size);
+sentencePage=Math.min(sentencePage,pages-1);from=sentencePage*size;
+var content='<section class="player"><div class="player-title">🎧 NEMAČKI IZGOVOR</div><div class="player-info">Slušaj i prati rečenice</div><div class="player-actions"><button class="player-main" id="play-all" data-action="play">'+svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst')+'</button><button class="player-small" data-action="rate">'+(rate===.75?'Sporo':rate===.88?'Normalno':'Brzo')+'</button></div></section>';
+content+='<div class="reader-tools"><span class="eyebrow">ČITANJE: '+(from+1)+'–'+Math.min(from+size,total)+' / '+total+'</span><button class="toggle '+(showTranslations?'active':'')+'" data-action="translate">'+(showTranslations?'✓ Prevod uključen':'SR prevod')+'</button></div>';
+content+='<div class="sentences-page">'+t.lines.slice(from,from+size).map(function(line,offset){
+var i=from+offset,active=focus===i,visible=showTranslations||active;
+return '<div class="sentence '+(active?'active':'')+'" data-action="focus" data-index="'+i+'" tabindex="0" role="button" aria-label="Rečenica '+(i+1)+'"><span class="sent-num">'+String(i+1).padStart(2,'0')+'</span><div class="sent-main">'+esc(line[0])+'<div class="sent-sr '+(visible?'':'hidden')+'">'+esc(line[1])+'</div></div><button class="sent-speak" data-action="line" data-index="'+i+'" aria-label="Slušaj">'+svg('speaker','sm')+'</button></div>'}).join('')+'</div>';
+content+='<div class="read-pager page-controls"><button class="pagebtn" data-action="sentence-prev" '+(sentencePage===0?'disabled':'')+'>← Prethodno</button><span class="page-n">'+(sentencePage+1)+' / '+pages+'</span><button class="pagebtn" data-action="sentence-next" '+(sentencePage===pages-1?'disabled':'')+'>Sledeće →</button></div>';
+return content}
+
 function opts(t,q){var arr=t.questions[q].options.map(function(s,i){return {label:s,index:i}}),seed=(lessonIndex+3)*77+(textIndex+2)*31+(q+1)*17;for(var i=arr.length-1;i>0;i--){var j=(seed+i*13)% (i+1);var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp}return arr}
 function quizPanel(t){
+var q=t.questions[Math.min(questionPage,t.questions.length-1)],i=Math.min(questionPage,t.questions.length-1);
 var k=key(lessonIndex,textIndex),res=progress.results[k];
-var html='<div class="section-heading"><h2>Razumevanje teksta</h2><span class="hint">'+t.questions.length+' pitanja</span></div><p class="page-sub">Pročitaj tekst, zatim izaberi po jedan tačan odgovor. Po završetku dobijaš rezultat.</p>';
-html+=t.questions.map(function(q,i){return '<section class="qcard"><div class="qno">PITANJE '+(i+1)+' / '+t.questions.length+'</div><div class="qtitle">'+esc(q.q)+'</div>'+opts(t,i).map(function(o,j){var selected=answers[i]===o.index;var cls=submitted?(o.index===q.correct?'correct':selected?'wrong':''):(selected?'selected':'');return '<button class="option '+cls+'" data-action="answer" data-q="'+i+'" data-opt="'+o.index+'" '+(submitted?'disabled':'')+'><span class="optionletter">'+String.fromCharCode(65+j)+'</span>'+esc(o.label)+(submitted&&o.index===q.correct?' ✓':'')+'</button>'}).join('')+'</section>'}).join('');
-if(submitted){var score=t.questions.filter(function(q,i){return answers[i]===q.correct}).length;html+='<div class="exam-summary"><span class="eyebrow" style="color:#137966">TVOJ REZULTAT</span><div><strong>'+percentage(score,t.questions.length)+'%</strong> · '+score+' / '+t.questions.length+' tačno</div><p>'+(score===t.questions.length?'Odlično! Sve odgovore znaš.':score>=2?'Vrlo dobro! Pogledaj označene tačne odgovore.':'Pročitaj tekst još jednom i pokušaj ponovo.')+'</p></div><button class="btn light" data-action="retry" style="width:100%">'+svg('refresh','sm')+' Ponovi test</button>'}
-else{html+='<button class="btn primary" data-action="grade" style="width:100%" '+(Object.keys(answers).length<t.questions.length?'disabled':'')+'>Proveri odgovore '+svg('check','sm')+'</button>';if(res)html+='<p class="tip" style="text-align:center">Tvoj prethodni najbolji rezultat: '+res.best+'%</p>'}
-return html}
+var out='<div class="quiz-panel"><div class="section-heading"><h2>Provera znanja</h2><span class="hint">'+(i+1)+' / '+t.questions.length+'</span></div><p class="page-sub">Izaberi tačan odgovor na pitanje.</p>';
+out+='<section class="qcard"><div class="qno">PITANJE '+(i+1)+' / '+t.questions.length+'</div><div class="qtitle">'+esc(q.q)+'</div>'+
+opts(t,i).map(function(o,j){var selected=answers[i]===o.index,cls=submitted?(o.index===q.correct?'correct':selected?'wrong':''):(selected?'selected':'');
+return '<button class="option '+cls+'" data-action="answer" data-q="'+i+'" data-opt="'+o.index+'" '+(submitted?'disabled':'')+'><span class="optionletter">'+String.fromCharCode(65+j)+'</span>'+esc(o.label)+(submitted&&o.index===q.correct?' ✓':'')+'</button>'}).join('')+'</section>';
+if(submitted){var score=t.questions.filter(function(q,i){return answers[i]===q.correct}).length;out+='<div class="quiz-summary-mini">✓ Rezultat: '+score+' / '+t.questions.length+' · '+percentage(score,t.questions.length)+'% tačno</div>'}
+else if(res){out+='<div class="quiz-summary-mini">Najbolji dosadašnji rezultat: '+res.best+'%</div>'}
+out+='<div class="read-pager page-controls"><button class="pagebtn" data-action="question-prev" '+(questionPage===0?'disabled':'')+'>← Prethodno</button><span class="page-n">'+(questionPage+1)+' / '+t.questions.length+'</span><button class="pagebtn" data-action="question-next" '+(questionPage===t.questions.length-1?'disabled':'')+'>Sledeće →</button></div></div>';
+return out}
+
 function wordPanel(t){
-return '<div class="section-heading"><h2>Reči iz teksta</h2><span class="hint">'+t.words.length+' korisnih izraza</span></div><p class="page-sub">Dodirni zvučnik za izgovor. Sačuvaj reči koje želiš ponovo da učiš.</p><div class="words">'+t.words.map(function(w,i){var id=wordKey(lessonIndex,textIndex,i),saved=progress.words.indexOf(id)>=0;return '<div class="wordcard"><button class="circlebtn" data-action="word-audio" data-word="'+i+'" aria-label="Izgovori reč">'+svg('speaker','sm')+'</button><div class="word-detail"><div class="word-de">'+esc(w[0])+'</div><div class="word-sr">'+esc(w[1])+'</div></div><button class="word-heart '+(saved?'active':'')+'" data-action="wordfav" data-word="'+i+'" aria-label="Sačuvaj reč">'+svg('heart','sm')+'</button></div>'}).join('')+'</div><div class="callout"><span class="callout-icon">📚</span><div><strong>De-Max rečnik</strong><p>Ponavljaj sačuvane reči u kartici „Sačuvano“.</p></div></div>'}
+var size=3,pages=Math.ceil(t.words.length/size);wordPage=Math.min(wordPage,pages-1);
+return '<div class="words-panel"><div class="section-heading"><h2>Reči iz teksta</h2><span class="hint">'+t.words.length+' reči</span></div><p class="page-sub">Pritisni zvučnik da čuješ nemački izgovor.</p><div class="words-page">'+t.words.slice(wordPage*size,(wordPage+1)*size).map(function(w,i){i+=wordPage*size;return '<div class="wordcard"><button class="circlebtn" data-action="word-audio" data-word="'+i+'" aria-label="Izgovori reč">'+svg('speaker','sm')+'</button><div class="word-detail"><div class="word-de">'+esc(w[0])+'</div><div class="word-sr">'+esc(w[1])+'</div></div></div>'}).join('')+'</div>'+
+'<div class="read-pager page-controls"><button class="pagebtn" data-action="word-prev" '+(wordPage===0?'disabled':'')+'>← Prethodno</button><span class="page-n">'+(wordPage+1)+' / '+pages+'</span><button class="pagebtn" data-action="word-next" '+(wordPage===pages-1?'disabled':'')+'>Sledeće →</button></div></div>'}
+
+function libraryMatches(){
+var cards=[];L.forEach(function(l,li){l.texts.forEach(function(t,ti){
+var hay=(t.title+' '+l.sr+' '+l.topic+' '+t.lines.map(function(x){return x[0]}).join(' ')).toLocaleLowerCase('de-DE');
+if((filter==='all'||String(li)===filter)&&(!search||hay.includes(search.toLocaleLowerCase('de-DE'))))cards.push({l:li,t:ti})
+})});return cards}
 function library(){
-var cards=[];L.forEach(function(l,li){l.texts.forEach(function(t,ti){cards.push({l:li,t:ti,title:t.title,query:(t.title+' '+l.sr+' '+l.topic+' '+t.lines.map(function(x){return x[0]}).join(' ')).toLocaleLowerCase('de-DE')})})});
-var filtered=cards.filter(function(x){return (filter==='all'||String(x.l)===filter)&&(!search||x.query.includes(search.toLocaleLowerCase('de-DE')))});
-return topBar()+'<main class="content"><h1 class="page-title">Biblioteka tekstova</h1><p class="page-sub">Svi A1 tekstovi na jednom mestu. Pronađi temu ili izaberi lekciju.</p><label class="search-field">'+svg('search','sm')+'<input id="search" type="search" autocomplete="off" placeholder="Traži tekst ili temu..." value="'+esc(search)+'" aria-label="Pretraži tekstove"></label><div class="chipbar">'+[['all','Sve'],...L.map(function(l,i){return [String(i),'Lekcija '+(i+1)]})].map(function(x){return '<button class="chip '+(filter===x[0]?'active':'')+'" data-action="filter" data-filter="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div><div class="section-heading"><h2>Tekstovi <span class="muted">('+filtered.length+')</span></h2></div><div id="library-results">'+(filtered.length?filtered.map(function(x){return storyCard(x.l,x.t)}).join(''):'<div class="empty">Nema tekstova za ovu pretragu.</div>')+'</div></main>'+navBar('library')}
+var found=libraryMatches(),size=pageSize(),pages=Math.max(1,Math.ceil(found.length/size));
+libraryPageNum=Math.min(libraryPageNum,pages-1);
+return topBar()+'<main class="content"><h1 class="page-title">Biblioteka tekstova</h1><p class="page-sub">Izaberi lekciju ili pronađi temu.</p><label class="search-field">'+svg('search','sm')+'<input id="search" type="search" autocomplete="off" placeholder="Traži tekst ili temu..." value="'+esc(search)+'"></label>'+
+'<select id="library-filter" class="library-select" aria-label="Izaberi lekciju"><option value="all" '+(filter==='all'?'selected':'')+'>Sve lekcije</option>'+
+L.map(function(l,i){return '<option value="'+i+'" '+(filter===String(i)?'selected':'')+'>Lekcija '+(i+1)+' – '+esc(l.sr)+'</option>'}).join('')+'</select>'+
+'<div class="section-heading"><h2>Tekstovi ('+found.length+')</h2></div>'+
+(found.length?found.slice(libraryPageNum*size,(libraryPageNum+1)*size).map(function(x){return storyCard(x.l,x.t)}).join(''):'<div class="empty">Nema tekstova za ovu pretragu.</div>')+
+pager(libraryPageNum,found.length,'library')+'</main>'+navBar('library')}
+
 function savedPage(){
 var favorites=progress.bookmarks.filter(function(k){var p=k.split('-').map(Number);return L[p[0]]&&L[p[0]].texts[p[1]]});
 var words=progress.words.filter(function(k){var p=k.split('-').map(Number);return L[p[0]]&&L[p[0]].texts[p[1]]&&L[p[0]].texts[p[1]].words[p[2]]});
@@ -218,10 +357,15 @@ return topBar()+'<main class="content"><h1 class="page-title">Moje sačuvano</h1
 '<h3 class="list-heading">✦ Reči ('+words.length+')</h3>'+(words.length?'<div class="words">'+words.map(function(k){var p=k.split('-').map(Number),w=L[p[0]].texts[p[1]].words[p[2]];return '<div class="wordcard"><button class="circlebtn" data-action="savedword-audio" data-k="'+k+'">'+svg('speaker','sm')+'</button><div class="word-detail"><div class="word-de">'+esc(w[0])+'</div><div class="word-sr">'+esc(w[1])+'</div></div><button class="word-heart active" data-action="savedword-remove" data-k="'+k+'">'+svg('heart','sm')+'</button></div>'}).join('')+'</div>':'<div class="empty"><div class="emoji">📝</div>Reči sačuvaj iz kartice „Reči“ uz tekst.</div>')+'</main>'+navBar('saved')}
 function statsPage(){
 var total=countTexts(),done=doneCount(),results=Object.values(progress.results),avg=results.length?Math.round(results.reduce(function(s,r){return s+r.best},0)/results.length):0;
-return topBar()+'<main class="content"><h1 class="page-title">Moj napredak</h1><p class="page-sub">Uči svojim tempom. Rezultati se čuvaju lokalno na ovom uređaju.</p><div class="progress-big"><span>UKUPNI NAPREDAK</span><div><strong>'+percentage(done,total)+'%</strong> <span>· '+done+' / '+total+' tekstova</span></div><div class="bar"><i style="width:'+percentage(done,total)+'%"></i></div></div><div class="overview"><div class="stat-mini"><strong>'+done+'</strong><small>pročitano</small></div><div class="stat-mini"><strong>'+results.length+'</strong><small>testova</small></div><div class="stat-mini"><strong>'+avg+'%</strong><small>prosek</small></div></div><div class="section-heading"><h2>Po lekcijama</h2></div>'+L.map(lessonCard).join('')+
-'<div class="panel" style="padding:16px;margin-top:16px"><strong style="font-size:14px">Lokalna rezervna kopija</strong><p class="page-sub" style="margin-top:7px">Napredak ostaje samo na ovom telefonu ili računaru. Možeš preuzeti JSON kopiju.</p><button class="btn light" style="width:100%" data-action="backup">'+svg('download','sm')+' Sačuvaj napredak</button><button class="text-btn" style="margin-top:7px" data-action="install">Dodaj aplikaciju na početni ekran</button></div></main>'+navBar('stats')}
+var size=pageSize();statsPageNum=Math.min(statsPageNum,Math.ceil(L.length/size)-1);
+return topBar()+'<main class="content"><h1 class="page-title">Moj napredak</h1><div class="progress-big"><span>UKUPNI NAPREDAK</span><div><strong>'+percentage(done,total)+'%</strong> <span>· '+done+' / '+total+' tekstova</span></div><div class="bar"><i style="width:'+percentage(done,total)+'%"></i></div></div>'+
+'<div class="overview"><div class="stat-mini"><strong>'+done+'</strong><small>pročitano</small></div><div class="stat-mini"><strong>'+results.length+'</strong><small>testova</small></div><div class="stat-mini"><strong>'+avg+'%</strong><small>prosek</small></div></div>'+
+'<div class="section-heading"><h2>Po lekcijama</h2></div>'+
+L.slice(statsPageNum*size,(statsPageNum+1)*size).map(function(l,i){return lessonCard(l,statsPageNum*size+i)}).join('')+pager(statsPageNum,L.length,'stats')+
+'<div class="stats-actions"><span class="muted">Napredak se čuva na uređaju.</span><button class="btn light" data-action="backup">'+svg('download','sm')+' Kopija</button></div></main>'+navBar('stats')}
+
 function render(keep){var y=keep?window.scrollY:0;var app=document.getElementById('app');app.innerHTML=view==='home'?home():view==='lesson'?lessonPage():view==='reader'?reader():view==='library'?library():view==='saved'?savedPage():statsPage();if(keep)window.scrollTo(0,y);else scrollTop()}
-function openReader(l,t){stopSpeak();lessonIndex=l;textIndex=t;tab='lesen';focus=-1;showTranslations=false;answers={};submitted=false;view='reader';progress.last={l:l,t:t};save();render()}
+function openReader(l,t){stopSpeak();lessonIndex=l;textIndex=t;tab='lesen';focus=-1;sentencePage=0;questionPage=0;wordPage=0;showTranslations=false;answers={};submitted=false;view='reader';progress.last={l:l,t:t};save();render()}
 function hasPrev(){return textIndex>0||lessonIndex>0}
 function goNext(step){var l=lessonIndex,t=textIndex+step;if(t>=L[l].texts.length){l++;t=0}if(t<0){l--;if(l>=0)t=L[l].texts.length-1}if(l<0||l>=L.length){toast('To je poslednji tekst. Bravo!');return}openReader(l,t)}
 function speakWord(s){if(!('speechSynthesis' in window)){toast('Zvučno čitanje nije dostupno.');return}stopSpeak();var u=new SpeechSynthesisUtterance(s);u.lang='de-DE';u.rate=rate;var v=speechSynthesis.getVoices().find(function(x){return /^de/i.test(x.lang)});if(v)u.voice=v;speechSynthesis.speak(u)}
@@ -229,8 +373,8 @@ function switchView(v){stopSpeak();view=v;render()}
 document.addEventListener('click',function(e){
 var button=e.target.closest('[data-action]');if(!button)return;var a=button.dataset.action,l=Number(button.dataset.l),t=Number(button.dataset.t),i=Number(button.dataset.index);
 if(a==='goto'){filter='all';search='';switchView(button.dataset.view)}
-else if(a==='lesson'){stopSpeak();lessonIndex=l;view='lesson';render()}
-else if(a==='backlesson'){stopSpeak();view='lesson';render()}
+else if(a==='lesson'){stopSpeak();lessonIndex=l;lessonPageNum=0;view='lesson';render()}
+else if(a==='backlesson'){stopSpeak();lessonPageNum=Math.floor(textIndex/pageSize());view='lesson';render()}
 else if(a==='open')openReader(l,t);
 else if(a==='tab'){stopSpeak();tab=button.dataset.tab;render()}
 else if(a==='fav'){var k=key(lessonIndex,textIndex);if(isFav(lessonIndex,textIndex))progress.bookmarks=progress.bookmarks.filter(function(x){return x!==k});else progress.bookmarks.push(k);save();render(true);toast(isFav(lessonIndex,textIndex)?'Tekst je sačuvan ❤️':'Tekst je uklonjen')}
@@ -249,11 +393,30 @@ else if(a==='word-audio')speakWord(L[lessonIndex].texts[textIndex].words[Number(
 else if(a==='wordfav'){var kw=wordKey(lessonIndex,textIndex,button.dataset.word),pos=progress.words.indexOf(kw);if(pos>=0)progress.words.splice(pos,1);else progress.words.push(kw);save();render(true)}
 else if(a==='savedword-audio'){var p=button.dataset.k.split('-').map(Number);speakWord(L[p[0]].texts[p[1]].words[p[2]][0])}
 else if(a==='savedword-remove'){progress.words=progress.words.filter(function(x){return x!==button.dataset.k});save();render(true)}
-else if(a==='filter'){filter=button.dataset.filter;render(true)}
+else if(a==='filter'){filter=button.dataset.filter;libraryPageNum=0;render(true)}
+else if(a==='home-prev'||a==='home-next'){homePage=Math.max(0,Math.min(Math.ceil(L.length/pageSize())-1,homePage+(a==='home-next'?1:-1)));render()}
+else if(a==='lesson-prev'||a==='lesson-next'){lessonPageNum=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts.length/pageSize())-1,lessonPageNum+(a==='lesson-next'?1:-1)));render()}
+else if(a==='stats-prev'||a==='stats-next'){statsPageNum=Math.max(0,Math.min(Math.ceil(L.length/pageSize())-1,statsPageNum+(a==='stats-next'?1:-1)));render()}
+else if(a==='library-prev'||a==='library-next'){libraryPageNum=Math.max(0,Math.min(Math.ceil(libraryMatches().length/pageSize())-1,libraryPageNum+(a==='library-next'?1:-1)));render()}
+else if(a==='sentence-prev'||a==='sentence-next'){stopSpeak();sentencePage=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts[textIndex].lines.length/2)-1,sentencePage+(a==='sentence-next'?1:-1)));focus=-1;render()}
+else if(a==='question-prev'||a==='question-next'){questionPage=Math.max(0,Math.min(L[lessonIndex].texts[textIndex].questions.length-1,questionPage+(a==='question-next'?1:-1)));render()}
+else if(a==='word-prev'||a==='word-next'){wordPage=Math.max(0,Math.min(Math.ceil(L[lessonIndex].texts[textIndex].words.length/3)-1,wordPage+(a==='word-next'?1:-1)));render()}
 else if(a==='backup'){try{var blob=new Blob([JSON.stringify({app:'DE-MAX-A1-LESEN',version:1,date:new Date().toISOString(),progress:progress},null,2)],{type:'application/json'});var url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='DE-MAX_A1_LESEN_napredak.json';link.click();setTimeout(function(){URL.revokeObjectURL(url)},3000);toast('Rezervna kopija je preuzeta.')}catch(err){toast('Preuzimanje nije uspelo.')}}
 else if(a==='install'){if(installPrompt){installPrompt.prompt();installPrompt.userChoice.then(function(){installPrompt=null})}else toast('Na iPhone-u: Share → Add to Home Screen. Na Androidu: meni → Install app.')}
 });
-document.addEventListener('input',function(e){if(e.target.id==='search'){search=e.target.value;var cards=[];L.forEach(function(l,li){l.texts.forEach(function(t,ti){var hay=(t.title+' '+l.topic+' '+l.sr+' '+t.lines.map(function(x){return x[0]}).join(' ')).toLocaleLowerCase('de-DE');if((filter==='all'||filter===String(li))&&hay.includes(search.toLocaleLowerCase('de-DE')))cards.push(storyCard(li,ti))})});var list=document.getElementById('library-results');if(list)list.innerHTML=cards.length?cards.join(''):'<div class="empty">Nema tekstova za ovu pretragu.</div>';var h=document.querySelector('.section-heading h2');if(h)h.innerHTML='Tekstovi <span class="muted">('+cards.length+')</span>'}});
+document.addEventListener('input',function(e){
+if(e.target.id==='search'){
+search=e.target.value;libraryPageNum=0;
+var pos=e.target.selectionStart;
+render(true);
+var input=document.getElementById('search');
+if(input){input.focus();if(pos!==null)input.setSelectionRange(pos,pos)}
+}
+if(e.target.id==='library-filter'){filter=e.target.value;libraryPageNum=0;render(true)}
+});
+document.addEventListener('change',function(e){
+if(e.target.id==='library-filter'){filter=e.target.value;libraryPageNum=0;render(true)}
+});
 document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('.sentence')){e.preventDefault();focus=Number(e.target.dataset.index);render(true)}});
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e});
 window.addEventListener('pagehide',function(){stopSpeak()});
