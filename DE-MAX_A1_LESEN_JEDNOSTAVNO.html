@@ -286,7 +286,7 @@ return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCI
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+
 '<div class="pager"><button class="read-back" data-a="readback">← Nazad</button><span>'+(readerPage+1)+' / '+pages+'</span><button data-a="following" data-kind="read" '+(readerPage>=pages-1?'disabled':'')+'>Sledeće →</button></div>'+
-'<div class="read-footer read-footer-single"><button class="action green" data-a="quiz">✓ Provera znanja</button></div></main>'}
+'</main>'}
 function optionList(q){
 const order=q.options.map((o,i)=>({label:o,index:i}));
 const shift=(lesson*2+text+question+1)%order.length;
