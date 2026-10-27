@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#092453">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="De-Max Lesen">
+<meta name="description" content="DE-MAX A1 Lesen: 7 lekcija, 40 tekstova, nemački izgovor, prevod i 120 pitanja.">
+<link rel="manifest" href="./DE-MAX_A1_LESEN.webmanifest">
+<title>DE-MAX Lesen A1 · Čitaj, slušaj, razumi</title>
+<style>
+:root{--navy:#092453;--navy2:#143d84;--red:#e94756;--mint:#19a98b;--paper:#f4f7fd;--ink:#152b4d;--muted:#687a94;--line:#e4eaf4;--white:#fff;--shadow:0 10px 26px rgba(12,37,84,.075)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:#dfe8f6;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible{outline:3px solid #86b7ff;outline-offset:2px}
+.app{max-width:485px;min-height:100vh;min-height:100dvh;margin:0 auto;background:var(--paper);box-shadow:0 0 45px rgba(3,25,65,.17);position:relative;overflow-x:hidden}
+.pad{padding:0 19px}.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;background:#fff;padding:13px 19px;border-bottom:1px solid #ecf0f7;min-height:68px}
+.brand{display:flex;align-items:center;gap:10px}.logo{height:40px;width:40px;flex:none;border-radius:13px;background:linear-gradient(143deg,#ea515f,#c92246);box-shadow:0 5px 11px rgba(233,71,86,.19);color:#fff;display:grid;place-items:center;font-weight:950;font-size:18px;letter-spacing:-1.4px}
+.brand-name{font-weight:900;letter-spacing:-.55px;font-size:17px;color:var(--navy)}.brand-sub{font-size:10px;font-weight:800;letter-spacing:1.8px;color:#8a9ab1;margin-top:1px}
+.circlebtn{width:40px;height:40px;display:grid;place-items:center;border:1px solid #e8edf5;background:#fff;color:var(--navy);border-radius:14px;flex:none}
+.circlebtn.on{color:var(--red);background:#fff1f3;border-color:#ffcbd1}
+.icon{width:20px;height:20px;display:inline-block;vertical-align:middle;flex:none;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.icon.sm{width:17px;height:17px}.icon.lg{width:23px;height:23px}
+.home-hero{background:radial-gradient(circle at 88% 5%,#234f9b 0,transparent 43%),linear-gradient(130deg,#071e49,#113c84);padding:24px 21px 25px;color:white;position:relative;overflow:hidden}
+.home-hero:after{content:"";position:absolute;width:210px;height:210px;right:-90px;bottom:-130px;border:35px solid rgba(255,255,255,.035);border-radius:50%}
+.hero-eyebrow{color:#a5d7f9;letter-spacing:1.65px;text-transform:uppercase;font-size:10px;font-weight:900}
+.hero-title{font-size:33px;font-weight:950;line-height:1.13;letter-spacing:-1.15px;margin:10px 0}.hero-title .accent{color:#ffcb78}
+.hero-description{max-width:285px;color:#d7e5fa;font-size:13px;line-height:1.5;margin:0 0 18px}
+.hero-bottom{display:flex;align-items:center;gap:10px;position:relative;z-index:2}
+.hero-button{border:0;border-radius:12px;background:#fff;color:#0b2e64;padding:12px 15px;font-size:12px;font-weight:900;display:flex;align-items:center;gap:7px}
+.hero-badge{border:1px solid rgba(255,255,255,.25);border-radius:12px;color:#e3ecfe;padding:9px 11px;font-size:12px;font-weight:800}
+.book-illustration{position:absolute;right:9px;top:39px;width:120px;transform:rotate(9deg);pointer-events:none;opacity:.93}
+.book-illustration svg{filter:drop-shadow(0 12px 17px rgba(1,10,35,.26))}
+.content{padding:18px 18px 102px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 1px 14px}
+.section-heading h2{font-size:20px;font-weight:900;letter-spacing:-.65px;margin:0}.section-heading .hint{font-size:11px;color:var(--muted);font-weight:750}
+.overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:22px}
+.stat-mini{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px 8px;text-align:center;box-shadow:var(--shadow)}
+.stat-mini strong{display:block;font-size:23px;letter-spacing:-1px;color:var(--navy);line-height:1.15}
+.stat-mini small{font-size:10px;font-weight:750;color:var(--muted)}
+.lesson-card,.story-card,.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.lesson-card{display:flex;align-items:center;gap:12px;padding:13px 12px;margin-bottom:10px;width:100%;text-align:left;color:inherit}
+.lesson-icon{width:52px;height:55px;flex:none;border-radius:16px;display:grid;place-items:center;font-size:26px}
+.pink{background:#fff0f1}.violet{background:#f0ecff}.orange{background:#fff1e7}.blue{background:#e9f1ff}.teal{background:#e3f9f5}.sky{background:#e7f7ff}.purple{background:#f8edff}
+.lesson-meta{flex:1;min-width:0}.eyebrow{font-size:10px;font-weight:900;letter-spacing:1.05px;color:#8998af;text-transform:uppercase}
+.lesson-title{font-size:15px;font-weight:850;margin:4px 0;letter-spacing:-.3px;line-height:1.2}.lesson-sub{font-size:11px;color:var(--muted);line-height:1.35}
+.tinybar{height:5px;background:#ecf0f7;border-radius:9px;overflow:hidden;margin-top:9px;max-width:230px}.tinybar i{display:block;background:linear-gradient(90deg,#11a789,#46d6aa);height:100%;border-radius:9px}
+.lesson-arrow{color:#8495ab;display:flex}.lesson-count{font-size:10px;color:var(--muted);font-weight:850;white-space:nowrap}
+.callout{background:linear-gradient(120deg,#e8f7f3,#f3fbf9);padding:14px;border:1px solid #d2ece5;border-radius:16px;margin-top:16px;display:flex;gap:12px;align-items:center}
+.callout-icon{width:41px;height:41px;display:grid;place-items:center;border-radius:13px;background:#d1f2e6;font-size:22px}.callout strong{font-size:13px}.callout p{margin:4px 0 0;font-size:11px;color:#55766d;line-height:1.4}
+.bottom-nav{height:76px;padding-bottom:env(safe-area-inset-bottom);display:grid;grid-template-columns:repeat(4,1fr);position:fixed;z-index:40;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,485px);background:rgba(255,255,255,.96);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(25,46,85,.035);backdrop-filter:blur(12px)}
+.nav-item{border:0;background:none;color:#96a4b9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;font-weight:850}
+.nav-item.active{color:#e74656}.nav-item.active .navicon{background:#ffe9ed}.navicon{width:40px;height:31px;border-radius:12px;display:grid;place-items:center}
+.page-title{font-size:26px;letter-spacing:-.9px;font-weight:900;margin:0 0 6px}.page-sub{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 18px}
+.backbar{display:flex;align-items:center;gap:10px;padding:16px 18px 4px}.backbar .backlabel{font-size:13px;font-weight:850;color:var(--navy)}
+.lesson-cover{margin:13px 18px 16px;border-radius:22px;padding:20px;background:linear-gradient(125deg,#112e68,#2851a1);color:#fff;position:relative;overflow:hidden}
+.lesson-cover .cover-icon{font-size:34px;position:absolute;right:18px;top:24px}.lesson-cover h1{font-size:25px;max-width:285px;line-height:1.08;letter-spacing:-.9px;margin:7px 0}
+.lesson-cover p{font-size:12px;color:#d8e6fc;max-width:290px;line-height:1.45;margin:0}
+.section-list{padding:0 18px 105px}.story-card{display:flex;align-items:center;gap:11px;width:100%;padding:14px 12px;margin-bottom:10px;color:inherit;text-align:left}
+.story-num{width:40px;height:42px;border-radius:13px;background:#f1f4fa;color:#526b95;display:grid;place-items:center;font-weight:900;font-size:13px}
+.story-meta{flex:1;min-width:0}.story-title{font-weight:850;font-size:14px;line-height:1.3}.story-sub{color:var(--muted);font-size:11px;margin-top:3px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:850;padding:5px 8px;border-radius:999px;background:#edf3fb;color:#587194}
+.pill.done{background:#e1f7ee;color:#138365}.pill.fav{background:#fff1f3;color:#c94154}
+.reader-top{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:13px 17px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.reader-cent{font-size:12px;color:var(--navy);font-weight:900;text-align:center}
+.reader-cent small{display:block;font-size:10px;color:#8190a4;font-weight:750;margin-top:1px}
+.reader-body{padding:18px 16px 105px}.reader-head{margin-bottom:16px}
+.reader-head h1{font-size:28px;line-height:1.12;letter-spacing:-.9px;margin:9px 0;color:var(--navy)}.reader-head .lead{font-size:12px;color:var(--muted)}
+.tabbar{display:flex;gap:5px;background:#e9eef7;padding:5px;border-radius:15px;margin:16px 0}
+.tab{flex:1;border:0;padding:11px 4px;border-radius:11px;background:transparent;color:#6f8099;font-size:12px;font-weight:850}
+.tab.active{color:#12335f;background:#fff;box-shadow:0 3px 10px rgba(13,39,79,.07)}
+.player{border-radius:18px;background:linear-gradient(130deg,#0a2a62,#123e85);color:#fff;padding:15px;margin-bottom:15px;position:relative;overflow:hidden}
+.player:after{content:"♪";position:absolute;right:12px;top:-19px;font-size:100px;opacity:.06}
+.player-title{font-size:10px;color:#b8d8fb;letter-spacing:1.25px;font-weight:900}
+.player-info{font-size:13px;font-weight:850;margin-top:6px;line-height:1.35;position:relative;z-index:1}
+.player-actions{display:flex;align-items:center;gap:9px;margin-top:12px;position:relative;z-index:1}
+.player-main{background:#fff;color:#173f83;border:0;border-radius:12px;padding:11px 15px;font-size:12px;font-weight:900;display:flex;gap:7px;align-items:center;flex:1;justify-content:center;min-height:43px}
+.player-small{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.19);color:#fff;border-radius:12px;padding:10px 12px;font-size:11px;font-weight:900;min-height:43px}
+.tip{font-size:11px;color:#78889d;line-height:1.5;margin:10px 3px 12px}
+.reader-tools{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:12px}
+.toggle{border:1px solid #e1e8f1;background:#fff;border-radius:12px;color:#526b90;padding:9px 11px;font-size:11px;font-weight:850}
+.toggle.active{background:#e6faf5;color:#00866f;border-color:#b7ebde}
+.sentence{display:flex;align-items:flex-start;gap:10px;position:relative;border:1.5px solid #e7ecf5;border-radius:15px;background:#fff;margin-bottom:9px;padding:14px 11px;transition:border-color .16s,background .16s}
+.sentence.active{border:2px solid var(--red);background:#fff8f9;box-shadow:0 4px 16px rgba(233,71,86,.08)}
+.sent-num{font-size:10px;color:#9daabd;font-weight:900;padding-top:3px;width:19px;flex:none}
+.sent-main{flex:1;min-width:0;font-size:15px;line-height:1.55;font-weight:650;color:#183158}
+.sent-sr{font-size:12px;color:#7a8599;margin-top:8px;font-weight:550;line-height:1.48;padding-top:6px;border-top:1px dashed #e7d8df}
+.sent-sr.hidden{display:none}
+.sent-speak{flex:none;border:0;background:#f0f5fd;color:#2a63ad;width:33px;height:33px;border-radius:10px;display:grid;place-items:center;margin-top:-4px}
+.reader-bottom-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}
+.btn{border:0;border-radius:14px;padding:13px 14px;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px}
+.btn.primary{color:#fff;background:#e94354}.btn.navy{color:#fff;background:#103c81}.btn.light{color:#245085;background:#eaf0fa}.btn.success{color:#07886d;background:#ddf7ec}
+.btn:disabled{opacity:.48;cursor:not-allowed}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.qno{font-size:10px;color:#d74456;letter-spacing:1px;font-weight:900}.qtitle{font-weight:850;font-size:15px;line-height:1.5;margin:8px 0 12px}
+.option{border:1.5px solid #e3e9f3;border-radius:12px;padding:11px 12px;width:100%;background:#fff;color:#193154;display:flex;align-items:center;gap:9px;margin:8px 0 0;font-size:13px;text-align:left;font-weight:750}
+.option.selected{background:#eef3ff;border-color:#4e81ce;color:#184785}.option.correct{background:#e5fbf1;border-color:#14a97c;color:#11694e}.option.wrong{background:#fff0f0;border-color:#ef6473;color:#b93145}
+.optionletter{flex:none;border:1px solid currentColor;border-radius:7px;width:22px;height:22px;display:grid;place-items:center;font-size:10px;opacity:.7}
+.exam-summary{padding:18px;border-radius:20px;background:linear-gradient(135deg,#e4f8ef,#f7fffc);border:1px solid #d0eadd;margin:14px 0}
+.exam-summary strong{font-size:26px;color:#09856d}.exam-summary p{margin:7px 0 0;color:#507569;font-size:12px}
+.words{display:grid;gap:9px}
+.wordcard{display:flex;align-items:center;gap:10px;background:#fff;border-radius:15px;padding:11px 12px;border:1px solid var(--line)}
+.word-detail{flex:1;min-width:0}.word-de{font-size:14px;font-weight:850}.word-sr{font-size:12px;color:#71839c;margin-top:3px}
+.word-heart{color:#b2bfd1;border:0;background:none;display:grid;place-items:center;padding:7px}
+.word-heart.active{color:#e74758}
+.search-field{display:flex;align-items:center;gap:9px;border:1px solid #dce4f2;border-radius:13px;background:#fff;padding:12px;margin-bottom:14px;color:#8b9ab0}
+.search-field input{border:0;outline:0;flex:1;min-width:0;color:var(--navy);font-size:14px;background:transparent}
+.chipbar{display:flex;gap:7px;overflow-x:auto;padding:0 0 13px;scrollbar-width:none}.chipbar::-webkit-scrollbar{display:none}
+.chip{border:1px solid #dce5f2;background:#fff;color:#7084a0;border-radius:999px;white-space:nowrap;font-size:11px;font-weight:850;padding:9px 12px}
+.chip.active{background:#133b80;color:#fff;border-color:#133b80}
+.empty{padding:32px 17px;background:#fff;border:1px dashed #d6e1f0;border-radius:18px;text-align:center;color:#8090a4;font-size:13px;line-height:1.6}
+.empty .emoji{font-size:38px;margin-bottom:7px}
+.progress-big{background:linear-gradient(130deg,#0b2a62,#2456a0);color:#fff;border-radius:20px;padding:20px;margin-bottom:18px}
+.progress-big strong{font-size:35px;font-weight:950;letter-spacing:-1.5px}.progress-big span{font-size:12px;color:#d6e5ff}
+.progress-big .bar{height:10px;border-radius:9px;background:rgba(255,255,255,.18);margin-top:15px;overflow:hidden}.progress-big .bar i{display:block;background:#64e5bd;height:100%;border-radius:9px}
+.list-heading{font-size:15px;margin:18px 0 9px;font-weight:900;color:var(--navy)}
+.toast{position:fixed;z-index:90;bottom:86px;left:50%;transform:translate(-50%,15px);background:#122b53;color:#fff;font-size:12px;font-weight:750;border-radius:12px;padding:13px 17px;width:max-content;max-width:min(calc(100vw - 35px),440px);opacity:0;transition:.18s;pointer-events:none;box-shadow:0 9px 28px rgba(12,35,82,.21)}
+.toast.visible{opacity:1;transform:translate(-50%,0)}
+.muted{color:var(--muted)}.text-btn{border:0;background:none;color:#2469ae;font-size:12px;font-weight:850;padding:7px}
+.divider{height:1px;background:var(--line);margin:16px 0}
+@media(min-width:570px){body{padding:16px 0}.app{border-radius:27px;min-height:calc(100vh - 32px);overflow:hidden}.bottom-nav{bottom:0;border-radius:20px 20px 0 0}}
+@media(max-width:360px){.content,.reader-body{padding-left:13px;padding-right:13px}.home-hero{padding-left:15px}.book-illustration{width:96px;right:4px}.hero-title{font-size:30px}.lesson-card{gap:9px}.lesson-icon{width:44px;height:50px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<script src="./DE-MAX_A1_LESEN_DATA.js" defer></script>
+<script defer>
+(function(){
+'use strict';
+var L=[],view='home',lessonIndex=0,textIndex=0,tab='lesen',focus=-1,showTranslations=false,rate=0.88,answers={},submitted=false,filter='all',search='',speaking=false,speechToken=0,installPrompt=null;
+var STORE='demax_a1_lesen_progress_v1';
+function readStore(){try{return JSON.parse(localStorage.getItem(STORE))||{}}catch(e){return {}}}
+var progress=Object.assign({done:{},results:{},bookmarks:[],words:[],last:null},readStore());
+function save(){try{localStorage.setItem(STORE,JSON.stringify(progress))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function svg(n,cl){
+var p={
+home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+book:'<path d="M3 4.5c3-1.5 6-1.5 9 0 3-1.5 6-1.5 9 0v15c-3-1.5-6-1.5-9 0-3-1.5-6-1.5-9 0z"/><path d="M12 4.5v15"/>',
+heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/>',
+chart:'<path d="M3 20h18M5 18v-7m7 7V4m7 14v-9"/>',
+arrow:'<path d="m14 5-7 7 7 7"/>',
+chevron:'<path d="m9 6 6 6-6 6"/>',
+play:'<path d="m8 5 11 7-11 7z"/>',
+stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+speaker:'<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/>',
+check:'<path d="m5 12 5 5L20 7"/>',
+search:'<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/>',
+headphones:'<path d="M4 15v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="13" width="4" height="7" rx="2"/><rect x="17" y="13" width="4" height="7" rx="2"/>',
+download:'<path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/>',
+refresh:'<path d="M3 12a9 9 0 1 0 3-7l-3 3M3 3v5h5"/>',
+star:'<path d="m12 2 3 6.5 7 1-5 5 .9 7-5.9-3.3L6.1 21.5l.9-7-5-5 7-1z"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'
+};return '<svg aria-hidden="true" class="icon '+(cl||'')+'" viewBox="0 0 24 24">'+(p[n]||p.book)+'</svg>'}
+function countTexts(){return L.reduce(function(s,x){return s+x.texts.length},0)}
+function doneCount(){return Object.keys(progress.done).filter(function(k){return !!progress.done[k]}).length}
+function key(l,t){return l+'-'+t}
+function isFav(l,t){return progress.bookmarks.indexOf(key(l,t))>=0}
+function wordKey(l,t,w){return key(l,t)+'-'+w}
+function percentage(n,d){return d?Math.round(n/d*100):0}
+function scrollTop(){window.scrollTo(0,0)}
+function toast(message){var el=document.getElementById('toast');if(!el)return;el.textContent=message;el.classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(function(){el.classList.remove('visible')},2400)}
+function stopSpeak(){speechToken++;speaking=false;if('speechSynthesis' in window){try{speechSynthesis.cancel()}catch(e){}}updateAudioUI()}
+function updateAudioUI(){var b=document.getElementById('play-all');if(b)b.innerHTML=svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst');document.querySelectorAll('.sentence').forEach(function(el){el.classList.toggle('active',Number(el.dataset.index)===focus)})}
+function speakAt(i,continuous){
+if(!('speechSynthesis' in window)){toast('Ovaj pregledač ne podržava glasovno čitanje.');return}
+var t=L[lessonIndex].texts[textIndex];if(i<0||i>=t.lines.length){speaking=false;updateAudioUI();return}
+var token=++speechToken;try{speechSynthesis.cancel()}catch(e){}
+speaking=true;focus=i;updateAudioUI();var u=new SpeechSynthesisUtterance(t.lines[i][0]);u.lang='de-DE';u.rate=rate;u.pitch=1;
+var voices=speechSynthesis.getVoices();var voice=voices.find(function(v){return /^de(-|_)/i.test(v.lang)})||voices.find(function(v){return /^de/i.test(v.lang)});if(voice)u.voice=voice;
+u.onstart=function(){if(token===speechToken){focus=i;updateAudioUI();var line=document.querySelector('.sentence[data-index="'+i+'"]');if(line && continuous)line.scrollIntoView({behavior:'smooth',block:'center'})}};
+u.onend=function(){if(token!==speechToken)return;if(continuous && i+1<t.lines.length){speakAt(i+1,true)}else{speaking=false;updateAudioUI()}};
+u.onerror=function(){if(token===speechToken){speaking=false;updateAudioUI()}};
+speechSynthesis.speak(u)}
+function navBar(active){var arr=[['home','home','Početna'],['library','grid','Tekstovi'],['saved','heart','Sačuvano'],['stats','chart','Napredak']];return '<nav class="bottom-nav" aria-label="Glavna navigacija">'+arr.map(function(x){return '<button class="nav-item '+(active===x[0]?'active':'')+'" data-action="goto" data-view="'+x[0]+'"><span class="navicon">'+svg(x[1])+'</span>'+x[2]+'</button>'}).join('')+'</nav>'}
+function topBar(){return '<header class="topbar"><div class="brand"><div class="logo">DM</div><div><div class="brand-name">DE-MAX <span style="color:#e74758">LESEN</span></div><div class="brand-sub">DEUTSCH A1 · TUTIN</div></div></div><button class="circlebtn" data-action="goto" data-view="library" aria-label="Pretraga tekstova">'+svg('search')+'</button></header>'}
+function pctLesson(i){var d=L[i].texts.filter(function(_,t){return !!progress.done[key(i,t)]}).length;return percentage(d,L[i].texts.length)}
+function lessonCard(l,i){var done=l.texts.filter(function(_,t){return !!progress.done[key(i,t)]}).length;return '<button class="lesson-card" data-action="lesson" data-l="'+i+'"><span class="lesson-icon '+l.gradient+'">'+l.icon+'</span><span class="lesson-meta"><span class="eyebrow">LEKCIJA '+(i+1)+'</span><div class="lesson-title">'+esc(l.sr)+'</div><div class="lesson-sub">'+esc(l.topic)+'</div><div class="tinybar"><i style="width:'+pctLesson(i)+'%"></i></div></span><span style="display:flex;align-items:center;gap:4px;flex-direction:column"><span class="lesson-count">'+done+'/'+l.texts.length+'</span><span class="lesson-arrow">'+svg('chevron','sm')+'</span></span></button>'}
+function home(){
+var next=progress.last&&L[progress.last.l]&&L[progress.last.l].texts[progress.last.t]?progress.last:{l:0,t:0};
+return topBar()+'<section class="home-hero"><div class="hero-eyebrow">DE-MAX • LESETRAINER A1</div><div class="hero-title">Čitaj. Slušaj.<br><span class="accent">Razumi nemački.</span></div><p class="hero-description">Od prvog pozdrava do pravih priča. Kratki tekstovi, nemački izgovor, prevod i interaktivna pitanja.</p><div class="book-illustration"><svg viewBox="0 0 130 140" width="100%" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="10" width="91" height="118" rx="14" fill="#ffe7b2" transform="rotate(8 65 70)"/><rect x="14" y="7" width="91" height="118" rx="12" fill="#ff7980" transform="rotate(-7 60 70)"/><rect x="27" y="20" width="82" height="108" rx="11" fill="#f8fbff" stroke="#c1daf9" stroke-width="2"/><path d="M42 45Q55 40 65 45 Q78 40 94 45V102Q78 96 65 102Q55 96 42 102Z" fill="#d3e5ff" stroke="#3567aa" stroke-width="2"/><path d="M65 45V102M48 58H60M70 58H88M48 68H60M70 68H88M48 78H60M70 78H88" stroke="#779fd5" stroke-width="2.5" stroke-linecap="round"/><circle cx="91" cy="29" r="15" fill="#ffcb6a"/><text x="91" y="35" text-anchor="middle" fill="#1c4b88" font-size="14" font-weight="bold">A1</text></svg></div><div class="hero-bottom"><button class="hero-button" data-action="open" data-l="'+next.l+'" data-t="'+next.t+'">'+svg('play','sm')+(progress.last?'Nastavi čitanje':'Počni da čitaš')+'</button><span class="hero-badge">40 tekstova ✨</span></div></section>'+
+'<main class="content"><div class="overview"><div class="stat-mini"><strong>7</strong><small>lekcija</small></div><div class="stat-mini"><strong>40</strong><small>tekstova</small></div><div class="stat-mini"><strong>'+doneCount()+'</strong><small>završeno</small></div></div><div class="section-heading"><h2>Izaberi lekciju</h2><span class="hint">A1 · po gradivu</span></div>'+L.map(lessonCard).join('')+
+'<div class="callout"><span class="callout-icon">🎧</span><div><strong>Vežbaj svojim tempom</strong><p>Slušaj na nemačkom, dodirni rečenicu za prevod i proveri razumevanje.</p></div></div></main>'+navBar('home')}
+function storyCard(l,t){var item=L[l].texts[t],done=progress.done[key(l,t)];return '<button class="story-card" data-action="open" data-l="'+l+'" data-t="'+t+'"><span class="story-num">'+String(t+1).padStart(2,'0')+'</span><span class="story-meta"><span class="story-title">'+esc(item.title)+'</span><span class="story-sub">'+item.lines.length+' rečenica · 3 pitanja · '+esc(L[l].sr)+'</span></span>'+(done?'<span class="pill done">'+svg('check','sm')+' Gotovo</span>':svg('chevron','sm'))+'</button>'}
+function lessonPage(){var l=L[lessonIndex];return '<div class="backbar"><button class="circlebtn" data-action="goto" data-view="home" aria-label="Nazad">'+svg('arrow')+'</button><span class="backlabel">Sve lekcije</span></div><div class="lesson-cover"><span class="eyebrow" style="color:#a9dafa">LEKCIJA '+(lessonIndex+1)+' / 7</span><span class="cover-icon">'+l.icon+'</span><h1>'+esc(l.sr)+'</h1><p>'+esc(l.desc)+'</p><div style="margin-top:14px;font-size:11px;font-weight:850;color:#b6d6ff">'+l.texts.length+' tekstova · '+pctLesson(lessonIndex)+'% završeno</div></div><main class="section-list"><div class="section-heading"><h2>Tekstovi</h2><span class="hint">Čitaj redom ili biraj</span></div>'+l.texts.map(function(t,i){return storyCard(lessonIndex,i)}).join('')+'</main>'+navBar('home')}
+function reader(){var t=L[lessonIndex].texts[textIndex],total=t.lines.length;
+var tabs=[['lesen','📖 Tekst'],['quiz','✓ Pitanja'],['words','✦ Reči']];
+var title='<div class="reader-head"><span class="eyebrow">TEKST '+(textIndex+1)+' / '+L[lessonIndex].texts.length+' · '+esc(L[lessonIndex].sr)+'</span><h1>'+esc(t.title)+'</h1><div class="lead">'+total+' rečenica · '+t.questions.length+' pitanja · nemački A1</div></div>';
+return '<header class="reader-top"><button class="circlebtn" data-action="backlesson" aria-label="Nazad na lekciju">'+svg('arrow')+'</button><div class="reader-cent">DE-MAX LESEN <small>LEKCIJA '+(lessonIndex+1)+' / 7</small></div><button class="circlebtn '+(isFav(lessonIndex,textIndex)?'on':'')+'" data-action="fav" aria-label="Sačuvaj tekst">'+svg('heart')+'</button></header>'+
+'<main class="reader-body">'+title+'<nav class="tabbar" aria-label="Delovi vežbe">'+tabs.map(function(x){return '<button class="tab '+(tab===x[0]?'active':'')+'" data-action="tab" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</nav>'+
+(tab==='lesen'?readPanel(t):tab==='quiz'?quizPanel(t):wordPanel(t))+
+'<div class="divider"></div><div class="reader-bottom-actions"><button class="btn light" data-action="prev" '+(!hasPrev()?'disabled':'')+'>'+svg('arrow','sm')+' Prethodni</button><button class="btn navy" data-action="next">Sledeći '+svg('chevron','sm')+'</button></div></main>'}
+function readPanel(t){
+return '<section class="player"><div class="player-title">🎧 NEMAČKI IZGOVOR</div><div class="player-info">Slušaj tekst i prati rečenice</div><div class="player-actions"><button class="player-main" id="play-all" data-action="play">'+svg(speaking?'stop':'play','sm')+(speaking?'Zaustavi':'Slušaj ceo tekst')+'</button><button class="player-small" data-action="rate" aria-label="Brzina izgovora">'+(rate===.75?'Sporo':rate===.88?'Normalno':'Brzo')+'</button></div></section>'+
+'<div class="reader-tools"><span class="eyebrow">NEMAČKI TEKST</span><button class="toggle '+(showTranslations?'active':'')+'" data-action="translate">'+(showTranslations?'✓ Prevod uključen':'Prikaži SR prevod')+'</button></div>'+
+'<div class="tip">Dodirni rečenicu za njen prevod ili zvučnik da je čuješ.</div>'+
+t.lines.map(function(line,i){var active=i===focus;var visible=showTranslations||active;return '<div class="sentence '+(active?'active':'')+'" data-action="focus" data-index="'+i+'" tabindex="0" role="button" aria-label="Rečenica '+(i+1)+': '+esc(line[0])+'"><span class="sent-num">'+String(i+1).padStart(2,'0')+'</span><div class="sent-main">'+esc(line[0])+'<div class="sent-sr '+(visible?'':'hidden')+'">'+esc(line[1])+'</div></div><button class="sent-speak" data-action="line" data-index="'+i+'" aria-label="Slušaj rečenicu">'+svg('speaker','sm')+'</button></div>'}).join('')+
+'<div class="reader-bottom-actions"><button class="btn '+(progress.done[key(lessonIndex,textIndex)]?'success':'light')+'" data-action="done">'+svg('check','sm')+(progress.done[key(lessonIndex,textIndex)]?'Pročitano ✓':'Označi pročitano')+'</button><button class="btn primary" data-action="tab" data-tab="quiz">Proveri znanje '+svg('chevron','sm')+'</button></div>'}
+function opts(t,q){var arr=t.questions[q].options.map(function(s,i){return {label:s,index:i}}),seed=(lessonIndex+3)*77+(textIndex+2)*31+(q+1)*17;for(var i=arr.length-1;i>0;i--){var j=(seed+i*13)% (i+1);var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp}return arr}
+function quizPanel(t){
+var k=key(lessonIndex,textIndex),res=progress.results[k];
+var html='<div class="section-heading"><h2>Razumevanje teksta</h2><span class="hint">'+t.questions.length+' pitanja</span></div><p class="page-sub">Pročitaj tekst, zatim izaberi po jedan tačan odgovor. Po završetku dobijaš rezultat.</p>';
+html+=t.questions.map(function(q,i){return '<section class="qcard"><div class="qno">PITANJE '+(i+1)+' / '+t.questions.length+'</div><div class="qtitle">'+esc(q.q)+'</div>'+opts(t,i).map(function(o,j){var selected=answers[i]===o.index;var cls=submitted?(o.index===q.correct?'correct':selected?'wrong':''):(selected?'selected':'');return '<button class="option '+cls+'" data-action="answer" data-q="'+i+'" data-opt="'+o.index+'" '+(submitted?'disabled':'')+'><span class="optionletter">'+String.fromCharCode(65+j)+'</span>'+esc(o.label)+(submitted&&o.index===q.correct?' ✓':'')+'</button>'}).join('')+'</section>'}).join('');
+if(submitted){var score=t.questions.filter(function(q,i){return answers[i]===q.correct}).length;html+='<div class="exam-summary"><span class="eyebrow" style="color:#137966">TVOJ REZULTAT</span><div><strong>'+percentage(score,t.questions.length)+'%</strong> · '+score+' / '+t.questions.length+' tačno</div><p>'+(score===t.questions.length?'Odlično! Sve odgovore znaš.':score>=2?'Vrlo dobro! Pogledaj označene tačne odgovore.':'Pročitaj tekst još jednom i pokušaj ponovo.')+'</p></div><button class="btn light" data-action="retry" style="width:100%">'+svg('refresh','sm')+' Ponovi test</button>'}
+else{html+='<button class="btn primary" data-action="grade" style="width:100%" '+(Object.keys(answers).length<t.questions.length?'disabled':'')+'>Proveri odgovore '+svg('check','sm')+'</button>';if(res)html+='<p class="tip" style="text-align:center">Tvoj prethodni najbolji rezultat: '+res.best+'%</p>'}
+return html}
+function wordPanel(t){
+return '<div class="section-heading"><h2>Reči iz teksta</h2><span class="hint">'+t.words.length+' korisnih izraza</span></div><p class="page-sub">Dodirni zvučnik za izgovor. Sačuvaj reči koje želiš ponovo da učiš.</p><div class="words">'+t.words.map(function(w,i){var id=wordKey(lessonIndex,textIndex,i),saved=progress.words.indexOf(id)>=0;return '<div class="wordcard"><button class="circlebtn" data-action="word-audio" data-word="'+i+'" aria-label="Izgovori reč">'+svg('speaker','sm')+'</button><div class="word-detail"><div class="word-de">'+esc(w[0])+'</div><div class="word-sr">'+esc(w[1])+'</div></div><button class="word-heart '+(saved?'active':'')+'" data-action="wordfav" data-word="'+i+'" aria-label="Sačuvaj reč">'+svg('heart','sm')+'</button></div>'}).join('')+'</div><div class="callout"><span class="callout-icon">📚</span><div><strong>De-Max rečnik</strong><p>Ponavljaj sačuvane reči u kartici „Sačuvano“.</p></div></div>'}
+function library(){
+var cards=[];L.forEach(function(l,li){l.texts.forEach(function(t,ti){cards.push({l:li,t:ti,title:t.title,query:(t.title+' '+l.sr+' '+l.topic+' '+t.lines.map(function(x){return x[0]}).join(' ')).toLocaleLowerCase('de-DE')})})});
+var filtered=cards.filter(function(x){return (filter==='all'||String(x.l)===filter)&&(!search||x.query.includes(search.toLocaleLowerCase('de-DE')))});
+return topBar()+'<main class="content"><h1 class="page-title">Biblioteka tekstova</h1><p class="page-sub">Svi A1 tekstovi na jednom mestu. Pronađi temu ili izaberi lekciju.</p><label class="search-field">'+svg('search','sm')+'<input id="search" type="search" autocomplete="off" placeholder="Traži tekst ili temu..." value="'+esc(search)+'" aria-label="Pretraži tekstove"></label><div class="chipbar">'+[['all','Sve'],...L.map(function(l,i){return [String(i),'Lekcija '+(i+1)]})].map(function(x){return '<button class="chip '+(filter===x[0]?'active':'')+'" data-action="filter" data-filter="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div><div class="section-heading"><h2>Tekstovi <span class="muted">('+filtered.length+')</span></h2></div><div id="library-results">'+(filtered.length?filtered.map(function(x){return storyCard(x.l,x.t)}).join(''):'<div class="empty">Nema tekstova za ovu pretragu.</div>')+'</div></main>'+navBar('library')}
+function savedPage(){
+var favorites=progress.bookmarks.filter(function(k){var p=k.split('-').map(Number);return L[p[0]]&&L[p[0]].texts[p[1]]});
+var words=progress.words.filter(function(k){var p=k.split('-').map(Number);return L[p[0]]&&L[p[0]].texts[p[1]]&&L[p[0]].texts[p[1]].words[p[2]]});
+return topBar()+'<main class="content"><h1 class="page-title">Moje sačuvano</h1><p class="page-sub">Tvoji omiljeni tekstovi i nove reči na jednom mestu.</p><h3 class="list-heading">❤️ Tekstovi ('+favorites.length+')</h3>'+(favorites.length?favorites.map(function(k){var p=k.split('-').map(Number);return storyCard(p[0],p[1])}).join(''):'<div class="empty"><div class="emoji">📖</div>Još nema sačuvanih tekstova. Dodirni srce u tekstu.</div>')+
+'<h3 class="list-heading">✦ Reči ('+words.length+')</h3>'+(words.length?'<div class="words">'+words.map(function(k){var p=k.split('-').map(Number),w=L[p[0]].texts[p[1]].words[p[2]];return '<div class="wordcard"><button class="circlebtn" data-action="savedword-audio" data-k="'+k+'">'+svg('speaker','sm')+'</button><div class="word-detail"><div class="word-de">'+esc(w[0])+'</div><div class="word-sr">'+esc(w[1])+'</div></div><button class="word-heart active" data-action="savedword-remove" data-k="'+k+'">'+svg('heart','sm')+'</button></div>'}).join('')+'</div>':'<div class="empty"><div class="emoji">📝</div>Reči sačuvaj iz kartice „Reči“ uz tekst.</div>')+'</main>'+navBar('saved')}
+function statsPage(){
+var total=countTexts(),done=doneCount(),results=Object.values(progress.results),avg=results.length?Math.round(results.reduce(function(s,r){return s+r.best},0)/results.length):0;
+return topBar()+'<main class="content"><h1 class="page-title">Moj napredak</h1><p class="page-sub">Uči svojim tempom. Rezultati se čuvaju lokalno na ovom uređaju.</p><div class="progress-big"><span>UKUPNI NAPREDAK</span><div><strong>'+percentage(done,total)+'%</strong> <span>· '+done+' / '+total+' tekstova</span></div><div class="bar"><i style="width:'+percentage(done,total)+'%"></i></div></div><div class="overview"><div class="stat-mini"><strong>'+done+'</strong><small>pročitano</small></div><div class="stat-mini"><strong>'+results.length+'</strong><small>testova</small></div><div class="stat-mini"><strong>'+avg+'%</strong><small>prosek</small></div></div><div class="section-heading"><h2>Po lekcijama</h2></div>'+L.map(lessonCard).join('')+
+'<div class="panel" style="padding:16px;margin-top:16px"><strong style="font-size:14px">Lokalna rezervna kopija</strong><p class="page-sub" style="margin-top:7px">Napredak ostaje samo na ovom telefonu ili računaru. Možeš preuzeti JSON kopiju.</p><button class="btn light" style="width:100%" data-action="backup">'+svg('download','sm')+' Sačuvaj napredak</button><button class="text-btn" style="margin-top:7px" data-action="install">Dodaj aplikaciju na početni ekran</button></div></main>'+navBar('stats')}
+function render(keep){var y=keep?window.scrollY:0;var app=document.getElementById('app');app.innerHTML=view==='home'?home():view==='lesson'?lessonPage():view==='reader'?reader():view==='library'?library():view==='saved'?savedPage():statsPage();if(keep)window.scrollTo(0,y);else scrollTop()}
+function openReader(l,t){stopSpeak();lessonIndex=l;textIndex=t;tab='lesen';focus=-1;showTranslations=false;answers={};submitted=false;view='reader';progress.last={l:l,t:t};save();render()}
+function hasPrev(){return textIndex>0||lessonIndex>0}
+function goNext(step){var l=lessonIndex,t=textIndex+step;if(t>=L[l].texts.length){l++;t=0}if(t<0){l--;if(l>=0)t=L[l].texts.length-1}if(l<0||l>=L.length){toast('To je poslednji tekst. Bravo!');return}openReader(l,t)}
+function speakWord(s){if(!('speechSynthesis' in window)){toast('Zvučno čitanje nije dostupno.');return}stopSpeak();var u=new SpeechSynthesisUtterance(s);u.lang='de-DE';u.rate=rate;var v=speechSynthesis.getVoices().find(function(x){return /^de/i.test(x.lang)});if(v)u.voice=v;speechSynthesis.speak(u)}
+function switchView(v){stopSpeak();view=v;render()}
+document.addEventListener('click',function(e){
+var button=e.target.closest('[data-action]');if(!button)return;var a=button.dataset.action,l=Number(button.dataset.l),t=Number(button.dataset.t),i=Number(button.dataset.index);
+if(a==='goto'){filter='all';search='';switchView(button.dataset.view)}
+else if(a==='lesson'){stopSpeak();lessonIndex=l;view='lesson';render()}
+else if(a==='backlesson'){stopSpeak();view='lesson';render()}
+else if(a==='open')openReader(l,t);
+else if(a==='tab'){stopSpeak();tab=button.dataset.tab;render()}
+else if(a==='fav'){var k=key(lessonIndex,textIndex);if(isFav(lessonIndex,textIndex))progress.bookmarks=progress.bookmarks.filter(function(x){return x!==k});else progress.bookmarks.push(k);save();render(true);toast(isFav(lessonIndex,textIndex)?'Tekst je sačuvan ❤️':'Tekst je uklonjen')}
+else if(a==='focus'){focus=i;render(true)}
+else if(a==='line'){e.stopPropagation();focus=i;render(true);speakAt(i,false)}
+else if(a==='play'){if(speaking)stopSpeak();else speakAt(0,true)}
+else if(a==='rate'){rate=rate===.75?.88:rate===.88?1.05:.75;var playingNow=speaking;stopSpeak();render(true);if(playingNow)toast('Brzina promenjena. Pritisni Slušaj.')}
+else if(a==='translate'){showTranslations=!showTranslations;render(true)}
+else if(a==='done'){progress.done[key(lessonIndex,textIndex)]=true;save();render(true);toast('Bravo! Tekst je označen kao pročitan.')}
+else if(a==='answer'){if(submitted)return;answers[Number(button.dataset.q)]=Number(button.dataset.opt);render(true)}
+else if(a==='grade'){var qs=L[lessonIndex].texts[textIndex].questions;if(qs.some(function(_,q){return answers[q]===undefined})){toast('Odgovori na sva pitanja.');return}submitted=true;var score=qs.filter(function(q,j){return answers[j]===q.correct}).length,percent=percentage(score,qs.length),id=key(lessonIndex,textIndex);progress.results[id]={best:Math.max(progress.results[id]?progress.results[id].best:0,percent),last:percent,attempts:(progress.results[id]?progress.results[id].attempts:0)+1};progress.done[id]=true;save();render(true);toast('Test je završen: '+percent+'%')}
+else if(a==='retry'){answers={};submitted=false;render(true)}
+else if(a==='prev')goNext(-1);
+else if(a==='next')goNext(1);
+else if(a==='word-audio')speakWord(L[lessonIndex].texts[textIndex].words[Number(button.dataset.word)][0]);
+else if(a==='wordfav'){var kw=wordKey(lessonIndex,textIndex,button.dataset.word),pos=progress.words.indexOf(kw);if(pos>=0)progress.words.splice(pos,1);else progress.words.push(kw);save();render(true)}
+else if(a==='savedword-audio'){var p=button.dataset.k.split('-').map(Number);speakWord(L[p[0]].texts[p[1]].words[p[2]][0])}
+else if(a==='savedword-remove'){progress.words=progress.words.filter(function(x){return x!==button.dataset.k});save();render(true)}
+else if(a==='filter'){filter=button.dataset.filter;render(true)}
+else if(a==='backup'){try{var blob=new Blob([JSON.stringify({app:'DE-MAX-A1-LESEN',version:1,date:new Date().toISOString(),progress:progress},null,2)],{type:'application/json'});var url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='DE-MAX_A1_LESEN_napredak.json';link.click();setTimeout(function(){URL.revokeObjectURL(url)},3000);toast('Rezervna kopija je preuzeta.')}catch(err){toast('Preuzimanje nije uspelo.')}}
+else if(a==='install'){if(installPrompt){installPrompt.prompt();installPrompt.userChoice.then(function(){installPrompt=null})}else toast('Na iPhone-u: Share → Add to Home Screen. Na Androidu: meni → Install app.')}
+});
+document.addEventListener('input',function(e){if(e.target.id==='search'){search=e.target.value;var cards=[];L.forEach(function(l,li){l.texts.forEach(function(t,ti){var hay=(t.title+' '+l.topic+' '+l.sr+' '+t.lines.map(function(x){return x[0]}).join(' ')).toLocaleLowerCase('de-DE');if((filter==='all'||filter===String(li))&&hay.includes(search.toLocaleLowerCase('de-DE')))cards.push(storyCard(li,ti))})});var list=document.getElementById('library-results');if(list)list.innerHTML=cards.length?cards.join(''):'<div class="empty">Nema tekstova za ovu pretragu.</div>';var h=document.querySelector('.section-heading h2');if(h)h.innerHTML='Tekstovi <span class="muted">('+cards.length+')</span>'}});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('.sentence')){e.preventDefault();focus=Number(e.target.dataset.index);render(true)}});
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e});
+window.addEventListener('pagehide',function(){stopSpeak()});
+L=window.DEMAX_A1_LESEN||[];
+if(!L.length){document.getElementById('app').innerHTML='<div style="padding:30px"><h2>Učitavanje tekstova nije uspelo.</h2><p>Proveri internet vezu i osveži stranicu.</p></div>';return}
+render();
+if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./DE-MAX_A1_LESEN_sw.js').catch(function(){});
+})();
+</script>
+</head>
+<body><div class="app" id="app"><div style="padding:25px;color:#102b53">Učitavanje DE-MAX A1 Lesen…</div></div><div class="toast" id="toast" role="status" aria-live="polite"></div></body>
+</html>
