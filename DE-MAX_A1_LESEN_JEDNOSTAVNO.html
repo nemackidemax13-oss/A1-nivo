@@ -182,7 +182,7 @@ function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
 return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
 function home(){
-return '<main class="screen home-screen"><section class="hero home-hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR</small><h1>Slušaj i ponovi izgovor rečenica.</h1></section>'+
+return '<main class="screen home-screen"><section class="hero home-hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR * Vežbaj čitanje rečenica</small><h1>Slušaj i ponovi izgovor rečenica</h1></section>'+
 '<div class="row-head home-heading"><h2>Izaberi lekciju</h2><span class="count">7 lekcija · 40 tekstova</span></div>'+
 '<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
 lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
