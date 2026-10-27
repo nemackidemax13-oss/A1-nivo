@@ -56,6 +56,9 @@ button:disabled{opacity:.32;cursor:default}
 .pager span{font-size:12px;color:#7385a1;font-weight:900;white-space:nowrap;min-width:44px;text-align:center}
 .secondary-action{border:1px solid #dce4ef;background:#fff;border-radius:13px;min-height:44px;color:var(--navy);font-weight:850;font-size:12px}
 .progress-link{border:0;background:transparent;color:#2b649e;font-size:12px;font-weight:850;min-height:30px;align-self:flex-start;padding:0 3px}
+.lesson-plain{padding:10px 3px 2px;font-size:22px;color:var(--navy);font-weight:950;letter-spacing:-.45px;flex:none}
+.pager .lesson-back{background:var(--red);color:#fff;border-color:var(--red)}
+@media(max-height:650px){.lesson-plain{font-size:18px;padding:3px 2px 0}}
 .feature{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;gap:12px;flex:none}
 .feature h2{font-size:22px;font-weight:950;letter-spacing:-.7px;margin:4px 0;color:var(--navy)}
 .feature p{font-size:12px;line-height:1.4;color:var(--muted);margin:0}
@@ -176,7 +179,7 @@ function wordSize(){return window.innerHeight<690?3:4}
 function id(l,t){return l+'-'+t}
 function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
 function percent(n,d){return d?Math.round(100*n/d):0}
-function top(){return '<header class="top">'+(page==='home'?'<div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button>')+'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></header>'}
+function top(){return '<header class="top">'+((page==='home'||page==='texts')?'<div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button>')+'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></header>'}
 function pager(p,pages,kind){return '<div class="pager"><button data-a="previous" data-kind="'+kind+'" '+(p===0?'disabled':'')+'>← Prethodno</button><span>'+(p+1)+' / '+pages+'</span><button data-a="following" data-kind="'+kind+'" '+(p>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
 function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
@@ -189,10 +192,10 @@ lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i
 '</div></main>'}
 function texts(){
 const l=lessons[lesson],n=size(),p=Math.max(0,Math.ceil(l.texts.length/n)-1);lessonPage=Math.min(lessonPage,p);
-return '<main class="screen"><section class="feature"><div><span class="eyebrow">LEKCIJA '+(lesson+1)+' OD 7</span><h2>'+escapeHTML(l.sr)+'</h2><p>'+escapeHTML(l.desc)+'</p></div><span class="glyph">'+l.icon+'</span></section>'+
+return '<main class="screen"><section class="lesson-plain">Lekcija '+(lesson+1)+'</section>'+
 '<div class="row-head"><h2>Izaberi tekst</h2><span class="count">'+l.texts.length+' tekstova</span></div>'+
 '<div class="card-list" style="--perpage:'+n+'">'+l.texts.slice(lessonPage*n,(lessonPage+1)*n).map((t,j)=>{const ti=lessonPage*n+j;return '<button class="item" data-a="read" data-t="'+ti+'"><span class="emoji">📖</span><span class="item-content"><span class="item-number">TEKST '+(ti+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(t.title)+'</span><span class="item-detail">'+t.lines.length+' rečenica · '+t.questions.length+' pitanja'+(progress.done[id(lesson,ti)]?' · ✅':'')+'</span></span><span class="chev">›</span></button>'}).join('')+'</div>'+
-pager(lessonPage,p+1,'texts')+'<div class="notice">Izaberi tekst koji želiš da čitaš.</div></main>'}
+'<div class="pager"><button class="lesson-back" data-a="textsback">← Nazad</button><span>'+(lessonPage+1)+' / '+(p+1)+'</span><button data-a="following" data-kind="texts" '+(lessonPage>=p?'disabled':'')+'>Sledeće →</button></div>'+'<div class="notice">Izaberi tekst koji želiš da čitaš.</div></main>'}
 function read(){
 const t=lessons[lesson].texts[text],n=readerSize(),pages=Math.ceil(t.lines.length/n);
 readerPage=Math.min(readerPage,pages-1);
@@ -282,6 +285,7 @@ document.addEventListener('click',e=>{
 const b=e.target.closest('[data-a]');if(!b)return;
 const a=b.dataset.a;
 if(a==='back')back();
+else if(a==='textsback'){if(lessonPage>0){lessonPage--;render()}else back()}
 else if(a==='lesson'){lesson=Number(b.dataset.l);lessonPage=0;page='texts';render()}
 else if(a==='read')openText(Number(b.dataset.t));
 else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previous'?-1:1);
