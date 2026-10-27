@@ -257,10 +257,12 @@ document.addEventListener('input',function(e){if(e.target.id==='search'){search=
 document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('.sentence')){e.preventDefault();focus=Number(e.target.dataset.index);render(true)}});
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e});
 window.addEventListener('pagehide',function(){stopSpeak()});
+document.addEventListener('DOMContentLoaded',function(){
 L=window.DEMAX_A1_LESEN||[];
 if(!L.length){document.getElementById('app').innerHTML='<div style="padding:30px"><h2>Učitavanje tekstova nije uspelo.</h2><p>Proveri internet vezu i osveži stranicu.</p></div>';return}
 render();
-if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./DE-MAX_A1_LESEN_sw.js').catch(function(){});
+if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./DE-MAX_A1_LESEN_sw.js',{scope:'./DE-MAX_A1_LESEN_APP.html'}).catch(function(){});
+});
 })();
 </script>
 </head>
