@@ -403,7 +403,7 @@ else if(kind==='quiz'){question=Math.max(0,Math.min(lessons[lesson].texts[text].
 else if(kind==='words'){wordPage=Math.max(0,Math.min(Math.ceil(lessons[lesson].texts[text].words.length/wordSize())-1,wordPage+step))}
 render()
 }
-function openText(t){stopAudio();text=t;selectedLesson=lesson;selectedText=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;focused=-1;lastLine=0;answers={};graded=false;page='read';render()}
+function openText(t){stopAudio();text=t;selectedLesson=lesson;selectedText=t;progress.last={l:lesson,t:text};save();readerPage=0;question=0;wordPage=0;focused=-1;lastLine=0;answers={};graded=false;page='read';speakWhole(0)}
 function back(){
 stopAudio();
 if(page==='home')return;
