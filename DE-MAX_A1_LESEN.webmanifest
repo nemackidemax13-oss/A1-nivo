@@ -1,0 +1,20 @@
+{
+  "name": "DE-MAX A1 Lesen – Čitaj, slušaj, razumi",
+  "short_name": "De-Max Lesen",
+  "description": "A1 nemački po lekcijama – tekstovi, prevod, izgovor i pitanja",
+  "id": "./DE-MAX_A1_LESEN_APP.html",
+  "start_url": "./DE-MAX_A1_LESEN_APP.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fd",
+  "theme_color": "#092453",
+  "lang": "sr",
+  "icons": [
+    {
+      "src": "./DE-MAX_A1_LESEN_icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
