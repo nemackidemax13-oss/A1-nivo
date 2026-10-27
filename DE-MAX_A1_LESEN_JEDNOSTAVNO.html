@@ -25,6 +25,10 @@ button:disabled{opacity:.32;cursor:default}
 .brand strong span{color:var(--red)}
 .brand small{display:block;font-size:10px;letter-spacing:1.1px;font-weight:900;color:#75859d;margin-top:3px}
 .back{border:0;color:#fff;background:var(--red);min-height:43px;padding:0 14px;border-radius:13px;font-weight:900;font-size:13px;display:flex;align-items:center;gap:7px}
+.lessons-top{border:0;border-radius:10px;background:#2369c9;color:#fff;font-size:11px;font-weight:900;min-height:34px;padding:0 9px;white-space:nowrap;flex:none}
+.lessons-top:active{background:#164f9d}
+@media(hover:hover) and (pointer:fine){.lessons-top:hover{background:#164f9d}}
+@media(max-width:355px){.top{padding-left:9px;padding-right:9px}.lessons-top{font-size:10px;padding:0 7px}.top .brand strong{font-size:16px}.top .brand small{font-size:9px}.top .mark{margin-left:7px;width:37px;height:37px;font-size:18px}}
 .screen{flex:1;min-height:0;padding:15px 16px max(15px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;overflow:hidden}
 .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.1px;color:#7587a0;font-weight:900}
 .h1{font-size:25px;line-height:1.15;font-weight:950;color:var(--navy);letter-spacing:-.8px;margin:4px 0 0}
@@ -312,7 +316,7 @@ function wordSize(){return window.innerHeight<690?3:4}
 function id(l,t){return l+'-'+t}
 function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
 function percent(n,d){return d?Math.round(100*n/d):0}
-function top(){return '<header class="top">'+((page==='home'||page==='texts'||page==='read')?'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div>')+'</header>'}
+function top(){return '<header class="top">'+(page==='read'?'<button class="lessons-top" data-a="lessonsHome">← Lekcije</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':(page==='home'||page==='texts')?'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div>')+'</header>'}
 function pager(p,pages,kind){return '<div class="pager"><button data-a="previous" data-kind="'+kind+'" '+(p===0?'disabled':'')+'>← Prethodno</button><span>'+(p+1)+' / '+pages+'</span><button data-a="following" data-kind="'+kind+'" '+(p>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
 function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
@@ -431,6 +435,7 @@ document.addEventListener('click',e=>{
 const b=e.target.closest('[data-a]');if(!b)return;
 const a=b.dataset.a;
 if(a==='back')back();
+else if(a==='lessonsHome'){stopAudio();page='home';render()}
 else if(a==='readback'){if(readerPage>0){previousStep('read',-1)}else back()}
 else if(a==='textsback'){if(lessonPage>0){lessonPage--;render()}else back()}
 else if(a==='lesson'){const nextLesson=Number(b.dataset.l);if(selectedLesson!==nextLesson)selectedText=-1;lesson=nextLesson;selectedLesson=lesson;lessonPage=0;page='texts';render()}
