@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#102d60">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>DE-MAX LESEN · A1 · Jednostavna verzija</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#102d60;--navy2:#193d7b;--red:#e43e50;--green:#0b9773;--ink:#12294a;--muted:#71829b;--line:#e0e7f2;--paper:#fff;--bg:#f3f6fb}
 *{box-sizing:border-box}
@@ -188,6 +191,41 @@ button:disabled{opacity:.32;cursor:default}
 }
 
 @media(min-width:550px){#app{border-radius:0}}
+
+/* Elegantan, prozračan font na naslovu, uz sačuvan kompaktni raspored. */
+.home-hero{
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:linear-gradient(118deg,#0b2554 0%,#174386 68%,#274f95 100%);
+  border:1px solid rgba(223,237,255,.16);
+  box-shadow:0 5px 16px rgba(15,48,110,.12);
+}
+.home-hero small{
+  display:flex!important;flex-wrap:wrap;align-items:center;gap:2px 7px;
+  font-size:9px;letter-spacing:.35px;line-height:1.35;font-weight:800;
+}
+.home-hero .hero-kicker{color:#c0deff;letter-spacing:.85px}
+.home-hero .hero-detail{color:#f3d6ac;letter-spacing:.05px;font-weight:650}
+.home-hero h1{
+  font-family:"Manrope",system-ui,sans-serif;
+  font-weight:800;letter-spacing:-.6px;font-size:17px;
+  line-height:1.12;margin:6px 0 0;
+  text-wrap:balance;
+}
+.home-hero h1 em{
+  font-family:"Playfair Display",Georgia,serif;
+  font-style:italic;font-weight:600;font-size:1.16em;
+  color:#ffd89e;letter-spacing:-.3px;white-space:normal;
+}
+@media(max-height:690px){
+ .home-hero h1{font-size:15px;margin-top:4px}
+ .home-hero small{font-size:8px}
+}
+@media(max-height:530px){
+ .home-hero h1{font-size:13px}
+ .home-hero h1 em{font-size:1.1em}
+ .home-hero small{font-size:7.5px}
+}
+
 </style>
 </head>
 <body>
@@ -219,7 +257,7 @@ function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
 return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
 function home(){
-return '<main class="screen home-screen"><section class="hero home-hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR * Vežbaj čitanje rečenica</small><h1>Slušaj i ponovi izgovor rečenica</h1></section>'+
+return '<main class="screen home-screen"><section class="hero home-hero"><small><span class="hero-kicker">DE-MAX A1 · NEMAČKI IZGOVOR</span><span class="hero-detail">✦ Vežbaj čitanje rečenica</span></small><h1>Slušaj i ponovi <em>izgovor rečenica</em></h1></section>'+
 '<div class="row-head home-heading"><h2>Izaberi lekciju</h2><span class="count">7 lekcija · 40 tekstova</span></div>'+
 '<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
 lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
