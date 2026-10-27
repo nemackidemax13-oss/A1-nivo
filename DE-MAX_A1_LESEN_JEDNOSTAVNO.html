@@ -113,6 +113,43 @@ button:disabled{opacity:.32;cursor:default}
 @media(max-width:360px){.audio{gap:5px;padding:8px}.audio button{padding:0 6px;font-size:10px}.audio .speed{min-width:63px}}
 @media(max-height:760px){.screen{gap:8px;padding-top:10px;padding-bottom:10px}.top{height:60px}.hero{padding:13px 16px}.hero h1{font-size:21px;margin:5px 0}.hero p{font-size:11px}.stat{padding:7px 2px}.h1{font-size:22px}.feature{padding:10px}.item{padding:7px 10px}.emoji{height:44px;width:44px;min-width:44px}.item-title{font-size:14px}.sentence{padding:10px 12px}.de{font-size:clamp(17px,4.5vw,21px)}.pager{height:45px}.pager button{height:42px}.action{min-height:44px}.question-card{padding:12px}.question-text{font-size:19px}.option{min-height:48px;padding:9px}}
 @media(max-height:620px){.hero{padding:10px}.hero h1{font-size:19px}.hero p{display:none}.stats{gap:5px}.stat strong{font-size:17px}.stat small{font-size:9px}.screen{gap:7px;padding:8px 12px}.read-title h1{font-size:19px}.sentence{padding:9px 11px}.sr{font-size:12px}.de{font-size:17px}.audio{padding:6px 9px}.option{min-height:43px}.feature{padding:9px}.feature h2{font-size:18px}.question-text{margin:0}.word-card{padding:7px}}
+
+/* Početna: svih 7 lekcija na jednom ekranu, bez skrolovanja i paginacije. */
+.home-screen{gap:9px;padding:11px 14px max(11px,env(safe-area-inset-bottom))}
+.home-hero{padding:9px 13px;border-radius:13px;min-height:0}
+.home-hero::after{content:none}
+.home-hero small{font-size:9px;letter-spacing:.85px;display:block}
+.home-hero h1{font-size:15px;line-height:1.18;letter-spacing:-.25px;margin:3px 0 0;font-weight:900}
+.home-heading{min-height:21px}
+.home-heading h2{font-size:17px}
+.home-heading .count{font-size:10px}
+.home-lessons{grid-template-rows:repeat(7,minmax(0,1fr));gap:6px}
+.home-lesson{padding:5px 9px;border-radius:12px;gap:10px;min-height:0}
+.home-lesson .emoji{width:37px;height:37px;min-width:37px;border-radius:10px;font-size:20px}
+.home-lesson .item-content{display:flex;flex-direction:column;justify-content:center;gap:1px}
+.home-lesson .item-number{font-size:9px;letter-spacing:.7px}
+.home-lesson .item-title{display:block;font-size:13px;line-height:1.18;margin:0;font-weight:900}
+.home-lesson .chev{font-size:21px}
+@media(max-height:690px){
+.home-screen{gap:7px;padding:8px 12px}
+.home-hero{padding:7px 11px}
+.home-hero h1{font-size:14px}
+.home-lessons{gap:5px}
+.home-lesson{padding:3px 8px;gap:8px}
+.home-lesson .emoji{width:32px;height:32px;min-width:32px;font-size:18px}
+.home-lesson .item-title{font-size:12px}
+.home-lesson .item-number{font-size:8px}
+.home-heading h2{font-size:15px}
+}
+@media(max-height:530px){
+.home-hero small{font-size:8px}
+.home-hero h1{font-size:13px}
+.home-lesson .item-content{flex-direction:row;align-items:center;gap:6px;justify-content:flex-start}
+.home-lesson .item-number{white-space:nowrap}
+.home-lesson .emoji{width:29px;height:29px;min-width:29px}
+.home-lesson .item-title{font-size:11px}
+}
+
 @media(min-width:550px){#app{border-radius:0}}
 </style>
 </head>
@@ -145,13 +182,11 @@ function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
 return '<button class="item" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title" style="display:block">'+escapeHTML(l.sr)+'</span><span class="item-detail">'+l.texts.length+' tekstova · '+count+' završeno</span><span class="meter" style="display:block"><i style="width:'+percent(count,l.texts.length)+'%"></i></span></span><span class="chev">›</span></button>'}
 function home(){
-const n=size(),p=Math.max(0,Math.ceil(lessons.length/n)-1);homePage=Math.min(homePage,p);
-return '<main class="screen"><section class="hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR</small><h1>Slušaj i ponovi<br><em>izgovor rečenica.</em></h1><p>Izaberi tekst, poslušaj nemački i ponovi svaku rečenicu.</p></section>'+
-'<div class="stats"><div class="stat"><strong>7</strong><small>lekcija</small></div><div class="stat"><strong>40</strong><small>tekstova</small></div><div class="stat"><strong>'+readCount()+'</strong><small>urađeno</small></div></div>'+
-'<div class="row-head"><h2>Izaberi lekciju</h2><span class="count">A1</span></div>'+
-'<div class="card-list" style="--perpage:'+n+'">'+lessons.slice(homePage*n,homePage*n+n).map((l,j)=>listLesson(l,homePage*n+j)).join('')+'</div>'+
-pager(homePage,p+1,'home')+
-'<button class="progress-link" data-a="stats">📈 Moj napredak</button></main>'}
+return '<main class="screen home-screen"><section class="hero home-hero"><small>DE-MAX A1 · NEMAČKI IZGOVOR</small><h1>Slušaj i ponovi izgovor rečenica.</h1></section>'+
+'<div class="row-head home-heading"><h2>Izaberi lekciju</h2><span class="count">7 lekcija · 40 tekstova</span></div>'+
+'<div class="card-list home-lessons" style="--perpage:'+lessons.length+'">'+
+lessons.map((l,i)=>'<button class="item home-lesson" data-a="lesson" data-l="'+i+'"><span class="emoji">'+l.icon+'</span><span class="item-content"><span class="item-number">LEKCIJA '+(i+1)+'</span><span class="item-title">'+escapeHTML(l.sr)+'</span></span><span class="chev">›</span></button>').join('')+
+'</div></main>'}
 function texts(){
 const l=lessons[lesson],n=size(),p=Math.max(0,Math.ceil(l.texts.length/n)-1);lessonPage=Math.min(lessonPage,p);
 return '<main class="screen"><section class="feature"><div><span class="eyebrow">LEKCIJA '+(lesson+1)+' OD 7</span><h2>'+escapeHTML(l.sr)+'</h2><p>'+escapeHTML(l.desc)+'</p></div><span class="glyph">'+l.icon+'</span></section>'+
@@ -250,7 +285,6 @@ if(a==='back')back();
 else if(a==='lesson'){lesson=Number(b.dataset.l);lessonPage=0;page='texts';render()}
 else if(a==='read')openText(Number(b.dataset.t));
 else if(a==='previous'||a==='following')previousStep(b.dataset.kind,a==='previous'?-1:1);
-else if(a==='stats'){homePage=0;page='stats';render()}
 else if(a==='focus'){focused=Number(b.dataset.i);render()}
 else if(a==='speakline'){e.stopPropagation();stopAudio();focused=Number(b.dataset.i);lastLine=focused;render();sound(lessons[lesson].texts[text].lines[focused][0])}
 else if(a==='repeat'){
