@@ -91,6 +91,8 @@ button:disabled{opacity:.32;cursor:default}
 .read-footer-single{display:block}
 .read-footer-single .action{width:100%}
 .pager .read-back{background:var(--red);color:#fff;border-color:var(--red)}
+.read-pager button:last-child{background:var(--green);color:#fff;border-color:var(--green)}
+@media(hover:hover) and (pointer:fine){.read-pager button:last-child:not(:disabled):hover{background:#087b60;border-color:#087b60}}
 .action{border:0;border-radius:14px;font-size:13px;font-weight:900;padding:0 10px;min-height:49px}
 .action.green{background:var(--green);color:#fff}
 .action.red{background:var(--red);color:white}
@@ -310,7 +312,7 @@ function wordSize(){return window.innerHeight<690?3:4}
 function id(l,t){return l+'-'+t}
 function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
 function percent(n,d){return d?Math.round(100*n/d):0}
-function top(){return '<header class="top">'+((page==='home'||page==='texts')?'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div>')+'</header>'}
+function top(){return '<header class="top">'+((page==='home'||page==='texts'||page==='read')?'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div>')+'</header>'}
 function pager(p,pages,kind){return '<div class="pager"><button data-a="previous" data-kind="'+kind+'" '+(p===0?'disabled':'')+'>← Prethodno</button><span>'+(p+1)+' / '+pages+'</span><button data-a="following" data-kind="'+kind+'" '+(p>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
 function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
@@ -342,7 +344,7 @@ return '<main class="screen"><div class="read-title"><span class="eyebrow">LEKCI
 '<div class="tools"><span>REČENICE '+(start+1)+'–'+finish+' OD '+t.lines.length+'</span><span class="'+(waitingForRepeat?'repeat-pause':'')+'">'+(waitingForRepeat?'Ponovi naglas · zatim Sledeće':'DE / SR')+'</span></div>'+
 '<div class="progress-track"><i style="width:'+percent(finish,t.lines.length)+'%"></i></div>'+
 '<div class="read-cards" style="--sentences:'+n+'">'+cards+'</div>'+
-'<div class="pager"><button class="read-back" data-a="readback">← Nazad</button><span>'+(readerPage+1)+' / '+pages+'</span><button data-a="following" data-kind="read" '+(readerPage>=pages-1?'disabled':'')+'>Sledeće →</button></div>'+
+'<div class="pager read-pager"><button class="read-back" data-a="readback">← Nazad</button><span>'+(readerPage+1)+' / '+pages+'</span><button data-a="following" data-kind="read" '+(readerPage>=pages-1?'disabled':'')+'>Sledeće →</button></div>'+
 '</main>'}
 function optionList(q){
 const order=q.options.map((o,i)=>({label:o,index:i}));
