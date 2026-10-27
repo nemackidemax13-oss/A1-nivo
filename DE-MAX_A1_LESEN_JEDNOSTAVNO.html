@@ -19,7 +19,7 @@ button:focus-visible{outline:3px solid #82b3ff;outline-offset:2px}
 button:disabled{opacity:.32;cursor:default}
 #app{height:100%;height:100dvh;max-width:500px;margin:auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 32px rgba(14,30,56,.13)}
 .top{height:66px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:#fff;border-bottom:1px solid var(--line)}
-.mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ed4a5d,#c92846);color:white;font-size:20px;letter-spacing:-1.5px;display:grid;place-items:center;font-weight:950}
+.mark{margin-left:12px;flex:none;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ed4a5d,#c92846);color:white;font-size:20px;letter-spacing:-1.5px;display:grid;place-items:center;font-weight:950}
 .brand{text-align:right;margin-left:auto}
 .brand strong{font-size:19px;letter-spacing:-.6px;color:var(--navy);display:block;line-height:1.16}
 .brand strong span{color:var(--red)}
@@ -265,7 +265,7 @@ button:disabled{opacity:.32;cursor:default}
 </style>
 </head>
 <body>
-<div id="app"><div class="top"><div class="mark">DM</div><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></div></div>
+<div id="app"><div class="top"><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div></div></div>
 <div id="toast" role="status" aria-live="polite" style="position:fixed;bottom:13px;left:50%;transform:translateX(-50%);z-index:60;max-width:90%;background:#163668;color:#fff;border-radius:12px;font-size:12px;font-weight:800;padding:11px 15px;display:none"></div>
 <script src="./DE-MAX_A1_LESEN_DATA.js"></script>
 <script>
@@ -288,7 +288,7 @@ function wordSize(){return window.innerHeight<690?3:4}
 function id(l,t){return l+'-'+t}
 function readCount(){return Object.keys(progress.done).filter(k=>progress.done[k]).length}
 function percent(n,d){return d?Math.round(100*n/d):0}
-function top(){return '<header class="top">'+((page==='home'||page==='texts')?'<div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button>')+'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div></header>'}
+function top(){return '<header class="top">'+((page==='home'||page==='texts')?'<div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div><div class="mark">DM</div>':'<button class="back" data-a="back">← Nazad</button><div class="brand"><strong>DE-MAX <span>LESEN</span></strong><small>DEUTSCH A1 · TUTIN</small></div>')+'</header>'}
 function pager(p,pages,kind){return '<div class="pager"><button data-a="previous" data-kind="'+kind+'" '+(p===0?'disabled':'')+'>← Prethodno</button><span>'+(p+1)+' / '+pages+'</span><button data-a="following" data-kind="'+kind+'" '+(p>=pages-1?'disabled':'')+'>Sledeće →</button></div>'}
 function listLesson(l,i){
 const count=l.texts.filter((t,ti)=>progress.done[id(i,ti)]).length;
