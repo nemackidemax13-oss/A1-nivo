@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#090f22">
+<title>DE-MAX A1 • VEŠALICA</title>
+<style>
+:root{color-scheme:dark;--ink:#f6f6ff;--muted:#bac3d9;--gold:#ffd16a;--red:#ff4d69;--blue:#172448}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#080d20}
+body{background:radial-gradient(ellipse at 50% 17%,#233353 0,#111c37 39%,#080d20 83%);overscroll-behavior:none}
+button,select{font:inherit;touch-action:manipulation}button{cursor:pointer}
+button:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#app{position:relative;isolation:isolate;width:min(100%,610px);height:100dvh;max-height:970px;margin:auto;display:flex;flex-direction:column;gap:clamp(4px,1svh,10px);padding:max(7px,env(safe-area-inset-top)) 11px max(8px,env(safe-area-inset-bottom));overflow:hidden}
+#app:before{content:"";position:absolute;pointer-events:none;inset:-20%;z-index:-2;background:radial-gradient(ellipse at 50% 50%,transparent 20%,#0306129c 80%)}
+.header,.strip,.panel,.keyboard,.bottom{position:relative;z-index:2}
+.header{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:43px}
+.brand{line-height:1.05;white-space:nowrap;letter-spacing:.05em;font-weight:950;font-size:clamp(17px,4.6vw,23px)}
+.brand b{color:var(--red)}.brand small{display:block;color:#a9bddf;letter-spacing:.17em;font-weight:750;font-size:9px;margin-top:5px}
+.controls{display:flex;gap:5px}
+.toggle{font-size:11px;font-weight:900;padding:8px 8px;border:1px solid #4b5879;border-radius:12px;background:#1d2b4b;color:white;min-width:52px;white-space:nowrap}
+.toggle.off{color:#8c96a9;opacity:.72}
+.titleRow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h1{font-size:clamp(21px,6vw,30px);line-height:1;margin:1px 0;color:white;font-weight:950;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--gold)}
+.mode{font-size:11px;font-weight:850;background:#142342;color:#ffe6ab;border:1px solid #4e5c79;border-radius:10px;padding:7px 5px;max-width:48%;min-width:120px}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.stat{padding:6px 3px 5px;border:1px solid #334260;border-radius:11px;background:#15223e9f;text-align:center;min-width:0}
+.stat label{display:block;color:#9daccc;font-weight:800;font-size:9px;letter-spacing:.06em;white-space:nowrap}
+.stat strong{display:block;font-weight:950;color:#fff;font-size:clamp(14px,4vw,19px);line-height:1.3}
+#progressTrack{height:5px;border-radius:99px;background:#37435f;overflow:hidden;flex:none}
+#progressFill{width:0;height:100%;background:linear-gradient(90deg,#ffe39e,#ffae3a);transition:width .45s}
+.panel{border:1px solid #415073;border-radius:22px;background:linear-gradient(180deg,#172749d9,#0b1630ec);box-shadow:0 10px 35px #0007;min-height:0;flex:1;display:flex;flex-direction:column;overflow:hidden;padding:7px 10px 10px}
+.scene{flex:1;min-height:90px;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:15px;background:radial-gradient(ellipse at 56% 24%,#30486b,#172a45 45%,#0b1429 92%)}
+.scene:after{content:"";position:absolute;inset:auto 0 0;height:24%;background:linear-gradient(0deg,#071324aa,transparent);pointer-events:none}
+.moon{position:absolute;top:10%;right:12%;width:clamp(34px,8svh,73px);aspect-ratio:1;border-radius:50%;background:#c9daed;box-shadow:0 0 30px 8px #a7d6ff44,0 0 90px 10px #9fd5ff25}
+.fog{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(120deg,transparent 0 34px,#bed8fa04 42px 48px,transparent 60px 100px);animation:drift 9s linear infinite}
+@keyframes drift{to{transform:translateX(75px)}}
+#drawing{width:min(100%,350px);height:100%;max-height:270px;overflow:visible;filter:drop-shadow(0 0 8px #0008);position:relative;z-index:1}
+#drawing .gallow{stroke:#7891a7;stroke-width:9;stroke-linecap:round;fill:none}
+#drawing .part{opacity:0;transition:opacity .2s,filter .2s;stroke:#e9effe;stroke-width:7;stroke-linecap:round;fill:none}
+#drawing .part.on{opacity:1;filter:drop-shadow(0 0 4px #e7e8ff66)}
+#drawing .face{stroke:var(--red);stroke-width:3.5}
+#drawing .rope{stroke:#bd9d65;stroke-width:5}
+#drawing .shadow{fill:#02061175}
+.spirit{position:absolute;z-index:2;right:8px;bottom:8px;border:1px solid #677a9d;background:#080d20bd;border-radius:999px;padding:5px 9px;font-size:10px;color:#e6edff;font-weight:900}
+.info{min-height:76px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:6px 2px 2px;flex:none}
+.topic{text-align:center;font-size:11px;color:#ffd98d;font-weight:850}
+#word{display:flex;justify-content:center;align-items:center;gap:clamp(2px,1vw,7px);min-height:34px;max-width:100%}
+.letter{flex:0 1 38px;min-width:0;max-width:38px;height:clamp(29px,5svh,45px);border-bottom:3px solid #94a6c5;display:flex;justify-content:center;align-items:center;font-weight:950;font-size:clamp(14px,4.5vw,23px);color:#fff;text-transform:uppercase}
+.letter.shown{border-color:#40d5a7;color:#87ffd7;animation:pop .23s}
+.letter.reveal{border-color:#ff6e83;color:#ff8398}
+@keyframes pop{50%{transform:scale(1.2)}}
+#clue{text-align:center;font-size:clamp(12px,3.4vw,15px);color:#e7eefd;font-weight:750;line-height:1.2;min-height:17px}
+#clue b{color:var(--gold)}
+.notice{height:22px;text-align:center;font-size:12px;font-weight:850;line-height:22px;color:#c7d3ea;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.notice.good{color:#66f3bc}.notice.bad{color:#ff738b}
+.keyboard{display:flex;flex-direction:column;gap:5px;flex:none;user-select:none}
+.keyrow{display:flex;justify-content:center;gap:4px;width:100%}
+.key{min-width:0;flex:1 1 0;max-width:46px;height:clamp(34px,5.9svh,48px);border-radius:9px;border:1px solid #627aa8;background:linear-gradient(180deg,#263f70,#17284c);box-shadow:0 3px 0 #0b1430;color:#fff;font-weight:900;font-size:clamp(13px,3.9vw,19px);transition:background .14s,transform .13s}
+.key:active:not(:disabled){transform:translateY(2px);box-shadow:none}
+.key.ok{background:#148a6c;border-color:#2ee9ae;box-shadow:0 2px 7px #23d39b55}
+.key.no{background:#70253e;border-color:#ba405e;opacity:.52}
+.key:disabled{cursor:default}
+.bottom{display:flex;gap:7px;flex:none}
+.action{flex:1;border-radius:12px;padding:9px 5px;border:1px solid #63759a;background:#223654;color:#fff;font-weight:900;font-size:clamp(11px,3.3vw,14px);min-height:39px}
+.action.gold{background:linear-gradient(145deg,#ffdf8a,#e9a947);border-color:#ffe4ac;color:#3b2405}
+.action.primary{background:linear-gradient(120deg,#2ed49a,#159f75);border-color:#54f1bf;color:#05291d}
+.action:disabled{opacity:.45;cursor:default}
+#toast{position:absolute;top:43%;left:50%;transform:translate(-50%,-50%) scale(.8);z-index:15;pointer-events:none;color:white;font-weight:1000;font-size:clamp(24px,7vw,39px);text-shadow:0 3px 14px #0009;text-align:center;opacity:0;white-space:nowrap}
+#toast.show{animation:toast 1s forwards}@keyframes toast{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}65%{opacity:1}100%{opacity:0;transform:translate(-50%,-72%) scale(1)}}
+.flash{position:absolute;inset:0;z-index:12;pointer-events:none;opacity:0;background:#d7eaff}
+.flash.boom{animation:flash .6s ease-out}@keyframes flash{0%,16%{opacity:0}6%,26%{opacity:.94}33%{opacity:.08}42%{opacity:.65}100%{opacity:0}}
+#app.shake{animation:shake .43s linear}@keyframes shake{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-5px)}30%,60%,90%{transform:translateX(5px)}}
+#particles{position:absolute;inset:0;z-index:13;pointer-events:none;overflow:hidden}
+.particle{position:absolute;left:50%;top:52%;width:7px;height:14px;background:var(--gold);animation:scatter .95s ease-out forwards}
+@keyframes scatter{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--rot))}}
+.overlay{position:absolute;inset:0;z-index:20;background:#050b1de8;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(9px)}
+.overlay.hidden{display:none}
+.modal{width:100%;max-width:430px;text-align:center;border:1px solid #56658a;border-radius:24px;background:linear-gradient(160deg,#263759,#111d38);padding:clamp(18px,5vw,29px) 18px;box-shadow:0 28px 70px #0009}
+.modal .emblem{font-size:clamp(43px,12vw,63px);filter:drop-shadow(0 0 20px #ffbf6155)}
+.modal h2{margin:7px 0;font-weight:1000;font-size:clamp(24px,7vw,33px)}
+.modal p{font-size:14px;line-height:1.45;color:#cbd5eb;margin:8px 0 17px}
+.modal select{width:100%;background:#111e3b;color:white;padding:13px;border:1px solid #677b9f;border-radius:12px;font-weight:800;margin:0 0 12px}
+.modal .bigbtn{width:100%;padding:15px;border:0;border-radius:14px;font-weight:1000;font-size:19px;background:linear-gradient(120deg,#ffe49f,#e5a73d);color:#382608;box-shadow:0 5px 0 #9a641e}
+.modal .micro{font-size:11px;line-height:1.5;color:#96a9cb;margin-top:13px}
+#summary{color:#ffe3a3;font-weight:850}
+@media(max-height:710px){#app{gap:4px}.header{min-height:36px}.brand{font-size:17px}.titleRow h1{font-size:21px}.stat{padding:4px 2px}.stat label{font-size:8px}.stat strong{font-size:14px}.panel{padding:4px 7px 5px}.info{min-height:61px;gap:2px;padding:3px 0 0}.letter{height:30px}.notice{height:18px;line-height:18px}.key{height:clamp(29px,5.5svh,39px)}.keyboard{gap:3px}.action{min-height:34px;padding:7px 3px}}
+@media(max-height:560px){.brand small{display:none}.header{min-height:29px}.toggle{padding:5px}.titleRow h1{font-size:19px}.strip .stat label{display:none}.strip .stat{padding:2px}.strip .stat strong{font-size:13px}#progressTrack{height:3px}.scene{min-height:55px}.info{min-height:47px}.topic{font-size:9px}.letter{height:25px;font-size:14px}#clue{font-size:11px}.keyboard{gap:2px}.keyrow{gap:2px}.key{height:28px}.bottom .action{min-height:30px;padding:5px}.notice{height:14px;line-height:14px;font-size:10px}}
+@media(min-width:720px){#app{padding:20px 16px;gap:10px}.header{min-height:54px}.panel{padding:13px}.info{min-height:98px}.keyboard{gap:8px}.keyrow{gap:6px}.key{height:49px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+<div id="app">
+ <header class="header">
+  <div class="brand">DE-<b>MAX</b><small>OD 2013. SA VAMA</small></div>
+  <div class="controls">
+   <button class="toggle" id="musicBtn" type="button" aria-pressed="true">♫ Muzika ON</button>
+   <button class="toggle" id="fxBtn" type="button" aria-pressed="true">🔊 Efekti ON</button>
+  </div>
+ </header>
+ <div class="titleRow"><h1>☠ <em>Vešalica</em></h1><select id="mode" class="mode" aria-label="Izaberi lekciju">
+  <option value="all">🎲 Sve lekcije 1–7</option><option value="1">Lekcija 1</option><option value="2">Lekcija 2</option><option value="3">Lekcija 3</option><option value="4">Lekcija 4</option><option value="5">Lekcija 5</option><option value="6">Lekcija 6</option><option value="7">Lekcija 7</option>
+ </select></div>
+ <section class="strip">
+  <div class="stat"><label>REČ</label><strong id="round">1 / 20</strong></div>
+  <div class="stat"><label>BODOVI</label><strong id="score">0</strong></div>
+  <div class="stat"><label>GREŠKE</label><strong id="mistakes">0 / 7</strong></div>
+  <div class="stat"><label>REKORD</label><strong id="record">0</strong></div>
+ </section>
+ <div id="progressTrack"><div id="progressFill"></div></div>
+ <section class="panel">
+  <div class="scene" id="scene">
+   <div class="moon"></div><div class="fog"></div>
+   <svg id="drawing" viewBox="0 0 320 235" aria-label="Vešalica: crtež se popunjava na pogrešna slova">
+    <ellipse class="shadow" cx="157" cy="225" rx="120" ry="9"/>
+    <path class="gallow" d="M40 224 H144 M91 224 V22 H215"/>
+    <path class="rope" d="M215 24 V64" fill="none"/>
+    <circle class="part" data-step="1" cx="215" cy="84" r="20"/>
+    <path class="part" data-step="2" d="M215 104 V154"/>
+    <path class="part" data-step="3" d="M214 116 L184 140"/>
+    <path class="part" data-step="4" d="M216 116 L246 140"/>
+    <path class="part" data-step="5" d="M215 154 L190 193"/>
+    <path class="part" data-step="6" d="M215 154 L242 193"/>
+    <g class="part face" data-step="7"><path d="M205 80 l7 7 m0 -7 l-7 7 M219 80 l7 7 m0 -7 l-7 7"/><path d="M208 96 Q215 90 222 96"/></g>
+   </svg>
+   <div class="spirit" id="livesText">❤️ 7 pokušaja</div>
+  </div>
+  <div class="info">
+   <div class="topic" id="topic">Lekcija 1</div>
+   <div id="word" aria-live="polite"></div>
+   <div id="clue">Prevod: ...</div>
+  </div>
+  <div class="notice" id="notice" aria-live="polite">Pogodi nemačku reč!</div>
+ </section>
+ <div class="keyboard" id="keyboard" role="group" aria-label="Nemačka tastatura"></div>
+ <div class="bottom">
+  <button class="action gold" id="hint" type="button">💡 Slovo −35</button>
+  <button class="action" id="skip" type="button">⏭ Preskoči</button>
+  <button class="action primary" id="next" type="button" disabled>Dalje →</button>
+ </div>
+ <div id="toast" aria-hidden="true"></div><div class="flash" id="flash"></div><div id="particles"></div>
+ <div class="overlay" id="overlay">
+  <div class="modal">
+   <div class="emblem" id="emblem">☠️</div>
+   <h2 id="modalTitle">DE-MAX Vešalica</h2>
+   <p id="modalDesc">Pronađi nemačku reč uz prevod na srpski. Imaš 7 grešaka, 20 reči i šansu za novi rekord!</p>
+   <select id="startMode" aria-label="Izaberi lekcije"><option value="all">🎲 Sve lekcije 1–7 (izmešano)</option><option value="1">Samo lekcija 1</option><option value="2">Samo lekcija 2</option><option value="3">Samo lekcija 3</option><option value="4">Samo lekcija 4</option><option value="5">Samo lekcija 5</option><option value="6">Samo lekcija 6</option><option value="7">Samo lekcija 7</option></select>
+   <button class="bigbtn" id="startBtn" type="button">▶ ZAPOČNI IGRU</button>
+   <div class="micro" id="summary">✓ 7 lekcija · 20 reči · prevod · bodovi · efekti<br>🔊 Zvuk se aktivira prvim dodirom.</div>
+  </div>
+ </div>
+</div>
+<script>
+"use strict";
+/* Reči i oblasti pažljivo prilagođene A1 testovima DE-MAX, lekcije 1–7. */
+const BANK={
+1:[["Hallo","zdravo"],["Deutsch","nemački jezik"],["Serbisch","srpski jezik"],["Schule","škola"],["Liebe","ljubav"],["Name","ime"],["Vorname","lično ime"],["Familienname","prezime"],["Wohnort","mesto stanovanja"],["Sprache","jezik"],["Deutschland","Nemačka"],["Serbien","Srbija"],["Land","država"],["wohnen","stanovati"],["kommen","doći, dolaziti"],["lernen","učiti"],["heißen","zvati se"],["sprechen","govoriti"],["Straße","ulica"],["Buch","knjiga"],["ich","ja"],["wir","mi"]],
+2:[["Mutter","majka"],["Vater","otac"],["Kind","dete"],["Kinder","deca"],["Familie","porodica"],["Fußball","fudbal"],["heute","danas"],["morgen","sutra"],["müde","umoran"],["Zeit","vreme"],["spielen","igrati se"],["leben","živeti"],["studieren","studirati"],["vierzehn","četrnaest"],["zwanzig","dvadeset"],["vierzig","četrdeset"],["haben","imati"],["sein","biti"],["war","bio/bila sam"],["wohnen","stanovati"],["Freund","prijatelj"],["gut","dobro"]],
+3:[["Mann","muškarac"],["Frau","žena"],["Kind","dete"],["Brot","hleb"],["Pizza","pica"],["Salat","salata"],["Wasser","voda"],["Saft","sok"],["essen","jesti"],["trinken","piti"],["brauchen","trebati"],["Heft","sveska"],["Auto","automobil"],["Lieblingsessen","omiljeno jelo"],["Milch","mleko"],["Obst","voće"],["Gemüse","povrće"],["kein","nijedan / nema"],["keine","nijedna / nema"],["isst","jedeš"],["trinkst","piješ"],["Apfel","jabuka"]],
+4:[["Wohnung","stan"],["Schlafzimmer","spavaća soba"],["Balkon","balkon"],["Bad","kupatilo"],["billig","jeftin"],["besser","bolji"],["gern","rado"],["lieber","radije"],["Fußball","fudbal"],["Fahrrad","bicikl"],["Freizeit","slobodno vreme"],["Hobby","hobi"],["Zimmer","soba"],["Haus","kuća"],["Küche","kuhinja"],["Garten","bašta"],["Million","milion"],["tausend","hiljadu"],["Uhr","sat"],["spielen","igrati"],["schön","lep"],["klein","mali"]],
+5:[["aufstehen","ustajati"],["anrufen","pozvati telefonom"],["Mittwoch","sreda"],["Montag","ponedeljak"],["Morgen","jutro"],["Nacht","noć"],["März","mart"],["Februar","februar"],["August","avgust"],["Geburtstag","rođendan"],["Auge","oko"],["Augen","oči"],["Musik","muzika"],["Popmusik","pop muzika"],["Unterricht","nastava"],["Kurs","kurs"],["Abend","veče"],["Januar","januar"],["April","april"],["halb","pola"],["Stunde","sat (60 minuta)"],["früh","rano"]],
+6:[["können","moći / umeti"],["müssen","morati"],["dürfen","smeti"],["wollen","hteti"],["mögen","voleti / sviđati se"],["möchte","želeo/želela bih"],["sonnig","sunčano"],["Sommer","leto"],["Berlin","Berlin"],["Schule","škola"],["kaufen","kupiti"],["lernen","učiti"],["Kaffee","kafa"],["sprechen","govoriti"],["parken","parkirati"],["fahren","voziti / putovati"],["regnen","padati (kiša)"],["wollen","hteti"],["gestern","juče"],["heute","danas"],["dürfen","imati dozvolu"],["werden","postati / pomoćni glagol za futur"]],
+7:[["gelernt","učio / naučio"],["gemacht","uradio / napravio"],["gehört","čuo / slušao"],["gelesen","pročitao"],["gegangen","otišao / išao"],["gefahren","vozio / putovao"],["gekommen","došao"],["gegessen","jeo"],["haben","imati / pomoćni glagol"],["sein","biti / pomoćni glagol"],["gestern","juče"],["Arbeit","posao"],["krank","bolestan"],["Freunde","prijatelji"],["treffen","sresti"],["unter","ispod"],["Hause","kući (nach Hause)"],["Partizip","particip"],["Imperativ","zapovedni način"],["hast","imaš / pomoćni glagol"],["bist","jesi / pomoćni glagol"],["triffst","srećeš"]]
+};
+const ROWS=["QWERTZUIOPÜ","ASDFGHJKLÖÄ","YXCVBNMß"];const $=id=>document.getElementById(id);
+const state={mode:"all",deck:[],index:0,word:null,used:new Set(),wrong:0,score:0,streak:0,won:0,finished:false,started:false,music:true,fx:true};
+let audio=null,ambience=null,ambienceGain=null,audioUnlocked=false,toastTimeout=null;
+function char(c){return c==="ß"||c==="ẞ"?"ß":c.toLocaleUpperCase("de-DE")}
+function letters(s){return Array.from(s.normalize("NFC")).map(char)}
+function shuffle(items){const x=items.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function recordKey(){return "demax_vesalica_v1_"+state.mode}
+function getRecord(){try{return Number(localStorage.getItem(recordKey()))||0}catch(e){return 0}}
+function saveRecord(){try{localStorage.setItem(recordKey(),String(Math.max(state.score,getRecord())))}catch(e){}}
+function makeDeck(mode){const result=[];if(mode==="all"){let buckets=Object.keys(BANK).map(k=>shuffle(BANK[k].map(x=>({word:x[0],clue:x[1],lesson:Number(k)}))));for(let i=0;i<3;i++){const order=shuffle([0,1,2,3,4,5,6]);for(const j of order){const item=buckets[j].shift();if(item)result.push(item)}}}else{result.push(...shuffle(BANK[mode].map(x=>({word:x[0],clue:x[1],lesson:Number(mode)}))))}return result.slice(0,20)}
+function buildKeyboard(){const root=$("keyboard");root.replaceChildren();for(const row of ROWS){const wrap=document.createElement("div");wrap.className="keyrow";for(const k of Array.from(row)){const btn=document.createElement("button");btn.className="key";btn.type="button";btn.textContent=k;btn.dataset.key=k;btn.setAttribute("aria-label","Slovo "+k);btn.addEventListener("click",()=>guess(k));wrap.appendChild(btn)}root.appendChild(wrap)}}
+function updateKeyboard(){document.querySelectorAll(".key").forEach(b=>{const c=b.dataset.key;const used=state.used.has(c);b.disabled=used||state.finished||!state.started;b.className="key"+(used?(letters(state.word.word).includes(c)?" ok":" no"):"")})}
+function updateDrawing(){document.querySelectorAll(".part").forEach(x=>x.classList.toggle("on",Number(x.dataset.step)<=state.wrong));$("livesText").textContent=state.wrong>=7?"☠ KRAJ!":"❤️ "+(7-state.wrong)+" pokušaja"}
+function updateStats(){$("round").textContent=(state.index+1)+" / "+state.deck.length;$("score").textContent=state.score;$("mistakes").textContent=state.wrong+" / 7";$("record").textContent=getRecord();$("progressFill").style.width=100*(state.index/state.deck.length)+"%"}
+function updateWord(reveal){const root=$("word");root.replaceChildren();const chars=letters(state.word.word);const small=chars.length>12;for(const c of chars){const node=document.createElement("span");const shown=state.used.has(c);node.className="letter"+(shown?" shown":reveal?" reveal":"");if(small){node.style.fontSize="clamp(12px,3.4vw,18px)";node.style.flexBasis="30px"}node.textContent=(shown||reveal)?c:"";root.appendChild(node)}}
+function setNotice(s,t){$("notice").textContent=s;$("notice").className="notice"+(t?" "+t:"")}
+function newRound(){state.word=state.deck[state.index];state.used=new Set();state.wrong=0;state.finished=false;$("next").disabled=true;$("hint").disabled=false;$("skip").disabled=false;$("topic").textContent="📚 LEKCIJA "+state.word.lesson+"  ·  A1 REČ";$("clue").innerHTML="<b>Prevod:</b> "+state.word.clue;updateWord(false);updateDrawing();updateKeyboard();updateStats();setNotice("Izaberi slovo na tastaturi!")}
+function guess(input){if(!state.started||state.finished)return;const c=char(input);if(!ROWS.join("").includes(c)||state.used.has(c))return;unlockAudio();state.used.add(c);const has=letters(state.word.word).includes(c);if(has){soundRight();setNotice("✓ Bravo! Slovo je tačno.","good");burst(8)}else{state.wrong++;soundWrong();setNotice("✕ Nema tog slova!","bad");if(navigator.vibrate)navigator.vibrate(45)}updateWord(false);updateDrawing();updateKeyboard();const success=letters(state.word.word).every(x=>state.used.has(x));if(success)winRound();else if(state.wrong>=7)loseRound()}
+function winRound(){state.finished=true;state.won++;state.streak++;const gain=100+(7-state.wrong)*12+Math.min(5,state.streak)*10;state.score+=gain;saveRecord();updateStats();updateKeyboard();$("next").disabled=false;$("hint").disabled=true;$("skip").disabled=true;setNotice("🏆 Pogođeno! +"+gain+" bodova · Niz "+state.streak,"good");showToast("+"+gain+" ⭐");burst(28);soundVictory()}
+function loseRound(skipped){state.finished=true;state.streak=0;updateWord(true);updateKeyboard();updateStats();$("next").disabled=false;$("hint").disabled=true;$("skip").disabled=true;setNotice((skipped?"⏭ Preskočeno. ":"☠ Obešen! ")+"Reč: "+state.word.word,"bad");if(!skipped){$("app").classList.remove("shake");void $("app").offsetWidth;$("app").classList.add("shake");$("flash").classList.remove("boom");void $("flash").offsetWidth;$("flash").classList.add("boom");showToast("☠ KRAJ!");soundHorror();if(navigator.vibrate)navigator.vibrate([70,40,120,50,190])}else soundWrong()}
+function skip(){if(state.started&&!state.finished){unlockAudio();loseRound(true)}}
+function hint(){if(!state.started||state.finished)return;unlockAudio();const missing=[...new Set(letters(state.word.word))].filter(c=>!state.used.has(c));if(!missing.length)return;state.score=Math.max(0,state.score-35);updateStats();setNotice("💡 Otkriveno slovo! −35 bodova");guess(missing[Math.floor(Math.random()*missing.length)])}
+function next(){unlockAudio();if(!state.finished)return;if(state.index<state.deck.length-1){state.index++;newRound();soundClick()}else finishGame()}
+function finishGame(){state.started=false;saveRecord();$("progressFill").style.width="100%";$("emblem").textContent=state.won>=15?"🏆":"🎓";$("modalTitle").textContent=state.won>=15?"Odličan rezultat!":"Kraj igre!";$("modalDesc").textContent="Pogođeno "+state.won+" od "+state.deck.length+" reči. Osvojeno "+state.score+" bodova. Rekord: "+getRecord()+"."; $("startBtn").textContent="↻ IGRAJ PONOVO";$("startMode").value=state.mode;$("summary").textContent="Izaberi lekciju ili pokušaj da oboriš rekord.";$("overlay").classList.remove("hidden");if(state.won>=15)burst(35)}
+function start(){unlockAudio();const mode=$("startMode").value;state.mode=mode;$("mode").value=mode;state.deck=makeDeck(mode);state.index=0;state.score=0;state.streak=0;state.won=0;state.started=true;$("overlay").classList.add("hidden");newRound();startAmbience();soundClick()}
+function switchMode(){const mode=$("mode").value;if(!state.started)return;state.mode=mode;state.started=false;$("startMode").value=mode;$("emblem").textContent="🎮";$("modalTitle").textContent="Nova igra";$("modalDesc").textContent="Promena lekcije pokreće novu partiju od 20 reči.";$("startBtn").textContent="▶ ZAPOČNI";$("overlay").classList.remove("hidden");$("summary").textContent="Trenutna partija se završava. Izaberi režim i nastavi."}
+function showToast(s){const x=$("toast");x.classList.remove("show");void x.offsetWidth;x.textContent=s;x.classList.add("show")}
+function burst(n){const root=$("particles");for(let i=0;i<n;i++){const item=document.createElement("span");item.className="particle";const a=Math.random()*Math.PI*2,r=45+Math.random()*160;item.style.setProperty("--x",(Math.cos(a)*r)+"px");item.style.setProperty("--y",(Math.sin(a)*r)+"px");item.style.setProperty("--rot",(Math.random()*720)+"deg");item.style.background=["#ffd267","#64f6cd","#ff7595","#a1bbff"][i%4];root.appendChild(item);setTimeout(()=>item.remove(),1000)}}
+function unlockAudio(){if(audioUnlocked){if(audio&&audio.state==="suspended")audio.resume().catch(()=>{});return}try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audio=new AC();audioUnlocked=true;if(audio.state==="suspended")audio.resume().catch(()=>{});startAmbience()}catch(e){}}
+function beep(freq,dur,type,volume,when,finalFreq){if(!audio)return;const t=audio.currentTime+(when||0);const osc=audio.createOscillator(),gain=audio.createGain();osc.type=type||"sine";osc.frequency.setValueAtTime(Math.max(30,freq),t);if(finalFreq)osc.frequency.exponentialRampToValueAtTime(Math.max(30,finalFreq),t+dur);gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+.015);gain.gain.exponentialRampToValueAtTime(.0001,t+dur);osc.connect(gain);gain.connect(audio.destination);osc.start(t);osc.stop(t+dur+.02)}
+function noise(dur,volume,start){if(!audio)return;const rate=audio.sampleRate,frames=Math.floor(rate*dur),buffer=audio.createBuffer(1,frames,rate),data=buffer.getChannelData(0);for(let i=0;i<frames;i++)data[i]=(Math.random()*2-1)*(1-i/frames);const source=audio.createBufferSource(),filter=audio.createBiquadFilter(),gain=audio.createGain(),t=audio.currentTime+(start||0);source.buffer=buffer;filter.type="lowpass";filter.frequency.setValueAtTime(1500,t);filter.frequency.exponentialRampToValueAtTime(110,t+dur);gain.gain.setValueAtTime(volume,t);gain.gain.exponentialRampToValueAtTime(.0001,t+dur);source.connect(filter);filter.connect(gain);gain.connect(audio.destination);source.start(t);source.stop(t+dur)}
+function soundRight(){if(!state.fx)return;beep(523,.13,"sine",.11,0,650);beep(784,.19,"triangle",.08,.09,920)}
+function soundWrong(){if(!state.fx)return;beep(220,.27,"sawtooth",.055,0,132);beep(110,.2,"triangle",.08,.08,82)}
+function soundClick(){if(state.fx)beep(450,.10,"sine",.035,0,580)}
+function soundVictory(){if(!state.fx)return;[523,659,784,1046].forEach((f,i)=>beep(f,.32,"triangle",.105,i*.085))}
+function soundHorror(){if(!state.fx)return;noise(1.65,.45,0);beep(230,1.8,"sawtooth",.19,0,36);beep(420,1.15,"sawtooth",.13,.12,53);beep(65,1.9,"triangle",.31,0,31);beep(740,.55,"square",.05,.38,135);beep(920,.38,"sawtooth",.09,.72,88)}
+function startAmbience(){if(!audio||ambience)return;const osc=audio.createOscillator(),mod=audio.createOscillator(),modGain=audio.createGain(),gain=audio.createGain();osc.type="sine";osc.frequency.value=92.5;mod.type="sine";mod.frequency.value=.31;modGain.gain.value=3;mod.connect(modGain);modGain.connect(osc.frequency);gain.gain.value=0;osc.connect(gain);gain.connect(audio.destination);osc.start();mod.start();ambience={osc,mod,gain};ambienceGain=gain;setMusic()}
+function setMusic(){if(!ambienceGain||!audio)return;ambienceGain.gain.setTargetAtTime(state.music&&state.started?.047:0,audio.currentTime,.24)}
+function updateToggles(){$("musicBtn").textContent="♫ Muzika "+(state.music?"ON":"OFF");$("fxBtn").textContent="🔊 Efekti "+(state.fx?"ON":"OFF");$("musicBtn").classList.toggle("off",!state.music);$("fxBtn").classList.toggle("off",!state.fx);$("musicBtn").setAttribute("aria-pressed",String(state.music));$("fxBtn").setAttribute("aria-pressed",String(state.fx));setMusic()}
+$("startBtn").addEventListener("click",start);
+$("startMode").addEventListener("change",e=>{$("mode").value=e.target.value});
+$("mode").addEventListener("change",switchMode);
+$("next").addEventListener("click",next);
+$("skip").addEventListener("click",skip);
+$("hint").addEventListener("click",hint);
+$("musicBtn").addEventListener("click",()=>{unlockAudio();state.music=!state.music;updateToggles()});
+$("fxBtn").addEventListener("click",()=>{unlockAudio();state.fx=!state.fx;updateToggles()});
+document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;if(e.key==="Enter"&&state.finished){e.preventDefault();next();return}if(e.key.length===1&&!$("overlay").classList.contains("hidden")===false)return;const c=char(e.key);if(ROWS.join("").includes(c)&&state.started){e.preventDefault();guess(c)}});
+document.addEventListener("visibilitychange",()=>{if(ambienceGain&&audio)ambienceGain.gain.setTargetAtTime(document.hidden?0:(state.music&&state.started?.047:0),audio.currentTime,.15)});
+buildKeyboard();updateToggles();$("record").textContent=getRecord();
+</script></body></html>
