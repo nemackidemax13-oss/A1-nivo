@@ -42,52 +42,175 @@
 @media(max-width:410px){.demax-music-toggle{font-size:10px;padding:5px 6px}}
 </style>
 <script>
-/* Original quiet procedural music: no external audio, licensed tracks or autoplay */
+/* DE-MAX ELECTRO ARCADE • original upbeat dance soundtrack, 132 BPM • Web Audio */
 (function(){
   "use strict";
-  let enabled=true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
+  const BPM=132,STEP=60/BPM/4,LOOKAHEAD=.18;
+  let enabled=true,playing=false,ctx=null,master=null,delay=null,noiseBuffer=null;
+  let interval=null,step=0,nextTime=0;
   try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
-  /* Reči • staklasti arpeđo: zasebna originalna melodija */
-  const notes=[329.63,392,493.88,659.25,493.88,392,329.63,293.66,349.23,440,587.33,440,349.23,293.66,329.63,392];
-  const b=document.createElement("button");
-  b.type="button";b.className="demax-music-toggle";b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
-  function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
-  function getAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ctx)ctx=new C();if(ctx.state==="suspended")ctx.resume().catch(()=>{});return ctx}catch(e){return null}}
-  function note(freq,when,seconds,volume){
-    const a=getAudio();if(!a||!enabled||!playing)return;
+  const btn=document.createElement("button");
+  btn.type="button";
+  btn.className="demax-music-toggle";
+  btn.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
+  function label(){btn.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";btn.setAttribute("aria-pressed",String(enabled))}
+  function midi(note){return 440*Math.pow(2,(note-69)/12)}
+  function prepare(){
     try{
-      const o=a.createOscillator(),g=a.createGain(),t=Math.max(a.currentTime+.005,when);
-      o.type="sine";o.frequency.setValueAtTime(freq,t);
-      g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(volume,t+.09);
-      g.gain.exponentialRampToValueAtTime(.0001,t+seconds);
-      o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+seconds+.03);
-      activeNodes.push({o,g});o.onended=()=>{activeNodes=activeNodes.filter(v=>v.o!==o);o.disconnect();g.disconnect()};
+      const Audio=window.AudioContext||window.webkitAudioContext;
+      if(!Audio)return null;
+      if(!ctx){
+        ctx=new Audio();
+        const compressor=ctx.createDynamicsCompressor();
+        compressor.threshold.value=-21;compressor.knee.value=13;
+        compressor.ratio.value=3.5;compressor.attack.value=.004;compressor.release.value=.18;
+        master=ctx.createGain();master.gain.value=.0001;
+        master.connect(compressor);compressor.connect(ctx.destination);
+        delay=ctx.createDelay(.8);
+        delay.delayTime.value=60/BPM*.75;
+        const feedback=ctx.createGain(),damp=ctx.createBiquadFilter(),wet=ctx.createGain();
+        feedback.gain.value=.16;damp.type="lowpass";damp.frequency.value=3600;wet.gain.value=.17;
+        delay.connect(damp);damp.connect(feedback);feedback.connect(delay);
+        delay.connect(wet);wet.connect(master);
+        const size=Math.ceil(ctx.sampleRate*.65);
+        noiseBuffer=ctx.createBuffer(1,size,ctx.sampleRate);
+        const data=noiseBuffer.getChannelData(0);
+        for(let i=0;i<size;i++)data[i]=Math.random()*2-1;
+      }
+      if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+      return ctx;
+    }catch(e){return null}
+  }
+  function volume(node,t,peak,attack,decay){
+    node.gain.setValueAtTime(.0001,t);
+    node.gain.exponentialRampToValueAtTime(Math.max(.0002,peak),t+attack);
+    node.gain.exponentialRampToValueAtTime(.0001,t+decay);
+  }
+  function oscillator(freq,t,dur,level,type="sawtooth",cut=1800,echo=false){
+    if(!ctx)return;
+    try{
+      const o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+      o.type=type;o.frequency.setValueAtTime(freq,t);
+      f.type="lowpass";f.frequency.setValueAtTime(cut,t);
+      f.frequency.exponentialRampToValueAtTime(Math.max(210,cut*.42),t+dur);
+      f.Q.value=.7;
+      volume(g,t,level,.009,dur);
+      o.connect(f);f.connect(g);g.connect(master);
+      if(echo){const send=ctx.createGain();send.gain.value=.24;g.connect(send);send.connect(delay)}
+      o.start(t);o.stop(t+dur+.025);
     }catch(e){}
   }
-  function beat(){
-    if(!playing||!enabled)return;const a=getAudio();if(!a)return;
-    const now=a.currentTime+.02;
-    note(notes[step%notes.length],now,0.46,0.013);
-    if(step%8===0)note(notes[(step+5)%notes.length]/2,now,1.1,.006);
-    step++;
+  function noise(t,dur,level,cut,mode="highpass"){
+    if(!noiseBuffer)return;
+    try{
+      const o=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+      o.buffer=noiseBuffer;f.type=mode;f.frequency.value=cut;
+      volume(g,t,level,.003,dur);
+      o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.006);
+    }catch(e){}
+  }
+  function kick(t,accent=1){
+    try{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type="sine";o.frequency.setValueAtTime(156,t);
+      o.frequency.exponentialRampToValueAtTime(46,t+.115);
+      volume(g,t,.39*accent,.006,.19);
+      o.connect(g);g.connect(master);o.start(t);o.stop(t+.21);
+      noise(t,.025,.035,3300);
+    }catch(e){}
+  }
+  function snare(t){
+    noise(t,.16,.16,1300);noise(t+.018,.095,.07,2300);
+    oscillator(181,t,.105,.067,"triangle",600);
+  }
+  function hat(t,open=false,accent=false){
+    noise(t,open?.19:.052,open?.052:accent?.049:.031,6600);
+  }
+  const chords=[
+    {bass:45,triad:[69,72,76]},  /* Am */
+    {bass:41,triad:[69,72,77]},  /* F  */
+    {bass:48,triad:[67,72,76]},  /* C  */
+    {bass:43,triad:[67,71,74]}   /* G  */
+  ];
+  const hook=[
+    76,null,79,null,81,null,79,76,72,null,76,79,76,null,72,null,
+    76,null,77,null,81,null,79,77,76,null,72,76,72,null,null,null,
+    79,null,76,null,72,76,79,null,81,null,79,76,74,null,72,null,
+    74,null,79,null,81,null,83,81,79,null,76,null,74,72,69,null
+  ];
+  function playStep(t,count){
+    const tick=count%16,bar=Math.floor(count/16)%4,section=Math.floor(count/64);
+    const chord=chords[bar],root=chord.bass;
+    /* Club rhythm: strong kick, clap on 2 & 4, sharp syncopated hats */
+    if(tick%4===0)kick(t,tick===0?1.08:1);
+    if(tick===14&&bar===3)kick(t,.68);
+    if(tick===4||tick===12)snare(t);
+    if(tick%2===0)hat(t,tick===6||tick===14,tick===2||tick===10);
+    if(tick===7||tick===15)hat(t,false,false);
+    /* Driving octave bass, shortened to leave space for the kick. */
+    const bassLine={0:0,2:0,3:12,6:7,8:0,10:12,11:7,14:0};
+    if(Object.prototype.hasOwnProperty.call(bassLine,tick)){
+      const pitch=root+bassLine[tick],dur=tick===3||tick===11?.105:.18;
+      oscillator(midi(pitch),t,dur,.108,"sawtooth",500);
+      oscillator(midi(pitch-12),t,dur,.039,"sine",200);
+    }
+    /* Warm rhythmic chord stabs: dance/pop feel rather than sleepy beeps. */
+    if(tick===2||tick===10||(tick===15&&bar===3)){
+      chord.triad.forEach((n,i)=>oscillator(midi(n),t,.185,.021,"sawtooth",1400+i*125));
+    }
+    /* Bright catchy melody, with tiny delay on main hook. */
+    const melody=hook[count%hook.length];
+    if(melody!==null&&((count%4)!==0||section%2===0)){
+      oscillator(midi(melody),t,.13,.059,"square",2900,true);
+      oscillator(midi(melody+12),t,.095,.011,"sine",5300);
+    }
+    if(tick===15&&bar===3){noise(t,.18,.05,3100)}
+  }
+  function schedule(){
+    if(!playing||!enabled||!ctx)return;
+    try{
+      let count=0;
+      while(nextTime<ctx.currentTime+LOOKAHEAD&&count++<8){
+        playStep(nextTime,step);
+        nextTime+=STEP;step++;
+      }
+    }catch(e){}
   }
   function stop(){
     playing=false;
     if(interval!==null){clearInterval(interval);interval=null}
-    activeNodes.forEach(({o,g})=>{try{g.gain.cancelScheduledValues(ctx.currentTime);g.gain.setTargetAtTime(.0001,ctx.currentTime,.03);o.stop(ctx.currentTime+.12)}catch(e){}});
+    if(ctx&&master){
+      try{
+        const t=ctx.currentTime;master.gain.cancelScheduledValues(t);
+        master.gain.setTargetAtTime(.0001,t,.025)
+      }catch(e){}
+    }
   }
   function start(){
     if(playing||!enabled)return;
-    playing=true;beat();interval=setInterval(beat,510);
+    const a=prepare();if(!a)return;
+    playing=true;step=0;nextTime=a.currentTime+.055;
+    const t=a.currentTime;master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(.0001,t);
+    master.gain.setTargetAtTime(.23,t,.055);
+    schedule();interval=setInterval(schedule,30);
   }
-  b.addEventListener("click",function(e){
+  btn.addEventListener("click",function(e){
     e.stopPropagation();enabled=!enabled;label();
     try{localStorage.setItem("demax_a1_music",enabled?"on":"off")}catch(e){}
-    if(enabled&&document.documentElement.dataset.demaxGameStarted==="yes")start();else stop();
+    if(enabled&&document.documentElement.dataset.demaxGameStarted==="yes")start();
+    else stop();
   });
-  label();const header=document.querySelector(".top,.header");if(header)header.appendChild(b);
-  window.DeMaxMusic={start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()}};
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(document.documentElement.dataset.demaxGameStarted==="yes")start()});
+  label();
+  const header=document.querySelector(".top,.header");if(header)header.appendChild(btn);
+  window.DeMaxMusic={
+    start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},
+    stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()}
+  };
+  document.addEventListener("visibilitychange",function(){
+    if(document.hidden)stop();
+    else if(document.documentElement.dataset.demaxGameStarted==="yes")start()
+  });
   window.addEventListener("pagehide",stop);
 })();
 </script>
