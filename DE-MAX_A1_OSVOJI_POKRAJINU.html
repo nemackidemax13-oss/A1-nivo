@@ -192,7 +192,7 @@ function questions(s){
  // All five answers are explicitly taught in the eight preceding sentences.
  const q1={question:"Koji je glavni grad pokrajine "+s.name+"?",correct:s.capital,options:optionsFor("capital",ix*19+1),difficulty:"1 · LAKO"};
  const q2={question:"Gde se nalazi pokrajina "+s.name+"?",correct:s.region,options:optionsFor("region",ix*19+2),difficulty:"2 · MALO TEŽE"};
- const q3={question:"Koji je grad naveden u lekciji o pokrajini "+s.name+"?",correct:s.city,options:optionsFor("city",ix*19+3),difficulty:"3 · SREDNJE"};
+ const q3=s.city===s.capital?{question:"Koja znamenitost je navedena u lekciji o pokrajini "+s.name+"?",correct:s.landmark,options:optionsFor("landmark",ix*19+3),difficulty:"3 · SREDNJE"}:{question:"Koji je grad naveden u lekciji o pokrajini "+s.name+"?",correct:s.city,options:optionsFor("city",ix*19+3),difficulty:"3 · SREDNJE"};
  const q4={question:"Po čemu je posebno poznata pokrajina "+s.name+"?",correct:s.special,options:optionsFor("special",ix*19+4),difficulty:"4 · TEŠKO"};
  // Last question requires recognizing two facts together, not guessing one word.
  const correct=s.city+" · "+s.landmark;
