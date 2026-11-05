@@ -190,7 +190,7 @@ function answer(i){
  document.querySelectorAll(".answer").forEach(b=>{b.disabled=true;const v=q.options[Number(b.dataset.answer)];if(v===q.correct)b.classList.add("correct");else if(Number(b.dataset.answer)===i)b.classList.add("wrong");else b.classList.add("dim")});
  const f=document.getElementById("quizfeedback");
  if(f){f.className="quizfeedback "+(ok?"good":"bad");f.textContent=ok?"✅ BRAVO! + BONUS · "+quiz.points+" poena u ovoj rundi":"❌ "+(i<0?"Vreme je isteklo!":"Netačno!")+" Tačno: "+q.correct;}
- setTimeout(()=>{if(scene!=="quiz")return;if(quiz.step<4){quiz.step++;renderQuiz();}else finishQuiz()},1100);
+ setTimeout(()=>{if(scene!=="quiz")return;if(quiz.step<4){quiz.step++;renderQuiz();bindActions();}else finishQuiz()},1100);
 }
 function finishQuiz(){
  clearInterval(questionTick);
