@@ -84,6 +84,76 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}body{overflow-x:hidden}butt
  header.top .controls{column-gap:3px}
  header.top .controls .small{font-size:9px;padding:6px 1px}
 }
+
+/* Single-screen mobile game; compact dynamically for shorter phones. */
+@media(max-width:600px) and (orientation:portrait){
+ html,body{height:100%;max-height:100%;overflow:hidden!important;overscroll-behavior:none}
+ body .app{height:100dvh;max-height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column;
+  padding:calc(6px + env(safe-area-inset-top,0px)) 10px calc(6px + env(safe-area-inset-bottom,0px))}
+ header.top{flex:0 0 auto}
+ header.top .topRight{gap:5px}
+ header.top .brand{font-size:clamp(22px,6.9vw,27px)}
+ header.top .trust{font-size:12px}
+ header.top .controls .small{min-height:38px;padding:5px 2px}
+ h1{flex:0 0 auto;font-size:clamp(29px,7.9vw,36px);margin:7px 0 5px;line-height:1.04}
+ .footer{display:none!important}
+ #setup:not(.hidden){flex:1 1 auto;min-height:0;max-height:none;margin:4px 0;padding:12px 12px 9px;overflow:hidden;
+ display:flex;flex-direction:column;justify-content:flex-start}
+ #setup .picker{gap:clamp(7px,1.7dvh,14px);flex:0 0 auto}
+ #setup .arrow-select{min-height:clamp(47px,8dvh,61px)}
+ #setup .pick-arrow{min-height:clamp(41px,7dvh,51px)}
+ #setup .note{margin:8px 0!important;font-size:11px;line-height:1.25}
+ #setup #startBtn{margin:auto auto;min-height:clamp(54px,9dvh,69px);font-size:clamp(17px,4.5vw,21px);
+ flex:0 0 auto}
+ #setup .note:last-child{margin:8px 0 0!important}
+ #game:not(.hidden){display:flex;flex:1 1 auto;flex-direction:column;min-height:0;max-height:100%;overflow:hidden}
+ #game>.stats{flex:0 0 auto;gap:5px}
+ #game .stat{padding:7px 2px}
+ #game .stat strong{font-size:clamp(16px,4.8vw,20px)}
+ #game .stat span{font-size:10px}
+ #game>.panel{flex:1 1 auto;min-height:0;margin:5px 0 0;padding:8px 10px 10px;
+ display:flex;flex-direction:column;justify-content:space-between;gap:2px;overflow:hidden}
+ #game #playerTurn{align-self:flex-start;font-size:11px;padding:3px 8px;min-height:0;line-height:1.2}
+ #game .progress{flex:0 0 auto;margin:5px 0;height:7px}
+ #game .question{padding:0;min-height:0;flex:0 1 auto}
+ #game .qnum{font-size:11px;line-height:1.1}
+ #game .noun{font-size:clamp(31px,10vw,48px);margin:4px 0 1px;line-height:1.04}
+ #game .trans{font-size:clamp(13px,3.8vw,17px);margin:2px 0 5px;line-height:1.15}
+ #game #sayBtn{min-height:35px;padding:4px 10px;font-size:11px}
+ #game .article{flex:0 0 auto;gap:7px;margin:7px 0 0}
+ #game .article button{min-height:clamp(53px,10dvh,78px);padding:7px 2px;font-size:clamp(26px,8vw,37px)}
+ #game .feedback{flex:0 1 auto;min-height:42px;margin:4px 0 0;font-size:clamp(13px,3.9vw,17px);line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center}
+ #game .feedback small{font-size:11px;margin-top:2px}
+ #game .bottomActions{flex:0 0 auto;margin:3px 0 0;gap:7px}
+ #game .bottomActions button{min-height:clamp(42px,7dvh,52px);font-size:13px;padding:5px 2px}
+ #result:not(.hidden){flex:1 1 auto;min-height:0;margin:5px 0;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+}
+@media(max-width:600px) and (max-height:680px) and (orientation:portrait){
+ header.top .topRight{gap:3px}
+ header.top .brand{font-size:23px}
+ header.top .trust{font-size:11px;margin-top:0}
+ header.top .controls .small{min-height:32px;font-size:10px}
+ h1{font-size:clamp(26px,7vw,30px);margin:5px 0 3px}
+ #game .stat{padding:5px 2px}
+ #game>.panel{padding:6px 9px}
+ #game #playerTurn{font-size:10px;padding:2px 6px}
+ #game .progress{height:5px;margin:3px 0}
+ #game .noun{font-size:clamp(30px,9vw,41px);margin:2px 0 0}
+ #game .trans{margin:1px 0 3px}
+ #game #sayBtn{min-height:30px}
+ #game .article button{min-height:clamp(47px,9dvh,63px)}
+ #game .feedback{min-height:34px}
+ #game .bottomActions button{min-height:39px}
+}
+@media(max-width:600px) and (max-height:570px) and (orientation:portrait){
+ header.top .brand{font-size:21px}
+ header.top .trust{font-size:10px}
+ header.top .controls .small{min-height:29px;font-size:9px}
+ #game #playerTurn{display:none}
+ #game .qnum{display:none}
+ #game .article button{min-height:45px}
+ #game .bottomActions button{min-height:37px}
+}
 </style></head><body><div class="app"><header class="top"><div class="topRight"><div class="brandWrap"><div class="brand">DE-<b>MAX</b> ❤️</div><div class="trust">13 godina poverenja!</div></div><div class="controls"><button id="musicBtn" class="small on" aria-label="Uključi ili isključi muziku">♫ Muzika: ON</button><button id="fxBtn" class="small on">🔊 Efekti: ON</button><button id="voiceBtn" class="small on">🗣 Izgovor: ON</button></div></div></header><h1><em>der • die • das</em></h1>
 <section id="setup" class="panel"><div class="picker"><div class="picker-group"><label id="lessonLabel">IZABERI LEKCIJU</label><div class="arrow-select" role="group" aria-labelledby="lessonLabel"><button type="button" class="pick-arrow" data-picker="lesson" data-direction="-1" aria-label="Prethodna lekcija">❮</button><span class="pick-value" id="lessonText" aria-live="polite">Sve lekcije</span><button type="button" class="pick-arrow" data-picker="lesson" data-direction="1" aria-label="Sledeća lekcija">❯</button></div><input id="lesson" type="hidden" value="all"></div><div class="picker-group"><label id="roundCountLabel">BROJ PITANJA</label><div class="arrow-select" role="group" aria-labelledby="roundCountLabel"><button type="button" class="pick-arrow" data-picker="roundCount" data-direction="-1" aria-label="Manje pitanja">❮</button><span class="pick-value" id="roundCountText" aria-live="polite">20 pitanja</span><button type="button" class="pick-arrow" data-picker="roundCount" data-direction="1" aria-label="Više pitanja">❯</button></div><input id="roundCount" type="hidden" value="20"></div></div><p class="note" style="margin:14px 0 0">⏱ Za svako pitanje imaš <b>10 sekundi</b>.</p><button id="startBtn" class="primary">▶ POKRENI IGRU</button><p class="note">Tačan odgovor +100 bodova · brzina do +50 · niz tačnih +25 · pogrešan odgovor 0</p></section>
 <section id="game" class="hidden"><div class="stats"><div class="stat"><strong id="points">0</strong><span>Bodovi</span></div><div class="stat"><strong id="streak">0 🔥</strong><span>Niz</span></div><div class="stat"><strong id="clock">10s</strong><span>Vreme</span></div><div class="stat"><strong id="step">1/20</strong><span>Pitanje</span></div></div><section class="panel"><div id="playerTurn" class="tag">🎯 Pogodi član za 10 sekundi</div><div class="progress"><div id="bar"></div></div><div class="question"><div class="qnum">IZABERI TAČAN ČLAN</div><div id="noun" class="noun">Haus</div><div id="translation" class="trans">kuća</div><button id="sayBtn" class="small">🔉 Poslušaj reč</button></div><div class="article"><button data-a="der">der</button><button data-a="die">die</button><button data-a="das">das</button></div><div class="feedback" id="feedback" aria-live="polite">Koji je tačan član?</div><div class="bottomActions"><button id="stopBtn">⌂ Početna</button><button id="skipBtn">Preskoči →</button></div></section></section>
@@ -102,54 +172,59 @@ const RAW=[
 `der|Kopf|glava;das|Gesicht|lice;das|Auge|oko;die|Nase|nos;der|Mund|usta;das|Ohr|uvo;der|Zahn|zub;der|Hals|vrat;die|Hand|šaka;der|Arm|ruka;das|Bein|noga;der|Fuß|stopalo;der|Bauch|stomak;der|Rücken|leđa;das|Haar|kosa;die|Haare|vlasi kose;das|Herz|srce;die|Gesundheit|zdravlje;die|Krankheit|bolest;der|Arzt|lekar;die|Ärztin|lekarka;das|Krankenhaus|bolnica;die|Praxis|ordinacija;die|Apotheke|apoteka;das|Medikament|lek;die|Tablette|tableta;das|Rezept|recept;der|Schmerz|bol;das|Fieber|temperatura;der|Husten|kašalj;die|Jacke|jakna;die|Hose|pantalone;das|Hemd|košulja;das|T-Shirt|majica;das|Kleid|haljina;der|Rock|suknja;der|Pullover|džemper;der|Schuh|cipela;die|Socke|čarapa;die|Mütze|kapa;der|Mantel|kaput`,
 `der|Markt|pijaca;der|Laden|prodavnica;das|Geschäft|radnja;der|Einkauf|kupovina;die|Kasse|kasa;die|Kassiererin|kasirka;der|Preis|cena;das|Geld|novac;der|Euro|evro;der|Cent|cent;die|Kreditkarte|kreditna kartica;die|Quittung|priznanica;der|Rabatt|popust;das|Angebot|ponuda;die|Größe|veličina;die|Farbe|boja;der|Kunde|kupac;die|Kundin|kupac (žena);die|Bäckerei|pekara;die|Metzgerei|mesara;die|Buchhandlung|knjižara;die|Blume|cvet;der|Baum|drvo;das|Gras|trava;der|Hund|pas;die|Katze|mačka;das|Tier|životinja;der|Vogel|ptica;das|Pferd|konj;die|Kuh|krava;das|Schaf|ovca;der|Himmel|nebo;die|Sonne|sunce;der|Mond|mesec (nebesko telo);der|Stern|zvezda;der|Regen|kiša;der|Schnee|sneg;der|Wind|vetar;der|Sommer|leto;der|Winter|zima;der|Frühling|proleće;der|Herbst|jesen;das|Meer|more;der|See|jezero;der|Fluss|reka`];
 const LESSONS=RAW.map((str,li)=>str.split(';').map(x=>{let [a,n,t]=x.split('|');return {a,n,t,li}}));let mode='solo',music=true,fx=true,voice=true,ctx=null,musicTimer=null,timer=null,questions=[],index=0,answered=false,roundScores=[0,0],streaks=[0,0],startAt=0,limit=10,chosenLesson='all',active=false,players=['Igrač 1','Igrač 2'];const $=id=>document.getElementById(id);const choiceBtns=[...document.querySelectorAll('.article button')];function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}function getAudio(){try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx}catch{return null}}function note(freq,duration=.12,type='sine',vol=.07,when=0){let c=getAudio();if(!c)return;let o=c.createOscillator(),g=c.createGain(),t=c.currentTime+when;o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.013);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g).connect(c.destination);o.start(t);o.stop(t+duration+.02)}function sound(kind){if(!fx)return;let notes=kind==='good'?[523,659,784,1047]:kind==='bad'?[280,210]:kind==='win'?[392,523,659,784,1047,1318]:[440];notes.forEach((f,i)=>note(f,kind==='win'?.25:.13,kind==='bad'?'sawtooth':'sine',kind==='bad'?.033:.06,i*(kind==='win'?.12:.075)))}
-/* Original, gently upbeat four-chord electro-pop loop, synthesized locally. */
+
+/* DE-MAX original clean synth-pop groove. No random-noise percussion or crackling samples. */
 let mStep=0,musicBus=null,musicNext=0;
 function musicNode(){
- let c=getAudio();if(!c)return null;
- if(!musicBus){musicBus=c.createGain();musicBus.gain.value=.72;musicBus.connect(c.destination)}
- return {c,bus:musicBus}
+ const c=getAudio();if(!c)return null;
+ if(!musicBus){
+  musicBus=c.createGain();musicBus.gain.value=.6;
+  const comp=c.createDynamicsCompressor();comp.threshold.value=-22;comp.knee.value=18;
+  comp.ratio.value=2;comp.attack.value=.015;comp.release.value=.22;
+  musicBus.connect(comp).connect(c.destination);
+ }
+ return {c,bus:musicBus};
 }
-function mTone(freq,t,dur,volume=.012,wave='triangle',cutoff=1500,attack=.012){
- let m=musicNode();if(!m)return;
- let {c,bus}=m,o=c.createOscillator(),filter=c.createBiquadFilter(),g=c.createGain();
+function mTone(freq,t,dur,volume=.01,wave='sine',cutoff=1600,attack=.016){
+ const m=musicNode();if(!m)return;
+ const {c,bus}=m,o=c.createOscillator(),filter=c.createBiquadFilter(),g=c.createGain();
  o.type=wave;o.frequency.setValueAtTime(freq,t);
- filter.type='lowpass';filter.frequency.value=cutoff;
- g.gain.setValueAtTime(.0001,t);
- g.gain.linearRampToValueAtTime(volume,t+attack);
+ filter.type='lowpass';filter.frequency.value=cutoff;filter.Q.value=.6;
+ const a=Math.min(attack,dur*.3);
+ g.gain.setValueAtTime(0,t);
+ g.gain.linearRampToValueAtTime(volume,t+a);
  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
- o.connect(filter).connect(g).connect(bus);o.start(t);o.stop(t+dur+.015)
-}
-function mNoise(t,dur=.085,volume=.012,frequency=4800){
- let m=musicNode();if(!m)return;
- let {c,bus}=m,b=c.createBuffer(1,Math.ceil(c.sampleRate*dur),c.sampleRate),data=b.getChannelData(0);
- for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
- let src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();src.buffer=b;
- f.type='highpass';f.frequency.value=frequency;
- g.gain.setValueAtTime(Math.max(volume,.0001),t);
- g.gain.exponentialRampToValueAtTime(.0001,t+dur);
- src.connect(f).connect(g).connect(bus);src.start(t);src.stop(t+dur)
+ o.connect(filter).connect(g).connect(bus);o.start(t);o.stop(t+dur+.02);
 }
 function mKick(t){
- let m=musicNode();if(!m)return;
- let {c,bus}=m,o=c.createOscillator(),g=c.createGain();
- o.type='sine';o.frequency.setValueAtTime(115,t);o.frequency.exponentialRampToValueAtTime(47,t+.12);
- g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.0001,t+.23);
- o.connect(g).connect(bus);o.start(t);o.stop(t+.24)
+ const m=musicNode();if(!m)return;
+ const {c,bus}=m,o=c.createOscillator(),g=c.createGain();
+ o.type='sine';o.frequency.setValueAtTime(124,t);o.frequency.exponentialRampToValueAtTime(53,t+.15);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.062,t+.007);
+ g.gain.exponentialRampToValueAtTime(.0001,t+.26);
+ o.connect(g).connect(bus);o.start(t);o.stop(t+.27);
+}
+function mSnare(t){
+ mTone(185,t,.105,.016,'triangle',750,.006);
+ mTone(540,t,.045,.003,'sine',1500,.005);
+}
+function mTick(t,accent){
+ mTone(accent?1480:1100,t,.038,accent?.0022:.0013,'sine',2400,.005);
 }
 const songChords=[
- {pad:[220,261.63,329.63],bass:110,mel:[0,392,440,0,523.25,440,392,0]},
- {pad:[174.61,220,261.63],bass:87.31,mel:[0,349.23,440,0,523.25,440,349.23,0]},
- {pad:[196,261.63,329.63],bass:130.81,mel:[0,392,523.25,0,659.25,523.25,392,0]},
- {pad:[196,246.94,293.66],bass:98,mel:[0,392,493.88,0,587.33,493.88,392,0]}
+ {pad:[220,261.63,329.63],bass:110,arp:[329.63,392,440,523.25,440,392,329.63,392]},
+ {pad:[174.61,220,261.63],bass:87.31,arp:[349.23,440,523.25,440,349.23,329.63,261.63,349.23]},
+ {pad:[196,261.63,329.63],bass:130.81,arp:[392,523.25,659.25,523.25,392,440,523.25,392]},
+ {pad:[196,246.94,293.66],bass:98,arp:[392,493.88,587.33,493.88,392,349.23,392,493.88]}
 ];
-function playSongStep(t,n){
- const eighth=n%8,bar=Math.floor(n/8)%4,chord=songChords[bar];
- if(eighth===0)chord.pad.forEach((f,i)=>mTone(f,t,2.13,.0045+i*.0006,'sine',1800,.14));
- if(eighth%2===0){mKick(t);mTone(chord.bass,t,.34,.022,'triangle',700,.014)}
- if(eighth===2||eighth===6)mNoise(t,.105,.012,950);
- mNoise(t,.045,eighth%2?.006:.003,6600);
- if(eighth===3||eighth===7)mTone(chord.bass*2,t,.17,.010,'triangle',1100,.008);
- const melody=chord.mel[eighth];if(melody)mTone(melody,t,.235,.012,'triangle',2000,.025);
+function playSongStep(t,step){
+ const n=step%8,bar=Math.floor(step/8)%4,ch=songChords[bar];
+ if(n===0)ch.pad.forEach((f,i)=>mTone(f,t,2.11,.008,'sine',1350,.21+i*.025));
+ if(n%2===0){mKick(t);mTone(ch.bass,t,.40,.022,'triangle',650,.02)}
+ if(n===2||n===6)mSnare(t);
+ if(n%2===1)mTick(t,n===3||n===7);
+ if(n===1||n===3||n===5||n===7)mTone(ch.arp[n],t,.24,.010,'triangle',2000,.012);
+ if(n===0||n===4)mTone(ch.arp[n],t,.27,.005,'sine',1500,.06);
 }
 function toggleMusic(on){
  music=!!on;
@@ -158,21 +233,22 @@ function toggleMusic(on){
  $('musicBtn').setAttribute('aria-pressed',String(music));
  clearInterval(musicTimer);musicTimer=null;
  const m=musicNode();if(!m)return;
- let {c,bus}=m;
+ const {c,bus}=m;
  bus.gain.cancelScheduledValues(c.currentTime);
- bus.gain.setTargetAtTime(music?.72:0,c.currentTime,.025);
+ bus.gain.setTargetAtTime(music?.6:0,c.currentTime,.02);
  if(!music)return;
- musicNext=c.currentTime+.045;
- const eighth=60/108/2;
+ const eighth=60/112/2;
+ musicNext=c.currentTime+.055;
  const schedule=()=>{
   if(!music||document.hidden)return;
-  while(musicNext<c.currentTime+.19){playSongStep(musicNext,mStep++);musicNext+=eighth}
+  while(musicNext<c.currentTime+.18){playSongStep(musicNext,mStep++);musicNext+=eighth}
  };
- schedule();musicTimer=setInterval(()=>{
-  if(document.hidden){musicNext=c.currentTime+.035;return}
-  schedule()
- },95)
+ schedule();
+ musicTimer=setInterval(()=>{
+  if(document.hidden){musicNext=c.currentTime+.06;return}
+  schedule();
+ },75);
 }
-function say(item){if(!voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(item.a+' '+item.n);u.lang='de-DE';u.rate=.84;u.volume=.9;let voices=speechSynthesis.getVoices(),v=voices.find(v=>v.lang.toLowerCase().startsWith('de'));if(v)u.voice=v;speechSynthesis.speak(u)}catch{}}function ui(){let pl=mode==='duel'?index%2:0;$('points').textContent=roundScores[pl];$('streak').textContent=streaks[pl]+' 🔥';$('step').textContent=(index+1)+'/'+questions.length;$('bar').style.width=100*index/questions.length+'%';$('playerTurn').textContent='🎯 Pogodi član za 10 sekundi';$('noun').textContent=questions[index].n;$('translation').textContent=questions[index].t;$('feedback').textContent='Koji je tačan član?';$('feedback').style.color='';answered=false;choiceBtns.forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong')});startAt=Date.now();updateClock();clearInterval(timer);timer=setInterval(()=>{if(!active||answered)return;updateClock();if(limit&&Date.now()-startAt>=limit*1000)answer('')},100)}function updateClock(){let left=limit?Math.max(0,limit-(Date.now()-startAt)/1000):null;$('clock').textContent=left===null?'∞':Math.ceil(left)+'s';$('clock').style.color=left!==null&&left<5?'#ff8298':''}function burst(){let b=$('confetti');b.innerHTML='';for(let i=0;i<22;i++){let e=document.createElement('span');e.className='piece';e.textContent=['⭐','✨','🎉','💛','💚'][i%5];e.style.left=Math.random()*100+'vw';e.style.setProperty('--drift',(Math.random()*160-80)+'px');e.style.animationDelay=(Math.random()*.4)+'s';b.append(e)}setTimeout(()=>b.innerHTML='',2400)}function answer(a){if(answered||!active)return;answered=true;clearInterval(timer);let q=questions[index],pl=mode==='duel'?index%2:0,ok=q.a===a,elapsed=(Date.now()-startAt)/1000;choiceBtns.forEach(b=>{b.disabled=true;if(b.dataset.a===q.a)b.classList.add('correct');else if(b.dataset.a===a)b.classList.add('wrong')});if(ok){streaks[pl]++;let bonus=limit?Math.max(0,Math.round(50*(1-elapsed/limit))):0,combo=streaks[pl]>=3?25:0,add=100+bonus+combo;roundScores[pl]+=add;$('feedback').innerHTML='✅ Tačno! +'+add+' poena<small>'+q.a+' '+q.n+' · '+q.t+(combo?' · 🔥 bonus za niz!':'')+'</small>';$('feedback').style.color='#65f6b5';sound('good');if(streaks[pl]%5===0)burst()}else{streaks[pl]=0;$('feedback').innerHTML=(a?'❌ Netačno!':'⌛ Vreme je isteklo!')+'<small>Tačno je: <b>'+q.a+' '+q.n+'</b> · '+q.t+'</small>';$('feedback').style.color='#ff8099';sound('bad')}say(q);$('points').textContent=roundScores[pl];$('streak').textContent=streaks[pl]+' 🔥';setTimeout(()=>{if(!active)return;index++;if(index>=questions.length)finish();else ui()},1250)}function start(){if(music&&!musicTimer)toggleMusic(true);getAudio();chosenLesson=$('lesson').value;let data=chosenLesson==='all'?LESSONS.flat():LESSONS[+chosenLesson];let unique=[...new Map(data.map(x=>[x.a+' '+x.n,x])).values()];questions=shuffle(unique);let size=$('roundCount').value;if(size!=='all'){if(mode==='duel')size=Number(size)*2;questions=questions.slice(0,Number(size))}index=0;roundScores=[0,0];streaks=[0,0];limit=10;active=true;$('setup').classList.add('hidden');$('result').classList.add('hidden');$('game').classList.remove('hidden');$('game').scrollIntoView({behavior:'smooth',block:'start'});ui();sound('good')}function finish(){active=false;clearInterval(timer);$('game').classList.add('hidden');$('result').classList.remove('hidden');let text='';if(mode==='duel'){let win=roundScores[0]===roundScores[1]?'🤝 Nerešeno!':('🏆 Pobednik: '+players[roundScores[0]>roundScores[1]?0:1]);text=win;$('finalScore').textContent=roundScores[0]+' : '+roundScores[1];$('versus').textContent=''+' protiv '+players[1]}else{$('finalScore').textContent=roundScores[0];text=roundScores[0]>=questions.length*125?'🥇 Fantastično znanje!':'👏 Bravo! Vežbanjem postaješ sve bolji.';$('versus').textContent=''}$('resultText').textContent=text;burst();sound('win');$('result').scrollIntoView({behavior:'smooth',block:'start'})}function home(){active=false;clearInterval(timer);$('game').classList.add('hidden');$('result').classList.add('hidden');$('setup').classList.remove('hidden');$('setup').scrollIntoView({behavior:'smooth',block:'start'})}document.addEventListener('pointerdown',()=>{if(music&&!musicTimer)toggleMusic(true)},{once:true});$('musicBtn').onclick=()=>toggleMusic(!music);$('fxBtn').onclick=()=>{fx=!fx;$('fxBtn').textContent='🔊 Efekti: '+(fx?'ON':'OFF');$('fxBtn').classList.toggle('on',fx);if(fx)sound('good')};$('voiceBtn').onclick=()=>{voice=!voice;$('voiceBtn').textContent='🗣 Izgovor: '+(voice?'ON':'OFF');$('voiceBtn').classList.toggle('on',voice);if(!voice&&'speechSynthesis'in window)speechSynthesis.cancel()};$('startBtn').onclick=start;$('again').onclick=start;$('home').onclick=home;$('stopBtn').onclick=home;$('skipBtn').onclick=()=>answer('');$('sayBtn').onclick=()=>say(questions[index]);choiceBtns.forEach(b=>b.onclick=()=>answer(b.dataset.a));
+function say(item){if(!voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(item.a+' '+item.n);u.lang='de-DE';u.rate=.84;u.volume=.9;let voices=speechSynthesis.getVoices(),v=voices.find(v=>v.lang.toLowerCase().startsWith('de'));if(v)u.voice=v;speechSynthesis.speak(u)}catch{}}function ui(){let pl=mode==='duel'?index%2:0;$('points').textContent=roundScores[pl];$('streak').textContent=streaks[pl]+' 🔥';$('step').textContent=(index+1)+'/'+questions.length;$('bar').style.width=100*index/questions.length+'%';$('playerTurn').textContent='🎯 Pogodi član za 10 sekundi';$('noun').textContent=questions[index].n;$('translation').textContent=questions[index].t;$('feedback').textContent='Koji je tačan član?';$('feedback').style.color='';answered=false;choiceBtns.forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong')});startAt=Date.now();updateClock();clearInterval(timer);timer=setInterval(()=>{if(!active||answered)return;updateClock();if(limit&&Date.now()-startAt>=limit*1000)answer('')},100)}function updateClock(){let left=limit?Math.max(0,limit-(Date.now()-startAt)/1000):null;$('clock').textContent=left===null?'∞':Math.ceil(left)+'s';$('clock').style.color=left!==null&&left<5?'#ff8298':''}function burst(){let b=$('confetti');b.innerHTML='';for(let i=0;i<22;i++){let e=document.createElement('span');e.className='piece';e.textContent=['⭐','✨','🎉','💛','💚'][i%5];e.style.left=Math.random()*100+'vw';e.style.setProperty('--drift',(Math.random()*160-80)+'px');e.style.animationDelay=(Math.random()*.4)+'s';b.append(e)}setTimeout(()=>b.innerHTML='',2400)}function answer(a){if(answered||!active)return;answered=true;clearInterval(timer);let q=questions[index],pl=mode==='duel'?index%2:0,ok=q.a===a,elapsed=(Date.now()-startAt)/1000;choiceBtns.forEach(b=>{b.disabled=true;if(b.dataset.a===q.a)b.classList.add('correct');else if(b.dataset.a===a)b.classList.add('wrong')});if(ok){streaks[pl]++;let bonus=limit?Math.max(0,Math.round(50*(1-elapsed/limit))):0,combo=streaks[pl]>=3?25:0,add=100+bonus+combo;roundScores[pl]+=add;$('feedback').innerHTML='✅ Tačno! +'+add+' poena<small>'+q.a+' '+q.n+' · '+q.t+(combo?' · 🔥 bonus za niz!':'')+'</small>';$('feedback').style.color='#65f6b5';sound('good');if(streaks[pl]%5===0)burst()}else{streaks[pl]=0;$('feedback').innerHTML=(a?'❌ Netačno!':'⌛ Vreme je isteklo!')+'<small>Tačno je: <b>'+q.a+' '+q.n+'</b> · '+q.t+'</small>';$('feedback').style.color='#ff8099';sound('bad')}say(q);$('points').textContent=roundScores[pl];$('streak').textContent=streaks[pl]+' 🔥';setTimeout(()=>{if(!active)return;index++;if(index>=questions.length)finish();else ui()},1250)}function start(){document.body.classList.add('playing');if(music&&!musicTimer)toggleMusic(true);getAudio();chosenLesson=$('lesson').value;let data=chosenLesson==='all'?LESSONS.flat():LESSONS[+chosenLesson];let unique=[...new Map(data.map(x=>[x.a+' '+x.n,x])).values()];questions=shuffle(unique);let size=$('roundCount').value;if(size!=='all'){if(mode==='duel')size=Number(size)*2;questions=questions.slice(0,Number(size))}index=0;roundScores=[0,0];streaks=[0,0];limit=10;active=true;$('setup').classList.add('hidden');$('result').classList.add('hidden');$('game').classList.remove('hidden');if(window.innerWidth>600)$('game').scrollIntoView({behavior:'smooth',block:'start'});ui();sound('good')}function finish(){document.body.classList.remove('playing');active=false;clearInterval(timer);$('game').classList.add('hidden');$('result').classList.remove('hidden');let text='';if(mode==='duel'){let win=roundScores[0]===roundScores[1]?'🤝 Nerešeno!':('🏆 Pobednik: '+players[roundScores[0]>roundScores[1]?0:1]);text=win;$('finalScore').textContent=roundScores[0]+' : '+roundScores[1];$('versus').textContent=''+' protiv '+players[1]}else{$('finalScore').textContent=roundScores[0];text=roundScores[0]>=questions.length*125?'🥇 Fantastično znanje!':'👏 Bravo! Vežbanjem postaješ sve bolji.';$('versus').textContent=''}$('resultText').textContent=text;burst();sound('win');if(window.innerWidth>600)$('result').scrollIntoView({behavior:'smooth',block:'start'})}function home(){document.body.classList.remove('playing');active=false;clearInterval(timer);$('game').classList.add('hidden');$('result').classList.add('hidden');$('setup').classList.remove('hidden');if(window.innerWidth>600)$('setup').scrollIntoView({behavior:'smooth',block:'start'})}document.addEventListener('pointerdown',()=>{if(music&&!musicTimer)toggleMusic(true)},{once:true});$('musicBtn').onclick=()=>toggleMusic(!music);$('fxBtn').onclick=()=>{fx=!fx;$('fxBtn').textContent='🔊 Efekti: '+(fx?'ON':'OFF');$('fxBtn').classList.toggle('on',fx);if(fx)sound('good')};$('voiceBtn').onclick=()=>{voice=!voice;$('voiceBtn').textContent='🗣 Izgovor: '+(voice?'ON':'OFF');$('voiceBtn').classList.toggle('on',voice);if(!voice&&'speechSynthesis'in window)speechSynthesis.cancel()};$('startBtn').onclick=start;$('again').onclick=start;$('home').onclick=home;$('stopBtn').onclick=home;$('skipBtn').onclick=()=>answer('');$('sayBtn').onclick=()=>say(questions[index]);choiceBtns.forEach(b=>b.onclick=()=>answer(b.dataset.a));
 const pickerOptions={lesson:[['all','Sve lekcije'],['0','1. lekcija'],['1','2. lekcija'],['2','3. lekcija'],['3','4. lekcija'],['4','5. lekcija'],['5','6. lekcija'],['6','7. lekcija']],roundCount:[['10','10 pitanja'],['20','20 pitanja'],['30','30 pitanja'],['all','Sve imenice']]};document.querySelectorAll('.pick-arrow').forEach(button=>{button.addEventListener('click',()=>{const id=button.dataset.picker,arr=pickerOptions[id],hidden=$(id);const current=Math.max(0,arr.findIndex(x=>x[0]===hidden.value));const dir=Number(button.dataset.direction);const next=arr[(current+dir+arr.length)%arr.length];hidden.value=next[0];$(id+'Text').textContent=next[1]})});
 </script></body></html>
