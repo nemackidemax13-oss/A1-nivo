@@ -55,6 +55,12 @@ button{font:inherit;cursor:pointer;touch-action:manipulation;border:0}button:foc
 @media(max-width:360px){.topbar .brandword{font-size:17px;letter-spacing:0}.soundbar .switch{padding:7px 4px;font-size:9px}.statechip{width:142px}}
 .reading-progress{display:flex;gap:7px;justify-content:center;padding-top:8px}.reading-progress span{height:6px;width:35px;background:#2b5074;border-radius:99px}.reading-progress span.current{background:#ffcd69;box-shadow:0 0 10px #ffd16d88}.reading-progress span.done{background:#48d9bc}.learn .learnfacts{gap:7px}.learn .learnfact{min-height:55px;flex:1;padding:9px 10px}.learn .learnfact p{line-height:1.36}
 @media(max-height:700px){.learn .learnfact{min-height:42px;padding:6px 9px}.learn .learnfact p{font-size:11px;line-height:1.25}.learn .reading-progress{padding-top:5px}.learn .fact-banner{margin:6px 0}.learn .factshead{margin-bottom:5px}}
+.quizhead .quizbadge{flex:1;min-width:0;max-width:60%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.life-counter{display:flex;align-items:center;justify-content:center;gap:2px;padding:6px 4px;flex-shrink:0;background:#401f3d88;border:1px solid #fb708459;border-radius:12px;min-height:37px}
+.life-heart{font-size:clamp(15px,4.5vw,21px);line-height:1;filter:drop-shadow(0 0 5px #e75b6095)}.life-heart.lost{opacity:.32;filter:grayscale(1)}.timer{flex-shrink:0}
+.quiz.challenge-last .quizvisual{height:clamp(54px,9vh,82px)}.quiz.challenge-last .answer{font-size:clamp(10.5px,3.1vw,13px);line-height:1.17;padding:6px 8px;overflow-wrap:anywhere}
+@media(max-width:375px){.quizhead{gap:4px}.quizhead .quizbadge{max-width:54%;padding:7px 6px;font-size:11px}.life-counter{padding:6px 2px;gap:0}.life-heart{font-size:15px}}
+@media(max-height:670px){.quiz .quizvisual{height:clamp(48px,9vh,80px)}.quiz .questionbox{min-height:60px}.quiz .answer{padding-top:5px;padding-bottom:5px}}
 </style>
 </head>
 <body>
@@ -70,23 +76,23 @@ button{font:inherit;cursor:pointer;touch-action:manipulation;border:0}button:foc
 </div></div>
 <script>
 "use strict";
-const STATES=[{id:"BY",name:"Bayern",capital:"München",emoji:"🏰",short:"BY",region:"Jug",landmark:"Dvorac Neuschwanstein",city:"Nürnberg",special:"Oktoberfest i bavarske Alpe",facts:["Bavarska je najveća nemačka pokrajina po površini, na jugu zemlje.","Glavni grad München poznat je po Oktoberfestu.","Ovde su visoke Alpe i svetski poznati dvorac Neuschwanstein."],phrase:"In Bayern gibt es die Alpen."},
-{id:"BW",name:"Baden-Württemberg",capital:"Stuttgart",emoji:"🌲",short:"BW",region:"Jugozapad",landmark:"Švarcvald (Schwarzwald)",city:"Heidelberg",special:"Automobilske marke Mercedes-Benz i Porsche",facts:["Na jugozapadu Nemačke nalazi se Švarcvald, čuvena Crna šuma.","Stuttgart je glavni grad i važan centar automobilske industrije.","Ova pokrajina poznata je po jezeru Bodensee i starom univerzitetskom gradu Heidelbergu."],phrase:"Der Schwarzwald ist wunderschön."},
+const STATES=[{id:"BY",name:"Bayern",capital:"München",emoji:"🏰",short:"BY",region:"Jug",landmark:"Dvorac Neuschwanstein",city:"Nürnberg",special:"Oktoberfest i bavarske Alpe",facts:["Bavarska je najveća nemačka pokrajina po površini, na jugu zemlje.","Glavni grad München poznat je po Oktoberfestu.","Ovde su visoke Alpe i svetski poznati dvorac Neuschwanstein."]},
+{id:"BW",name:"Baden-Württemberg",capital:"Stuttgart",emoji:"🌲",short:"BW",region:"Jugozapad",landmark:"Švarcvald (Schwarzwald)",city:"Heidelberg",special:"Automobilske marke Mercedes-Benz i Porsche",facts:["Na jugozapadu Nemačke nalazi se Švarcvald, čuvena Crna šuma.","Stuttgart je glavni grad i važan centar automobilske industrije.","Ova pokrajina poznata je po jezeru Bodensee i starom univerzitetskom gradu Heidelbergu."]},
 
-{id:"BE",name:"Berlin",capital:"Berlin",emoji:"🐻",short:"BE",region:"Severoistok",landmark:"Brandenburška kapija",city:"Berlin",special:"Glavni grad cele Nemačke i gradska pokrajina",facts:["Berlin je istovremeno glavni grad Nemačke i zasebna savezna pokrajina.","Simbol grada je Brandenburška kapija (Brandenburger Tor).","Berlinski zid je bio važan simbol nemačke podele; pao je 1989. godine."],phrase:"Berlin ist die Hauptstadt Deutschlands."},
-{id:"BB",name:"Brandenburg",capital:"Potsdam",emoji:"🌳",short:"BB",region:"Severoistok",landmark:"Palata Sanssouci",city:"Cottbus",special:"Jezera, šume i područje oko Berlina",facts:["Brandenburg okružuje Berlin, ali ima svoj glavni grad Potsdam.","U Potsdamu se nalazi poznata palata Sanssouci.","Pokrajina je bogata jezerima, šumama i prirodnim rezervatima."],phrase:"Potsdam liegt in Brandenburg."},
-{id:"HB",name:"Bremen",capital:"Bremen",emoji:"🎶",short:"HB",region:"Severozapad",landmark:"Bremenski muzikanti",city:"Bremerhaven",special:"Gradska pokrajina od Bremena i Bremerhavena",facts:["Bremen je jedna od tri nemačke gradske pokrajine.","Čine je gradovi Bremen i Bremerhaven, važni za pomorsku trgovinu.","Poznati su kip Bremenskih muzikanata i stari gradski trg."],phrase:"Die Bremer Stadtmusikanten sind berühmt."},
-{id:"HH",name:"Hamburg",capital:"Hamburg",emoji:"⚓",short:"HH",region:"Sever",landmark:"Elbphilharmonie",city:"Hamburg",special:"Velika luka na reci Labi (Elbe)",facts:["Hamburg je istovremeno grad i savezna pokrajina.","To je jedna od najvažnijih evropskih luka, na reci Labi (Elbe).","Poznate znamenitosti su Elbphilharmonie i stari magacini Speicherstadt."],phrase:"Hamburg hat einen großen Hafen."},
-{id:"HE",name:"Hessen",capital:"Wiesbaden",emoji:"🏙️",short:"HE",region:"Središnja Nemačka",landmark:"Römerberg u Frankfurtu",city:"Frankfurt am Main",special:"Frankfurtske banke i veliki aerodrom",facts:["Hessen se nalazi u središnjem delu Nemačke.","Glavni grad je Wiesbaden, a najveći i poznatiji grad Frankfurt am Main.","Frankfurt je važno finansijsko središte sa velikim međunarodnim aerodromom."],phrase:"Frankfurt liegt in Hessen."},
-{id:"MV",name:"Mecklenburg-Vorpommern",capital:"Schwerin",emoji:"🏖️",short:"MV",region:"Severoistok",landmark:"Ostrvo Rügen",city:"Rostock",special:"Baltičko more i brojne peščane plaže",facts:["Pokrajina se nalazi na severoistoku, uz Baltičko more (Ostsee).","Glavni grad je Schwerin, poznat po prelepom dvorcu.","Ostrvo Rügen i obala sa plažama privlače mnoge turiste."],phrase:"Rügen liegt an der Ostsee."},
-{id:"NI",name:"Niedersachsen",capital:"Hannover",emoji:"🐎",short:"NI",region:"Severozapad",landmark:"Autostadt u Wolfsburgu",city:"Wolfsburg",special:"Volkswagen i područja uz Severno more",facts:["Niedersachsen je velika pokrajina na severozapadu Nemačke.","Hannover je glavni grad, a Wolfsburg je povezan sa Volkswagenom.","Ima obalu Severnog mora, ravnice i deo planine Harz."],phrase:"Hannover ist die Landeshauptstadt."},
-{id:"NW",name:"Nordrhein-Westfalen",capital:"Düsseldorf",emoji:"⛪",short:"NW",region:"Zapad",landmark:"Kelnska katedrala (Kölner Dom)",city:"Köln",special:"Ruhrska oblast i najviše stanovnika među pokrajinama",facts:["Nordrhein-Westfalen je najnaseljenija nemačka pokrajina.","Glavni grad je Düsseldorf, dok je Köln čuven po velikoj katedrali.","Ruhrska oblast je istorijski poznata po rudarstvu i industriji."],phrase:"Der Kölner Dom ist sehr bekannt."},
-{id:"RP",name:"Rheinland-Pfalz",capital:"Mainz",emoji:"🍇",short:"RP",region:"Zapad",landmark:"Porta Nigra u Trieru",city:"Trier",special:"Vinogradi u dolinama Rajne i Mozela",facts:["Rheinland-Pfalz leži na zapadu Nemačke, uz Rajnu (Rhein) i Mozel (Mosel).","Glavni grad Mainz poznat je i po istoriji štamparstva Johanna Gutenberga.","Poznata je po vinogradima, dvorcima i rimskim ostacima u Trieru."],phrase:"Am Rhein gibt es viele Weinberge."},
-{id:"SL",name:"Saarland",capital:"Saarbrücken",emoji:"🌉",short:"SL",region:"Zapad",landmark:"Krivina reke Saar (Saarschleife)",city:"Völklingen",special:"Mala pokrajina uz granicu s Francuskom",facts:["Saarland je jedna od najmanjih pokrajina po površini.","Nalazi se na zapadu Nemačke, blizu Francuske i Luksemburga.","Poznata mesta su Saarschleife i industrijsko nasleđe Völklingena."],phrase:"Das Saarland liegt an der Grenze."},
-{id:"SN",name:"Sachsen",capital:"Dresden",emoji:"🎻",short:"SN",region:"Istok",landmark:"Frauenkirche u Dresdenu",city:"Leipzig",special:"Dresden, Leipzig i bogata muzička tradicija",facts:["Sachsen, odnosno Saksonija, nalazi se na istoku Nemačke.","Glavni grad Dresden poznat je po istorijskoj arhitekturi i crkvi Frauenkirche.","Leipzig je važan grad muzike, knjiga i sajmova."],phrase:"Dresden liegt in Sachsen."},
-{id:"ST",name:"Sachsen-Anhalt",capital:"Magdeburg",emoji:"📚",short:"ST",region:"Istok",landmark:"Bauhaus u Dessauu",city:"Halle (Saale)",special:"Lutherov Wittenberg i škola dizajna Bauhaus",facts:["Glavni grad Sachsen-Anhalta je Magdeburg, na reci Labi.","Dessau je poznat po arhitektonskoj školi Bauhaus.","U Lutherstadtu Wittenbergu započela je reformacija Martina Luthera."],phrase:"Magdeburg liegt an der Elbe."},
-{id:"SH",name:"Schleswig-Holstein",capital:"Kiel",emoji:"⛵",short:"SH",region:"Sever",landmark:"Holstentor u Lübecku",city:"Lübeck",special:"Između Severnog i Baltičkog mora",facts:["Schleswig-Holstein je na krajnjem severu Nemačke, uz Dansku.","Nalazi se između Severnog mora (Nordsee) i Baltičkog mora (Ostsee).","Glavni grad Kiel poznat je po jedrenju, a Lübeck po starom centru."],phrase:"Kiel liegt an der Ostsee."},
-{id:"TH",name:"Thüringen",capital:"Erfurt",emoji:"🌿",short:"TH",region:"Središnja Nemačka",landmark:"Dvorac Wartburg",city:"Weimar",special:"Goethe, Schiller i Tirinška šuma",facts:["Thüringen se nalazi u središnjoj Nemačkoj i poznat je kao zelena pokrajina.","Glavni grad je Erfurt, a Weimar je važan kulturni centar.","Dvorac Wartburg i Tirinška šuma spadaju u poznate znamenitosti."],phrase:"Thüringen ist sehr grün."}
+{id:"BE",name:"Berlin",capital:"Berlin",emoji:"🐻",short:"BE",region:"Severoistok",landmark:"Brandenburška kapija",city:"Berlin",special:"Glavni grad cele Nemačke i gradska pokrajina",facts:["Berlin je istovremeno glavni grad Nemačke i zasebna savezna pokrajina.","Simbol grada je Brandenburška kapija (Brandenburger Tor).","Berlinski zid je bio važan simbol nemačke podele; pao je 1989. godine."]},
+{id:"BB",name:"Brandenburg",capital:"Potsdam",emoji:"🌳",short:"BB",region:"Severoistok",landmark:"Palata Sanssouci",city:"Cottbus",special:"Jezera, šume i područje oko Berlina",facts:["Brandenburg okružuje Berlin, ali ima svoj glavni grad Potsdam.","U Potsdamu se nalazi poznata palata Sanssouci.","Pokrajina je bogata jezerima, šumama i prirodnim rezervatima."]},
+{id:"HB",name:"Bremen",capital:"Bremen",emoji:"🎶",short:"HB",region:"Severozapad",landmark:"Bremenski muzikanti",city:"Bremerhaven",special:"Gradska pokrajina od Bremena i Bremerhavena",facts:["Bremen je jedna od tri nemačke gradske pokrajine.","Čine je gradovi Bremen i Bremerhaven, važni za pomorsku trgovinu.","Poznati su kip Bremenskih muzikanata i stari gradski trg."]},
+{id:"HH",name:"Hamburg",capital:"Hamburg",emoji:"⚓",short:"HH",region:"Sever",landmark:"Elbphilharmonie",city:"Hamburg",special:"Velika luka na reci Labi (Elbe)",facts:["Hamburg je istovremeno grad i savezna pokrajina.","To je jedna od najvažnijih evropskih luka, na reci Labi (Elbe).","Poznate znamenitosti su Elbphilharmonie i stari magacini Speicherstadt."]},
+{id:"HE",name:"Hessen",capital:"Wiesbaden",emoji:"🏙️",short:"HE",region:"Središnja Nemačka",landmark:"Römerberg u Frankfurtu",city:"Frankfurt am Main",special:"Frankfurtske banke i veliki aerodrom",facts:["Hessen se nalazi u središnjem delu Nemačke.","Glavni grad je Wiesbaden, a najveći i poznatiji grad Frankfurt am Main.","Frankfurt je važno finansijsko središte sa velikim međunarodnim aerodromom."]},
+{id:"MV",name:"Mecklenburg-Vorpommern",capital:"Schwerin",emoji:"🏖️",short:"MV",region:"Severoistok",landmark:"Ostrvo Rügen",city:"Rostock",special:"Baltičko more i brojne peščane plaže",facts:["Pokrajina se nalazi na severoistoku, uz Baltičko more (Ostsee).","Glavni grad je Schwerin, poznat po prelepom dvorcu.","Ostrvo Rügen i obala sa plažama privlače mnoge turiste."]},
+{id:"NI",name:"Niedersachsen",capital:"Hannover",emoji:"🐎",short:"NI",region:"Severozapad",landmark:"Autostadt u Wolfsburgu",city:"Wolfsburg",special:"Volkswagen i područja uz Severno more",facts:["Niedersachsen je velika pokrajina na severozapadu Nemačke.","Hannover je glavni grad, a Wolfsburg je povezan sa Volkswagenom.","Ima obalu Severnog mora, ravnice i deo planine Harz."]},
+{id:"NW",name:"Nordrhein-Westfalen",capital:"Düsseldorf",emoji:"⛪",short:"NW",region:"Zapad",landmark:"Kelnska katedrala (Kölner Dom)",city:"Köln",special:"Ruhrska oblast i najviše stanovnika među pokrajinama",facts:["Nordrhein-Westfalen je najnaseljenija nemačka pokrajina.","Glavni grad je Düsseldorf, dok je Köln čuven po velikoj katedrali.","Ruhrska oblast je istorijski poznata po rudarstvu i industriji."]},
+{id:"RP",name:"Rheinland-Pfalz",capital:"Mainz",emoji:"🍇",short:"RP",region:"Zapad",landmark:"Porta Nigra u Trieru",city:"Trier",special:"Vinogradi u dolinama Rajne i Mozela",facts:["Rheinland-Pfalz leži na zapadu Nemačke, uz Rajnu (Rhein) i Mozel (Mosel).","Glavni grad Mainz poznat je i po istoriji štamparstva Johanna Gutenberga.","Poznata je po vinogradima, dvorcima i rimskim ostacima u Trieru."]},
+{id:"SL",name:"Saarland",capital:"Saarbrücken",emoji:"🌉",short:"SL",region:"Zapad",landmark:"Krivina reke Saar (Saarschleife)",city:"Völklingen",special:"Mala pokrajina uz granicu s Francuskom",facts:["Saarland je jedna od najmanjih pokrajina po površini.","Nalazi se na zapadu Nemačke, blizu Francuske i Luksemburga.","Poznata mesta su Saarschleife i industrijsko nasleđe Völklingena."]},
+{id:"SN",name:"Sachsen",capital:"Dresden",emoji:"🎻",short:"SN",region:"Istok",landmark:"Frauenkirche u Dresdenu",city:"Leipzig",special:"Dresden, Leipzig i bogata muzička tradicija",facts:["Sachsen, odnosno Saksonija, nalazi se na istoku Nemačke.","Glavni grad Dresden poznat je po istorijskoj arhitekturi i crkvi Frauenkirche.","Leipzig je važan grad muzike, knjiga i sajmova."]},
+{id:"ST",name:"Sachsen-Anhalt",capital:"Magdeburg",emoji:"📚",short:"ST",region:"Istok",landmark:"Bauhaus u Dessauu",city:"Halle (Saale)",special:"Lutherov Wittenberg i škola dizajna Bauhaus",facts:["Glavni grad Sachsen-Anhalta je Magdeburg, na reci Labi.","Dessau je poznat po arhitektonskoj školi Bauhaus.","U Lutherstadtu Wittenbergu započela je reformacija Martina Luthera."]},
+{id:"SH",name:"Schleswig-Holstein",capital:"Kiel",emoji:"⛵",short:"SH",region:"Sever",landmark:"Holstentor u Lübecku",city:"Lübeck",special:"Između Severnog i Baltičkog mora",facts:["Schleswig-Holstein je na krajnjem severu Nemačke, uz Dansku.","Nalazi se između Severnog mora (Nordsee) i Baltičkog mora (Ostsee).","Glavni grad Kiel poznat je po jedrenju, a Lübeck po starom centru."]},
+{id:"TH",name:"Thüringen",capital:"Erfurt",emoji:"🌿",short:"TH",region:"Središnja Nemačka",landmark:"Dvorac Wartburg",city:"Weimar",special:"Goethe, Schiller i Tirinška šuma",facts:["Thüringen se nalazi u središnjoj Nemačkoj i poznat je kao zelena pokrajina.","Glavni grad je Erfurt, a Weimar je važan kulturni centar.","Dvorac Wartburg i Tirinška šuma spadaju u poznate znamenitosti."]}
 ];
 const SAVE_KEY="demax-osvoji-pokrajinu-v1";
 const FIELDS={BW:[186,433],BY:[306,461],BE:[373,246],BB:[393,265],HB:[173,185],HH:[220,140],HE:[230,319],MV:[349,115],NI:[206,227],NW:[131,288],RP:[152,375],SL:[105,427],SN:[390,342],ST:[297,269],SH:[251,70],TH:[299,348]};
@@ -94,7 +100,7 @@ const STATIC_SILHOUETTE="M258 13 L290 18 315 43 355 39 381 67 374 96 405 112 400
 const qMain=document.getElementById("main"),stats=document.getElementById("stats"),app=document.getElementById("app"),fxLayer=document.getElementById("fxlayer");
 let saved={won:{},best:0};
 try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(s&&typeof s==="object"&&s.won)saved=s;}catch(e){}
-let scene="home",selected="BY",quiz=null,questionTick=null,advanceTimer=null,learnPage=0,responding=false,controlMusic=true,controlFx=true,mapCache="",rankName="";
+let scene="home",selected="BY",quiz=null,questionTick=null,questionAdvanceTimer=null,advanceTimer=null,learnPage=0,responding=false,controlMusic=true,controlFx=true,mapCache="",rankName="";
 function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(saved));}catch(e){}}
 function hasWon(id){return Number.isFinite(Number(saved.won[id]))&&Number(saved.won[id])>0}
 function wins(){return STATES.filter(s=>hasWon(s.id)).length}
@@ -105,7 +111,7 @@ function st(id){return STATES.find(a=>a.id===id)||STATES[0]}
 function btn(label,klass,action){return '<button class="btn '+klass+'" data-action="'+action+'">'+label+'</button>'}
 function updateStats(){stats.innerHTML='<div class="stat">🏆 <b>'+wins()+'/16</b><small>osvojeno</small></div><div class="stat">⭐ <b>'+score().toLocaleString("sr-RS")+'</b><small>bodova</small></div><div class="stat">🔥 <b>'+level().split(" ")[0]+'</b></div>'}
 function render(){clearInterval(questionTick);questionTick=null;updateStats();qMain.innerHTML="";if(scene==="home")renderHome();else if(scene==="map")renderMap();else if(scene==="learn")renderLearn();else if(scene==="quiz")renderQuiz();else if(scene==="result")renderResult();bindActions()}
-function setScene(s){clearTimeout(advanceTimer);advanceTimer=null;if(s==="map")selected=nextUnlocked().id;if(s==="learn")learnPage=0;scene=s;render();if(s!=="quiz")audioMood()}
+function setScene(s){clearTimeout(advanceTimer);clearTimeout(questionAdvanceTimer);advanceTimer=null;questionAdvanceTimer=null;if(s==="map")selected=nextUnlocked().id;if(s==="learn")learnPage=0;scene=s;render();if(s!=="quiz")audioMood()}
 function nextUnlocked(){return STATES.find(s=>!hasWon(s.id))||STATES[STATES.length-1]}
 function canVisit(id){return hasWon(id)||id===nextUnlocked().id}
 function renderHome(){
@@ -163,11 +169,11 @@ function learningSentences(s){
 function renderLearn(){
  const s=st(selected),all=learningSentences(s),first=learnPage*4,shown=all.slice(first,first+4);
  const backAction=learnPage===0?"map":"learnPrev",backLabel=learnPage===0?"← NA MAPU":"← PRETHODNE REČENICE";
- const nextLabel=learnPage===0?"📖 NASTAVI ČITANJE →":"⚔️ KVIZ · 3 PITANJA";
+ const nextLabel=learnPage===0?"📖 NASTAVI ČITANJE →":"⚔️ KVIZ · 5 PITANJA";
  const nextAction=learnPage===0?"learnNext":"startQuiz";
  qMain.innerHTML='<section class="view learn"><div class="backline"><button class="backbtn" data-action="'+backAction+'">'+backLabel+'</button><span class="chapter">POKRAJINA '+(STATES.indexOf(s)+1)+' / 16</span></div>'
  +'<div class="learnbanner"><div class="learnicon">'+s.emoji+'</div><div class="learntitle"><small>🇩🇪 BUNDESLAND</small><h2>'+safe(s.name)+'</h2><small>Pročitaj svih 8 rečenica, pa reši kviz</small></div></div>'
- +'<div class="fact-banner"><div><small>📚 REČENICE</small><b>'+(first+1)+'–'+(first+shown.length)+' / '+all.length+'</b></div><div><small>🎯 ZA OSVAJANJE</small><b>2 od 3 tačna</b></div></div>'
+ +'<div class="fact-banner"><div><small>📚 REČENICE</small><b>'+(first+1)+'–'+(first+shown.length)+' / '+all.length+'</b></div><div><small>🎯 ZA OSVAJANJE</small><b>3 od 5 · 3 života</b></div></div>'
  +'<div class="factshead">📖 ČITAJ I ZAPAMTI · '+(learnPage+1)+'/2</div>'
  +'<div class="learnfacts">'+shown.map((f,i)=>'<div class="learnfact"><span class="number">'+String(first+i+1).padStart(2,"0")+'</span><p>'+safe(f)+'</p></div>').join("")+'</div>'
  +'<div class="reading-progress" aria-label="Napredak u čitanju"><span class="'+(learnPage===0?"current":"done")+'"></span><span class="'+(learnPage===1?"current":"")+'"></span></div>'
@@ -179,41 +185,50 @@ function questions(s){
  const ix=STATES.indexOf(s);
  function optionsFor(key,seed){
   const correct=s[key];
-  let distractors=Array.from(new Set(STATES.filter(o=>o.id!==s.id).map(o=>o[key]).filter(v=>v!==correct)));
+  let distractors=[...new Set(STATES.filter(other=>other.id!==s.id).map(other=>other[key]).filter(item=>item!==correct))];
   if(key==="region")distractors=["Sever","Jug","Istok","Zapad","Severoistok","Severozapad","Jugozapad","Središnja Nemačka"].filter(v=>v!==correct);
-  return shuffled([correct,...shuffled(distractors,seed+20).slice(0,3)],seed+70);
+  return shuffled([correct,...shuffled(distractors,seed+13).slice(0,3)],seed+53);
  }
- const first={question:"Koji je glavni grad pokrajine "+s.name+"?",correct:s.capital,options:optionsFor("capital",ix*11+1),difficulty:"LAKO"};
- if(ix<6){
-  return [first,
-   {question:"U kom delu Nemačke nalazi se "+s.name+"?",correct:s.region,options:optionsFor("region",ix*11+2),difficulty:"SREDNJE"},
-   {question:"Koja je poznata znamenitost pokrajine "+s.name+"?",correct:s.landmark,options:optionsFor("landmark",ix*11+3),difficulty:"TEŠKO"}];
- }
- const second={question:"Koja se znamenitost vezuje za "+s.name+"?",correct:s.landmark,options:optionsFor("landmark",ix*11+2),difficulty:"SREDNJE"};
- const cityAlternatives=shuffled([...new Set(STATES.filter(o=>o.id!==s.id).map(o=>o.city).filter(c=>c!==s.city))],ix*17+5);
- const regionAlternatives=shuffled(["Sever","Jug","Istok","Zapad","Severoistok","Severozapad","Jugozapad","Središnja Nemačka"].filter(v=>v!==s.region),ix*23+7);
- const correct=s.region+" · "+s.city;
- const wrongA=s.region+" · "+cityAlternatives[0];
- const wrongB=regionAlternatives[0]+" · "+s.city;
- const wrongC=ix>=10?s.region+" · "+cityAlternatives[1]:regionAlternatives[1]+" · "+cityAlternatives[1];
- const last={question:"Koja kombinacija je potpuno tačna za "+s.name+"? (položaj + grad)",correct,options:shuffled([correct,wrongA,wrongB,wrongC],ix*57+19),difficulty:"TEŠKO"};
- return [first,second,last];
+ // All five answers are explicitly taught in the eight preceding sentences.
+ const q1={question:"Koji je glavni grad pokrajine "+s.name+"?",correct:s.capital,options:optionsFor("capital",ix*19+1),difficulty:"1 · LAKO"};
+ const q2={question:"Gde se nalazi pokrajina "+s.name+"?",correct:s.region,options:optionsFor("region",ix*19+2),difficulty:"2 · MALO TEŽE"};
+ const q3={question:"Koji je grad naveden u lekciji o pokrajini "+s.name+"?",correct:s.city,options:optionsFor("city",ix*19+3),difficulty:"3 · SREDNJE"};
+ const q4={question:"Po čemu je posebno poznata pokrajina "+s.name+"?",correct:s.special,options:optionsFor("special",ix*19+4),difficulty:"4 · TEŠKO"};
+ // Last question requires recognizing two facts together, not guessing one word.
+ const correct=s.city+" · "+s.landmark;
+ const candidateCities=[...new Set(STATES.filter(o=>o.id!==s.id).map(o=>o.city).filter(c=>c!==s.city))];
+ const candidateSites=[...new Set(STATES.filter(o=>o.id!==s.id).map(o=>o.landmark).filter(v=>v!==s.landmark))];
+ const cities=shuffled(candidateCities,ix*101+5);
+ const sites=shuffled(candidateSites,ix*101+7);
+ const distractors=[cities[0]+" · "+s.landmark,s.city+" · "+sites[0],cities[1]+" · "+sites[1]];
+ const q5={question:"Koja kombinacija grada i znamenitosti je tačno navedena za "+s.name+"?",correct,options:shuffled([correct,...distractors],ix*53+91),difficulty:"5 · EKSPERT"};
+ return [q1,q2,q3,q4,q5];
 }
 
 function startQuiz(){
- const s=st(selected);if(learnPage<1)return;const limit=STATES.indexOf(s)>=10?22:STATES.indexOf(s)>=6?19:16;quiz={state:s,qs:questions(s),step:0,correct:0,points:0,streak:0,history:[],remaining:limit,limit,answered:false,award:0};scene="quiz";render();sound("start");audioMood();
+ clearTimeout(advanceTimer);clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null;
+ const s=st(selected);if(learnPage<1)return;const limit=STATES.indexOf(s)>=10?22:STATES.indexOf(s)>=6?19:16;quiz={state:s,qs:questions(s),step:0,correct:0,lives:3,points:0,streak:0,history:[],remaining:limit,limit,answered:false,award:0};scene="quiz";render();sound("start");audioMood();
 }
 function renderQuiz(){
  const s=quiz.state,q=quiz.qs[quiz.step];
- qMain.innerHTML='<section class="view quiz"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="timer"><span>VREME</span><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">'+quiz.limit+'</b></div></div></div>'
+ const lifeDisplay=[0,1,2].map(i=>'<span class="life-heart'+(i>=quiz.lives?' lost':'')+'" aria-hidden="true">'+(i<quiz.lives?'❤️':'🖤')+'</span>').join("");
+ qMain.innerHTML='<section class="view quiz'+(quiz.step===4?' challenge-last':'')+'"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="life-counter" id="lifeCounter" role="status" aria-label="Životi: '+quiz.lives+' od 3">'+lifeDisplay+'</div><div class="timer"><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">'+quiz.limit+'</b></div></div></div>'
  +'<div class="quizdots">'+quiz.qs.map((_,i)=>'<i class="'+(i===quiz.step?'current':i<quiz.step?(quiz.history[i]?'done':'bad'):'')+'"></i>').join("")+'</div>'
  +'<div class="quizvisual"><span class="spark l">✦</span><span class="quiz-globe">'+s.emoji+'</span><span class="spark r">✦</span></div>'
  +'<div class="questionbox"><div><div class="qsmall">PITANJE '+(quiz.step+1)+' / '+quiz.qs.length+' · '+safe(q.difficulty)+'</div><h2>'+safe(q.question)+'</h2></div></div>'
  +'<div class="answers">'+q.options.map((a,i)=>'<button class="answer" data-answer="'+i+'"><span class="letter">'+["A","B","C","D"][i]+'</span><span>'+safe(a)+'</span></button>').join("")+'</div>'
- +'<div id="quizfeedback" class="quizfeedback">Tačan odgovor donosi bodove i bonus za brzinu ⚡</div></section>';
+ +'<div id="quizfeedback" class="quizfeedback">❤️ '+quiz.lives+'/3 života · Treća greška znači ispadanje</div></section>';
  responding=false;
  startTimer();
 }
+function refreshLives(){
+ const counter=document.getElementById("lifeCounter");
+ if(counter){
+  counter.setAttribute("aria-label","Životi: "+quiz.lives+" od 3");
+  counter.innerHTML=[0,1,2].map(i=>'<span class="life-heart'+(i>=quiz.lives?' lost':'')+'" aria-hidden="true">'+(i<quiz.lives?'❤️':'🖤')+'</span>').join("");
+ }
+}
+
 function startTimer(){clearInterval(questionTick);const since=performance.now();quiz.remaining=quiz.limit;questionTick=setInterval(()=>{
  if(scene!=="quiz"||quiz.answered){clearInterval(questionTick);return}
  quiz.remaining=Math.max(0,quiz.limit-(performance.now()-since)/1000);
@@ -224,19 +239,47 @@ function startTimer(){clearInterval(questionTick);const since=performance.now();
 },110)}
 function answer(i){
  if(!quiz||scene!=="quiz"||quiz.answered)return;
- quiz.answered=true;clearInterval(questionTick);
- const q=quiz.qs[quiz.step],choice=q.options[i],ok=choice===q.correct;
+ quiz.answered=true;
+ clearInterval(questionTick);
+ const currentQuiz=quiz,q=quiz.qs[quiz.step],choice=q.options[i],ok=choice===q.correct;
  quiz.history.push(ok);
- if(ok){quiz.correct++;quiz.streak++;let gain=100+Math.floor(quiz.remaining)*5+Math.max(0,quiz.streak-1)*20;quiz.points+=gain;sound("correct");burst("good",22);if(navigator.vibrate)navigator.vibrate(20);}
- else {quiz.streak=0;sound("wrong");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),420);if(navigator.vibrate)navigator.vibrate([45,30,55]);}
- document.querySelectorAll(".answer").forEach(b=>{b.disabled=true;const v=q.options[Number(b.dataset.answer)];if(v===q.correct)b.classList.add("correct");else if(Number(b.dataset.answer)===i)b.classList.add("wrong");else b.classList.add("dim")});
+ if(ok){
+  quiz.correct++;quiz.streak++;
+  const gain=100+Math.floor(quiz.remaining)*5+Math.max(0,quiz.streak-1)*20;
+  quiz.points+=gain;sound("correct");burst("good",22);
+  if(navigator.vibrate)navigator.vibrate(20);
+ }else{
+  quiz.lives=Math.max(0,quiz.lives-1);quiz.streak=0;sound("wrong");
+  app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");
+  setTimeout(()=>app.classList.remove("shake"),420);
+  if(navigator.vibrate)navigator.vibrate([45,30,55]);
+  refreshLives();
+ }
+ document.querySelectorAll(".answer").forEach(b=>{
+  b.disabled=true;
+  const v=q.options[Number(b.dataset.answer)];
+  if(v===q.correct)b.classList.add("correct");
+  else if(Number(b.dataset.answer)===i)b.classList.add("wrong");
+  else b.classList.add("dim");
+ });
  const f=document.getElementById("quizfeedback");
- if(f){f.className="quizfeedback "+(ok?"good":"bad");f.textContent=ok?"✅ BRAVO! + BONUS · "+quiz.points+" poena u ovoj rundi":"❌ "+(i<0?"Vreme je isteklo!":"Netačno!")+" Tačno: "+q.correct;}
- setTimeout(()=>{if(scene!=="quiz")return;if(quiz.step<quiz.qs.length-1){quiz.step++;renderQuiz();bindActions();}else finishQuiz()},1100);
+ if(f){
+  f.className="quizfeedback "+(ok?"good":"bad");
+  f.textContent=ok?"✅ TAČNO! "+quiz.points+" bodova · ❤️ "+quiz.lives+"/3":"❌ "+(i<0?"Vreme je isteklo!":"Netačno!")+" Tačno: "+q.correct+" · ❤️ "+quiz.lives+"/3";
+  if(!ok&&quiz.lives===0)f.textContent="💥 Treća greška! Ispao si iz ove pokrajine.";
+ }
+ questionAdvanceTimer=setTimeout(()=>{
+  questionAdvanceTimer=null;
+  if(scene!=="quiz"||quiz!==currentQuiz)return;
+  if(quiz.lives===0){finishQuiz();return;}
+  if(quiz.step<quiz.qs.length-1){quiz.step++;renderQuiz();bindActions();}
+  else finishQuiz();
+ },1250);
 }
+
 function finishQuiz(){
  clearInterval(questionTick);
- const win=quiz.correct>=2,prev=Number(saved.won[quiz.state.id]||0);
+ const win=quiz.history.length===5&&quiz.lives>0&&quiz.correct>=3,prev=Number(saved.won[quiz.state.id]||0);
  quiz.award=win?Math.max(0,quiz.points-prev):0;
  if(win){saved.won[quiz.state.id]=Math.max(prev,quiz.points);saved.best=Math.max(saved.best,score());persist();sound("win");burst("win",110);}
  else{sound("lose");burst("lose",30);}
@@ -245,14 +288,14 @@ function finishQuiz(){
  if(win&&wins()===16){setTimeout(()=>{if(scene==="result")burst("win",170)},750);}
 }
 function renderResult(){
- const s=quiz.state,win=quiz.correct>=2,all=wins()===16;
+ const s=quiz.state,win=quiz.history.length===5&&quiz.lives>0&&quiz.correct>=3,all=wins()===16;
  const successMessage=all?"Osvojene su sve pokrajine! Bravo!":"Sledeća pokrajina otvara se automatski za nekoliko sekundi. Prvo pročitaj njene rečenice.";
- const failedMessage="Za osvajanje su potrebna najmanje 2 tačna od 3 pitanja. Pročitaj rečenice još jednom, pa pokušaj opet.";
+ const failedMessage=quiz.lives===0?"💥 Potrošena su sva 3 života. Pročitaj lekciju ponovo i pokušaj da savladaš svih 5 pitanja.":"Potrebna su najmanje 3 tačna odgovora od 5. Ponovi lekciju pa pokušaj opet.";
  qMain.innerHTML='<section class="view result"><div class="pagehead"><div class="eyebrow">'+(win?"MISIJA USPEŠNA":"POKUŠAJ PONOVO")+'</div><div class="heading">'+safe(s.name)+'</div></div>'
  +'<div class="result-trophy"><span>'+(win?(all?"👑":"🏆"):"💥")+'</span></div>'
  +'<h2>'+(!win?"POKRAJINA NIJE OSVOJENA":all?"OSVOJIO SI NEMAČKU!":"POKRAJINA OSVOJENA!")+'</h2>'
  +'<p>'+(win?successMessage:failedMessage)+'</p>'
- +'<div class="resultstats"><div><strong>'+quiz.correct+'/'+quiz.qs.length+'</strong><small>Tačni odgovori</small></div><div><strong>'+quiz.points+'</strong><small>Bodovi runde</small></div><div><strong>'+wins()+'/16</strong><small>Osvojeno</small></div></div>'
+ +'<div class="resultstats"><div><strong>'+quiz.correct+'/'+quiz.qs.length+'</strong><small>Tačni odgovori</small></div><div><strong>❤️ '+quiz.lives+'/3</strong><small>Preostali životi</small></div><div><strong>'+quiz.points+'</strong><small>Bodovi runde</small></div></div>'
  +'<div class="rank">✨ TVOJ RANG: '+level()+'</div>'
  +'<div class="bottom" style="padding-left:0;padding-right:0"><div class="btn-row">'+btn("🗺️ NA MAPU","ghost","map")+btn(win?(all?"🇩🇪 MAPA":"⚔️ SLEDEĆA POKRAJINA"):"📖 PONOVO PROČITAJ",win?"gold":"green",win?(all?"map":"next"):"learn")+'</div></div></section>';
 }
@@ -272,10 +315,7 @@ function bindActions(){
  });
  qMain.querySelectorAll("[data-answer]").forEach(b=>b.addEventListener("click",()=>answer(Number(b.dataset.answer))));
 }
-function speakState(){
- if(!("speechSynthesis" in window))return;
- try{speechSynthesis.cancel();let s=st(selected);let utter=new SpeechSynthesisUtterance(s.name+". Die Landeshauptstadt ist "+s.capital+". "+s.phrase);utter.lang="de-DE";utter.rate=.84;utter.pitch=1;const voices=speechSynthesis.getVoices();let german=voices.find(v=>v.lang.toLowerCase().startsWith("de"));if(german)utter.voice=german;speechSynthesis.speak(utter)}catch(e){}
-}
+
 function burst(type,n){
  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  if(type==="win"){const flash=document.createElement("div");flash.className="flash";app.appendChild(flash);setTimeout(()=>flash.remove(),600)}
