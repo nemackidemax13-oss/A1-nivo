@@ -54,9 +54,19 @@ footer{text-align:center;color:#b9c9e9;letter-spacing:1.1px;font-size:10px;font-
 @media(max-height:710px){#app{gap:5px;padding-top:5px;padding-bottom:5px}header{min-height:33px}.flag{width:32px;height:24px}.brand b{font-size:17px}.audio button{font-size:10px;padding:5px}.hero{gap:6px;padding:8px}.hero .flagart{font-size:clamp(56px,11vh,89px)}.hero h1{font-size:29px}.features div{padding:5px 2px}.menu{gap:6px}.menu .btn{padding:10px}.panel{gap:6px;padding:9px}.symbol{font-size:30px}.question{font-size:clamp(17px,4.7vw,23px)}.option{font-size:clamp(11px,3.2vw,15px);padding:5px}.stat{padding:5px}.stat strong{font-size:18px}section{gap:5px}}
 @media(max-height:560px){.hero .flagart{display:none}.hero h1{font-size:26px}.hero p{font-size:11px}.symbol{font-size:22px}.question{min-height:2em;font-size:17px}.panel{gap:4px;padding:7px}.stat strong{font-size:16px}.hud{min-height:40px}.features b{font-size:15px}footer{font-size:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Naslov na sredini ekrana, manji font i kompaktni audio tasteri */
+header{position:relative;justify-content:space-between;gap:4px}
+header>.flag{flex:none}
+header>.brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;pointer-events:none;text-align:center}
+header>.brand b{font-size:clamp(11px,3.5vw,16px);letter-spacing:-.35px;line-height:1.08;white-space:nowrap}
+header>.audio{margin-left:auto;position:relative;z-index:1}
+header>.audio button{font-size:clamp(9px,2.5vw,11px);padding:5px 5px}
+.symbol.word{font-size:clamp(20px,5.1vw,30px);font-weight:1000;color:#ffe48e;letter-spacing:.6px;line-height:1.15;overflow-wrap:anywhere;filter:drop-shadow(0 3px 8px #0008)}
+@media(max-width:360px){header>.brand b{font-size:11px;letter-spacing:-.65px}header>.audio{gap:3px}header>.audio button{padding:5px 3px}}
 </style></head>
 <body><div id="app">
-<header><div class="brand"><span class="flag"><i></i><i></i><i></i></span><div><b>UPOZNAJ NEMAČKU</b><small>DE-MAX • KVIZ IGRA</small></div></div><div class="audio"><button id="music">♫ ON</button><button id="effects">🔊 ON</button></div></header>
+<header><span class="flag" aria-label="Nemačka zastava"><i></i><i></i><i></i></span><div class="brand"><b>UPOZNAJ NEMAČKU</b></div><div class="audio"><button id="music">♫ ON</button><button id="effects">🔊 ON</button></div></header>
 <main>
 <section id="home"><div class="hero glass"><div class="flagart">🇩🇪</div><div class="kicker">VELIKI NEMAČKI IZAZOV</div><h1>Koliko poznaješ <em>Nemačku?</em></h1><p>Gradovi, kultura, znamenitosti i nemačke reči. Odgovaraj brzo, uzmi bonus i osvoji titulu šampiona!</p><div class="features"><div><b>⏱️</b>15 sekundi</div><div><b>❤️</b>3 života</div><div><b>🌟</b>Bonus x2</div></div></div><div class="menu"><button id="solo" class="btn goldbtn">⚡ IGRAJ SAM — 12 PITANJA</button><button id="duel" class="btn bluebtn">🏆 DUEL — 2 IGRAČA</button><div class="best">👑 LIČNI REKORD: <b id="best">0</b> poena</div></div></section>
 <section id="game" class="hide"><div id="duelb" class="duel hide"><div id="p0">🔴 Igrač 1 <strong>0</strong></div><div id="p1">🟡 Igrač 2 <strong>0</strong></div></div><div class="hud"><div class="stat"><label>POENI</label><strong class="gold" id="points">0</strong></div><div class="stat"><label>VREME</label><strong id="seconds">15</strong></div><div class="stat"><label>ŽIVOTI</label><strong class="hearts" id="hearts">❤️❤️❤️</strong></div></div><div class="timer"><div id="bar"></div></div><div class="info"><span class="who" id="who">⚡ SOLO</span><span id="progress"></span><span class="bonus" id="bonus"></span></div><div id="panel" class="panel glass"><div class="cat"><span id="cat"></span><span class="level" id="level"></span></div><div class="symbol" id="symbol">🇩🇪</div><h2 class="question" id="question"></h2><div class="options" id="options"></div><div class="feedback" id="feedback"></div></div><div class="bottom"><span id="streak">🔥 Niz: 0</span><button id="quit">✕ Izađi</button></div></section>
@@ -132,6 +142,23 @@ var db=[
 ["Jezik","Šta znači Wochenende?","Vikend","Ponedeljak","Radni dan","Cela godina","🌞"],
 ["Jezik","Šta znači die Hauptstadt?","Glavni grad","Železnička stanica","Stara kuća","Veliki put","🏙️"]
 ];
+// Umesto samog simbola, kod jezičkih pitanja ispisuje se konkretna reč/izraz.
+var wordLabels={
+"Kako se kaže hvala na nemačkom?":"HVALA",
+"Kako se kaže dobar dan na nemačkom?":"DOBAR DAN",
+"Kako se na nemačkom kaže dobro došli?":"DOBRO DOŠLI",
+"Šta znači Bahnhof?":"BAHNHOF",
+"Šta znači Flughafen?":"FLUGHAFEN",
+"Šta znači Schule?":"SCHULE",
+"Šta znači Polizei?":"POLIZEI",
+"Kako se kaže jedan, dva, tri?":"JEDAN, DVA, TRI",
+"Šta znači Ausgang?":"AUSGANG",
+"Šta znači Eingang?":"EINGANG",
+"Kako se kaže da na nemačkom?":"DA",
+"Kako se kaže ne na nemačkom?":"NE",
+"Šta znači Wochenende?":"WOCHENENDE",
+"Šta znači die Hauptstadt?":"DIE HAUPTSTADT"
+};
 var game={mode:"solo",players:[],q:[],i:0,count:12,locked:true,done:false,deadline:0,tick:0,transition:0,remain:15,current:null,opts:[],bonus:false};
 var effects=true,music=true,ctx=null,loop=null,step=0,best=0;
 try{best=Number(localStorage.getItem("demax-deutschland-record")||0)}catch(e){}$("best").textContent=best;
@@ -166,7 +193,7 @@ $("who").textContent=game.mode==="solo"?"⚡ SOLO IZAZOV":p.id?"🟡 IGRAČ 2":"
 $("progress").textContent=game.mode==="solo"?"PITANJE "+(p.done+1)+" / 12":"KRUG "+(p.done+1)+" / 8";
 $("bonus").textContent=game.bonus?"🌟 BONUS x2":"";
 $("level").textContent=game.bonus?"⭐ DUPLI POENI":"NIVO "+(Math.floor(p.done/4)+1);
-$("cat").textContent=q[0];$("symbol").textContent=q[6];$("question").textContent=q[1];
+$("cat").textContent=q[0];$("symbol").classList.toggle("word",q[0]==="Jezik");$("symbol").textContent=q[0]==="Jezik"?(wordLabels[q[1]]||q[1]):q[6];$("question").textContent=q[1];
 $("feedback").className="feedback";$("feedback").textContent=game.bonus?"✨ BONUS PITANJE: osvoji duple poene!":"Izaberi tačan odgovor!";
 $("options").innerHTML="";
 game.opts.forEach(function(a,i){var b=document.createElement("button");b.className="option";b.type="button";var hot=document.createElement("i");hot.textContent=i+1;var txt=document.createElement("span");txt.textContent=a;b.appendChild(hot);b.appendChild(txt);b.onclick=function(){answer(i)};$("options").appendChild(b)});
