@@ -147,6 +147,11 @@ footer{color:#6f93ac}footer b{color:#1c618b}
 .top .sound button{font-size:clamp(10px,2.7vw,12px);padding:5px 8px}
 @media(max-height:720px){.question-tools{gap:5px;min-height:22px}.speak-btn{font-size:10px;padding:3px 9px}.top .sound button{padding:3px 7px}}
 @media(max-height:575px){.question-tools{min-height:19px}.speak-btn{font-size:9px;padding:3px 7px}.questionpanel{gap:3px}}
+
+/* Audio-first režim: ikona slušalica i zaključani odgovori do kraja izgovora */
+.ans:disabled:not(.right):not(.wrong):not(.muted){opacity:.67;cursor:wait}
+.questionpanel:has(.ans:disabled:not(.right):not(.wrong):not(.muted)) .animal{background:linear-gradient(140deg,#ddf6ff,#ffe5b3);box-shadow:0 0 23px #67bfe36a}
+.questionpanel .speak-btn{background:linear-gradient(135deg,#c6ecff,#f4dfff);border-color:#95cdea;color:#154c77;font-weight:1000}
 </style></head><body><div id="app"><div class="blob one"></div><div class="blob two"></div>
 <header class="top"><div class="brand"><div><strong>DE-<em>MAX</em></strong><small>NEMAČKI A1 • KVIZ</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button><button id="pronunciation" aria-label="Uključi ili isključi nemački izgovor" aria-pressed="true">🗣 ON</button></div></header>
 <main class="view"><section id="home" class="screen home"><div class="hero glass"><div class="orbit"><div class="orb a">🦁</div><div class="orb b">🦋</div><div class="orb c">🐬</div><div class="orb d">🦅</div><div class="paw">🐶</div></div><div class="tag">VELIKI NEMAČKI IZAZOV</div><h1 id="heroTitle">OSNOVNE <span>ŽIVOTINJE</span></h1><p>Mačka, pas, jarac, zec, lisica i druge osnovne životinje. Uči <b>der • die • das</b> uz prevod, muziku i bonus poene!</p><div class="pills"><div><b>🐶 50</b>osnovnih reči</div><div><b>⏱️ 15 s</b>po pitanju</div><div><b>🏆 x2</b>bonus poeni</div></div></div><div class="menu"><button id="marathon" class="cta primary">🐶 SVE ŽIVOTINJE — 50 PITANJA</button><button id="quick" class="cta secondary">⚡ BRZI KVIZ — 20 PITANJA</button><div class="records"><div>🏅 Rekord 20: <span id="best20">0</span></div><div>👑 Rekord 50: <span id="best200">0</span></div></div></div></section>
@@ -215,7 +220,7 @@ const $=id=>document.getElementById(id);
 const raw=document.getElementById("animal-data").textContent.trim();
 let cat="";const bank=[];
 raw.split("\n").forEach(row=>{row=row.trim();if(row.startsWith("# ")){cat=row.slice(2);return}const parts=row.split("|");if(parts.length===3)bank.push({de:parts[0],sr:parts[1],emoji:parts[2],cat})});
-const S={mode:200,order:[],i:0,score:0,lives:12,streak:0,correct:0,active:false,locked:true,deadline:0,remaining:15,tick:null,next:null,q:null,answers:[],direction:"de",bonus:false,played:0};
+const S={mode:50,order:[],i:0,score:0,lives:5,streak:0,correct:0,active:false,locked:true,answered:false,started:false,deadline:0,remaining:15,tick:null,next:null,q:null,answers:[],direction:"de",bonus:false,played:0,questionToken:0,speechWatch:null};
 let musicEnabled=true,fxEnabled=true,ctx=null,scheduler=null,nextBeat=0,beatStep=0,best20=0,best200=0;
 try{best20=Number(localStorage.getItem("de-max-animals-best20")||"0");best200=Number(localStorage.getItem("de-max-animals-best50")||"0")}catch(e){}
 $("best20").textContent=best20;$("best200").textContent=best200;
@@ -332,50 +337,98 @@ function fx(kind){if(!fxEnabled)return;audioInit();if(!ctx)return;const t=ctx.cu
 $("music").onclick=()=>{musicEnabled=!musicEnabled;$("music").textContent=musicEnabled?"♫ ON":"♫ OFF";$("music").classList.toggle("off",!musicEnabled);musicEnabled?startMusic():stopMusic();musicVolume();fx("tap")};
 $("effects").onclick=()=>{fxEnabled=!fxEnabled;$("effects").textContent=fxEnabled?"🔊 ON":"🔇 OFF";$("effects").classList.toggle("off",!fxEnabled);fx("tap")};
 
-/* Nemački izgovor na uređaju kroz Web Speech API */
+/* Slušaj i pogodi: nemački naziv se izgovara pre početka odbrojavanja.
+   German speech depends on the voices installed or provided by the browser. */
 let pronunciationOn=true,pronounceTimer=null,speechSerial=0;
 const ttsAvailable=typeof window!=="undefined"&&"speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
 if(!ttsAvailable){$("pronunciation").textContent="🗣 NEMA";$("pronunciation").disabled=true;$("speakBtn").disabled=true}
 function stopPronunciation(){
  speechSerial++;
  if(pronounceTimer!==null){clearTimeout(pronounceTimer);pronounceTimer=null}
+ if(S.speechWatch!==null){clearTimeout(S.speechWatch);S.speechWatch=null}
  if(ttsAvailable)try{window.speechSynthesis.cancel()}catch(e){}
  speaking=false;musicVolume()
 }
 function chooseGermanVoice(){
  if(!ttsAvailable)return null;
  try{
-  const voices=window.speechSynthesis.getVoices();
-  const german=voices.filter(v=>/^de[-_]/i.test(v.lang)||v.lang.toLowerCase()==="de");
-  return german.find(v=>v.localService&&/de[-_]DE/i.test(v.lang))||
-         german.find(v=>/de[-_]DE/i.test(v.lang))||german[0]||null
+  const voices=window.speechSynthesis.getVoices(),german=voices.filter(v=>/^de([_-]|$)/i.test(v.lang));
+  return german.find(v=>/de[-_]DE/i.test(v.lang)&&(/Google|Microsoft|Katja|Petra|Hedda|Anna|Marlene|Neural|Enhanced/i.test(v.name)))||
+   german.find(v=>v.localService&&/de[-_]DE/i.test(v.lang))||
+   german.find(v=>/de[-_]DE/i.test(v.lang))||german[0]||null;
  }catch(e){return null}
 }
-function sayGerman(){
- if(!ttsAvailable||!pronunciationOn||!S.active||!S.q)return;
- if(S.direction==="sr"&&!S.locked)return; // ne otkrivaj odgovor
- if(document.hidden)return;
- stopPronunciation();
- const id=speechSerial,word=S.q.de;
- try{
-  const utterance=new SpeechSynthesisUtterance(word);
-  utterance.lang="de-DE";utterance.rate=.87;utterance.pitch=1;utterance.volume=1;
-  const voice=chooseGermanVoice();if(voice)utterance.voice=voice;
-  utterance.onstart=()=>{if(speechSerial!==id)return;speaking=true;musicVolume()};
-  utterance.onend=utterance.onerror=()=>{if(speechSerial!==id)return;speaking=false;musicVolume()};
-  // čuvaj nemački naglasak i član, čak i kada se pitanje pita na srpskom
-  window.speechSynthesis.speak(utterance);
- }catch(e){speaking=false;musicVolume()}
+function pauseQuestionClock(){
+ if(S.answered||!S.active)return;
+ if(S.started){
+  S.remaining=Math.max(.1,(S.deadline-performance.now())/1000);
+  if(S.tick){clearInterval(S.tick);S.tick=null}
+  S.started=false;
+ }
+ S.locked=true;
 }
-function cueGerman(delay){
- if(!ttsAvailable||!pronunciationOn)return;
- if(pronounceTimer!==null)clearTimeout(pronounceTimer);
- pronounceTimer=setTimeout(()=>{pronounceTimer=null;sayGerman()},delay)
+function beginQuestionClock(){
+ if(S.answered||!S.active)return;
+ if(S.tick){clearInterval(S.tick);S.tick=null}
+ S.locked=false;S.started=true;
+ S.deadline=performance.now()+Math.max(.1,S.remaining)*1000;
+ S.lastBeep=0;
+ updateTimer();
+ S.tick=setInterval(updateTimer,70);
+ $("feedback").textContent=S.bonus?"🌟 BONUS! Izaberi odgovor!":"🎯 Pogodi životinju na srpskom!";
+ Array.from($("answers").children).forEach(b=>b.disabled=false);
+ updateSpeakButton();
+}
+function showAudioFallback(){
+ if(!S.active||S.answered)return;
+ $("question").textContent=S.q.de;
+ $("instruction").textContent="NEMAČKI GLAS NIJE DOSTUPAN — PROČITAJ REČ";
+ $("feedback").textContent="Možeš pogoditi na osnovu napisane reči.";
+}
+function sayGerman(){
+ if(!S.active||!S.q||document.hidden)return;
+ if(!ttsAvailable||!pronunciationOn){
+  if(!S.answered){showAudioFallback();beginQuestionClock()}
+  return;
+ }
+ const replayAfterAnswer=S.answered;
+ if(!replayAfterAnswer)pauseQuestionClock();
+ stopPronunciation();
+ const id=speechSerial,token=S.questionToken;
+ try{
+  const utterance=new SpeechSynthesisUtterance(S.q.de);
+  utterance.lang="de-DE";utterance.rate=.88;utterance.pitch=1;utterance.volume=1;
+  const voice=chooseGermanVoice();if(voice)utterance.voice=voice;
+  $("feedback").textContent=replayAfterAnswer?"🔊 Izgovor: "+S.q.de:"🔊 Slušaj nemački izgovor...";
+  updateSpeakButton();
+  const end=failed=>{
+   if(id!==speechSerial||token!==S.questionToken)return;
+   if(S.speechWatch!==null){clearTimeout(S.speechWatch);S.speechWatch=null}
+   speaking=false;musicVolume();
+   if(!S.active)return;
+   if(!S.answered){
+    if(failed)showAudioFallback();
+    beginQuestionClock();
+   }
+  };
+  utterance.onstart=()=>{if(id!==speechSerial)return;speaking=true;musicVolume()};
+  utterance.onend=()=>end(false);
+  utterance.onerror=()=>end(true);
+  window.speechSynthesis.speak(utterance);
+  S.speechWatch=setTimeout(()=>{
+   if(id!==speechSerial||token!==S.questionToken||S.answered)return;
+   stopPronunciation();
+   showAudioFallback();
+   beginQuestionClock();
+  },6500);
+ }catch(e){
+  stopPronunciation();if(!S.answered){showAudioFallback();beginQuestionClock()}
+ }
 }
 function updateSpeakButton(){
- const visible=S.active&&pronunciationOn&&ttsAvailable&&(S.direction==="de"||S.locked);
+ const visible=S.active&&pronunciationOn&&ttsAvailable;
  $("speakBtn").classList.toggle("hide",!visible);
- $("speakBtn").textContent=S.locked?"🔊 "+(S.q?S.q.de:"IZGOVORI"):"🔊 IZGOVORI";
+ $("speakBtn").textContent=S.answered?"🔊 "+(S.q?S.q.de:"IZGOVORI"):"🔊 PONOVI IZGOVOR";
 }
 $("speakBtn").onclick=()=>sayGerman();
 $("pronunciation").onclick=()=>{
@@ -383,41 +436,123 @@ $("pronunciation").onclick=()=>{
  $("pronunciation").textContent=pronunciationOn?"🗣 ON":"🗣 OFF";
  $("pronunciation").setAttribute("aria-pressed",String(pronunciationOn));
  $("pronunciation").classList.toggle("off",!pronunciationOn);
- if(!pronunciationOn)stopPronunciation();
- else if(S.active&&S.direction==="de"&&!S.locked)cueGerman(120);
+ if(!pronunciationOn){
+  stopPronunciation();
+  if(S.active&&!S.answered){showAudioFallback();beginQuestionClock()}
+ }else if(S.active&&!S.answered){sayGerman()}
  updateSpeakButton();
 };
 function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function clearTimers(){if(S.tick){clearInterval(S.tick);S.tick=null}if(S.next){clearTimeout(S.next);S.next=null}}
 function start(mode){clearTimers();stopPronunciation();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=5;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
-function nextQuestion(){clearTimers();stopPronunciation();if(S.i>=S.order.length){finish(false);return}S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction=Math.random()<.7?"de":"sr";S.locked=false;
-const key=S.direction==="de"?"sr":"de";const correct=S.q[key];const pool=shuffled(bank.filter(x=>x.cat===S.q.cat&&x[key]!==correct));S.answers=shuffled([correct,...pool.slice(0,3).map(x=>x[key])]);
-$("questionPanel").classList.toggle("bonus",S.bonus);$("questionPanel").classList.remove("shake");$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("hearts").style.fontSize="clamp(13px,3.4vw,19px)";
-$("stage").textContent=(S.i+1)+" / "+S.mode;$("progress").style.width=(S.i/S.mode*100)+"%";$("category").textContent=S.q.cat;$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;$("animal").textContent=S.q.emoji;
-$("instruction").textContent=S.direction==="de"?"PREVEDI NA SRPSKI":"PREVEDI NA NEMAČKI";$("question").textContent=S.q[S.direction];$("feedback").className="feedback";$("feedback").textContent=S.bonus?"✨ BONUS RUNDA: DUPLI POENI!":"Izaberi tačan odgovor";
-$("answers").innerHTML="";
-S.answers.forEach((text,i)=>{const b=document.createElement("button");b.className="ans";b.type="button";const num=document.createElement("span"),txt=document.createElement("span");num.className="num";num.textContent=i+1;txt.textContent=text;b.append(num,txt);b.onclick=()=>answer(i);$("answers").appendChild(b)});
-S.deadline=performance.now()+15000;S.lastBeep=0;updateSpeakButton();updateTimer();S.tick=setInterval(updateTimer,70);if(S.direction==="de")cueGerman(270)}
+function nextQuestion(){
+ clearTimers();stopPronunciation();
+ if(S.i>=S.order.length){finish(false);return}
+ S.questionToken++;
+ S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction="de";
+ S.locked=true;S.answered=false;S.started=false;S.remaining=15;
+ const correct=S.q.sr;
+ // Odgovori se prikazuju samo na srpskom, da nemački izgovor bude pravi zadatak.
+ const pool=shuffled(bank.filter(x=>x.cat===S.q.cat&&x.sr!==correct));
+ S.answers=shuffled([correct,...pool.slice(0,3).map(x=>x.sr)]);
+ $("questionPanel").classList.toggle("bonus",S.bonus);
+ $("questionPanel").classList.remove("shake");
+ $("score").textContent=S.score;
+ $("hearts").textContent="❤️".repeat(S.lives);
+ $("hearts").style.fontSize="clamp(13px,3.4vw,19px)";
+ $("stage").textContent=(S.i+1)+" / "+S.mode;
+ $("progress").style.width=(S.i/S.mode*100)+"%";
+ $("category").textContent=S.q.cat;
+ $("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
+ $("animal").textContent="🎧"; // Ne prikazuj sliku/emoji tačne životinje unapred.
+ $("instruction").textContent="SLUŠAJ NEMAČKI PA POGODI";
+ $("question").textContent="Koja je životinja?";
+ $("feedback").className="feedback";
+ $("feedback").textContent="🎧 Slušaj izgovor pre odgovora...";
+ $("answers").innerHTML="";
+ S.answers.forEach((text,i)=>{
+  const b=document.createElement("button");b.className="ans";b.type="button";b.disabled=true;
+  const num=document.createElement("span"),txt=document.createElement("span");
+  num.className="num";num.textContent=i+1;txt.textContent=text;
+  b.append(num,txt);b.onclick=()=>answer(i);$("answers").appendChild(b);
+ });
+ $("seconds").textContent="15";
+ $("timerProgress").style.width="100%";$("timerProgress").classList.remove("urgent");
+ updateSpeakButton();
+ sayGerman();
+}
 function updateTimer(){if(S.locked)return;const r=Math.max(0,(S.deadline-performance.now())/1000),sec=Math.ceil(r);S.remaining=r;$("seconds").textContent=sec;$("timerProgress").style.width=(r/15*100)+"%";$("timerProgress").classList.toggle("urgent",r<5);if(sec<=3&&sec>0&&sec!==S.lastBeep){S.lastBeep=sec;fx("tick")}if(r<=0)answer(-1)}
-function answer(idx){if(S.locked||!S.active)return;S.locked=true;clearTimers();S.played++;const correct=S.q[S.direction==="de"?"sr":"de"],good=idx>=0&&S.answers[idx]===correct,time=Math.max(0,Math.ceil((S.deadline-performance.now())/1000));Array.from($("answers").children).forEach((b,i)=>{b.disabled=true;if(S.answers[i]===correct)b.classList.add("right");else if(i===idx)b.classList.add("wrong");else b.classList.add("muted")});
-if(good){S.correct++;S.streak++;const gained=(100+Math.min(10,S.streak-1)*15+time*5)*(S.bonus?2:1);S.score+=gained;$("feedback").className="feedback ok";$("feedback").textContent="✅ TAČNO! +"+gained+" POENA"+(S.bonus?" 🌟 BONUS!":"");fx(S.bonus?"bonus":"right");sparks($("questionPanel"),S.bonus?30:18,false);if(navigator.vibrate)navigator.vibrate(30)}
-else{S.streak=0;S.lives--;$("feedback").className="feedback no";$("feedback").textContent=idx===-1?"⏰ VREME ISTEKLO!":"❌ TAČNO JE: "+correct;$("questionPanel").classList.add("shake");fx("wrong");if(navigator.vibrate)navigator.vibrate([60,50,70])}
-$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
-updateSpeakButton();if(S.direction==="sr")cueGerman(480);
-S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?2300:2600)}
+function answer(idx){
+ if(S.locked||S.answered||!S.active)return;
+ S.locked=true;S.answered=true;S.started=false;clearTimers();stopPronunciation();S.played++;
+ const correct=S.q.sr,good=idx>=0&&S.answers[idx]===correct;
+ const time=Math.max(0,Math.ceil((S.deadline-performance.now())/1000));
+ Array.from($("answers").children).forEach((b,i)=>{
+  b.disabled=true;
+  if(S.answers[i]===correct)b.classList.add("right");
+  else if(i===idx)b.classList.add("wrong");
+  else b.classList.add("muted");
+ });
+ $("animal").textContent=S.q.emoji;
+ $("instruction").textContent="NEMAČKI NAZIV ŽIVOTINJE";
+ $("question").textContent=S.q.de;
+ if(good){
+  S.correct++;S.streak++;
+  const gained=(100+Math.min(10,S.streak-1)*15+time*5)*(S.bonus?2:1);
+  S.score+=gained;
+  $("feedback").className="feedback ok";
+  $("feedback").textContent="✅ TAČNO! "+S.q.de+" = "+correct+" • +"+gained+" poena";
+  fx(S.bonus?"bonus":"right");sparks($("questionPanel"),S.bonus?30:18,false);
+  if(navigator.vibrate)navigator.vibrate(30);
+ }else{
+  S.streak=0;S.lives--;
+  $("feedback").className="feedback no";
+  $("feedback").textContent=(idx===-1?"⏰ VREME ISTEKLO!":"❌ NETAČNO!")+" "+S.q.de+" = "+correct;
+  $("questionPanel").classList.add("shake");fx("wrong");
+  if(navigator.vibrate)navigator.vibrate([60,50,70]);
+ }
+ $("score").textContent=S.score;
+ $("hearts").textContent="❤️".repeat(S.lives);
+ $("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
+ updateSpeakButton();
+ // Pokaži odgovor dovoljno dugo da učenik pročita ispravan nemački naziv.
+ S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?1900:2300);
+}
 function saveRecord(){let changed=false;try{if(S.mode===50&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best50",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
 function modal(html){$("modal").innerHTML=html;$("overlay").classList.remove("hide")}
 function closeModal(){$("overlay").classList.add("hide");$("overlay").querySelectorAll(".spark,.explosion,.flash").forEach(e=>e.remove())}
 function sparks(target,count,explode){for(let i=0;i<count;i++){const p=document.createElement("span"),angle=Math.random()*Math.PI*2,distance=(explode?95:35)+Math.random()*(explode?330:130);p.className="spark";p.style.setProperty("--dx",Math.cos(angle)*distance+"px");p.style.setProperty("--dy",Math.sin(angle)*distance+"px");p.style.setProperty("--dur",(expludeDuration(explode)+Math.random()*550)+"ms");p.style.setProperty("--c",["#ffdc66","#ff9742","#fd4171","#9d77ff","#fff4ba"][i%5]);const size=(5+Math.random()*11)+"px";p.style.width=size;p.style.height=size;target.appendChild(p);setTimeout(()=>p.remove(),1650)}}
 function expludeDuration(boom){return boom?850:520}
 function explosion(){fx("boom");const over=$("overlay"),flash=document.createElement("div"),fire=document.createElement("div");flash.className="flash";fire.className="explosion";fire.textContent="💥";over.append(flash,fire);sparks(over,80,true);$("app").classList.add("shake");setTimeout(()=>{$("app").classList.remove("shake");flash.remove();fire.remove()},930)}
-function finish(lost){clearTimers();stopPronunciation();S.locked=true;S.active=false;const newRecord=saveRecord();const title=lost?"💥 KRAJ IGRE!":"🏆 ŠAMPION ŽIVOTINJA!",msg=lost?"Izgubio/la si sve živote. Pokušaj ponovo i popravi rekord!":"Fantastično! Završio/la si čitav izazov.";
+function finish(lost){clearTimers();stopPronunciation();S.locked=true;S.answered=true;S.started=false;S.active=false;const newRecord=saveRecord();const title=lost?"💥 KRAJ IGRE!":"🏆 ŠAMPION ŽIVOTINJA!",msg=lost?"Izgubio/la si sve živote. Pokušaj ponovo i popravi rekord!":"Fantastično! Završio/la si čitav izazov.";
 modal("<div class='big'>"+(lost?"💔":"🏆")+"</div><h2>"+title+"</h2><p>"+msg+"</p><div class='value'>"+S.score+" <span style='font-size:17px'>POENA</span></div><div class='resultgrid'><div>TAČNI ODGOVORI<b>"+S.correct+" / "+S.played+"</b></div><div>PREĐENO<b>"+S.played+" / "+S.mode+"</b></div></div>"+(newRecord?"<p class='wintext'>🌟 NOVI LIČNI REKORD!</p>":"")+"<button id='again' class='cta primary'>🔄 IGRAJ PONOVO</button><button id='back' class='cta ghost'>⌂ POČETNA</button>");
 $("again").onclick=()=>start(S.mode);$("back").onclick=home;if(lost)explosion();else{fx("win");sparks($("overlay"),70,true)}}
-function home(){clearTimers();stopPronunciation();S.active=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
+function home(){clearTimers();stopPronunciation();S.active=false;S.started=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
 $("marathon").onclick=()=>start(50);$("quick").onclick=()=>start(20);
-$("quit").onclick=()=>{if(!S.active)return;clearTimers();S.locked=true;modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");$("resume").onclick=()=>{closeModal();S.locked=false;S.deadline=performance.now()+Math.max(1,S.remaining)*1000;S.tick=setInterval(updateTimer,70)};$("exit").onclick=home};
+$("quit").onclick=()=>{
+ if(!S.active)return;
+ const wasRunning=S.started;
+ pauseQuestionClock();stopPronunciation();
+ modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");
+ $("resume").onclick=()=>{closeModal();if(!S.answered){if(wasRunning)beginQuestionClock();else sayGerman()}};
+ $("exit").onclick=home;
+};
 document.addEventListener("keydown",e=>{if(S.active&&!S.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
-document.addEventListener("visibilitychange",()=>{if(document.hidden){stopPronunciation();stopMusic();if(S.active&&!S.locked){clearInterval(S.tick);S.tick=null;S.remaining=Math.max(0,(S.deadline-performance.now())/1000);S.deadline=Infinity}}else{if(musicEnabled&&ctx)startMusic();if(S.active&&!S.locked&&S.deadline===Infinity){S.deadline=performance.now()+S.remaining*1000;S.tick=setInterval(updateTimer,70)}}});
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden){
+  stopMusic();
+  if(S.active&&!S.answered){
+   S.hiddenWasRunning=S.started;
+   pauseQuestionClock();
+   stopPronunciation();
+  }
+ }else{
+  if(musicEnabled&&ctx)startMusic();
+  if(S.active&&!S.answered&&$("overlay").classList.contains("hide")){
+   if(S.hiddenWasRunning)beginQuestionClock();
+   else sayGerman();
+  }
+ }
+});
 if(bank.length!==50){$("heroTitle").textContent="Greška u bazi: "+bank.length}
 })();</script></body></html>
