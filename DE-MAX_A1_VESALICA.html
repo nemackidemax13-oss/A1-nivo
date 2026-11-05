@@ -166,14 +166,14 @@ const BANK={
 };
 const ROWS=["QWERTZUIOPÜ","ASDFGHJKLÖÄ","YXCVBNMß"];const $=id=>document.getElementById(id);
 const state={mode:"all",deck:[],index:0,word:null,used:new Set(),wrong:0,score:0,streak:0,won:0,finished:false,started:false,music:true,fx:true};
-let audio=null,ambience=null,ambienceGain=null,audioUnlocked=false,toastTimeout=null;
+let audio=null,ambience=null,ambienceGain=null,audioUnlocked=false,musicTimer=null,musicTick=0;
 function char(c){return c==="ß"||c==="ẞ"?"ß":c.toLocaleUpperCase("de-DE")}
 function letters(s){return Array.from(s.normalize("NFC")).map(char)}
 function shuffle(items){const x=items.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
 function recordKey(){return "demax_vesalica_v1_"+state.mode}
 function getRecord(){try{return Number(localStorage.getItem(recordKey()))||0}catch(e){return 0}}
 function saveRecord(){try{localStorage.setItem(recordKey(),String(Math.max(state.score,getRecord())))}catch(e){}}
-function makeDeck(mode){const result=[];if(mode==="all"){let buckets=Object.keys(BANK).map(k=>shuffle(BANK[k].map(x=>({word:x[0],clue:x[1],lesson:Number(k)}))));for(let i=0;i<3;i++){const order=shuffle([0,1,2,3,4,5,6]);for(const j of order){const item=buckets[j].shift();if(item)result.push(item)}}}else{result.push(...shuffle(BANK[mode].map(x=>({word:x[0],clue:x[1],lesson:Number(mode)}))))}return result.slice(0,20)}
+function makeDeck(mode){const result=[],seen=new Set();const keys=mode==="all"?[1,2,3,4,5,6,7]:[Number(mode)];const buckets=keys.map(k=>shuffle(BANK[k].map(x=>({word:x[0],clue:x[1],lesson:k}))));while(result.length<20&&buckets.some(b=>b.length)){for(const j of shuffle(keys.map((_,i)=>i))){let item;do{item=buckets[j].shift()}while(item&&seen.has(item.word.toLocaleLowerCase("de-DE")));if(item){result.push(item);seen.add(item.word.toLocaleLowerCase("de-DE"));if(result.length===20)break}}}return result}
 function buildKeyboard(){const root=$("keyboard");root.replaceChildren();for(const row of ROWS){const wrap=document.createElement("div");wrap.className="keyrow";for(const k of Array.from(row)){const btn=document.createElement("button");btn.className="key";btn.type="button";btn.textContent=k;btn.dataset.key=k;btn.setAttribute("aria-label","Slovo "+k);btn.addEventListener("click",()=>guess(k));wrap.appendChild(btn)}root.appendChild(wrap)}}
 function updateKeyboard(){document.querySelectorAll(".key").forEach(b=>{const c=b.dataset.key;const used=state.used.has(c);b.disabled=used||state.finished||!state.started;b.className="key"+(used?(letters(state.word.word).includes(c)?" ok":" no"):"")})}
 function updateDrawing(){document.querySelectorAll(".part").forEach(x=>x.classList.toggle("on",Number(x.dataset.step)<=state.wrong));$("livesText").textContent=state.wrong>=7?"☠ KRAJ!":"❤️ "+(7-state.wrong)+" pokušaja"}
@@ -200,7 +200,7 @@ function soundWrong(){if(!state.fx)return;beep(220,.27,"sawtooth",.055,0,132);be
 function soundClick(){if(state.fx)beep(450,.10,"sine",.035,0,580)}
 function soundVictory(){if(!state.fx)return;[523,659,784,1046].forEach((f,i)=>beep(f,.32,"triangle",.105,i*.085))}
 function soundHorror(){if(!state.fx)return;noise(1.65,.45,0);beep(230,1.8,"sawtooth",.19,0,36);beep(420,1.15,"sawtooth",.13,.12,53);beep(65,1.9,"triangle",.31,0,31);beep(740,.55,"square",.05,.38,135);beep(920,.38,"sawtooth",.09,.72,88)}
-function startAmbience(){if(!audio||ambience)return;const osc=audio.createOscillator(),mod=audio.createOscillator(),modGain=audio.createGain(),gain=audio.createGain();osc.type="sine";osc.frequency.value=92.5;mod.type="sine";mod.frequency.value=.31;modGain.gain.value=3;mod.connect(modGain);modGain.connect(osc.frequency);gain.gain.value=0;osc.connect(gain);gain.connect(audio.destination);osc.start();mod.start();ambience={osc,mod,gain};ambienceGain=gain;setMusic()}
+function startAmbience(){if(!audio||ambience)return;const osc=audio.createOscillator(),mod=audio.createOscillator(),modGain=audio.createGain(),gain=audio.createGain();osc.type="sine";osc.frequency.value=92.5;mod.type="sine";mod.frequency.value=.31;modGain.gain.value=3;mod.connect(modGain);modGain.connect(osc.frequency);gain.gain.value=0;osc.connect(gain);gain.connect(audio.destination);osc.start();mod.start();ambience={osc,mod,gain};ambienceGain=gain;setMusic();musicTimer=setInterval(()=>{if(!audio||!state.music||!state.started||document.hidden)return;const melody=[220,261.63,329.63,392,220,261.63,349.23,329.63,174.61,220,261.63,329.63,196,246.94,293.66,349.23];const f=melody[musicTick%melody.length];beep(f,.33,"sine",.022);if(musicTick%4===0)beep(f/2,.75,"triangle",.025);musicTick++},335)}
 function setMusic(){if(!ambienceGain||!audio)return;ambienceGain.gain.setTargetAtTime(state.music&&state.started?.047:0,audio.currentTime,.24)}
 function updateToggles(){$("musicBtn").textContent="♫ Muzika "+(state.music?"ON":"OFF");$("fxBtn").textContent="🔊 Efekti "+(state.fx?"ON":"OFF");$("musicBtn").classList.toggle("off",!state.music);$("fxBtn").classList.toggle("off",!state.fx);$("musicBtn").setAttribute("aria-pressed",String(state.music));$("fxBtn").setAttribute("aria-pressed",String(state.fx));setMusic()}
 $("startBtn").addEventListener("click",start);
@@ -211,7 +211,7 @@ $("skip").addEventListener("click",skip);
 $("hint").addEventListener("click",hint);
 $("musicBtn").addEventListener("click",()=>{unlockAudio();state.music=!state.music;updateToggles()});
 $("fxBtn").addEventListener("click",()=>{unlockAudio();state.fx=!state.fx;updateToggles()});
-document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;if(e.key==="Enter"&&state.finished){e.preventDefault();next();return}if(e.key.length===1&&!$("overlay").classList.contains("hidden")===false)return;const c=char(e.key);if(ROWS.join("").includes(c)&&state.started){e.preventDefault();guess(c)}});
+document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;if(e.key==="Enter"&&state.finished){e.preventDefault();next();return}if(!$("overlay").classList.contains("hidden"))return;const c=char(e.key);if(ROWS.join("").includes(c)&&state.started){e.preventDefault();guess(c)}});
 document.addEventListener("visibilitychange",()=>{if(ambienceGain&&audio)ambienceGain.gain.setTargetAtTime(document.hidden?0:(state.music&&state.started?.047:0),audio.currentTime,.15)});
 buildKeyboard();updateToggles();$("record").textContent=getRecord();
 </script></body></html>
