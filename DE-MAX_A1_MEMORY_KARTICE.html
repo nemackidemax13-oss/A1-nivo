@@ -54,16 +54,16 @@
     else if(type==="win"){[523,659,784,1047].forEach((f,i)=>tone(f,.23,i*.13,"sine",.07))}
     else if(type==="spin"){[330,440,550,660,770].forEach((f,i)=>tone(f,.09,i*.075,"triangle",.045))}
   }
-  window.DeMaxSound={play};
+  window.DeMaxSound={play,isEnabled:()=>enabled};
   const b=document.createElement("button");
   b.type="button";b.className="demax-sound-toggle";
   b.setAttribute("aria-label","Uključi ili isključi zvuk");
   b.title="Zvuk uključen / isključen";
-  function label(){b.textContent=enabled?"🔊 Zvuk":"🔇 Zvuk";b.setAttribute("aria-pressed",String(enabled))}
+  function label(){b.textContent=enabled?"🔊 Zvuk ON":"🔇 Zvuk OFF";b.setAttribute("aria-pressed",String(enabled))}
   label();
-  b.addEventListener("click",function(e){e.stopPropagation();enabled=!enabled;try{localStorage.setItem("demax_a1_sound",enabled?"on":"off")}catch(err){}label();if(enabled)play("tap")});
+  b.addEventListener("click",function(e){e.stopPropagation();enabled=!enabled;try{localStorage.setItem("demax_a1_sound",enabled?"on":"off")}catch(err){}label();window.DeMaxMusic?.setMuted(!enabled);if(enabled)play("tap")});
   const header=document.querySelector(".top, .header");
-  if(header)header.appendChild(b);
+  if(header){const controls=document.createElement("div");controls.className="demax-game-toggles";controls.appendChild(b);header.appendChild(controls)}
   document.addEventListener("click",function(e){
     const btn=e.target.closest("button");
     if(!btn||btn===b||!enabled)return;
@@ -82,13 +82,9 @@
 /* Original quiet procedural music: no external audio, licensed tracks or autoplay */
 (function(){
   "use strict";
-  let enabled=true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
-  try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
+  let enabled=window.DeMaxSound?.isEnabled?.()??true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
   /* Memory • mirna zvonca: zasebna originalna melodija */
   const notes=[392,523.25,440,523.25,587.33,523.25,440,392,349.23,440,392,523.25,440,392,329.63,392];
-  const b=document.createElement("button");
-  b.type="button";b.className="demax-music-toggle";b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
-  function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
   function getAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ctx)ctx=new C();if(ctx.state==="suspended")ctx.resume().catch(()=>{});return ctx}catch(e){return null}}
   function note(freq,when,seconds,volume){
     const a=getAudio();if(!a||!enabled||!playing)return;
@@ -117,13 +113,7 @@
     if(playing||!enabled)return;
     playing=true;beat();interval=setInterval(beat,720);
   }
-  b.addEventListener("click",function(e){
-    e.stopPropagation();enabled=!enabled;label();
-    try{localStorage.setItem("demax_a1_music",enabled?"on":"off")}catch(e){}
-    if(enabled&&document.documentElement.dataset.demaxGameStarted==="yes")start();else stop();
-  });
-  label();const header=document.querySelector(".top,.header");if(header)header.appendChild(b);
-  window.DeMaxMusic={start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()}};
+  window.DeMaxMusic={start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()},setMuted:function(muted){enabled=!muted;if(!enabled)stop();else if(document.documentElement.dataset.demaxGameStarted==="yes")start()}};
   document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(document.documentElement.dataset.demaxGameStarted==="yes")start()});
   window.addEventListener("pagehide",stop);
 })();
@@ -206,7 +196,13 @@ html.demax-effects-on #area .tile.demax-fx-miss{animation:demaxFxMiss .36s ease-
    win(){if(!enabled||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;for(let i=0;i<42;i++){const x=Math.random()*window.innerWidth;particle("demax-fx-confetti",x,0,(Math.random()-.5)*140,0,1800+Math.random()*1200)}}
  };
  b.addEventListener("click",e=>{e.stopPropagation();enabled=!enabled;if(!enabled){active.forEach(x=>x.remove());active.clear();document.querySelectorAll(".demax-fx-miss").forEach(x=>x.classList.remove("demax-fx-miss"))}try{localStorage.setItem("demax_a1_visual_fx",enabled?"on":"off")}catch(err){}label()});
- label();if(header)header.appendChild(b);
+ label();const controls=document.querySelector(".demax-game-toggles");if(controls)controls.appendChild(b);else if(header)header.appendChild(b);
 })();
 </script>
+<style id="demax-memory-control-row">
+.demax-game-toggles{position:absolute;bottom:1px;left:0;z-index:20;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.demax-game-toggles .demax-sound-toggle,.demax-game-toggles .demax-effects-toggle{position:static!important;left:auto!important;bottom:auto!important;margin:0!important;min-height:30px!important;line-height:17px!important;padding:5px 8px!important;white-space:nowrap}
+@media(max-width:600px){.demax-game-toggles{bottom:1px}.demax-game-toggles .demax-sound-toggle,.demax-game-toggles .demax-effects-toggle{min-height:27px!important;padding:4px 6px!important}}
+@media(max-width:360px){.demax-game-toggles{gap:4px}.demax-game-toggles .demax-sound-toggle,.demax-game-toggles .demax-effects-toggle{font-size:10px!important;padding:4px 5px!important}}
+</style>
 </body></html>
