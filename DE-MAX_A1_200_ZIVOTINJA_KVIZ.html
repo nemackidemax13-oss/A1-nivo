@@ -138,10 +138,19 @@ footer{color:#6f93ac}footer b{color:#1c618b}
 .bottom #quit{background:linear-gradient(125deg,#fa5068,#db234c);border:1px solid #c61d43;color:#fff;box-shadow:0 3px 10px #ee597858;font-weight:1000;padding:7px 12px}
 .bottom #quit:active{background:#b71037;transform:scale(.97)}
 @media(max-height:720px){.top{gap:2px}.top .brand strong{font-size:19px}.top .brand small{margin-top:1px;font-size:9px}.top .sound button{padding:3px 8px}}
+
+/* Čist svetli HD prikaz dugmeta za izgovor */
+.question-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;flex:none;min-height:26px}
+.question-tools .instruction{flex:none}
+.speak-btn{background:linear-gradient(135deg,#dff4ff,#bceaff);color:#13537b;border:1px solid #8cc9e9;border-radius:999px;box-shadow:0 3px 10px #a7d5ee58;padding:5px 12px;font-size:11px;font-weight:1000;line-height:1.2;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.speak-btn:active{transform:scale(.96);background:#a7e4ff}
+.top .sound button{font-size:clamp(10px,2.7vw,12px);padding:5px 8px}
+@media(max-height:720px){.question-tools{gap:5px;min-height:22px}.speak-btn{font-size:10px;padding:3px 9px}.top .sound button{padding:3px 7px}}
+@media(max-height:575px){.question-tools{min-height:19px}.speak-btn{font-size:9px;padding:3px 7px}.questionpanel{gap:3px}}
 </style></head><body><div id="app"><div class="blob one"></div><div class="blob two"></div>
-<header class="top"><div class="brand"><div><strong>DE-<em>MAX</em></strong><small>NEMAČKI A1 • KVIZ</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button></div></header>
+<header class="top"><div class="brand"><div><strong>DE-<em>MAX</em></strong><small>NEMAČKI A1 • KVIZ</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button><button id="pronunciation" aria-label="Uključi ili isključi nemački izgovor" aria-pressed="true">🗣 ON</button></div></header>
 <main class="view"><section id="home" class="screen home"><div class="hero glass"><div class="orbit"><div class="orb a">🦁</div><div class="orb b">🦋</div><div class="orb c">🐬</div><div class="orb d">🦅</div><div class="paw">🐶</div></div><div class="tag">VELIKI NEMAČKI IZAZOV</div><h1 id="heroTitle">OSNOVNE <span>ŽIVOTINJE</span></h1><p>Mačka, pas, jarac, zec, lisica i druge osnovne životinje. Uči <b>der • die • das</b> uz prevod, muziku i bonus poene!</p><div class="pills"><div><b>🐶 50</b>osnovnih reči</div><div><b>⏱️ 15 s</b>po pitanju</div><div><b>🏆 x2</b>bonus poeni</div></div></div><div class="menu"><button id="marathon" class="cta primary">🐶 SVE ŽIVOTINJE — 50 PITANJA</button><button id="quick" class="cta secondary">⚡ BRZI KVIZ — 20 PITANJA</button><div class="records"><div>🏅 Rekord 20: <span id="best20">0</span></div><div>👑 Rekord 50: <span id="best200">0</span></div></div></div></section>
-<section id="game" class="screen hide"><div class="hud"><div class="stat"><small>POENI</small><b class="score" id="score">0</b></div><div class="stat"><small>ŽIVOTI</small><b class="hearts" id="hearts">❤️❤️❤️❤️❤️</b></div><div class="stat"><small>VREME</small><b class="time" id="seconds">15</b></div></div><div class="progress"><label id="stage">1 / 50</label><div class="progressbar"><div id="progress"></div></div><span class="badge">🏆 KVIZ</span></div><div class="timerbar"><div id="timerProgress"></div></div><div class="questionpanel glass" id="questionPanel"><div class="meta"><div class="category" id="category">DOMAĆE ŽIVOTINJE</div><div class="badge" id="badge">🔥 NIZ 0</div></div><div class="animal" id="animal">🦁</div><div class="instruction" id="instruction">PREVEDI NA SRPSKI</div><h2 class="question" id="question">der Löwe</h2><div id="answers" class="answers"></div><div class="feedback" id="feedback">Izaberi tačan odgovor</div></div><div class="bottom"><span>🎯 Tačno = više poena • 🌟 Bonus svakih 10</span><button id="quit">✕ Izađi</button></div></section></main>
+<section id="game" class="screen hide"><div class="hud"><div class="stat"><small>POENI</small><b class="score" id="score">0</b></div><div class="stat"><small>ŽIVOTI</small><b class="hearts" id="hearts">❤️❤️❤️❤️❤️</b></div><div class="stat"><small>VREME</small><b class="time" id="seconds">15</b></div></div><div class="progress"><label id="stage">1 / 50</label><div class="progressbar"><div id="progress"></div></div><span class="badge">🏆 KVIZ</span></div><div class="timerbar"><div id="timerProgress"></div></div><div class="questionpanel glass" id="questionPanel"><div class="meta"><div class="category" id="category">DOMAĆE ŽIVOTINJE</div><div class="badge" id="badge">🔥 NIZ 0</div></div><div class="animal" id="animal">🦁</div><div class="question-tools"><div class="instruction" id="instruction">PREVEDI NA SRPSKI</div><button type="button" id="speakBtn" class="speak-btn" aria-label="Poslušaj nemački izgovor">🔊 IZGOVORI</button></div><h2 class="question" id="question">der Löwe</h2><div id="answers" class="answers"></div><div class="feedback" id="feedback">Izaberi tačan odgovor</div></div><div class="bottom"><span>🎯 Tačno = više poena • 🌟 Bonus svakih 10</span><button id="quit">✕ Izađi</button></div></section></main>
 <footer>POWERED BY <b>DE-MAX</b></footer>
 <div id="overlay" class="overlay hide"><div id="modal" class="modal glass" role="dialog" aria-modal="true"></div></div>
 </div><script type="text/plain" id="animal-data"># DOMAĆE ŽIVOTINJE
@@ -210,19 +219,107 @@ const S={mode:200,order:[],i:0,score:0,lives:12,streak:0,correct:0,active:false,
 let musicEnabled=true,fxEnabled=true,ctx=null,scheduler=null,nextBeat=0,beatStep=0,best20=0,best200=0;
 try{best20=Number(localStorage.getItem("de-max-animals-best20")||"0");best200=Number(localStorage.getItem("de-max-animals-best50")||"0")}catch(e){}
 $("best20").textContent=best20;$("best200").textContent=best200;
-function audioInit(){try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume().catch(()=>{})}catch(e){}}
-function env(g,t,d,v,attack=.008){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+d)}
-function osc(f,t,d,v,type="sine",end){if(!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(Math.max(24,end),t+d);env(g,t,d,v);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d+.05)}
-function noise(t,d,v,hp=0){if(!ctx)return;const len=Math.ceil(d*ctx.sampleRate),b=ctx.createBuffer(1,len,ctx.sampleRate),a=b.getChannelData(0);for(let i=0;i<len;i++)a[i]=(Math.random()*2-1);const src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();src.buffer=b;f.type=hp?"highpass":"lowpass";f.frequency.value=hp||3300;env(g,t,d,v,.002);src.connect(f);f.connect(g);g.connect(ctx.destination);src.start(t);src.stop(t+d+.03)}
-function kick(t){osc(150,t,.24,.065,"sine",46)}
-function clap(t){noise(t,.11,.027,800);noise(t+.045,.085,.017,1100)}
-function hat(t,accent){noise(t,.045,accent?.015:.008,3200)}
-function bass(f,t){osc(f,t,.25,.024,"triangle");osc(f/2,t,.24,.015,"sine")}
-function pluck(f,t){osc(f,t,.17,.017,"triangle");osc(f*2,t,.12,.004,"sine")}
-const BPM=121,beatDur=60/BPM/4,roots=[146.83,116.54,174.61,130.81],melody=[440,523.25,587.33,523.25,392,440,349.23,440,523.25,587.33,698.46,587.33,440,523.25,587.33,659.25];
-function scheduleBeat(i,t){const j=i%16,bar=Math.floor(i/16)%4;if(j%4===0)kick(t);if(j===4||j===12)clap(t);if(j%2===0)hat(t,j%4===0);if(j===0||j===6||j===10)bass(roots[bar],t);if(j%2===1)pluck(melody[(i+bar*4)%16],t);if(j===0){osc(roots[bar]*2,t,1.38,.006,"sine");osc(roots[bar]*3,t,1.2,.004,"triangle")}}
-function startMusic(){if(!musicEnabled)return;audioInit();if(!ctx||scheduler)return;beatStep=0;nextBeat=ctx.currentTime+.05;scheduler=setInterval(()=>{if(!ctx||ctx.state!=="running")return;while(nextBeat<ctx.currentTime+.17){scheduleBeat(beatStep++,nextBeat);nextBeat+=beatDur}},27)}
-function stopMusic(){if(scheduler){clearInterval(scheduler);scheduler=null}}
+/* Originalni DE-MAX moderni pop/future-groove ritam, bez eksternih audio fajlova. */
+let musicBus=null,masterCompressor=null,speaking=false;
+function audioInit(){
+ try{
+  if(!ctx){
+   ctx=new(window.AudioContext||window.webkitAudioContext)();
+   musicBus=ctx.createGain();musicBus.gain.value=.68;
+   masterCompressor=ctx.createDynamicsCompressor();masterCompressor.threshold.value=-17;
+   masterCompressor.knee.value=24;masterCompressor.ratio.value=3;
+   masterCompressor.attack.value=.006;masterCompressor.release.value=.2;
+   musicBus.connect(masterCompressor);masterCompressor.connect(ctx.destination);
+  }
+  if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+ }catch(e){}
+}
+function musicVolume(){
+ if(!ctx||!musicBus)return;
+ const target=!musicEnabled?.0001:(speaking?.15:.68);
+ musicBus.gain.cancelScheduledValues(ctx.currentTime);
+ musicBus.gain.setTargetAtTime(target,ctx.currentTime,.12);
+}
+function env(g,t,d,v,attack=.008){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+d)}
+function osc(f,t,d,v,type="sine",end){
+ if(!ctx)return;
+ const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);
+ if(end)o.frequency.exponentialRampToValueAtTime(Math.max(24,end),t+d);
+ env(g,t,d,v);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d+.03)
+}
+function noise(t,d,v,hp=0){
+ if(!ctx)return;
+ const len=Math.ceil(d*ctx.sampleRate),b=ctx.createBuffer(1,len,ctx.sampleRate),a=b.getChannelData(0);
+ for(let i=0;i<len;i++)a[i]=Math.random()*2-1;
+ const src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+ src.buffer=b;f.type=hp?"highpass":"lowpass";f.frequency.value=hp||3300;
+ env(g,t,d,v,.003);src.connect(f);f.connect(g);g.connect(ctx.destination);
+ src.start(t);src.stop(t+d+.04)
+}
+function synth(f,t,d,v,cutoff=1300,type="sawtooth",attack=.025,release=.12){
+ if(!ctx||!musicBus)return;
+ const o=ctx.createOscillator(),filter=ctx.createBiquadFilter(),g=ctx.createGain();
+ o.type=type;o.frequency.setValueAtTime(f,t);
+ filter.type="lowpass";filter.frequency.value=cutoff;filter.Q.value=.65;
+ const peak=t+Math.min(attack,d*.3),tail=Math.max(peak+.025,t+d-release);
+ g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,peak);
+ g.gain.setValueAtTime(v,tail);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+ o.connect(filter);filter.connect(g);g.connect(musicBus);o.start(t);o.stop(t+d+.025);
+}
+function drumNoise(t,d,v,highpass){
+ if(!ctx||!musicBus)return;
+ const len=Math.ceil(d*ctx.sampleRate),buf=ctx.createBuffer(1,len,ctx.sampleRate),a=buf.getChannelData(0);
+ for(let i=0;i<len;i++)a[i]=Math.random()*2-1;
+ const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+ f.type="highpass";f.frequency.value=highpass;
+ g.gain.setValueAtTime(Math.max(.0002,v),t);
+ g.gain.exponentialRampToValueAtTime(.0001,t+d);
+ src.buffer=buf;src.connect(f);f.connect(g);g.connect(musicBus);src.start(t);src.stop(t+d+.02);
+}
+function kick(t){
+ if(!ctx||!musicBus)return;
+ const o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+ o.type="sine";o.frequency.setValueAtTime(160,t);o.frequency.exponentialRampToValueAtTime(48,t+.13);
+ f.type="lowpass";f.frequency.value=250;
+ g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.14,t+.006);
+ g.gain.exponentialRampToValueAtTime(.0001,t+.36);
+ o.connect(f);f.connect(g);g.connect(musicBus);o.start(t);o.stop(t+.39);
+}
+function clap(t){drumNoise(t,.11,.027,800);drumNoise(t+.027,.1,.016,1600)}
+function hat(t,accent){drumNoise(t,.055,accent?.014:.008,5000)}
+function bass(f,t,d=.35){
+ synth(f,t,d,.045,360,"sawtooth",.012,.17);
+ synth(f/2,t,d,.036,230,"triangle",.015,.18)
+}
+function pad(notes,t,d){
+ notes.forEach((f,i)=>{synth(f,t,d,.012,960,"sawtooth",.35,.36);synth(f*1.004,t,d,.007,1100,"triangle",.4,.4)})
+}
+function bell(f,t){synth(f,t,.32,.015,1450,"triangle",.008,.24)}
+const BPM=115,beatDur=60/BPM/4;
+const rootNotes=[73.42,58.27,87.31,65.41];
+const chords=[[293.66,349.23,440],[233.08,293.66,349.23],[261.63,349.23,440],[261.63,329.63,392]];
+const hooks=[[587.33,698.46,880,698.46],[587.33,698.46,783.99,587.33],[523.25,698.46,880,698.46],[523.25,659.25,783.99,659.25]];
+function scheduleBeat(i,t){
+ const step=i%16,bar=Math.floor(i/16)%4;
+ if(step%4===0)kick(t);
+ if(step===4||step===12)clap(t);
+ if(step%2===2)hat(t,true);
+ if(step%2===0&&step%4!==2)hat(t,false);
+ if(step===0){pad(chords[bar],t,beatDur*15.7);bass(rootNotes[bar],t,.44)}
+ if(step===7||step===10||step===14)bass(rootNotes[bar]*(step===14?1.5:1),t,.22);
+ if(step===3||step===7||step===11||step===15)bell(hooks[bar][Math.floor(step/4)],t);
+}
+function startMusic(){
+ if(!musicEnabled)return;audioInit();if(!ctx||scheduler)return;
+ musicVolume();nextBeat=ctx.currentTime+.06;scheduler=setInterval(()=>{
+  if(!ctx||ctx.state!=="running")return;
+  while(nextBeat<ctx.currentTime+.16){scheduleBeat(beatStep++,nextBeat);nextBeat+=beatDur}
+ },27)
+}
+function stopMusic(){
+ if(scheduler){clearInterval(scheduler);scheduler=null}
+ if(ctx&&musicBus){musicBus.gain.cancelScheduledValues(ctx.currentTime);musicBus.gain.setTargetAtTime(.0001,ctx.currentTime,.04)}
+}
 function fx(kind){if(!fxEnabled)return;audioInit();if(!ctx)return;const t=ctx.currentTime+.015;
  if(kind==="tap"){osc(740,t,.065,.04,"triangle");osc(1047,t+.04,.09,.023,"sine")}
  if(kind==="right"){[587.33,740,880,1174.66].forEach((f,i)=>osc(f,t+i*.075,.22,.064,"triangle"));osc(1760,t+.3,.25,.018,"sine")}
@@ -232,38 +329,95 @@ function fx(kind){if(!fxEnabled)return;audioInit();if(!ctx)return;const t=ctx.cu
  if(kind==="win"){[523,659,784,1047,1318,1568,2093].forEach((f,i)=>osc(f,t+i*.105,.32,.075,"triangle"))}
  if(kind==="boom"){noise(t,1.25,.19);osc(155,t,.95,.16,"sawtooth",30);osc(65,t+.12,1.03,.16,"sine",25);noise(t+.18,.8,.13)}
 }
-$("music").onclick=()=>{musicEnabled=!musicEnabled;$("music").textContent=musicEnabled?"♫ ON":"♫ OFF";$("music").classList.toggle("off",!musicEnabled);musicEnabled?startMusic():stopMusic();fx("tap")};
+$("music").onclick=()=>{musicEnabled=!musicEnabled;$("music").textContent=musicEnabled?"♫ ON":"♫ OFF";$("music").classList.toggle("off",!musicEnabled);musicEnabled?startMusic():stopMusic();musicVolume();fx("tap")};
 $("effects").onclick=()=>{fxEnabled=!fxEnabled;$("effects").textContent=fxEnabled?"🔊 ON":"🔇 OFF";$("effects").classList.toggle("off",!fxEnabled);fx("tap")};
+
+/* Nemački izgovor na uređaju kroz Web Speech API */
+let pronunciationOn=true,pronounceTimer=null,speechSerial=0;
+const ttsAvailable=typeof window!=="undefined"&&"speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
+if(!ttsAvailable){$("pronunciation").textContent="🗣 NEMA";$("pronunciation").disabled=true;$("speakBtn").disabled=true}
+function stopPronunciation(){
+ speechSerial++;
+ if(pronounceTimer!==null){clearTimeout(pronounceTimer);pronounceTimer=null}
+ if(ttsAvailable)try{window.speechSynthesis.cancel()}catch(e){}
+ speaking=false;musicVolume()
+}
+function chooseGermanVoice(){
+ if(!ttsAvailable)return null;
+ try{
+  const voices=window.speechSynthesis.getVoices();
+  const german=voices.filter(v=>/^de[-_]/i.test(v.lang)||v.lang.toLowerCase()==="de");
+  return german.find(v=>v.localService&&/de[-_]DE/i.test(v.lang))||
+         german.find(v=>/de[-_]DE/i.test(v.lang))||german[0]||null
+ }catch(e){return null}
+}
+function sayGerman(){
+ if(!ttsAvailable||!pronunciationOn||!S.active||!S.q)return;
+ if(S.direction==="sr"&&!S.locked)return; // ne otkrivaj odgovor
+ if(document.hidden)return;
+ stopPronunciation();
+ const id=speechSerial,word=S.q.de;
+ try{
+  const utterance=new SpeechSynthesisUtterance(word);
+  utterance.lang="de-DE";utterance.rate=.87;utterance.pitch=1;utterance.volume=1;
+  const voice=chooseGermanVoice();if(voice)utterance.voice=voice;
+  utterance.onstart=()=>{if(speechSerial!==id)return;speaking=true;musicVolume()};
+  utterance.onend=utterance.onerror=()=>{if(speechSerial!==id)return;speaking=false;musicVolume()};
+  // čuvaj nemački naglasak i član, čak i kada se pitanje pita na srpskom
+  window.speechSynthesis.speak(utterance);
+ }catch(e){speaking=false;musicVolume()}
+}
+function cueGerman(delay){
+ if(!ttsAvailable||!pronunciationOn)return;
+ if(pronounceTimer!==null)clearTimeout(pronounceTimer);
+ pronounceTimer=setTimeout(()=>{pronounceTimer=null;sayGerman()},delay)
+}
+function updateSpeakButton(){
+ const visible=S.active&&pronunciationOn&&ttsAvailable&&(S.direction==="de"||S.locked);
+ $("speakBtn").classList.toggle("hide",!visible);
+ $("speakBtn").textContent=S.locked?"🔊 "+(S.q?S.q.de:"IZGOVORI"):"🔊 IZGOVORI";
+}
+$("speakBtn").onclick=()=>sayGerman();
+$("pronunciation").onclick=()=>{
+ pronunciationOn=!pronunciationOn;
+ $("pronunciation").textContent=pronunciationOn?"🗣 ON":"🗣 OFF";
+ $("pronunciation").setAttribute("aria-pressed",String(pronunciationOn));
+ $("pronunciation").classList.toggle("off",!pronunciationOn);
+ if(!pronunciationOn)stopPronunciation();
+ else if(S.active&&S.direction==="de"&&!S.locked)cueGerman(120);
+ updateSpeakButton();
+};
 function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function clearTimers(){if(S.tick){clearInterval(S.tick);S.tick=null}if(S.next){clearTimeout(S.next);S.next=null}}
-function start(mode){clearTimers();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=5;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
-function nextQuestion(){clearTimers();if(S.i>=S.order.length){finish(false);return}S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction=Math.random()<.5?"de":"sr";S.locked=false;
+function start(mode){clearTimers();stopPronunciation();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=5;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
+function nextQuestion(){clearTimers();stopPronunciation();if(S.i>=S.order.length){finish(false);return}S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction=Math.random()<.7?"de":"sr";S.locked=false;
 const key=S.direction==="de"?"sr":"de";const correct=S.q[key];const pool=shuffled(bank.filter(x=>x.cat===S.q.cat&&x[key]!==correct));S.answers=shuffled([correct,...pool.slice(0,3).map(x=>x[key])]);
 $("questionPanel").classList.toggle("bonus",S.bonus);$("questionPanel").classList.remove("shake");$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("hearts").style.fontSize="clamp(13px,3.4vw,19px)";
 $("stage").textContent=(S.i+1)+" / "+S.mode;$("progress").style.width=(S.i/S.mode*100)+"%";$("category").textContent=S.q.cat;$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;$("animal").textContent=S.q.emoji;
 $("instruction").textContent=S.direction==="de"?"PREVEDI NA SRPSKI":"PREVEDI NA NEMAČKI";$("question").textContent=S.q[S.direction];$("feedback").className="feedback";$("feedback").textContent=S.bonus?"✨ BONUS RUNDA: DUPLI POENI!":"Izaberi tačan odgovor";
 $("answers").innerHTML="";
 S.answers.forEach((text,i)=>{const b=document.createElement("button");b.className="ans";b.type="button";const num=document.createElement("span"),txt=document.createElement("span");num.className="num";num.textContent=i+1;txt.textContent=text;b.append(num,txt);b.onclick=()=>answer(i);$("answers").appendChild(b)});
-S.deadline=performance.now()+15000;S.lastBeep=0;updateTimer();S.tick=setInterval(updateTimer,70)}
+S.deadline=performance.now()+15000;S.lastBeep=0;updateSpeakButton();updateTimer();S.tick=setInterval(updateTimer,70);if(S.direction==="de")cueGerman(270)}
 function updateTimer(){if(S.locked)return;const r=Math.max(0,(S.deadline-performance.now())/1000),sec=Math.ceil(r);S.remaining=r;$("seconds").textContent=sec;$("timerProgress").style.width=(r/15*100)+"%";$("timerProgress").classList.toggle("urgent",r<5);if(sec<=3&&sec>0&&sec!==S.lastBeep){S.lastBeep=sec;fx("tick")}if(r<=0)answer(-1)}
 function answer(idx){if(S.locked||!S.active)return;S.locked=true;clearTimers();S.played++;const correct=S.q[S.direction==="de"?"sr":"de"],good=idx>=0&&S.answers[idx]===correct,time=Math.max(0,Math.ceil((S.deadline-performance.now())/1000));Array.from($("answers").children).forEach((b,i)=>{b.disabled=true;if(S.answers[i]===correct)b.classList.add("right");else if(i===idx)b.classList.add("wrong");else b.classList.add("muted")});
 if(good){S.correct++;S.streak++;const gained=(100+Math.min(10,S.streak-1)*15+time*5)*(S.bonus?2:1);S.score+=gained;$("feedback").className="feedback ok";$("feedback").textContent="✅ TAČNO! +"+gained+" POENA"+(S.bonus?" 🌟 BONUS!":"");fx(S.bonus?"bonus":"right");sparks($("questionPanel"),S.bonus?30:18,false);if(navigator.vibrate)navigator.vibrate(30)}
 else{S.streak=0;S.lives--;$("feedback").className="feedback no";$("feedback").textContent=idx===-1?"⏰ VREME ISTEKLO!":"❌ TAČNO JE: "+correct;$("questionPanel").classList.add("shake");fx("wrong");if(navigator.vibrate)navigator.vibrate([60,50,70])}
 $("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
-S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?900:1350)}
-function saveRecord(){let changed=false;try{if(S.mode===50&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best200",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
+updateSpeakButton();if(S.direction==="sr")cueGerman(480);
+S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?2300:2600)}
+function saveRecord(){let changed=false;try{if(S.mode===50&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best50",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
 function modal(html){$("modal").innerHTML=html;$("overlay").classList.remove("hide")}
 function closeModal(){$("overlay").classList.add("hide");$("overlay").querySelectorAll(".spark,.explosion,.flash").forEach(e=>e.remove())}
 function sparks(target,count,explode){for(let i=0;i<count;i++){const p=document.createElement("span"),angle=Math.random()*Math.PI*2,distance=(explode?95:35)+Math.random()*(explode?330:130);p.className="spark";p.style.setProperty("--dx",Math.cos(angle)*distance+"px");p.style.setProperty("--dy",Math.sin(angle)*distance+"px");p.style.setProperty("--dur",(expludeDuration(explode)+Math.random()*550)+"ms");p.style.setProperty("--c",["#ffdc66","#ff9742","#fd4171","#9d77ff","#fff4ba"][i%5]);const size=(5+Math.random()*11)+"px";p.style.width=size;p.style.height=size;target.appendChild(p);setTimeout(()=>p.remove(),1650)}}
 function expludeDuration(boom){return boom?850:520}
 function explosion(){fx("boom");const over=$("overlay"),flash=document.createElement("div"),fire=document.createElement("div");flash.className="flash";fire.className="explosion";fire.textContent="💥";over.append(flash,fire);sparks(over,80,true);$("app").classList.add("shake");setTimeout(()=>{$("app").classList.remove("shake");flash.remove();fire.remove()},930)}
-function finish(lost){clearTimers();S.locked=true;S.active=false;const newRecord=saveRecord();const title=lost?"💥 KRAJ IGRE!":"🏆 ŠAMPION ŽIVOTINJA!",msg=lost?"Izgubio/la si sve živote. Pokušaj ponovo i popravi rekord!":"Fantastično! Završio/la si čitav izazov.";
+function finish(lost){clearTimers();stopPronunciation();S.locked=true;S.active=false;const newRecord=saveRecord();const title=lost?"💥 KRAJ IGRE!":"🏆 ŠAMPION ŽIVOTINJA!",msg=lost?"Izgubio/la si sve živote. Pokušaj ponovo i popravi rekord!":"Fantastično! Završio/la si čitav izazov.";
 modal("<div class='big'>"+(lost?"💔":"🏆")+"</div><h2>"+title+"</h2><p>"+msg+"</p><div class='value'>"+S.score+" <span style='font-size:17px'>POENA</span></div><div class='resultgrid'><div>TAČNI ODGOVORI<b>"+S.correct+" / "+S.played+"</b></div><div>PREĐENO<b>"+S.played+" / "+S.mode+"</b></div></div>"+(newRecord?"<p class='wintext'>🌟 NOVI LIČNI REKORD!</p>":"")+"<button id='again' class='cta primary'>🔄 IGRAJ PONOVO</button><button id='back' class='cta ghost'>⌂ POČETNA</button>");
 $("again").onclick=()=>start(S.mode);$("back").onclick=home;if(lost)explosion();else{fx("win");sparks($("overlay"),70,true)}}
-function home(){clearTimers();S.active=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
+function home(){clearTimers();stopPronunciation();S.active=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
 $("marathon").onclick=()=>start(50);$("quick").onclick=()=>start(20);
 $("quit").onclick=()=>{if(!S.active)return;clearTimers();S.locked=true;modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");$("resume").onclick=()=>{closeModal();S.locked=false;S.deadline=performance.now()+Math.max(1,S.remaining)*1000;S.tick=setInterval(updateTimer,70)};$("exit").onclick=home};
 document.addEventListener("keydown",e=>{if(S.active&&!S.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
-document.addEventListener("visibilitychange",()=>{if(document.hidden){stopMusic();if(S.active&&!S.locked){clearInterval(S.tick);S.tick=null;S.remaining=Math.max(0,(S.deadline-performance.now())/1000);S.deadline=Infinity}}else{if(musicEnabled&&ctx)startMusic();if(S.active&&!S.locked&&S.deadline===Infinity){S.deadline=performance.now()+S.remaining*1000;S.tick=setInterval(updateTimer,70)}}});
+document.addEventListener("visibilitychange",()=>{if(document.hidden){stopPronunciation();stopMusic();if(S.active&&!S.locked){clearInterval(S.tick);S.tick=null;S.remaining=Math.max(0,(S.deadline-performance.now())/1000);S.deadline=Infinity}}else{if(musicEnabled&&ctx)startMusic();if(S.active&&!S.locked&&S.deadline===Infinity){S.deadline=performance.now()+S.remaining*1000;S.tick=setInterval(updateTimer,70)}}});
 if(bank.length!==50){$("heroTitle").textContent="Greška u bazi: "+bank.length}
 })();</script></body></html>
