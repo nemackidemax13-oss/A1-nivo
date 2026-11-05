@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0d1224"><title>Upoznaj Nemačku 🇩🇪 | De-Max</title>
+<style>
+:root{--gold:#ffd45c;--green:#31db95;--red:#ff4b70;--blue:#89b8ff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body{background:#090d1b;color:#fff;font:500 15px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}button{cursor:pointer;touch-action:manipulation;font:inherit}button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#app{height:100vh;height:100dvh;max-width:560px;margin:auto;padding:calc(7px + env(safe-area-inset-top)) 12px calc(6px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:7px;overflow:hidden;position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% -10%,#344d7b 0,transparent 59%),radial-gradient(ellipse at 0% 100%,#2a2454 0,transparent 50%),linear-gradient(145deg,#121a35,#0a1020)}
+#app:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff40 0.7px,transparent 0.7px);background-size:25px 25px;opacity:.16;z-index:-1}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:0 0 auto;min-height:40px}
+.brand{display:flex;align-items:center;gap:8px;min-width:0}.flag{display:grid;grid-template-rows:repeat(3,1fr);width:38px;height:28px;border-radius:5px;overflow:hidden;transform:rotate(-6deg);box-shadow:0 4px 14px #0009;flex:none}.flag i:first-child{background:#111}.flag i:nth-child(2){background:#e62b44}.flag i:last-child{background:#ffca35}
+.brand b{font-size:clamp(16px,4.9vw,23px);letter-spacing:-.7px;white-space:nowrap;display:block;line-height:1.05}.brand small{display:block;color:#bbd0fa;letter-spacing:1.6px;font-size:9px;font-weight:900;margin-top:3px}
+.audio{display:flex;gap:4px;flex-shrink:0}.audio button{border:1px solid #ffffff31;background:#2b385a;border-radius:9px;padding:6px;color:#fff;font-size:11px;font-weight:900}.audio button.off{opacity:.5}
+main{display:flex;flex-direction:column;flex:1;min-height:0}section{height:100%;min-height:0;display:flex;flex-direction:column;gap:7px}.hide{display:none!important}
+.glass{background:linear-gradient(155deg,#273554e8,#141c35ee);border:1px solid #ffffff2a;box-shadow:0 13px 34px #0005,inset 0 1px #ffffff1c;border-radius:17px}
+#home{justify-content:space-between}
+.hero{display:flex;flex-direction:column;flex:1;min-height:0;align-items:center;justify-content:center;text-align:center;padding:12px;gap:clamp(6px,1.5vh,14px)}
+.hero .flagart{font-size:clamp(62px,14vh,120px);line-height:1;filter:drop-shadow(0 12px 18px #000b);animation:float 2.7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-7px) rotate(3deg)}}
+.kicker{color:var(--gold);font-weight:1000;letter-spacing:2.2px;font-size:11px}
+.hero h1{font-size:clamp(28px,7.6vw,43px);line-height:1.04;letter-spacing:-1.2px;margin:0;font-weight:1000}.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{margin:0;color:#cbd7ef;font-size:clamp(12px,3.5vw,15px);line-height:1.45;max-width:350px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%}.features div{background:#ffffff12;border:1px solid #ffffff26;border-radius:10px;padding:8px 3px;font-weight:850;font-size:11px}.features b{font-size:19px;display:block;margin-bottom:3px}
+.menu{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.btn{width:100%;border:0;border-radius:12px;padding:clamp(12px,2vh,18px) 10px;font-size:clamp(15px,4vw,18px);font-weight:1000;color:#14203b;box-shadow:0 5px 0 #0009;transition:transform .1s}.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #0009}
+.goldbtn{background:linear-gradient(130deg,#ffe582,#ffbf41)}.bluebtn{background:linear-gradient(130deg,#b6d4ff,#73a7ff)}.darkbtn{background:#ffffff19;color:#edf3ff;border:1px solid #ffffff2a;box-shadow:none}
+.best{text-align:center;font-size:12px;color:#d4dff5;font-weight:850}.best b{color:var(--gold)}
+.hud,.duel{display:flex;gap:6px;flex:none}
+.stat{flex:1;min-width:0;border:1px solid #ffffff26;background:#ffffff13;border-radius:12px;text-align:center;padding:7px 4px}.stat label{font-size:9px;font-weight:1000;color:#b8c8e6;letter-spacing:1px;display:block}.stat strong{font-weight:1000;font-size:clamp(18px,5.5vw,25px);display:block;line-height:1.13;margin-top:1px;white-space:nowrap}.stat .gold{color:var(--gold)}.stat .hearts{font-size:clamp(15px,4.3vw,23px)}
+.duel>div{flex:1;min-width:0;display:flex;justify-content:space-between;gap:5px;font-size:11px;font-weight:900;background:#ffffff14;border:1px solid #ffffff30;border-radius:8px;padding:6px}.duel .on{border-color:var(--gold);background:#ffd45c21}.duel strong{color:var(--gold)}
+.timer{height:8px;border-radius:7px;background:#ffffff25;overflow:hidden;flex:none}.timer>div{width:100%;height:100%;border-radius:7px;background:linear-gradient(90deg,#35dfa4,#ffd45c);transition:width .08s linear}.timer .urgent{background:linear-gradient(90deg,#ff9748,#ff3e5f)}
+.info{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:10px;font-weight:950;color:#c7d6f2;min-height:17px}.info .who{color:#fff}.info .bonus{color:var(--gold);animation:pulse 1s infinite alternate}@keyframes pulse{to{filter:brightness(1.8)}}
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;gap:clamp(7px,1.3vh,13px);padding:clamp(9px,1.7vh,16px);overflow:hidden}.panel.bonuspanel{border-color:#ffd45cb0;box-shadow:0 0 23px #ffd45c23}
+.cat{display:flex;justify-content:space-between;gap:5px;align-items:center;font-size:10px;letter-spacing:1px;color:#a9ceff;font-weight:1000;text-transform:uppercase}.cat .level{border:1px solid #e8c16186;background:#c08a2a25;border-radius:99px;padding:5px 8px;color:#ffdb80;font-size:10px}
+.symbol{text-align:center;font-size:clamp(29px,6vh,53px);line-height:1.15;flex:none;filter:drop-shadow(0 6px 9px #0006)}
+.question{margin:0;text-align:center;font-size:clamp(18px,5vw,28px);font-weight:1000;letter-spacing:-.45px;line-height:1.22;min-height:2.35em;display:grid;place-items:center;flex:none;text-wrap:balance}
+.options{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;flex:1;min-height:0;gap:clamp(7px,1.5vh,11px)}
+.option{position:relative;min-width:0;border:1px solid #ffffff34;border-radius:13px;color:#fff;background:linear-gradient(155deg,#35466b,#253354);font-weight:850;font-size:clamp(12px,3.6vw,17px);line-height:1.2;padding:9px 5px;overflow-wrap:anywhere;box-shadow:inset 0 1px #ffffff1c;transition:transform .1s}.option:active:not(:disabled){transform:scale(.96)}.option.correct{background:linear-gradient(135deg,#0b9268,#35c58d);border-color:#b9ffe0;box-shadow:0 0 17px #16ff9150}.option.wrong{background:linear-gradient(135deg,#a02140,#f04469);border-color:#ffc1cd;box-shadow:0 0 17px #f25a7855}.option.dim{opacity:.43}.option i{font-style:normal;position:absolute;top:5px;left:7px;font-size:9px;color:#afc1e2}
+.feedback{text-align:center;min-height:20px;font-size:clamp(11px,3.15vw,14px);font-weight:900;color:#c3d2ee;flex:none}.feedback.good{color:#64ffb9}.feedback.bad{color:#ff98b1}
+.bottom{display:flex;justify-content:space-between;align-items:center;flex:none}.bottom span{color:#ffd87e;font-size:11px;font-weight:850}.bottom button{border:1px solid #ffffff2e;color:#dee9ff;border-radius:8px;background:#ffffff13;padding:5px 10px;font-size:11px;font-weight:850}
+footer{text-align:center;color:#b9c9e9;letter-spacing:1.1px;font-size:10px;font-weight:900;flex:none;min-height:15px}footer b{color:#fff}
+.overlay{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:15px;background:#060b18e5;backdrop-filter:blur(7px)}
+.modal{width:100%;max-width:440px;position:relative;z-index:2;padding:21px 15px;text-align:center}.modal .emoji{font-size:clamp(60px,13vh,93px);line-height:1.1}.modal h2{font-size:clamp(24px,6vw,33px);margin:10px 0 6px}.modal p{font-size:14px;color:#cfdbef;line-height:1.5;margin:8px 0 14px}.modal .scorebig{font-size:43px;font-weight:1000;color:var(--gold)}.modal .btn{margin-top:8px}
+.result{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.result div{border:1px solid #ffffff2c;background:#ffffff11;border-radius:12px;padding:10px 5px;font-size:12px}.result b{display:block;color:#fff;font-size:25px}
+.spark{position:absolute;left:50%;top:45%;width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);z-index:1;pointer-events:none;animation:spark var(--dur) ease-out forwards}
+@keyframes spark{from{opacity:1;transform:translate(-50%,-50%)}to{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.1)}}
+.explosion{position:absolute;top:43%;left:50%;font-size:85px;z-index:1;animation:boom .9s ease-out forwards;pointer-events:none}
+@keyframes boom{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-20deg)}30%{opacity:1;transform:translate(-50%,-50%) scale(2.4)}60%{opacity:1;transform:translate(-50%,-50%) scale(5)}100%{opacity:0;transform:translate(-50%,-50%) scale(8) rotate(35deg)}}
+.flash{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle,#fffab5,#ff8d42,#e62a60a0,transparent 73%);animation:flash .7s ease-out forwards}
+@keyframes flash{from{transform:scale(.2);opacity:1}to{transform:scale(2.2);opacity:0}}
+.shake{animation:shake .42s ease-in-out}@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@media(max-height:710px){#app{gap:5px;padding-top:5px;padding-bottom:5px}header{min-height:33px}.flag{width:32px;height:24px}.brand b{font-size:17px}.audio button{font-size:10px;padding:5px}.hero{gap:6px;padding:8px}.hero .flagart{font-size:clamp(56px,11vh,89px)}.hero h1{font-size:29px}.features div{padding:5px 2px}.menu{gap:6px}.menu .btn{padding:10px}.panel{gap:6px;padding:9px}.symbol{font-size:30px}.question{font-size:clamp(17px,4.7vw,23px)}.option{font-size:clamp(11px,3.2vw,15px);padding:5px}.stat{padding:5px}.stat strong{font-size:18px}section{gap:5px}}
+@media(max-height:560px){.hero .flagart{display:none}.hero h1{font-size:26px}.hero p{font-size:11px}.symbol{font-size:22px}.question{min-height:2em;font-size:17px}.panel{gap:4px;padding:7px}.stat strong{font-size:16px}.hud{min-height:40px}.features b{font-size:15px}footer{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style></head>
+<body><div id="app">
+<header><div class="brand"><span class="flag"><i></i><i></i><i></i></span><div><b>UPOZNAJ NEMAČKU</b><small>DE-MAX • KVIZ IGRA</small></div></div><div class="audio"><button id="music">♫ ON</button><button id="effects">🔊 ON</button></div></header>
+<main>
+<section id="home"><div class="hero glass"><div class="flagart">🇩🇪</div><div class="kicker">VELIKI NEMAČKI IZAZOV</div><h1>Koliko poznaješ <em>Nemačku?</em></h1><p>Gradovi, kultura, znamenitosti i nemačke reči. Odgovaraj brzo, uzmi bonus i osvoji titulu šampiona!</p><div class="features"><div><b>⏱️</b>15 sekundi</div><div><b>❤️</b>3 života</div><div><b>🌟</b>Bonus x2</div></div></div><div class="menu"><button id="solo" class="btn goldbtn">⚡ IGRAJ SAM — 12 PITANJA</button><button id="duel" class="btn bluebtn">🏆 DUEL — 2 IGRAČA</button><div class="best">👑 LIČNI REKORD: <b id="best">0</b> poena</div></div></section>
+<section id="game" class="hide"><div id="duelb" class="duel hide"><div id="p0">🔴 Igrač 1 <strong>0</strong></div><div id="p1">🟡 Igrač 2 <strong>0</strong></div></div><div class="hud"><div class="stat"><label>POENI</label><strong class="gold" id="points">0</strong></div><div class="stat"><label>VREME</label><strong id="seconds">15</strong></div><div class="stat"><label>ŽIVOTI</label><strong class="hearts" id="hearts">❤️❤️❤️</strong></div></div><div class="timer"><div id="bar"></div></div><div class="info"><span class="who" id="who">⚡ SOLO</span><span id="progress"></span><span class="bonus" id="bonus"></span></div><div id="panel" class="panel glass"><div class="cat"><span id="cat"></span><span class="level" id="level"></span></div><div class="symbol" id="symbol">🇩🇪</div><h2 class="question" id="question"></h2><div class="options" id="options"></div><div class="feedback" id="feedback"></div></div><div class="bottom"><span id="streak">🔥 Niz: 0</span><button id="quit">✕ Izađi</button></div></section>
+</main><footer>POWERED BY <b>DE-MAX</b> • Od 2013. sa Vama!</footer>
+<div id="overlay" class="overlay hide"><div id="modal" class="modal glass" role="dialog" aria-modal="true"></div></div></div>
+<script>
+(function(){
+"use strict";
+var $=function(x){return document.getElementById(x)};
+var db=[
+["Geografija","Glavni grad Nemačke?","Berlin","Minhen","Hamburg","Bonn","🏙️"],
+["Geografija","Na kom kontinentu se nalazi Nemačka?","Evropa","Azija","Afrika","Amerika","🌍"],
+["Geografija","Koliko saveznih pokrajina ima Nemačka?","16","12","14","18","🗺️"],
+["Geografija","Kako se na nemačkom zove Nemačka?","Deutschland","Österreich","Schweiz","Dänemark","🇩🇪"],
+["Geografija","Boje nemačke zastave su...","Crna, crvena, zlatna","Bela, plava, crvena","Crvena, zelena, bela","Crna, plava, bela","🚩"],
+["Geografija","Koju valutu koristi Nemačka?","Evro","Franak","Funta","Kruna","💶"],
+["Geografija","Službeni jezik Nemačke je...","Nemački","Engleski","Francuski","Holandski","🗣️"],
+["Geografija","U kom gradu je Brandenburška kapija?","Berlin","Drezden","Keln","Štutgart","🏛️"],
+["Geografija","U kom gradu se održava Oktoberfest?","Minhen","Berlin","Bremen","Hanover","🎪"],
+["Geografija","Koja država se graniči s Nemačkom na severu?","Danska","Italija","Španija","Švedska","🧭"],
+["Geografija","Koja država je južni sused Nemačke?","Austrija","Belgija","Poljska","Holandija","⛰️"],
+["Geografija","Koja država je istočni sused Nemačke?","Poljska","Francuska","Belgija","Luksemburg","🧭"],
+["Geografija","Sa koliko država se graniči Nemačka?","9","6","7","11","🌍"],
+["Geografija","Koje more zapljuskuje severozapad Nemačke?","Severno more","Crno more","Jadransko more","Egejsko more","🌊"],
+["Geografija","Koje more je na severoistoku Nemačke?","Baltičko more","Sredozemno more","Crveno more","Mrtvo more","🌊"],
+["Geografija","Koja velika reka protiče kroz Keln?","Rajna","Temza","Sena","Tibar","🚢"],
+["Geografija","Koja reka protiče kroz Berlin?","Špreja (Spree)","Rajna","Dunav","Majna","🏞️"],
+["Geografija","Koji je najviši vrh Nemačke?","Zugspitze","Monblan","Materhorn","Triglav","🏔️"],
+["Geografija","Najveća nemačka pokrajina po površini?","Bavarska","Hesen","Berlin","Saksonija","🗺️"],
+["Geografija","Glavni grad Bavarske je...","Minhen","Hamburg","Esen","Bonn","🏙️"],
+["Geografija","Koji je veliki lučki grad Nemačke?","Hamburg","Minhen","Frankfurt","Dortmund","⚓"],
+["Geografija","Koji grad je poznat po bankama i velikom aerodromu?","Frankfurt na Majni","Potsdam","Erfurt","Kil","✈️"],
+["Geografija","Glavni grad Baden-Virtemberga je...","Štutgart","Bremen","Berlin","Dizeldorf","🏛️"],
+["Geografija","U kojoj pokrajini se nalazi Drezden?","Saksonija","Hesen","Bavarska","Tiringija","🏙️"],
+["Geografija","Koja poznata šuma je na jugozapadu Nemačke?","Švarcvald","Laponija","Sahara","Amazonija","🌲"],
+["Geografija","U kom gradu je čuveni Dom (katedrala)?","Keln","Hanover","Rostok","Bremen","⛪"],
+["Geografija","U kojoj pokrajini je zamak Nojšvanštajn?","Bavarska","Brandenburg","Saksonija","Hesen","🏰"],
+["Kultura","Najpoznatiji timski sport u Nemačkoj?","Fudbal","Kriket","Bejzbol","Ragbi","⚽"],
+["Kultura","Kako se zove najviša nemačka fudbalska liga?","Bundesliga","La Liga","Serija A","Premijer liga","🏟️"],
+["Kultura","Koji klub igra na Alijanc areni?","Bajern Minhen","Borusija Dortmund","Šalke 04","Bajer Leverkuzen","⚽"],
+["Kultura","Koja marka automobila ima sedište u Volfsburgu?","Volkswagen","Toyota","Volvo","Renault","🚗"],
+["Kultura","Koja marka automobila potiče iz Minhena?","BMW","Fiat","Jaguar","Peugeot","🏎️"],
+["Kultura","Koja marka sportskih automobila je iz Štutgarta?","Porsche","Ferrari","Lamborghini","Jaguar","🏎️"],
+["Kultura","Kako se zove poznati nemački auto-put?","Autobahn","Route 66","Autostrada del Sole","Highway One","🛣️"],
+["Kultura","Kako se zove poznata nemačka pereca?","Brezel","Taco","Sushi","Croissant","🥨"],
+["Kultura","Šta je Bratwurst?","Pečena kobasica","Vrsta sira","Sladak kolač","Riblja čorba","🌭"],
+["Kultura","Kako se zove nemački brzi voz?","ICE","TGV","Eurostar","Shinkansen","🚄"],
+["Kultura","Kako se zove poznata nemačka železnička kompanija?","Deutsche Bahn","Renfe","SNCF","Trenitalia","🚆"],
+["Kultura","Koji kompozitor je rođen u Bonu?","Betoven","Mocart","Vivaldi","Šopen","🎼"],
+["Kultura","Koji nemački pisac je napisao Fausta?","Gete","Viktor Igo","Dante","Mark Tven","📚"],
+["Kultura","Ko je sakupljao poznate nemačke bajke?","Braća Grim","Braća Rajt","Braća Limijer","Braća Marks","📖"],
+["Kultura","Ko je poznat po razvoju štampe pokretnim slovima u Evropi?","Gutenberg","Ajnštajn","Benc","Dizel","🖨️"],
+["Kultura","Dan nemačkog jedinstva slavi se...","3. oktobra","1. januara","9. maja","25. decembra","🎉"],
+["Kultura","Koje godine je ponovo ujedinjena Nemačka?","1990.","1945.","1980.","2001.","🤝"],
+["Kultura","Koje godine je pao Berlinski zid?","1989.","1961.","1999.","1975.","🧱"],
+["Kultura","Koja životinja je simbol na grbu Nemačke?","Orao","Lav","Konj","Medved","🦅"],
+["Kultura","Kako se zove nemački savezni parlament?","Bundestag","Sejm","Kongres","Duma","🏛️"],
+["Kultura","Pozivni broj Nemačke je...","+49","+43","+41","+33","📱"],
+["Kultura","Internet domen Nemačke je...",".de",".at",".fr",".ch","💻"],
+["Kultura","Međunarodna oznaka Nemačke na vozilima?","D","A","F","CH","🚘"],
+["Jezik","Kako se kaže hvala na nemačkom?","Danke","Bitte","Hallo","Tschüss","💬"],
+["Jezik","Kako se kaže dobar dan na nemačkom?","Guten Tag","Gute Nacht","Guten Appetit","Auf Wiedersehen","☀️"],
+["Jezik","Kako se na nemačkom kaže dobro došli?","Willkommen","Verboten","Abfahrt","Achtung","👋"],
+["Jezik","Šta znači Bahnhof?","Železnička stanica","Bolnica","Pošta","Pekara","🚉"],
+["Jezik","Šta znači Flughafen?","Aerodrom","Biblioteka","Muzej","Restoran","🛫"],
+["Jezik","Šta znači Schule?","Škola","Ulica","Park","Banka","🎓"],
+["Jezik","Šta znači Polizei?","Policija","Apoteka","Pekara","Bolnica","👮"],
+["Jezik","Kako se kaže jedan, dva, tri?","Eins, zwei, drei","Uno, dos, tres","One, two, three","Un, deux, trois","🔢"],
+["Jezik","Šta znači Ausgang?","Izlaz","Ulaz","Povratak","Parking","🚪"],
+["Jezik","Šta znači Eingang?","Ulaz","Izlaz","Stepenice","Parking","🚪"],
+["Jezik","Kako se kaže da na nemačkom?","Ja","Nein","Nie","Nicht","✅"],
+["Jezik","Kako se kaže ne na nemačkom?","Nein","Ja","Danke","Bitte","❌"],
+["Jezik","Šta znači Wochenende?","Vikend","Ponedeljak","Radni dan","Cela godina","🌞"],
+["Jezik","Šta znači die Hauptstadt?","Glavni grad","Železnička stanica","Stara kuća","Veliki put","🏙️"]
+];
+var game={mode:"solo",players:[],q:[],i:0,count:12,locked:true,done:false,deadline:0,tick:0,transition:0,remain:15,current:null,opts:[],bonus:false};
+var effects=true,music=true,ctx=null,loop=null,step=0,best=0;
+try{best=Number(localStorage.getItem("demax-deutschland-record")||0)}catch(e){}$("best").textContent=best;
+function initAudio(){try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume()}catch(e){}}
+function note(f,t,d,v,w,end){if(!ctx)return;var o=ctx.createOscillator(),g=ctx.createGain();o.type=w||"triangle";o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(Math.max(22,end),t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d+.03)}
+function hiss(t,d,v){if(!ctx)return;var b=ctx.createBuffer(1,Math.ceil(d*ctx.sampleRate),ctx.sampleRate),a=b.getChannelData(0);for(var i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);var s=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.setValueAtTime(4700,t);f.frequency.exponentialRampToValueAtTime(130,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.buffer=b;s.connect(f);f.connect(g);g.connect(ctx.destination);s.start(t);s.stop(t+d)}
+function sound(type){if(!effects)return;initAudio();if(!ctx)return;var t=ctx.currentTime+.02;if(type==="click"){note(620,t,.06,.035);note(930,t+.06,.08,.025)}
+if(type==="right"){[587,740,880,1175].forEach(function(n,i){note(n,t+i*.09,.21,.085)})}
+if(type==="wrong"){note(290,t,.22,.065,"sawtooth",120);note(160,t+.12,.28,.075,"triangle",85)}
+if(type==="tick")note(900,t,.05,.035);
+if(type==="bonus"){[523,659,784,1047,1318].forEach(function(n,i){note(n,t+i*.09,.25,.088)})}
+if(type==="win"){[523,659,784,1047,1318,1568].forEach(function(n,i){note(n,t+i*.12,.38,.085)})}
+if(type==="boom"){hiss(t,1,.38);note(140,t,.72,.18,"sawtooth",35);note(65,t+.12,.82,.19,"triangle",26);hiss(t+.17,.65,.21)}}
+var melody=[659,784,988,784,587,740,880,740,523,659,784,659,587,740,880,988],bass=[220,196,174.61,196];
+function beat(){if(!music||!ctx)return;var i=step++,t=ctx.currentTime+.02;note(melody[i%16],t,.23,.019);if(i%2===0)note(bass[Math.floor(i/4)%4],t,.35,.024,"sine");if(i%4===0)note(bass[Math.floor(i/4)%4]/2,t,.17,.032,"sine",55)}
+function musicStart(){if(!music)return;initAudio();if(loop||!ctx)return;beat();loop=setInterval(beat,308)}
+function musicStop(){clearInterval(loop);loop=null}
+$("music").onclick=function(){music=!music;this.textContent=music?"♫ ON":"♫ OFF";this.classList.toggle("off",!music);music?musicStart():musicStop();sound("click")};
+$("effects").onclick=function(){effects=!effects;this.textContent=effects?"🔊 ON":"🔇 OFF";this.classList.toggle("off",!effects);sound("click")};
+function mix(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x}return a}
+function choose(n){var a=[];["Geografija","Kultura","Jezik"].forEach(function(c){a=a.concat(mix(db.filter(function(q){return q[0]===c})).slice(0,Math.ceil(n/3)+3))});return mix(a).slice(0,n)}
+function makePlayer(id){return {name:"Igrač "+(id+1),score:0,lives:3,streak:0,done:0,correct:0,id:id}}
+function currentPlayer(){return game.players[game.mode==="solo"?0:game.i%2]}
+function clear(){clearInterval(game.tick);clearTimeout(game.transition);game.tick=0;game.transition=0}
+function close(){var box=$("overlay");box.classList.add("hide");box.querySelectorAll(".spark,.flash,.explosion").forEach(function(x){x.remove()})}
+function modal(s){$("modal").innerHTML=s;$("overlay").classList.remove("hide")}
+function start(mode){close();clear();game.mode=mode;game.players=mode==="solo"?[makePlayer(0)]:[makePlayer(0),makePlayer(1)];game.i=0;game.count=mode==="solo"?12:16;game.q=choose(game.count);game.done=false;$("home").classList.add("hide");$("game").classList.remove("hide");$("duelb").classList.toggle("hide",mode==="solo");musicStart();sound("click");show()}
+function show(){clear();if(game.i>=game.count){finish(false);return}var p=currentPlayer(),q=game.q[game.i];game.current=q;game.opts=mix(q.slice(2,6));game.bonus=(p.done+1)%4===0;game.locked=false;
+$("panel").classList.remove("shake");$("panel").classList.toggle("bonuspanel",game.bonus);
+$("points").textContent=p.score;$("hearts").textContent="❤️".repeat(p.lives)+"🖤".repeat(3-p.lives);$("streak").textContent="🔥 Niz: "+p.streak;
+$("who").textContent=game.mode==="solo"?"⚡ SOLO IZAZOV":p.id?"🟡 IGRAČ 2":"🔴 IGRAČ 1";
+$("progress").textContent=game.mode==="solo"?"PITANJE "+(p.done+1)+" / 12":"KRUG "+(p.done+1)+" / 8";
+$("bonus").textContent=game.bonus?"🌟 BONUS x2":"";
+$("level").textContent=game.bonus?"⭐ DUPLI POENI":"NIVO "+(Math.floor(p.done/4)+1);
+$("cat").textContent=q[0];$("symbol").textContent=q[6];$("question").textContent=q[1];
+$("feedback").className="feedback";$("feedback").textContent=game.bonus?"✨ BONUS PITANJE: osvoji duple poene!":"Izaberi tačan odgovor!";
+$("options").innerHTML="";
+game.opts.forEach(function(a,i){var b=document.createElement("button");b.className="option";b.type="button";var hot=document.createElement("i");hot.textContent=i+1;var txt=document.createElement("span");txt.textContent=a;b.appendChild(hot);b.appendChild(txt);b.onclick=function(){answer(i)};$("options").appendChild(b)});
+if(game.mode==="duel")game.players.forEach(function(x,i){$("p"+i).classList.toggle("on",x===p);$("p"+i).innerHTML=(i?"🟡":"🔴")+" "+x.name+" <strong>"+x.score+"</strong>"});
+game.deadline=performance.now()+15000;game.lastBeep=0;timer();game.tick=setInterval(timer,80)}
+function timer(){if(game.locked)return;var t=Math.max(0,(game.deadline-performance.now())/1000),sec=Math.ceil(t);game.remain=t;$("seconds").textContent=sec;$("bar").style.width=t/15*100+"%";$("bar").classList.toggle("urgent",t<=5);if(sec<=3&&sec>0&&game.lastBeep!==sec){game.lastBeep=sec;sound("tick")}if(t<=0)answer(-1)}
+function answer(idx){if(game.locked||game.done)return;game.locked=true;clearInterval(game.tick);var p=currentPlayer(),right=game.current[2],ok=idx>=0&&game.opts[idx]===right,sec=Math.max(0,Math.ceil((game.deadline-performance.now())/1000));p.done++;
+Array.prototype.forEach.call($("options").children,function(b,i){b.disabled=true;if(game.opts[i]===right)b.classList.add("correct");else if(i===idx)b.classList.add("wrong");else b.classList.add("dim")});
+if(ok){p.correct++;p.streak++;var pts=(100+Math.min(5,p.streak-1)*15+4*sec)*(game.bonus?2:1);p.score+=pts;$("feedback").className="feedback good";$("feedback").textContent="✅ TAČNO! +"+pts+" POENA"+(game.bonus?" 🌟 BONUS!":"");sound(game.bonus?"bonus":"right");if(game.bonus)sparks($("panel"),22,false)}
+else{p.lives--;p.streak=0;$("feedback").className="feedback bad";$("feedback").textContent=idx<0?"⏰ VREME JE ISTEKLO!":"❌ NETAČNO! Tačno: "+right;$("panel").classList.add("shake");sound("wrong")}
+$("points").textContent=p.score;$("hearts").textContent="❤️".repeat(p.lives)+"🖤".repeat(3-p.lives);$("streak").textContent="🔥 Niz: "+p.streak;
+game.transition=setTimeout(function(){if(p.lives<=0){finish(true,p);return}game.i++;if(game.i>=game.count){finish(false);return}if(game.mode==="duel")handoff();else show()},ok?1100:1500)}
+function handoff(){var p=currentPlayer();modal("<div class='emoji'>"+(p.id?"🟡":"🔴")+"</div><h2>Na potezu je "+p.name+"!</h2><p>Predajte telefon sledećem igraču za novo pitanje.</p><button id='go' class='btn goldbtn'>🎮 SPREMAN / SPREMNA</button>");$("go").onclick=function(){sound("click");close();show()}}
+function sparks(where,count,boom){for(var i=0;i<count;i++){var e=document.createElement("div"),ang=Math.random()*6.283,dist=(boom?100:60)+Math.random()*(boom?310:85);e.className="spark";e.style.setProperty("--x",Math.cos(ang)*dist+"px");e.style.setProperty("--y",Math.sin(ang)*dist+"px");e.style.setProperty("--dur",(600+Math.random()*750)+"ms");e.style.setProperty("--c",["#ffcc45","#ff713b","#ff3a77","#fff3a3"][i%4]);e.style.width=e.style.height=(5+Math.random()*12)+"px";where.appendChild(e);setTimeout(function(node){node.remove()},1600,e)}}
+function blast(){sound("boom");var b=$("overlay"),e=document.createElement("div"),f=document.createElement("div");e.className="explosion";e.textContent="💥";f.className="flash";b.appendChild(f);b.appendChild(e);sparks(b,65,true);$("app").classList.add("shake");setTimeout(function(){$("app").classList.remove("shake");e.remove();f.remove()},950)}
+function save(score){if(score>best){best=score;$("best").textContent=best;try{localStorage.setItem("demax-deutschland-record",String(best))}catch(e){}return true}return false}
+function finish(lost,eliminated){clear();game.done=true;game.locked=true;var solo=game.mode==="solo",p=game.players[0],p2=game.players[1],title,emoji,desc,details="";
+if(solo){var record=save(p.score);title=lost?"💥 KRAJ IGRE!":"🏆 BRAVO, ŠAMPIONE!";emoji=lost?"💔":"🏆";desc=lost?"Ponestalo je života. Probaj ponovo i obori rekord!":"Uspešno si završio/la kviz!";details="<div class='scorebig'>"+p.score+" poena</div><div class='result'><div>TAČNO<strong>"+p.correct+" / "+p.done+"</strong></div><div>REKORD<strong>"+best+"</strong></div></div>"+(record?"<p>🌟 NOVI LIČNI REKORD!</p>":"")}
+else{var winner=p.score>p2.score?p:p2.score>p.score?p2:null;if(lost)winner=eliminated===p?p2:p;title=winner?"🏆 POBEDNIK: "+winner.name+"!":"🤝 NEREŠENO!";emoji=lost?"💥":"🏆";desc=lost?eliminated.name+" je ostao bez života!":"Duel je završen. Čestitamo!";details="<div class='result'><div>🔴 IGRAČ 1<b>"+p.score+"</b>"+p.correct+" tačnih</div><div>🟡 IGRAČ 2<b>"+p2.score+"</b>"+p2.correct+" tačnih</div></div>"}
+modal("<div class='emoji'>"+emoji+"</div><h2>"+title+"</h2><p>"+desc+"</p>"+details+"<button class='btn goldbtn' id='again'>🔄 IGRAJ PONOVO</button><button class='btn darkbtn' id='back'>⌂ POČETNA</button>");
+$("again").onclick=function(){start(game.mode)};$("back").onclick=home;if(lost)blast();else{sound("win");sparks($("overlay"),50,true)}}
+function home(){clear();game.done=true;game.locked=true;close();$("game").classList.add("hide");$("home").classList.remove("hide");sound("click")}
+$("solo").onclick=function(){start("solo")};$("duel").onclick=function(){start("duel")};
+$("quit").onclick=function(){clear();game.locked=true;modal("<div class='emoji'>🚪</div><h2>Napustiti igru?</h2><p>Možeš nastaviti ili se vratiti na početnu.</p><button class='btn goldbtn' id='resume'>▶ NASTAVI</button><button class='btn darkbtn' id='exit'>⌂ POČETNA</button>");$("resume").onclick=function(){close();game.locked=false;game.deadline=performance.now()+Math.max(1,game.remain)*1000;game.tick=setInterval(timer,80)};$("exit").onclick=home};
+document.addEventListener("keydown",function(e){if(!$("game").classList.contains("hide")&&$("overlay").classList.contains("hide")&&!game.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
+document.addEventListener("visibilitychange",function(){if(document.hidden)musicStop();else if(music&&ctx)musicStart()});
+})();
+</script></body></html>
