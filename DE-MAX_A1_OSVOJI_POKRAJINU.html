@@ -208,7 +208,7 @@ function renderQuiz(){
  qMain.innerHTML='<section class="view quiz"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="timer"><span>VREME</span><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">'+quiz.limit+'</b></div></div></div>'
  +'<div class="quizdots">'+quiz.qs.map((_,i)=>'<i class="'+(i===quiz.step?'current':i<quiz.step?(quiz.history[i]?'done':'bad'):'')+'"></i>').join("")+'</div>'
  +'<div class="quizvisual"><span class="spark l">✦</span><span class="quiz-globe">'+s.emoji+'</span><span class="spark r">✦</span></div>'
- +'<div class="questionbox"><div><div class="qsmall">PITANJE '+(quiz.step+1)+' / '+quiz.qs.length+' · '+safe(q.difficulty)</div><h2>'+safe(q.question)+'</h2></div></div>'
+ +'<div class="questionbox"><div><div class="qsmall">PITANJE '+(quiz.step+1)+' / '+quiz.qs.length+' · '+safe(q.difficulty)+'</div><h2>'+safe(q.question)+'</h2></div></div>'
  +'<div class="answers">'+q.options.map((a,i)=>'<button class="answer" data-answer="'+i+'"><span class="letter">'+["A","B","C","D"][i]+'</span><span>'+safe(a)+'</span></button>').join("")+'</div>'
  +'<div id="quizfeedback" class="quizfeedback">Tačan odgovor donosi bodove i bonus za brzinu ⚡</div></section>';
  responding=false;
