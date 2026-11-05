@@ -134,15 +134,14 @@ button{font:inherit}
   .result .grid{margin:5px 0}
 }
 
-</style>
+.header{position:relative;min-height:75px;justify-content:space-between}.quiz-heading{position:absolute;left:50%;transform:translateX(-50%);width:min(55%,360px);text-align:center;justify-content:center}.quiz-heading h1{font-size:clamp(16px,3.8vw,22px)}.quiz-heading p{white-space:normal}.header>.wordmark{margin-left:auto;flex:none}@media(max-width:600px){.header{min-height:68px}.quiz-heading{width:54%}.quiz-heading h1{font-size:16px}.quiz-heading p{font-size:10px;line-height:1.25}.header>.wordmark{font-size:14px;padding:6px}.best{min-width:55px}}@media(max-width:365px){.quiz-heading{width:51%}.quiz-heading h1{font-size:14px}.quiz-heading p{font-size:9px}}</style>
 </head>
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand">
-      <div class="wordmark" aria-label="De-Max">De-Max</div><div><h1>A1 Brzi kviz</h1><p>120 sekundi • pitanja iz GitHub A1 baze</p></div>
-    </div>
     <div class="best"><span>REKORD</span><b id="bestScore">0</b></div>
+    <div class="brand quiz-heading"><div><h1>⏱️ A1 Brzi kviz</h1><p>120 sekundi • pitanja iz GitHub A1 baze</p></div></div>
+    <div class="wordmark" aria-label="De-Max">De-Max</div>
   </div>
 
   <section class="timer-card" id="timerCard">
