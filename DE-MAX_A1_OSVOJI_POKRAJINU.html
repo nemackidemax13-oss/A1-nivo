@@ -53,6 +53,8 @@ button{font:inherit;cursor:pointer;touch-action:manipulation;border:0}button:foc
 .secondary.home-red{color:#fff;background:linear-gradient(115deg,#f33f60,#b81839);border-color:#ff8190;box-shadow:0 4px 14px #e1265350}
 .wordline{justify-content:center;text-align:center}
 @media(max-width:360px){.topbar .brandword{font-size:17px;letter-spacing:0}.soundbar .switch{padding:7px 4px;font-size:9px}.statechip{width:142px}}
+.reading-progress{display:flex;gap:7px;justify-content:center;padding-top:8px}.reading-progress span{height:6px;width:35px;background:#2b5074;border-radius:99px}.reading-progress span.current{background:#ffcd69;box-shadow:0 0 10px #ffd16d88}.reading-progress span.done{background:#48d9bc}.learn .learnfacts{gap:7px}.learn .learnfact{min-height:55px;flex:1;padding:9px 10px}.learn .learnfact p{line-height:1.36}
+@media(max-height:700px){.learn .learnfact{min-height:42px;padding:6px 9px}.learn .learnfact p{font-size:11px;line-height:1.25}.learn .reading-progress{padding-top:5px}.learn .fact-banner{margin:6px 0}.learn .factshead{margin-bottom:5px}}
 </style>
 </head>
 <body>
@@ -92,7 +94,7 @@ const STATIC_SILHOUETTE="M258 13 L290 18 315 43 355 39 381 67 374 96 405 112 400
 const qMain=document.getElementById("main"),stats=document.getElementById("stats"),app=document.getElementById("app"),fxLayer=document.getElementById("fxlayer");
 let saved={won:{},best:0};
 try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(s&&typeof s==="object"&&s.won)saved=s;}catch(e){}
-let scene="home",selected="BY",quiz=null,questionTick=null,responding=false,controlMusic=true,controlFx=true,mapCache="",rankName="";
+let scene="home",selected="BY",quiz=null,questionTick=null,advanceTimer=null,learnPage=0,responding=false,controlMusic=true,controlFx=true,mapCache="",rankName="";
 function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(saved));}catch(e){}}
 function hasWon(id){return Number.isFinite(Number(saved.won[id]))&&Number(saved.won[id])>0}
 function wins(){return STATES.filter(s=>hasWon(s.id)).length}
@@ -103,7 +105,7 @@ function st(id){return STATES.find(a=>a.id===id)||STATES[0]}
 function btn(label,klass,action){return '<button class="btn '+klass+'" data-action="'+action+'">'+label+'</button>'}
 function updateStats(){stats.innerHTML='<div class="stat">🏆 <b>'+wins()+'/16</b><small>osvojeno</small></div><div class="stat">⭐ <b>'+score().toLocaleString("sr-RS")+'</b><small>bodova</small></div><div class="stat">🔥 <b>'+level().split(" ")[0]+'</b></div>'}
 function render(){clearInterval(questionTick);questionTick=null;updateStats();qMain.innerHTML="";if(scene==="home")renderHome();else if(scene==="map")renderMap();else if(scene==="learn")renderLearn();else if(scene==="quiz")renderQuiz();else if(scene==="result")renderResult();bindActions()}
-function setScene(s){if(s==="map")selected=nextUnlocked().id;scene=s;render();if(s!=="quiz")audioMood()}
+function setScene(s){clearTimeout(advanceTimer);advanceTimer=null;if(s==="map")selected=nextUnlocked().id;if(s==="learn")learnPage=0;scene=s;render();if(s!=="quiz")audioMood()}
 function nextUnlocked(){return STATES.find(s=>!hasWon(s.id))||STATES[STATES.length-1]}
 function canVisit(id){return hasWon(id)||id===nextUnlocked().id}
 function renderHome(){
@@ -148,46 +150,76 @@ function renderMap(){
  +'<div class="bottom"><button class="secondary home-red" data-action="home">← 🇩🇪 Nemačka · Početna</button></div></section>';
 }
 
-function renderLearn(){
- const s=st(selected);
- qMain.innerHTML='<section class="view learn"><div class="backline"><button class="backbtn" data-action="map">← NA MAPU</button><span class="chapter">POKRAJINA '+(STATES.indexOf(s)+1)+' / 16</span></div>'
- +'<div class="learnbanner"><div class="learnicon">'+s.emoji+'</div><div class="learntitle"><small>🇩🇪 BUNDESLAND</small><h2>'+safe(s.name)+'</h2><small>✨ Saznaj · zapamti · osvoji</small></div></div>'
- +'<div class="fact-banner"><div><small>🏛️ GLAVNI GRAD</small><b>'+safe(s.capital)+'</b></div><div><small>🧭 GDE SE NALAZI?</small><b>'+safe(s.region)+'</b></div></div>'
- +'<div class="factshead">📖 Nauči ove 3 važne stvari</div><div class="learnfacts">'+s.facts.map((f,i)=>'<div class="learnfact"><span class="number">0'+(i+1)+'</span><p>'+safe(f)+'</p></div>').join("")+'</div>'
- +'<div class="wordline"><div><strong>🇩🇪 '+safe(s.phrase)+'</strong><small>Nemačka rečenica za pamćenje</small></div></div>'
- +'<div class="bottom" style="padding-left:0;padding-right:0"><button class="btn gold" data-action="startQuiz">⚔️ KVIZ — OSVOJI POKRAJINU</button></div></section>';
+function learningSentences(s){
+ return [
+ "Glavni grad pokrajine "+s.name+" je "+s.capital+".",
+ "Položaj pokrajine na karti Nemačke: "+s.region+".",
+ "Poznata znamenitost ove pokrajine: "+s.landmark+".",
+ s.city===s.capital?"Poznati grad "+s.city+" ujedno je i glavni grad pokrajine.":"Još jedan važan grad u pokrajini je "+s.city+".",
+ "Posebnost pokrajine: "+s.special+".",
+ ...s.facts
+ ];
 }
+function renderLearn(){
+ const s=st(selected),all=learningSentences(s),first=learnPage*4,shown=all.slice(first,first+4);
+ const backAction=learnPage===0?"map":"learnPrev",backLabel=learnPage===0?"← NA MAPU":"← PRETHODNE REČENICE";
+ const nextLabel=learnPage===0?"📖 NASTAVI ČITANJE →":"⚔️ KVIZ · 3 PITANJA";
+ const nextAction=learnPage===0?"learnNext":"startQuiz";
+ qMain.innerHTML='<section class="view learn"><div class="backline"><button class="backbtn" data-action="'+backAction+'">'+backLabel+'</button><span class="chapter">POKRAJINA '+(STATES.indexOf(s)+1)+' / 16</span></div>'
+ +'<div class="learnbanner"><div class="learnicon">'+s.emoji+'</div><div class="learntitle"><small>🇩🇪 BUNDESLAND</small><h2>'+safe(s.name)+'</h2><small>Pročitaj svih 8 rečenica, pa reši kviz</small></div></div>'
+ +'<div class="fact-banner"><div><small>📚 REČENICE</small><b>'+(first+1)+'–'+(first+shown.length)+' / '+all.length+'</b></div><div><small>🎯 ZA OSVAJANJE</small><b>2 od 3 tačna</b></div></div>'
+ +'<div class="factshead">📖 ČITAJ I ZAPAMTI · '+(learnPage+1)+'/2</div>'
+ +'<div class="learnfacts">'+shown.map((f,i)=>'<div class="learnfact"><span class="number">'+String(first+i+1).padStart(2,"0")+'</span><p>'+safe(f)+'</p></div>').join("")+'</div>'
+ +'<div class="reading-progress" aria-label="Napredak u čitanju"><span class="'+(learnPage===0?"current":"done")+'"></span><span class="'+(learnPage===1?"current":"")+'"></span></div>'
+ +'<div class="bottom" style="padding-left:0;padding-right:0"><button class="btn '+(learnPage===0?"blue":"gold")+'" data-action="'+nextAction+'">'+nextLabel+'</button></div></section>';
+}
+
 function shuffled(items,seed){let a=items.slice();let x=(seed+1)*19073;for(let i=a.length-1;i>0;i--){x=(x*1664525+1013904223)>>>0;let j=x%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a}
 function questions(s){
  const ix=STATES.indexOf(s);
- const fields=[["capital","Koji je glavni grad pokrajine "+s.name+"?"],["landmark","Koja znamenitost se nalazi u pokrajini "+s.name+"?"],["region","U kom delu Nemačke leži "+s.name+"?"],["special","Po čemu je posebno poznata pokrajina "+s.name+"?"],["city","Koji grad pripada pokrajini "+s.name+"?"]];
- return fields.map((pair,i)=>{
-  const key=pair[0],correct=s[key];
-  let options=shuffled(Array.from(new Set(STATES.filter(t=>t.id!==s.id).map(t=>t[key]).filter(x=>x!==correct))),ix*17+i*31).slice(0,3);
-  if(key==="region"){options=shuffled(["Sever","Jug","Istok","Zapad","Severoistok","Severozapad","Jugozapad","Središnja Nemačka"].filter(v=>v!==correct),ix*19+i*11).slice(0,3);}
-  return {question:pair[1],correct:correct,options:shuffled([correct,...options],ix*97+i*13),kind:key};
- });
+ function optionsFor(key,seed){
+  const correct=s[key];
+  let distractors=Array.from(new Set(STATES.filter(o=>o.id!==s.id).map(o=>o[key]).filter(v=>v!==correct)));
+  if(key==="region")distractors=["Sever","Jug","Istok","Zapad","Severoistok","Severozapad","Jugozapad","Središnja Nemačka"].filter(v=>v!==correct);
+  return shuffled([correct,...shuffled(distractors,seed+20).slice(0,3)],seed+70);
+ }
+ const first={question:"Koji je glavni grad pokrajine "+s.name+"?",correct:s.capital,options:optionsFor("capital",ix*11+1),difficulty:"LAKO"};
+ if(ix<6){
+  return [first,
+   {question:"U kom delu Nemačke nalazi se "+s.name+"?",correct:s.region,options:optionsFor("region",ix*11+2),difficulty:"SREDNJE"},
+   {question:"Koja je poznata znamenitost pokrajine "+s.name+"?",correct:s.landmark,options:optionsFor("landmark",ix*11+3),difficulty:"TEŠKO"}];
+ }
+ const second={question:"Koja se znamenitost vezuje za "+s.name+"?",correct:s.landmark,options:optionsFor("landmark",ix*11+2),difficulty:"SREDNJE"};
+ const cityAlternatives=shuffled([...new Set(STATES.filter(o=>o.id!==s.id).map(o=>o.city).filter(c=>c!==s.city))],ix*17+5);
+ const regionAlternatives=shuffled(["Sever","Jug","Istok","Zapad","Severoistok","Severozapad","Jugozapad","Središnja Nemačka"].filter(v=>v!==s.region),ix*23+7);
+ const correct=s.region+" · "+s.city;
+ const wrongA=s.region+" · "+cityAlternatives[0];
+ const wrongB=regionAlternatives[0]+" · "+s.city;
+ const wrongC=ix>=10?s.region+" · "+cityAlternatives[1]:regionAlternatives[1]+" · "+cityAlternatives[1];
+ const last={question:"Koja kombinacija je potpuno tačna za "+s.name+"? (položaj + grad)",correct,options:shuffled([correct,wrongA,wrongB,wrongC],ix*57+19),difficulty:"TEŠKO"};
+ return [first,second,last];
 }
+
 function startQuiz(){
- const s=st(selected);quiz={state:s,qs:questions(s),step:0,correct:0,points:0,streak:0,history:[],remaining:16,answered:false,award:0};scene="quiz";render();sound("start");audioMood();
+ const s=st(selected);if(learnPage<1)return;const limit=STATES.indexOf(s)>=10?22:STATES.indexOf(s)>=6?19:16;quiz={state:s,qs:questions(s),step:0,correct:0,points:0,streak:0,history:[],remaining:limit,limit,answered:false,award:0};scene="quiz";render();sound("start");audioMood();
 }
 function renderQuiz(){
  const s=quiz.state,q=quiz.qs[quiz.step];
- qMain.innerHTML='<section class="view quiz"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="timer"><span>VREME</span><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">16</b></div></div></div>'
+ qMain.innerHTML='<section class="view quiz"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="timer"><span>VREME</span><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">'+quiz.limit+'</b></div></div></div>'
  +'<div class="quizdots">'+quiz.qs.map((_,i)=>'<i class="'+(i===quiz.step?'current':i<quiz.step?(quiz.history[i]?'done':'bad'):'')+'"></i>').join("")+'</div>'
  +'<div class="quizvisual"><span class="spark l">✦</span><span class="quiz-globe">'+s.emoji+'</span><span class="spark r">✦</span></div>'
- +'<div class="questionbox"><div><div class="qsmall">PITANJE '+(quiz.step+1)+' / 5 · OSVAJAČKI IZAZOV</div><h2>'+safe(q.question)+'</h2></div></div>'
+ +'<div class="questionbox"><div><div class="qsmall">PITANJE '+(quiz.step+1)+' / '+quiz.qs.length+' · '+safe(q.difficulty)</div><h2>'+safe(q.question)+'</h2></div></div>'
  +'<div class="answers">'+q.options.map((a,i)=>'<button class="answer" data-answer="'+i+'"><span class="letter">'+["A","B","C","D"][i]+'</span><span>'+safe(a)+'</span></button>').join("")+'</div>'
  +'<div id="quizfeedback" class="quizfeedback">Tačan odgovor donosi bodove i bonus za brzinu ⚡</div></section>';
  responding=false;
  startTimer();
 }
-function startTimer(){clearInterval(questionTick);const since=performance.now();quiz.remaining=16;questionTick=setInterval(()=>{
+function startTimer(){clearInterval(questionTick);const since=performance.now();quiz.remaining=quiz.limit;questionTick=setInterval(()=>{
  if(scene!=="quiz"||quiz.answered){clearInterval(questionTick);return}
- quiz.remaining=Math.max(0,16-(performance.now()-since)/1000);
+ quiz.remaining=Math.max(0,quiz.limit-(performance.now()-since)/1000);
  const t=document.getElementById("clock"),ring=document.getElementById("clockRing");
  if(t)t.textContent=String(Math.ceil(quiz.remaining));
- if(ring)ring.style.setProperty("--angle",(quiz.remaining/16*360)+"deg");
+ if(ring)ring.style.setProperty("--angle",(quiz.remaining/quiz.limit*360)+"deg");
  if(quiz.remaining<=0){clearInterval(questionTick);answer(-1);}
 },110)}
 function answer(i){
@@ -200,28 +232,33 @@ function answer(i){
  document.querySelectorAll(".answer").forEach(b=>{b.disabled=true;const v=q.options[Number(b.dataset.answer)];if(v===q.correct)b.classList.add("correct");else if(Number(b.dataset.answer)===i)b.classList.add("wrong");else b.classList.add("dim")});
  const f=document.getElementById("quizfeedback");
  if(f){f.className="quizfeedback "+(ok?"good":"bad");f.textContent=ok?"✅ BRAVO! + BONUS · "+quiz.points+" poena u ovoj rundi":"❌ "+(i<0?"Vreme je isteklo!":"Netačno!")+" Tačno: "+q.correct;}
- setTimeout(()=>{if(scene!=="quiz")return;if(quiz.step<4){quiz.step++;renderQuiz();bindActions();}else finishQuiz()},1100);
+ setTimeout(()=>{if(scene!=="quiz")return;if(quiz.step<quiz.qs.length-1){quiz.step++;renderQuiz();bindActions();}else finishQuiz()},1100);
 }
 function finishQuiz(){
  clearInterval(questionTick);
- const win=quiz.correct>=4,prev=Number(saved.won[quiz.state.id]||0);
+ const win=quiz.correct>=2,prev=Number(saved.won[quiz.state.id]||0);
  quiz.award=win?Math.max(0,quiz.points-prev):0;
- if(win){saved.won[quiz.state.id]=Math.max(prev,quiz.points);saved.best=Math.max(saved.best,score());persist();sound("win");burst("win",130);}
- else{sound("lose");burst("lose",38);}
- scene="result";render();if(win&&wins()===16){setTimeout(()=>burst("win",190),650);}
+ if(win){saved.won[quiz.state.id]=Math.max(prev,quiz.points);saved.best=Math.max(saved.best,score());persist();sound("win");burst("win",110);}
+ else{sound("lose");burst("lose",30);}
+ scene="result";render();
+ if(win&&wins()<16){clearTimeout(advanceTimer);advanceTimer=setTimeout(()=>{if(scene==="result")nextState()},3200);}
+ if(win&&wins()===16){setTimeout(()=>{if(scene==="result")burst("win",170)},750);}
 }
 function renderResult(){
- const s=quiz.state,win=quiz.correct>=4,all=wins()===16;
+ const s=quiz.state,win=quiz.correct>=2,all=wins()===16;
+ const successMessage=all?"Osvojene su sve pokrajine! Bravo!":"Sledeća pokrajina otvara se automatski za nekoliko sekundi. Prvo pročitaj njene rečenice.";
+ const failedMessage="Za osvajanje su potrebna najmanje 2 tačna od 3 pitanja. Pročitaj rečenice još jednom, pa pokušaj opet.";
  qMain.innerHTML='<section class="view result"><div class="pagehead"><div class="eyebrow">'+(win?"MISIJA USPEŠNA":"POKUŠAJ PONOVO")+'</div><div class="heading">'+safe(s.name)+'</div></div>'
  +'<div class="result-trophy"><span>'+(win?(all?"👑":"🏆"):"💥")+'</span></div>'
  +'<h2>'+(!win?"POKRAJINA NIJE OSVOJENA":all?"OSVOJIO SI NEMAČKU!":"POKRAJINA OSVOJENA!")+'</h2>'
- +'<p>'+(win?"Sjajno! Pokrajina je sada <b>zlatna na tvojoj mapi</b>. Nastavi do svih 16!":"Za osvajanje su potrebna najmanje <b>4 tačna od 5 pitanja</b>. Pročitaj još jednom i pobedi!")+'</p>'
- +'<div class="resultstats"><div><strong>'+quiz.correct+'/5</strong><small>Tačni odgovori</small></div><div><strong>'+quiz.points+'</strong><small>Bodovi runde</small></div><div><strong>'+wins()+'/16</strong><small>Osvojeno</small></div></div>'
+ +'<p>'+(win?successMessage:failedMessage)+'</p>'
+ +'<div class="resultstats"><div><strong>'+quiz.correct+'/'+quiz.qs.length+'</strong><small>Tačni odgovori</small></div><div><strong>'+quiz.points+'</strong><small>Bodovi runde</small></div><div><strong>'+wins()+'/16</strong><small>Osvojeno</small></div></div>'
  +'<div class="rank">✨ TVOJ RANG: '+level()+'</div>'
- +'<div class="bottom" style="padding-left:0;padding-right:0"><div class="btn-row">'+btn("🗺️ NA MAPU","ghost","map")+btn(win?"⚔️ SLEDEĆA":"🔁 POKUŠAJ OPET",win?"gold":"green",win?"next":"startQuiz")+'</div></div></section>';
+ +'<div class="bottom" style="padding-left:0;padding-right:0"><div class="btn-row">'+btn("🗺️ NA MAPU","ghost","map")+btn(win?(all?"🇩🇪 MAPA":"⚔️ SLEDEĆA POKRAJINA"):"📖 PONOVO PROČITAJ",win?"gold":"green",win?(all?"map":"next"):"learn")+'</div></div></section>';
 }
-function nextState(){selected=nextUnlocked().id;scene="learn";render();}
-function doAction(a){audioUnlock();if(a==="home")setScene("home");else if(a==="map")setScene("map");else if(a==="learn"&&canVisit(selected))setScene("learn");else if(a==="startQuiz"&&canVisit(selected))startQuiz();else if(a==="next")nextState()}
+
+function nextState(){clearTimeout(advanceTimer);advanceTimer=null;selected=nextUnlocked().id;learnPage=0;scene="learn";render();}
+function doAction(a){audioUnlock();if(a==="home")setScene("home");else if(a==="map")setScene("map");else if(a==="learn"&&canVisit(selected))setScene("learn");else if(a==="learnNext"){learnPage=1;render();sound("select");}else if(a==="learnPrev"){learnPage=0;render();sound("select");}else if(a==="startQuiz"&&canVisit(selected)&&learnPage===1)startQuiz();else if(a==="next")nextState()}
 function bindActions(){
  qMain.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>doAction(b.dataset.action)));
  qMain.querySelectorAll(".statechip[data-state]").forEach(b=>{
