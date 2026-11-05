@@ -451,7 +451,8 @@ queueMobileFit();
   "use strict";
   let enabled=true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
   try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
-  const notes=[261.63,329.63,392,329.63,293.66,349.23,440,349.23,261.63,329.63,392,493.88,349.23,293.66,329.63,261.63];
+  /* Kviz • ritmični izazov: zasebna originalna melodija */
+  const notes=[392,392,523.25,587.33,659.25,587.33,523.25,440,392,493.88,587.33,698.46,659.25,587.33,493.88,392];
   const b=document.createElement("button");
   b.type="button";b.className="demax-music-toggle";b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
   function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
@@ -470,8 +471,8 @@ queueMobileFit();
   function beat(){
     if(!playing||!enabled)return;const a=getAudio();if(!a)return;
     const now=a.currentTime+.02;
-    note(notes[step%notes.length],now,.48,.013);
-    if(step%4===0)note(notes[(step+4)%notes.length]/2,now,1.3,.008);
+    note(notes[step%notes.length],now,0.32,0.012);
+    if(step%4===0)note(notes[(step+5)%notes.length]/2,now,1.1,.006);
     step++;
   }
   function stop(){
@@ -481,7 +482,7 @@ queueMobileFit();
   }
   function start(){
     if(playing||!enabled)return;
-    playing=true;beat();interval=setInterval(beat,540);
+    playing=true;beat();interval=setInterval(beat,360);
   }
   b.addEventListener("click",function(e){
     e.stopPropagation();enabled=!enabled;label();
