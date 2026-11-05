@@ -1,0 +1,365 @@
+<!doctype html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#0a1126"><meta name="description" content="DE-MAX: 200 životinja na nemačkom. HD kviz sa muzikom, efektima i bonus pitanjima."><title>DE-MAX | 200 ŽIVOTINJA — ANIMAL ARENA</title><style>
+:root{--gold:#ffd36a;--orange:#ff9f40;--green:#3dedaa;--red:#fc597d;--ink:#f9fbff;--sub:#b8c5e2;--line:#ffffff24}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
+body{background:#070c1e;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#app{max-width:590px;width:100%;height:100vh;height:100dvh;margin:0 auto;position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 7px);background:radial-gradient(ellipse 90% 56% at 50% -12%,#384f94 0%,transparent 70%),radial-gradient(ellipse 80% 50% at 115% 96%,#3b1b6b 0%,transparent 75%),linear-gradient(160deg,#121b37,#080d20)}
+#app:before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;opacity:.3;background-image:radial-gradient(#829aff44 1px,transparent 1px);background-size:25px 25px}
+.blob{position:absolute;width:200px;height:200px;border-radius:50%;filter:blur(70px);background:#a62eff36;pointer-events:none;z-index:-1;animation:float 9s ease-in-out infinite alternate}
+.blob.one{top:15%;right:-130px}.blob.two{bottom:0;left:-145px;background:#0077ff2d;animation-delay:-3s}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:42px;flex-shrink:0}
+.brand{display:flex;gap:9px;align-items:center;min-width:0}
+.logo{background:linear-gradient(145deg,#fcd77c,#ff993c);color:#101c36;width:39px;height:39px;display:grid;place-items:center;border-radius:11px;box-shadow:0 0 25px #ffc35b36;flex-shrink:0;font-size:22px}
+.brand strong{font-size:clamp(17px,4.7vw,23px);font-weight:1000;letter-spacing:-.7px;display:block;line-height:1.05}.brand strong em{font-style:normal;color:#ffcf69}
+.brand small{font-size:9px;letter-spacing:1.8px;font-weight:900;color:#a5b9e4;display:block;margin-top:4px}
+.sound{display:flex;gap:5px;flex-shrink:0}
+.sound button{border:1px solid #ffffff2b;border-radius:9px;background:#ffffff13;color:#eaf1ff;font-size:11px;padding:7px 8px;font-weight:850;white-space:nowrap}
+.sound button.off{opacity:.52}
+.view{flex:1;min-height:0;display:flex;flex-direction:column}
+.screen{display:flex;flex-direction:column;gap:8px;min-height:0;flex:1}
+.hide{display:none!important}
+.glass{border:1px solid #ffffff24;background:linear-gradient(145deg,#263658dc,#111c38e8);box-shadow:0 13px 35px #0007,inset 0 1px #ffffff22;border-radius:19px}
+.home{justify-content:space-between}
+.hero{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;gap:clamp(7px,1.7vh,16px);padding:12px}
+.orbit{width:clamp(135px,28vh,212px);height:clamp(122px,25vh,188px);position:relative;display:grid;place-items:center}
+.orbit:before,.orbit:after{content:"";border:1px dashed #ffda853d;position:absolute;inset:10%;border-radius:50%;transform:rotate(-20deg)}
+.orbit:after{inset:0;transform:rotate(27deg);border-color:#b2befe30}
+.orbit .orb{position:absolute;display:grid;place-items:center;z-index:1;width:clamp(37px,7vh,52px);height:clamp(37px,7vh,52px);border-radius:15px;background:linear-gradient(145deg,#3a4b75,#16213f);box-shadow:0 7px 12px #0007,0 0 0 1px #ffffff2c;font-size:clamp(22px,4.5vh,32px);animation:float 3.5s ease-in-out infinite}
+.orbit .orb.a{top:-2%;left:4%}.orbit .orb.b{top:4%;right:0;animation-delay:-1s}.orbit .orb.c{bottom:0;left:0;animation-delay:-2s}.orbit .orb.d{bottom:0;right:1%;animation-delay:-.6s}
+.orbit .paw{width:clamp(90px,18vh,135px);height:clamp(90px,18vh,135px);display:grid;place-items:center;font-size:clamp(63px,12vh,94px);border-radius:33px;background:linear-gradient(155deg,#fce386,#ff9d51);box-shadow:0 15px 43px #ff9d4240,inset 0 3px #fff8;transform:rotate(-9deg);animation:bob 3s ease-in-out infinite}
+@keyframes float{to{transform:translateY(-9px)}}@keyframes bob{50%{transform:translateY(-7px) rotate(-3deg)}}
+.tag{font-size:10px;letter-spacing:2.5px;font-weight:1000;color:var(--gold)}
+.hero h1{font-size:clamp(32px,8.9vw,49px);line-height:.97;margin:0;font-weight:1000;letter-spacing:-1.8px}
+.hero h1 span{display:block;color:var(--gold)}
+.hero p{max-width:370px;margin:0;color:#cbd5ec;line-height:1.42;font-size:clamp(12px,3.55vw,15px)}
+.pills{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.pills>div{background:#ffffff0e;border:1px solid #ffffff2b;border-radius:12px;padding:8px 4px;font-weight:850;font-size:11px}.pills b{font-size:20px;display:block;line-height:1.3}
+.menu{display:flex;flex-direction:column;gap:8px;flex:none}
+.cta{width:100%;font-size:clamp(15px,4.4vw,19px);font-weight:1000;letter-spacing:.1px;color:#10182e;border:0;border-radius:14px;padding:clamp(12px,2.1vh,17px) 10px;box-shadow:0 5px #000a;transition:transform .12s}
+.cta:active{transform:translateY(3px);box-shadow:0 2px #000a}
+.cta.primary{background:linear-gradient(115deg,#ffe78c,#ffb147);box-shadow:0 5px #8d4f16,0 8px 25px #ffb54d38}
+.cta.secondary{background:linear-gradient(115deg,#a4bbff,#788dfa);box-shadow:0 5px #39498c}
+.cta.ghost{background:#ffffff17;color:#e8efff;border:1px solid #ffffff29;box-shadow:none}
+.records{display:flex;justify-content:space-around;gap:7px;text-align:center;color:#bdcae6;font-weight:900;font-size:11px}.records span{color:var(--gold)}
+.hud{display:flex;gap:6px;flex-shrink:0;align-items:stretch}
+.stat{flex:1;min-width:0;border:1px solid #ffffff22;border-radius:11px;background:#ffffff11;text-align:center;padding:7px 3px}
+.stat small{display:block;font-size:9px;letter-spacing:1.2px;font-weight:900;color:#aebee1}
+.stat b{display:block;font-size:clamp(16px,5.4vw,24px);line-height:1.2;margin-top:2px;font-weight:1000;white-space:nowrap}.stat b.score{color:var(--gold)}.stat b.hearts{font-size:clamp(15px,4.3vw,20px)}.stat b.time{color:#8affdb}
+.progress{flex:none;min-height:24px;display:flex;align-items:center;gap:9px}.progress label{font-size:11px;font-weight:900;color:#ccdbf6;white-space:nowrap}.progressbar{height:8px;border-radius:20px;background:#ffffff22;overflow:hidden;flex:1}.progressbar div{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#31dbaa,#f9d66d);transition:width .35s}.progress .badge{font-size:10px;font-weight:1000;background:#d9952f22;color:var(--gold);border:1px solid #e7b7576b;border-radius:999px;padding:4px 7px;white-space:nowrap}
+.timerbar{height:5px;background:#ffffff22;overflow:hidden;flex:none;border-radius:10px}.timerbar div{width:100%;height:100%;background:linear-gradient(90deg,#3ce9bd,#f6d66c)}.timerbar div.urgent{background:linear-gradient(90deg,#ffad49,#fc4b6b)}
+.questionpanel{flex:1;min-height:0;display:flex;flex-direction:column;gap:clamp(6px,1.5vh,13px);padding:clamp(9px,2vh,17px);position:relative;overflow:hidden}
+.questionpanel.bonus{border-color:#ffcf69b9;box-shadow:0 0 23px #ffb8392d,inset 0 1px #ffffff44}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:5px;flex:none}
+.meta .category{font-size:10px;letter-spacing:1px;font-weight:950;color:#aaccff;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta .badge{font-size:10px;font-weight:1000;color:#ffe18a;border:1px solid #ffd36c80;background:#ffbf2b21;padding:5px 8px;border-radius:99px;white-space:nowrap}
+.animal{flex:none;align-self:center;width:clamp(72px,16vh,136px);height:clamp(65px,14vh,122px);border-radius:22px;display:grid;place-items:center;font-size:clamp(42px,9vh,78px);background:radial-gradient(circle at 30% 20%,#ffffff35,#ffffff07 70%);box-shadow:inset 0 1px #ffffff30,0 0 23px #e2c57416;position:relative;text-shadow:0 5px 12px #0004}
+.animal:after{content:"";position:absolute;bottom:5px;width:60%;height:7px;background:#0005;filter:blur(5px);border-radius:50%}
+.instruction{text-align:center;font-size:10px;color:#aabde1;font-weight:1000;letter-spacing:1.6px;flex:none}
+.question{text-align:center;font-weight:1000;font-size:clamp(21px,5.7vw,31px);letter-spacing:-.6px;line-height:1.13;display:grid;place-items:center;margin:0;min-height:2.05em;flex:none;text-wrap:balance}
+.answers{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(7px,1.5vh,11px)}
+.ans{position:relative;min-width:0;border:1px solid #ffffff2e;border-radius:14px;background:linear-gradient(145deg,#364970,#263352);box-shadow:inset 0 1px #ffffff21,0 3px 8px #0003;color:#fff;font-weight:850;font-size:clamp(12px,3.6vw,17px);line-height:1.2;padding:9px 7px;overflow-wrap:anywhere;transition:transform .12s,filter .12s}
+.ans:active:not(:disabled){transform:scale(.96)}.ans:disabled{cursor:default}
+.ans .num{position:absolute;top:5px;left:7px;color:#b3c6e4;font-size:10px}
+.ans.right{background:linear-gradient(135deg,#098c69,#26c78b);border-color:#bdffe8;box-shadow:0 0 21px #1cfca052}.ans.wrong{background:linear-gradient(135deg,#a32a4b,#f7486e);border-color:#ffb0c1;box-shadow:0 0 18px #f533655c}.ans.muted{opacity:.38}
+.feedback{flex:none;text-align:center;color:#b8cbe9;font-size:clamp(10px,3vw,13px);font-weight:900;min-height:18px}.feedback.ok{color:#6affc6}.feedback.no{color:#ff92ab}
+.bottom{display:flex;align-items:center;justify-content:space-between;flex:none;gap:5px}.bottom span{font-size:11px;color:#ffe08b;font-weight:850}.bottom button{font-size:11px;border:1px solid #ffffff2a;background:#ffffff13;border-radius:8px;padding:6px 9px;color:#d7e3fb;font-weight:850}
+footer{text-align:center;flex:none;color:#9caccd;font-size:10px;letter-spacing:1.2px;font-weight:900}footer b{color:#fff}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;z-index:30;padding:16px;background:#030817dd;backdrop-filter:blur(8px)}
+.modal{width:100%;max-width:435px;padding:22px 15px;text-align:center;position:relative;z-index:3}
+.modal .big{font-size:clamp(66px,15vh,105px);line-height:1.1}.modal h2{font-size:clamp(25px,6.5vw,34px);line-height:1.15;margin:9px 0}.modal p{font-size:13px;line-height:1.45;color:#c3d2eb;margin:8px 0 15px}
+.modal .value{color:var(--gold);font-weight:1000;font-size:clamp(37px,11vw,54px);line-height:1.1}
+.resultgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:13px 0}.resultgrid>div{background:#ffffff13;border:1px solid #ffffff26;border-radius:10px;padding:9px 5px;font-size:11px;color:#c8d6ee}.resultgrid b{display:block;color:#fff;font-size:24px}
+.modal .cta{margin-top:8px}
+.spark{position:absolute;left:50%;top:45%;width:10px;height:10px;z-index:1;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);pointer-events:none;animation:scatter var(--dur) ease-out forwards}
+@keyframes scatter{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.25)}}
+.explosion{position:absolute;left:50%;top:47%;z-index:4;font-size:86px;animation:boom .9s ease-out both;pointer-events:none}
+@keyframes boom{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-30deg)}30%{opacity:1;transform:translate(-50%,-50%) scale(2.4)}65%{opacity:1;transform:translate(-50%,-50%) scale(4.6)}100%{opacity:0;transform:translate(-50%,-50%) scale(8) rotate(35deg)}}
+.flash{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle,#fff7bb,#ffb453,#ff38649c,transparent 72%);animation:flash .7s ease-out forwards}
+@keyframes flash{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(2.2)}}
+.shake{animation:shake .4s ease-out both}@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.wintext{color:var(--gold);font-weight:1000}
+@media(max-height:720px){#app{gap:5px;padding-top:5px;padding-bottom:5px}.top{min-height:35px}.logo{height:34px;width:34px;font-size:19px}.brand strong{font-size:18px}.brand small{font-size:9px}.hero{gap:6px;padding:9px}.orbit{height:clamp(100px,20vh,145px);width:clamp(110px,24vh,166px)}.orbit .paw{height:clamp(72px,15vh,105px);width:clamp(72px,15vh,105px);font-size:clamp(52px,10vh,75px)}.orbit .orb{width:35px;height:35px;font-size:21px}.hero h1{font-size:clamp(28px,7.7vw,38px)}.pills>div{padding:5px 3px}.pills b{font-size:17px}.menu{gap:6px}.cta{padding:10px}.screen{gap:5px}.stat{padding:4px}.stat b{font-size:18px}.questionpanel{gap:5px;padding:8px}.animal{width:75px;height:68px;font-size:43px;border-radius:14px}.question{font-size:clamp(18px,5vw,24px);min-height:1.9em}.ans{font-size:clamp(11px,3.2vw,15px);padding:6px}.feedback{font-size:11px}}
+@media(max-height:575px){.orbit{display:none}.hero h1{font-size:29px}.hero p{font-size:11px}.pills>div{font-size:10px;padding:4px 2px}.pills b{font-size:15px}.animal{height:49px;font-size:35px;width:60px}.question{font-size:17px;min-height:1.8em}.questionpanel{gap:4px;padding:7px}.stat b{font-size:16px}.progress{min-height:21px}.instruction{font-size:9px}.feedback{min-height:15px}.meta .badge{padding:3px 6px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style></head><body><div id="app"><div class="blob one"></div><div class="blob two"></div>
+<header class="top"><div class="brand"><span class="logo">🐾</span><div><strong>DE-<em>MAX</em></strong><small>ANIMAL ARENA • A1–B1</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button></div></header>
+<main class="view"><section id="home" class="screen home"><div class="hero glass"><div class="orbit"><div class="orb a">🦁</div><div class="orb b">🦋</div><div class="orb c">🐬</div><div class="orb d">🦅</div><div class="paw">🐾</div></div><div class="tag">VELIKI NEMAČKI IZAZOV</div><h1 id="heroTitle">200 <span>ŽIVOTINJA</span></h1><p>Nauči nazive životinja na nemačkom uz <b>der • die • das</b>, prevod, brzinu, bonus poene i takmičenje!</p><div class="pills"><div><b>🐾 200</b>životinja</div><div><b>⏱️ 15 s</b>po pitanju</div><div><b>🏆 x2</b>bonus poeni</div></div></div><div class="menu"><button id="marathon" class="cta primary">🔥 MARATON — SVIH 200</button><button id="quick" class="cta secondary">⚡ BRZI KVIZ — 20 PITANJA</button><div class="records"><div>🏅 Rekord 20: <span id="best20">0</span></div><div>👑 Rekord 200: <span id="best200">0</span></div></div></div></section>
+<section id="game" class="screen hide"><div class="hud"><div class="stat"><small>POENI</small><b class="score" id="score">0</b></div><div class="stat"><small>ŽIVOTI</small><b class="hearts" id="hearts">❤️❤️❤️❤️</b></div><div class="stat"><small>VREME</small><b class="time" id="seconds">15</b></div></div><div class="progress"><label id="stage">1 / 200</label><div class="progressbar"><div id="progress"></div></div><span class="badge">🏆 KVIZ</span></div><div class="timerbar"><div id="timerProgress"></div></div><div class="questionpanel glass" id="questionPanel"><div class="meta"><div class="category" id="category">DOMAĆE ŽIVOTINJE</div><div class="badge" id="badge">🔥 NIZ 0</div></div><div class="animal" id="animal">🦁</div><div class="instruction" id="instruction">PREVEDI NA SRPSKI</div><h2 class="question" id="question">der Löwe</h2><div id="answers" class="answers"></div><div class="feedback" id="feedback">Izaberi tačan odgovor</div></div><div class="bottom"><span>🎯 Tačno = više poena • 🌟 Bonus svakih 10</span><button id="quit">✕ Izađi</button></div></section></main>
+<footer>POWERED BY <b>DE-MAX</b></footer>
+<div id="overlay" class="overlay hide"><div id="modal" class="modal glass" role="dialog" aria-modal="true"></div></div>
+</div><script type="text/plain" id="animal-data"># DOMAĆE ŽIVOTINJE I FARMA
+der Hund|pas|🐕
+die Katze|mačka|🐈
+das Pferd|konj|🐎
+das Pony|poni|🐴
+die Kuh|krava|🐄
+der Stier|bik|🐂
+das Kalb|tele|🐮
+das Schwein|svinja|🐖
+das Ferkel|prase|🐷
+das Schaf|ovca|🐑
+der Widder|ovan|🐏
+das Lamm|jagnje|🐑
+die Ziege|koza|🐐
+der Ziegenbock|jarac|🐐
+der Esel|magarac|🫏
+das Maultier|mula|🐴
+das Huhn|kokoška|🐔
+der Hahn|petao|🐓
+das Küken|pile|🐥
+die Ente|patka|🦆
+der Erpel|patak|🦆
+die Gans|guska|🪿
+der Truthahn|ćuran|🦃
+das Kaninchen|kunić|🐇
+der Büffel|bivol|🦬
+# KUĆNI LJUBIMCI I MALE ŽIVOTINJE
+der Hamster|hrčak|🐹
+das Meerschweinchen|morsko prase|🐹
+die Maus|miš|🐁
+die Ratte|pacov|🐀
+der Wellensittich|tigrica|🦜
+der Papagei|papagaj|🦜
+der Goldfisch|zlatna ribica|🐠
+die Schildkröte|kornjača|🐢
+der Igel|jež|🦔
+das Frettchen|pitomi tvor|🦡
+das Chinchilla|činčila|🐭
+der Degu|degu|🐭
+der Gecko|gekon|🦎
+die Eidechse|gušter|🦎
+der Axolotl|aksolotl|🦎
+die Vogelspinne|tarantula|🕷️
+der Skorpion|škorpija|🦂
+der Salamander|daždevnjak|🦎
+die Rennmaus|gerbil|🐁
+die Fledermaus|slepi miš|🦇
+das Stachelschwein|bodljikavo prase|🦔
+das Eichhörnchen|veverica|🐿️
+das Streifenhörnchen|prugasta veverica|🐿️
+der Feldhamster|poljski hrčak|🐹
+der Maulwurf|krtica|🐾
+# ŠUMA I PLANINE
+der Wolf|vuk|🐺
+der Fuchs|lisica|🦊
+der Bär|medved|🐻
+der Braunbär|mrki medved|🐻
+der Eisbär|polarni medved|🐻‍❄️
+der Waschbär|rakun|🦝
+der Dachs|jazavac|🦡
+der Luchs|ris|🐈
+der Hirsch|jelen|🦌
+das Reh|srna|🦌
+das Wildschwein|divlja svinja|🐗
+der Elch|los|🫎
+das Rentier|irvas|🦌
+der Steinbock|kozorog|🐐
+die Gämse|divokoza|🐐
+das Murmeltier|mrmot|🐿️
+der Hase|zec|🐇
+der Vielfraß|žderavac|🐻
+der Otter|vidra|🦦
+der Biber|dabar|🦫
+das Wiesel|lasica|🐾
+der Marder|kuna|🐾
+der Hermelin|hermelin|🐾
+das Wisent|evropski bizon|🦬
+der Damhirsch|jelen lopatar|🦌
+# SAVANA I DŽUNGLA
+der Löwe|lav|🦁
+der Tiger|tigar|🐅
+der Leopard|leopard|🐆
+der Gepard|gepard|🐆
+der Jaguar|jaguar|🐆
+der Elefant|slon|🐘
+die Giraffe|žirafa|🦒
+das Zebra|zebra|🦓
+das Nashorn|nosorog|🦏
+das Flusspferd|nilski konj|🦛
+der Affe|majmun|🐒
+der Gorilla|gorila|🦍
+der Schimpanse|šimpanza|🐒
+der Orang-Utan|orangutan|🦧
+der Pavian|pavijan|🐵
+die Hyäne|hijena|🐺
+die Antilope|antilopa|🦌
+die Gazelle|gazela|🦌
+das Gnu|gnu|🦬
+das Kamel|kamila|🐪
+das Dromedar|jednogrba kamila|🐪
+das Lama|lama|🦙
+das Alpaka|alpaka|🦙
+das Faultier|lenjivac|🦥
+der Ameisenbär|mravojed|🐾
+# PTICE
+der Adler|orao|🦅
+der Falke|soko|🦅
+der Habicht|jastreb|🦅
+die Eule|sova|🦉
+der Uhu|buljina|🦉
+die Krähe|vrana|🐦‍⬛
+der Rabe|gavran|🐦‍⬛
+die Elster|svraka|🐦
+der Spatz|vrabac|🐦
+die Schwalbe|lasta|🐦
+die Amsel|kos|🐦‍⬛
+das Rotkehlchen|crvendać|🐦
+der Specht|detlić|🐦
+der Storch|roda|🕊️
+der Kranich|ždral|🐦
+der Flamingo|flamingo|🦩
+der Pinguin|pingvin|🐧
+der Strauß|noj|🪶
+der Pfau|paun|🦚
+die Taube|golub|🕊️
+die Möwe|galeb|🐦
+der Pelikan|pelikan|🐦
+der Schwan|labud|🦢
+der Eisvogel|vodomar|🐦
+der Kolibri|kolibri|🐦
+# MORE I OKEAN
+der Hai|ajkula|🦈
+der Wal|kit|🐋
+der Blauwal|plavi kit|🐋
+der Delfin|delfin|🐬
+der Orca|orka|🐳
+die Robbe|foka|🦭
+der Seelöwe|morski lav|🦭
+das Walross|morž|🦭
+der Oktopus|hobotnica|🐙
+der Tintenfisch|lignja|🦑
+der Seestern|morska zvezda|⭐
+der Seeigel|morski jež|🦔
+die Qualle|meduza|🪼
+die Krabbe|kraba|🦀
+der Krebs|rak|🦞
+der Hummer|jastog|🦞
+die Garnele|škamp|🦐
+das Seepferdchen|morski konjić|🐠
+der Kugelfisch|riba naduvača|🐡
+der Clownfisch|riba klovn|🐠
+der Schwertfisch|sabljarka|🐟
+der Thunfisch|tuna|🐟
+der Hering|haringa|🐟
+die Sardine|sardina|🐟
+der Rochen|raža|🐟
+# REKE I MOČVARE
+der Frosch|žaba|🐸
+die Kröte|krastača|🐸
+der Laubfrosch|gatalinka|🐸
+der Molch|mrmoljak|🦎
+das Krokodil|krokodil|🐊
+der Alligator|aligator|🐊
+das Nilkrokodil|nilski krokodil|🐊
+die Wasserschildkröte|vodena kornjača|🐢
+der Karpfen|šaran|🐟
+die Forelle|pastrmka|🐟
+der Lachs|losos|🐟
+der Hecht|štuka|🐟
+der Wels|som|🐟
+der Zander|smuđ|🐟
+der Barsch|grgeč|🐟
+der Aal|jegulja|🐍
+die Schleie|linjak|🐟
+die Brasse|deverika|🐟
+der Stör|jesetra|🐟
+der Flusskrebs|rečni rak|🦞
+die Libelle|vilin konjic|🪰
+die Wasserspinne|vodeni pauk|🕷️
+die Ringelnatter|belouška|🐍
+der Reiher|čaplja|🐦
+der Kormoran|kormoran|🐦
+# INSEKTI I EGZOTIČNE ŽIVOTINJE
+die Biene|pčela|🐝
+die Wespe|osa|🐝
+die Hornisse|stršljen|🐝
+die Hummel|bumbar|🐝
+die Ameise|mrav|🐜
+die Termite|termit|🐜
+die Fliege|muva|🪰
+die Mücke|komarac|🦟
+die Motte|moljac|🦋
+der Schmetterling|leptir|🦋
+die Raupe|gusenica|🐛
+der Käfer|buba|🪲
+der Marienkäfer|bubamara|🐞
+der Hirschkäfer|jelenak|🪲
+die Heuschrecke|skakavac|🦗
+die Grille|zrikavac|🦗
+die Zikade|cvrčak|🦗
+die Spinne|pauk|🕷️
+die Schnecke|puž|🐌
+der Regenwurm|kišna glista|🪱
+die Schlange|zmija|🐍
+die Kobra|kobra|🐍
+die Python|piton|🐍
+die Anakonda|anakonda|🐍
+das Chamäleon|kameleon|🦎</script><script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const raw=document.getElementById("animal-data").textContent.trim();
+let cat="";const bank=[];
+raw.split("\n").forEach(row=>{row=row.trim();if(row.startsWith("# ")){cat=row.slice(2);return}const parts=row.split("|");if(parts.length===3)bank.push({de:parts[0],sr:parts[1],emoji:parts[2],cat})});
+const S={mode:200,order:[],i:0,score:0,lives:12,streak:0,correct:0,active:false,locked:true,deadline:0,remaining:15,tick:null,next:null,q:null,answers:[],direction:"de",bonus:false,played:0};
+let musicEnabled=true,fxEnabled=true,ctx=null,scheduler=null,nextBeat=0,beatStep=0,best20=0,best200=0;
+try{best20=Number(localStorage.getItem("de-max-animals-best20")||"0");best200=Number(localStorage.getItem("de-max-animals-best200")||"0")}catch(e){}
+$("best20").textContent=best20;$("best200").textContent=best200;
+function audioInit(){try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume().catch(()=>{})}catch(e){}}
+function env(g,t,d,v,attack=.008){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+d)}
+function osc(f,t,d,v,type="sine",end){if(!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(Math.max(24,end),t+d);env(g,t,d,v);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d+.05)}
+function noise(t,d,v,hp=0){if(!ctx)return;const len=Math.ceil(d*ctx.sampleRate),b=ctx.createBuffer(1,len,ctx.sampleRate),a=b.getChannelData(0);for(let i=0;i<len;i++)a[i]=(Math.random()*2-1);const src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();src.buffer=b;f.type=hp?"highpass":"lowpass";f.frequency.value=hp||3300;env(g,t,d,v,.002);src.connect(f);f.connect(g);g.connect(ctx.destination);src.start(t);src.stop(t+d+.03)}
+function kick(t){osc(150,t,.24,.065,"sine",46)}
+function clap(t){noise(t,.11,.027,800);noise(t+.045,.085,.017,1100)}
+function hat(t,accent){noise(t,.045,accent?.015:.008,3200)}
+function bass(f,t){osc(f,t,.25,.024,"triangle");osc(f/2,t,.24,.015,"sine")}
+function pluck(f,t){osc(f,t,.17,.017,"triangle");osc(f*2,t,.12,.004,"sine")}
+const BPM=121,beatDur=60/BPM/4,roots=[146.83,116.54,174.61,130.81],melody=[440,523.25,587.33,523.25,392,440,349.23,440,523.25,587.33,698.46,587.33,440,523.25,587.33,659.25];
+function scheduleBeat(i,t){const j=i%16,bar=Math.floor(i/16)%4;if(j%4===0)kick(t);if(j===4||j===12)clap(t);if(j%2===0)hat(t,j%4===0);if(j===0||j===6||j===10)bass(roots[bar],t);if(j%2===1)pluck(melody[(i+bar*4)%16],t);if(j===0){osc(roots[bar]*2,t,1.38,.006,"sine");osc(roots[bar]*3,t,1.2,.004,"triangle")}}
+function startMusic(){if(!musicEnabled)return;audioInit();if(!ctx||scheduler)return;beatStep=0;nextBeat=ctx.currentTime+.05;scheduler=setInterval(()=>{if(!ctx||ctx.state!=="running")return;while(nextBeat<ctx.currentTime+.17){scheduleBeat(beatStep++,nextBeat);nextBeat+=beatDur}},27)}
+function stopMusic(){if(scheduler){clearInterval(scheduler);scheduler=null}}
+function fx(kind){if(!fxEnabled)return;audioInit();if(!ctx)return;const t=ctx.currentTime+.015;
+ if(kind==="tap"){osc(740,t,.065,.04,"triangle");osc(1047,t+.04,.09,.023,"sine")}
+ if(kind==="right"){[587.33,740,880,1174.66].forEach((f,i)=>osc(f,t+i*.075,.22,.064,"triangle"));osc(1760,t+.3,.25,.018,"sine")}
+ if(kind==="bonus"){[523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>osc(f,t+i*.09,.25,.073,"triangle"))}
+ if(kind==="wrong"){osc(310,t,.32,.065,"sawtooth",135);osc(160,t+.13,.37,.075,"triangle",75)}
+ if(kind==="tick")osc(1000,t,.06,.028,"sine")
+ if(kind==="win"){[523,659,784,1047,1318,1568,2093].forEach((f,i)=>osc(f,t+i*.105,.32,.075,"triangle"))}
+ if(kind==="boom"){noise(t,1.25,.19);osc(155,t,.95,.16,"sawtooth",30);osc(65,t+.12,1.03,.16,"sine",25);noise(t+.18,.8,.13)}
+}
+$("music").onclick=()=>{musicEnabled=!musicEnabled;$("music").textContent=musicEnabled?"♫ ON":"♫ OFF";$("music").classList.toggle("off",!musicEnabled);musicEnabled?startMusic():stopMusic();fx("tap")};
+$("effects").onclick=()=>{fxEnabled=!fxEnabled;$("effects").textContent=fxEnabled?"🔊 ON":"🔇 OFF";$("effects").classList.toggle("off",!fxEnabled);fx("tap")};
+function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function clearTimers(){if(S.tick){clearInterval(S.tick);S.tick=null}if(S.next){clearTimeout(S.next);S.next=null}}
+function start(mode){clearTimers();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=mode===200?12:4;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
+function nextQuestion(){clearTimers();if(S.i>=S.order.length){finish(false);return}S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction=Math.random()<.5?"de":"sr";S.locked=false;
+const key=S.direction==="de"?"sr":"de";const correct=S.q[key];const pool=shuffled(bank.filter(x=>x.cat===S.q.cat&&x[key]!==correct));S.answers=shuffled([correct,...pool.slice(0,3).map(x=>x[key])]);
+$("questionPanel").classList.toggle("bonus",S.bonus);$("questionPanel").classList.remove("shake");$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("hearts").style.fontSize=S.mode===200?"clamp(9px,2.25vw,13px)":"clamp(15px,4.3vw,20px)";
+$("stage").textContent=(S.i+1)+" / "+S.mode;$("progress").style.width=(S.i/S.mode*100)+"%";$("category").textContent=S.q.cat;$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;$("animal").textContent=S.q.emoji;
+$("instruction").textContent=S.direction==="de"?"PREVEDI NA SRPSKI":"PREVEDI NA NEMAČKI";$("question").textContent=S.q[S.direction];$("feedback").className="feedback";$("feedback").textContent=S.bonus?"✨ BONUS RUNDA: DUPLI POENI!":"Izaberi tačan odgovor";
+$("answers").innerHTML="";
+S.answers.forEach((text,i)=>{const b=document.createElement("button");b.className="ans";b.type="button";const num=document.createElement("span"),txt=document.createElement("span");num.className="num";num.textContent=i+1;txt.textContent=text;b.append(num,txt);b.onclick=()=>answer(i);$("answers").appendChild(b)});
+S.deadline=performance.now()+15000;S.lastBeep=0;updateTimer();S.tick=setInterval(updateTimer,70)}
+function updateTimer(){if(S.locked)return;const r=Math.max(0,(S.deadline-performance.now())/1000),sec=Math.ceil(r);S.remaining=r;$("seconds").textContent=sec;$("timerProgress").style.width=(r/15*100)+"%";$("timerProgress").classList.toggle("urgent",r<5);if(sec<=3&&sec>0&&sec!==S.lastBeep){S.lastBeep=sec;fx("tick")}if(r<=0)answer(-1)}
+function answer(idx){if(S.locked||!S.active)return;S.locked=true;clearTimers();S.played++;const correct=S.q[S.direction==="de"?"sr":"de"],good=idx>=0&&S.answers[idx]===correct,time=Math.max(0,Math.ceil((S.deadline-performance.now())/1000));Array.from($("answers").children).forEach((b,i)=>{b.disabled=true;if(S.answers[i]===correct)b.classList.add("right");else if(i===idx)b.classList.add("wrong");else b.classList.add("muted")});
+if(good){S.correct++;S.streak++;const gained=(100+Math.min(10,S.streak-1)*15+time*5)*(S.bonus?2:1);S.score+=gained;$("feedback").className="feedback ok";$("feedback").textContent="✅ TAČNO! +"+gained+" POENA"+(S.bonus?" 🌟 BONUS!":"");fx(S.bonus?"bonus":"right");sparks($("questionPanel"),S.bonus?30:18,false);if(navigator.vibrate)navigator.vibrate(30)}
+else{S.streak=0;S.lives--;$("feedback").className="feedback no";$("feedback").textContent=idx===-1?"⏰ VREME ISTEKLO!":"❌ TAČNO JE: "+correct;$("questionPanel").classList.add("shake");fx("wrong");if(navigator.vibrate)navigator.vibrate([60,50,70])}
+$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
+S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?900:1350)}
+function saveRecord(){let changed=false;try{if(S.mode===200&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best200",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
+function modal(html){$("modal").innerHTML=html;$("overlay").classList.remove("hide")}
+function closeModal(){$("overlay").classList.add("hide");$("overlay").querySelectorAll(".spark,.explosion,.flash").forEach(e=>e.remove())}
+function sparks(target,count,explode){for(let i=0;i<count;i++){const p=document.createElement("span"),angle=Math.random()*Math.PI*2,distance=(explode?95:35)+Math.random()*(explode?330:130);p.className="spark";p.style.setProperty("--dx",Math.cos(angle)*distance+"px");p.style.setProperty("--dy",Math.sin(angle)*distance+"px");p.style.setProperty("--dur",(expludeDuration(explode)+Math.random()*550)+"ms");p.style.setProperty("--c",["#ffdc66","#ff9742","#fd4171","#9d77ff","#fff4ba"][i%5]);const size=(5+Math.random()*11)+"px";p.style.width=size;p.style.height=size;target.appendChild(p);setTimeout(()=>p.remove(),1650)}}
+function expludeDuration(boom){return boom?850:520}
+function explosion(){fx("boom");const over=$("overlay"),flash=document.createElement("div"),fire=document.createElement("div");flash.className="flash";fire.className="explosion";fire.textContent="💥";over.append(flash,fire);sparks(over,80,true);$("app").classList.add("shake");setTimeout(()=>{$("app").classList.remove("shake");flash.remove();fire.remove()},930)}
+function finish(lost){clearTimers();S.locked=true;S.active=false;const newRecord=saveRecord();const title=lost?"💥 KRAJ IGRE!":"🏆 ŠAMPION ŽIVOTINJA!",msg=lost?"Izgubio/la si sve živote. Pokušaj ponovo i popravi rekord!":"Fantastično! Završio/la si čitav izazov.";
+modal("<div class='big'>"+(lost?"💔":"🏆")+"</div><h2>"+title+"</h2><p>"+msg+"</p><div class='value'>"+S.score+" <span style='font-size:17px'>POENA</span></div><div class='resultgrid'><div>TAČNI ODGOVORI<b>"+S.correct+" / "+S.played+"</b></div><div>PREĐENO<b>"+S.played+" / "+S.mode+"</b></div></div>"+(newRecord?"<p class='wintext'>🌟 NOVI LIČNI REKORD!</p>":"")+"<button id='again' class='cta primary'>🔄 IGRAJ PONOVO</button><button id='back' class='cta ghost'>⌂ POČETNA</button>");
+$("again").onclick=()=>start(S.mode);$("back").onclick=home;if(lost)explosion();else{fx("win");sparks($("overlay"),70,true)}}
+function home(){clearTimers();S.active=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
+$("marathon").onclick=()=>start(200);$("quick").onclick=()=>start(20);
+$("quit").onclick=()=>{if(!S.active)return;clearTimers();S.locked=true;modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");$("resume").onclick=()=>{closeModal();S.locked=false;S.deadline=performance.now()+Math.max(1,S.remaining)*1000;S.tick=setInterval(updateTimer,70)};$("exit").onclick=home};
+document.addEventListener("keydown",e=>{if(S.active&&!S.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
+document.addEventListener("visibilitychange",()=>{if(document.hidden){stopMusic();if(S.active&&!S.locked){clearInterval(S.tick);S.tick=null;S.remaining=Math.max(0,(S.deadline-performance.now())/1000);S.deadline=Infinity}}else{if(musicEnabled&&ctx)startMusic();if(S.active&&!S.locked&&S.deadline===Infinity){S.deadline=performance.now()+S.remaining*1000;S.tick=setInterval(updateTimer,70)}}});
+if(bank.length!==200){$("heroTitle").textContent="Greška u bazi: "+bank.length}
+})();</script></body></html>
