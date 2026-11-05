@@ -171,7 +171,7 @@ button{font:inherit}
       <span class="badge">bez upisivanja</span>
       <span class="badge">nasumičan redosled</span>
     </div>
-    <div class="name-wrap"><label for="studentName">Ime učenika</label><input class="name-input" id="studentName" type="text" maxlength="40" autocomplete="name" placeholder="Unesi ime i prezime"><div class="name-error" id="nameError"></div></div><button class="primary" id="startBtn" type="button">▶ Započni kviz</button>
+    <button class="primary" id="startBtn" type="button">▶ Započni kviz</button>
   </section>
 
   <section class="card quiz" id="quizScreen" aria-live="polite">
@@ -192,7 +192,7 @@ button{font:inherit}
       <div class="stat"><b id="wrongStat">0</b><span>grešaka</span></div>
       <div class="stat"><b id="accuracyStat">0%</b><span>tačnost</span></div>
     </div>
-    <div class="leaderboard"><h3>🏆 TOP 5 učenika</h3><ol id="leaderboardList"></ol></div><button class="primary" id="againBtn" type="button">↻ Igraj ponovo</button>
+    <div class="leaderboard"><h3>🏆 TOP 5 rezultata</h3><ol id="leaderboardList"></ol></div><button class="primary" id="againBtn" type="button">↻ Igraj ponovo</button>
   </section>
 
   <div class="source">DE-MAX • A1 • Izvor pitanja: završni test, lekcije 1–7</div>
@@ -203,7 +203,7 @@ const BANK=[{"p":"Kako pravilno odgovaramo na „Wie heißen Sie?“","o":["Ich 
 const TOTAL_TIME=120;
 const $=id=>document.getElementById(id);
 let queue=[], pos=0, timeLeft=TOTAL_TIME, timer=null, running=false, locked=false;
-let correct=0, wrong=0, answered=0, streak=0, current=null, studentName="", startedAt=0;
+let correct=0, wrong=0, answered=0, streak=0, current=null, startedAt=0;
 
 function shuffle(arr){
   const a=[...arr];
@@ -223,7 +223,7 @@ function getLeaderboard(){
 function saveLeaderboard(entry){
   const list=getLeaderboard();
   list.push(entry);
-  list.sort((a,b)=>(b.score-a.score)||(a.seconds-b.seconds)||(b.accuracy-a.accuracy)||String(a.name).localeCompare(String(b.name)));
+  list.sort((a,b)=>(b.score-a.score)||(a.seconds-b.seconds)||(b.accuracy-a.accuracy));
   const top=list.slice(0,5);
   try{ localStorage.setItem(leaderboardKey(),JSON.stringify(top)); }catch(e){}
   return top;
@@ -240,7 +240,7 @@ function renderLeaderboard(list=getLeaderboard()){
     const li=document.createElement("li");
     const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":String(i+1)+".";
     li.innerHTML='<span class="rank">'+medal+'</span><span class="student"></span><span class="score">'+r.score+' tačnih</span><span class="secs">'+r.seconds+' s</span>';
-    li.querySelector(".student").textContent=r.name;
+    li.querySelector(".student").textContent="Partija "+(i+1);
     box.appendChild(li);
   });
 }
@@ -259,14 +259,6 @@ function resetState(){
   $("feedback").className="feedback"; $("feedback").textContent="";
 }
 function startGame(){
-  const name=$("studentName").value.trim().replace(/\s+/g," ");
-  if(name.length<2){
-    $("nameError").textContent="Unesi ime učenika.";
-    $("studentName").focus();
-    return;
-  }
-  $("nameError").textContent="";
-  studentName=name;
   resetState();
   window.DeMaxSound?.play('tap');
   $("startScreen").style.display="none";
@@ -360,8 +352,8 @@ function endGame(){
   $("answeredStat").textContent=answered;
   $("wrongStat").textContent=wrong;
   $("accuracyStat").textContent=acc+"%";
-  $("resultText").textContent=studentName+", rezultat: "+correct+" tačnih za "+seconds+" sekundi.";
-  const top=saveLeaderboard({name:studentName,score:correct,seconds,accuracy:acc,ts:Date.now()});
+  $("resultText").textContent="Rezultat: "+correct+" tačnih za "+seconds+" sekundi.";
+  const top=saveLeaderboard({score:correct,seconds,accuracy:acc,ts:Date.now()});
   renderLeaderboard(top);
   loadBest();
   queueMobileFit();
@@ -370,11 +362,9 @@ $("startBtn").addEventListener("click",startGame);
 $("againBtn").addEventListener("click",()=>{
   $("resultScreen").style.display="none";
   $("startScreen").style.display="block";
-  $("studentName").focus();
   queueMobileFit();
 });
 $("skipBtn").addEventListener("click",skip);
-$("studentName").addEventListener("keydown",e=>{if(e.key==="Enter")startGame();});
 loadBest();
 
 // Mobile only: keep all visible content inside viewport without scrolling.
