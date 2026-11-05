@@ -246,7 +246,7 @@ function makePlayer(id){return {name:"Igrač "+(id+1),score:0,lives:3,streak:0,d
 function currentPlayer(){return game.players[game.mode==="solo"?0:game.i%2]}
 function clear(){clearInterval(game.tick);clearTimeout(game.transition);game.tick=0;game.transition=0}
 function close(){var box=$("overlay");box.classList.add("hide");box.querySelectorAll(".spark,.flash,.explosion").forEach(function(x){x.remove()})}
-function modal(s){$("modal").innerHTML=s;$("overlay").classList.remove("hide")}
+function modal(s){$("modal").classList.remove("results-modal");$("modal").innerHTML=s;$("overlay").classList.remove("hide")}
 function start(mode){close();clear();game.mode=mode;game.players=mode==="solo"?[makePlayer(0)]:[makePlayer(0),makePlayer(1)];game.i=0;game.count=mode==="solo"?12:16;game.q=choose(game.count);game.done=false;$("home").classList.add("hide");$("game").classList.remove("hide");$("duelb").classList.toggle("hide",mode==="solo");musicStart();sound("click");show()}
 function show(){clear();if(game.i>=game.count){finish(false);return}var p=currentPlayer(),q=game.q[game.i];game.current=q;game.opts=mix(q.slice(2,6));game.bonus=(p.done+1)%4===0;game.locked=false;
 $("panel").classList.remove("shake");$("panel").classList.toggle("bonuspanel",game.bonus);
@@ -271,12 +271,49 @@ game.transition=setTimeout(function(){if(p.lives<=0){finish(true,p);return}game.
 function handoff(){var p=currentPlayer();modal("<div class='emoji'>"+(p.id?"🟡":"🔴")+"</div><h2>Na potezu je "+p.name+"!</h2><p>Predajte telefon sledećem igraču za novo pitanje.</p><button id='go' class='btn goldbtn'>🎮 SPREMAN / SPREMNA</button>");$("go").onclick=function(){sound("click");close();show()}}
 function sparks(where,count,boom){for(var i=0;i<count;i++){var e=document.createElement("div"),ang=Math.random()*6.283,dist=(boom?100:60)+Math.random()*(boom?310:85);e.className="spark";e.style.setProperty("--x",Math.cos(ang)*dist+"px");e.style.setProperty("--y",Math.sin(ang)*dist+"px");e.style.setProperty("--dur",(600+Math.random()*750)+"ms");e.style.setProperty("--c",["#ffcc45","#ff713b","#ff3a77","#fff3a3"][i%4]);e.style.width=e.style.height=(5+Math.random()*12)+"px";where.appendChild(e);setTimeout(function(node){node.remove()},1600,e)}}
 function blast(){sound("boom");var b=$("overlay"),e=document.createElement("div"),f=document.createElement("div");e.className="explosion";e.textContent="💥";f.className="flash";b.appendChild(f);b.appendChild(e);sparks(b,65,true);$("app").classList.add("shake");setTimeout(function(){$("app").classList.remove("shake");e.remove();f.remove()},950)}
-function save(score){if(score>best){best=score;$("best").textContent=best;try{localStorage.setItem("demax-deutschland-record",String(best))}catch(e){}return true}return false}
-function finish(lost,eliminated){clear();game.done=true;game.locked=true;var solo=game.mode==="solo",p=game.players[0],p2=game.players[1],title,emoji,desc,details="";
-if(solo){var record=save(p.score);title=lost?"💥 KRAJ IGRE!":"🏆 BRAVO, ŠAMPIONE!";emoji=lost?"💔":"🏆";desc=lost?"Ponestalo je života. Probaj ponovo i obori rekord!":"Uspešno si završio/la kviz!";details="<div class='scorebig'>"+p.score+" poena</div><div class='result'><div>TAČNO<strong>"+p.correct+" / "+p.done+"</strong></div><div>REKORD<strong>"+best+"</strong></div></div>"+(record?"<p>🌟 NOVI LIČNI REKORD!</p>":"")}
-else{var winner=p.score>p2.score?p:p2.score>p.score?p2:null;if(lost)winner=eliminated===p?p2:p;title=winner?"🏆 POBEDNIK: "+winner.name+"!":"🤝 NEREŠENO!";emoji=lost?"💥":"🏆";desc=lost?eliminated.name+" je ostao bez života!":"Duel je završen. Čestitamo!";details="<div class='result'><div>🔴 IGRAČ 1<b>"+p.score+"</b>"+p.correct+" tačnih</div><div>🟡 IGRAČ 2<b>"+p2.score+"</b>"+p2.correct+" tačnih</div></div>"}
-modal("<div class='emoji'>"+emoji+"</div><h2>"+title+"</h2><p>"+desc+"</p>"+details+"<button class='btn goldbtn' id='again'>🔄 IGRAJ PONOVO</button><button class='btn darkbtn' id='back'>⌂ POČETNA</button>");
-$("again").onclick=function(){start(game.mode)};$("back").onclick=home;if(lost)blast();else{sound("win");sparks($("overlay"),50,true)}}
+
+function finish(lost,eliminated){
+ clear();game.done=true;game.locked=true;
+ var mode=game.mode,solo=mode==="solo",p=game.players[0],p2=game.players[1];
+ var oldLeader=orderRank(mode)[0],oldScore=oldLeader?oldLeader.score:0;
+ var entries=game.players.map(function(player){return addRank(mode,player)});
+ var leader=orderRank(mode)[0],newRecord=game.players.some(function(player){return player.score>oldScore});
+ var winner,title,emoji,desc,details="";
+ if(solo){
+  title=lost?"💥 KRAJ IGRE!":"🏆 BRAVO, ŠAMPIONE!";
+  emoji=lost?"💔":"🏆";
+  desc=lost?"Ponestalo je života. Probaj ponovo i obori rekord!":"Uspešno si završio/la kviz!";
+  details="<div class='result'><div>OSVOJENO<strong>"+p.score.toLocaleString("sr-RS")+"</strong>POENA</div><div>TAČNO<strong>"+p.correct+" / "+p.done+"</strong>ODGOVORA</div></div>";
+ }else{
+  winner=p.score>p2.score?p:p2.score>p.score?p2:null;
+  if(lost)winner=eliminated===p?p2:p;
+  title=winner?"🏆 POBEDNIK: "+winner.name+"!":"🤝 NEREŠENO!";
+  emoji=lost?"💥":"🏆";
+  desc=lost?eliminated.name+" je ostao bez života!":"Duel je završen. Čestitamo!";
+  details="<div class='result'><div>🔴 IGRAČ 1<strong>"+p.score.toLocaleString("sr-RS")+"</strong>"+p.correct+" tačnih</div><div>🟡 IGRAČ 2<strong>"+p2.score.toLocaleString("sr-RS")+"</strong>"+p2.correct+" tačnih</div></div>";
+ }
+ details+="<div class='recordline'>👑 REKORD: <b id='modalBest'>"+leader.score.toLocaleString("sr-RS")+"</b> poena<br><span id='modalHolder'>"+safeName(leader.name)+"</span></div>";
+ if(newRecord)details+="<div class='newrecord'>🌟 NOVI REKORD! UPIŠI IME!</div>";
+ details+="<div class='rankblock'><div class='ranktitle'>🏅 TOP 5 — "+(solo?"SOLO":"DUEL")+"</div><div id='rankRows'>"+rankHtml(mode)+"</div></div>";
+ details+="<div class='namefields'><div class='namehint'>✍️ Upiši ime za rang-listu:</div>";
+ if(solo)details+="<input id='playerName0' maxlength='20' placeholder='Tvoje ime' aria-label='Ime igrača' autocomplete='off'>";
+ else details+="<div class='duelnames'><input id='playerName0' maxlength='20' placeholder='🔴 Igrač 1' aria-label='Ime igrača 1' autocomplete='off'><input id='playerName1' maxlength='20' placeholder='🟡 Igrač 2' aria-label='Ime igrača 2' autocomplete='off'></div>";
+ details+="<button class='btn bluebtn nameSave' id='saveNames'>✓ SAČUVAJ IME</button><div class='localscope'>Rekordi se čuvaju na ovom uređaju.</div></div>";
+ modal("<div class='emoji'>"+emoji+"</div><h2>"+title+"</h2><p>"+desc+"</p>"+details+"<div class='endactions'><button class='btn goldbtn' id='again'>🔄 IGRAJ PONOVO</button><button class='btn darkbtn' id='back'>⌂ POČETNA</button></div>");
+ $("modal").classList.add("results-modal");
+ $("saveNames").onclick=function(){
+  var done=false;
+  entries.forEach(function(rec,i){var inp=$("playerName"+i);if(inp&&renameRank(mode,rec,inp.value))done=true});
+  if(done){
+   $("rankRows").innerHTML=rankHtml(mode);
+   var top=orderRank(mode)[0];$("modalHolder").textContent=top.name;
+   $("saveNames").textContent="✅ IME SAČUVANO";sound("right");
+  }else $("saveNames").textContent="✍️ UPIŠI IME";
+ };
+ $("again").onclick=function(){start(mode)};
+ $("back").onclick=home;
+ if(lost)blast();else{sound("win");sparks($("overlay"),50,true)}
+}
 function home(){clear();game.done=true;game.locked=true;close();$("game").classList.add("hide");$("home").classList.remove("hide");sound("click")}
 $("solo").onclick=function(){start("solo")};$("duel").onclick=function(){start("duel")};
 $("quit").onclick=function(){clear();game.locked=true;modal("<div class='emoji'>🚪</div><h2>Napustiti igru?</h2><p>Možeš nastaviti ili se vratiti na početnu.</p><button class='btn goldbtn' id='resume'>▶ NASTAVI</button><button class='btn darkbtn' id='exit'>⌂ POČETNA</button>");$("resume").onclick=function(){close();game.locked=false;game.deadline=performance.now()+Math.max(1,game.remain)*1000;game.tick=setInterval(timer,80)};$("exit").onclick=home};
