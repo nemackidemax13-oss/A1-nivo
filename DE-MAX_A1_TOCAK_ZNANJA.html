@@ -47,7 +47,8 @@
   "use strict";
   let enabled=true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
   try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
-  const notes=[261.63,329.63,392,329.63,293.66,349.23,440,349.23,261.63,329.63,392,493.88,349.23,293.66,329.63,261.63];
+  /* Točak • razigrani valcer: zasebna originalna melodija */
+  const notes=[392,493.88,587.33,659.25,587.33,493.88,440,587.33,698.46,587.33,493.88,392,440,523.25,493.88,392];
   const b=document.createElement("button");
   b.type="button";b.className="demax-music-toggle";b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
   function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
@@ -56,7 +57,7 @@
     const a=getAudio();if(!a||!enabled||!playing)return;
     try{
       const o=a.createOscillator(),g=a.createGain(),t=Math.max(a.currentTime+.005,when);
-      o.type="sine";o.frequency.setValueAtTime(freq,t);
+      o.type="triangle";o.frequency.setValueAtTime(freq,t);
       g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(volume,t+.09);
       g.gain.exponentialRampToValueAtTime(.0001,t+seconds);
       o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+seconds+.03);
@@ -66,8 +67,8 @@
   function beat(){
     if(!playing||!enabled)return;const a=getAudio();if(!a)return;
     const now=a.currentTime+.02;
-    note(notes[step%notes.length],now,.48,.013);
-    if(step%4===0)note(notes[(step+4)%notes.length]/2,now,1.3,.008);
+    note(notes[step%notes.length],now,0.35,0.01);
+    if(step%4===0)note(notes[(step+5)%notes.length]/2,now,1.1,.006);
     step++;
   }
   function stop(){
@@ -77,7 +78,7 @@
   }
   function start(){
     if(playing||!enabled)return;
-    playing=true;beat();interval=setInterval(beat,540);
+    playing=true;beat();interval=setInterval(beat,390);
   }
   b.addEventListener("click",function(e){
     e.stopPropagation();enabled=!enabled;label();
