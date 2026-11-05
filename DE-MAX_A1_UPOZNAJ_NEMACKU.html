@@ -65,11 +65,37 @@ header>.audio{margin-left:auto;position:relative;z-index:1}
 header>.audio button{font-size:clamp(9px,2.5vw,11px);padding:5px 5px}
 .symbol.word{font-size:clamp(20px,5.1vw,30px);font-weight:1000;color:#ffe48e;letter-spacing:.6px;line-height:1.15;overflow-wrap:anywhere;filter:drop-shadow(0 3px 8px #0008)}
 @media(max-width:360px){header>.brand b{font-size:11px;letter-spacing:-.65px}header>.audio{gap:3px}header>.audio button{padding:5px 3px}}
+
+.modal.results-modal{max-height:calc(100dvh - 20px);overflow-y:auto;overscroll-behavior:contain;padding:12px 14px;scrollbar-width:thin}
+.modal.results-modal .emoji{font-size:37px;line-height:1}
+.modal.results-modal h2{font-size:clamp(17px,5vw,23px);margin:5px 0 3px}
+.modal.results-modal p{font-size:11px;line-height:1.3;margin:4px 0 6px}
+.results-modal .result{margin:6px 0;gap:6px}
+.results-modal .result div{padding:7px 5px;font-size:10px}
+.results-modal .result strong{font-size:21px}
+.recordline{padding:7px;border:1px solid #ffdc78a0;background:#5b43265c;border-radius:11px;font-size:12px;font-weight:900}
+.recordline b{font-size:19px;color:#ffe482}.recordline span{color:#fff3c3}
+.newrecord{color:#ffe371;font-weight:950;font-size:12px;margin:6px}
+.rankblock{margin:7px 0 5px;border:1px solid #ffffff27;border-radius:12px;background:#ffffff0b;overflow:hidden;text-align:left}
+.ranktitle{text-align:center;background:#ffffff16;color:#ffdc78;font-size:11px;font-weight:950;padding:6px}
+.rankrow{display:flex;align-items:center;gap:8px;padding:4px 10px;font-size:12px;border-top:1px solid #ffffff13;min-height:27px}
+.rankrow:first-child{background:#e6b73d16}.rankrow>span:first-child{width:25px;text-align:center}
+.rankname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}
+.rankrow b{color:#ffe17b;font-size:13px;font-variant-numeric:tabular-nums}
+.rankempty{padding:10px;text-align:center;font-size:11px}
+.namefields{margin-top:6px}.namehint{color:#dce9ff;font-size:11px;font-weight:800;margin-bottom:5px}
+.namefields input{display:block;width:100%;min-width:0;background:#ffffffee;border:2px solid #a7bbec;border-radius:8px;padding:7px 9px;color:#101d34;font-size:13px;font-weight:800}
+.duelnames{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.results-modal .nameSave{font-size:11px;padding:7px 10px;margin:6px 0 0;width:100%}
+.localscope{font-size:9px;color:#c6d2e7;margin:3px 0}
+.endactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.results-modal .endactions .btn{font-size:11px;padding:9px 3px;margin:0}
+@media(max-height:640px){.results-modal .rankrow{padding:3px 10px;min-height:23px}.results-modal .result strong{font-size:19px}.results-modal .emoji{font-size:29px}}
 </style></head>
 <body><div id="app">
 <header><span class="flag" aria-label="Nemačka zastava"><i></i><i></i><i></i></span><div class="brand"><b>UPOZNAJ NEMAČKU</b></div><div class="audio"><button id="music">♫ ON</button><button id="effects">🔊 ON</button></div></header>
 <main>
-<section id="home"><div class="hero glass"><div class="flagart">🇩🇪</div><div class="kicker">VELIKI NEMAČKI IZAZOV</div><h1>Koliko poznaješ <em>Nemačku?</em></h1><p>Gradovi, kultura, znamenitosti i nemačke reči. Odgovaraj brzo, uzmi bonus i osvoji titulu šampiona!</p><div class="features"><div><b>⏱️</b>15 sekundi</div><div><b>❤️</b>3 života</div><div><b>🌟</b>Bonus x2</div></div></div><div class="menu"><button id="solo" class="btn goldbtn">⚡ IGRAJ SAM — 12 PITANJA</button><button id="duel" class="btn bluebtn">🏆 DUEL — 2 IGRAČA</button><div class="best">👑 LIČNI REKORD: <b id="best">0</b> poena</div></div></section>
+<section id="home"><div class="hero glass"><div class="flagart">🇩🇪</div><div class="kicker">VELIKI NEMAČKI IZAZOV</div><h1>Koliko poznaješ <em>Nemačku?</em></h1><p>Gradovi, kultura, znamenitosti i nemačke reči. Odgovaraj brzo, uzmi bonus i osvoji titulu šampiona!</p><div class="features"><div><b>⏱️</b>15 sekundi</div><div><b>❤️</b>3 života</div><div><b>🌟</b>Bonus x2</div></div></div><div class="menu"><button id="solo" class="btn goldbtn">⚡ IGRAJ SAM — 12 PITANJA</button><button id="duel" class="btn bluebtn">🏆 DUEL — 2 IGRAČA</button><div class="best">👑 REKORD: <b id="best">0</b> poena <span id="bestName"></span></div></div></section>
 <section id="game" class="hide"><div id="duelb" class="duel hide"><div id="p0">🔴 Igrač 1 <strong>0</strong></div><div id="p1">🟡 Igrač 2 <strong>0</strong></div></div><div class="hud"><div class="stat"><label>POENI</label><strong class="gold" id="points">0</strong></div><div class="stat"><label>VREME</label><strong id="seconds">15</strong></div><div class="stat"><label>ŽIVOTI</label><strong class="hearts" id="hearts">❤️❤️❤️</strong></div></div><div class="timer"><div id="bar"></div></div><div class="info"><span class="who" id="who">⚡ SOLO</span><span id="progress"></span><span class="bonus" id="bonus"></span></div><div id="panel" class="panel glass"><div class="cat"><span id="cat"></span><span class="level" id="level"></span></div><div class="symbol" id="symbol">🇩🇪</div><h2 class="question" id="question"></h2><div class="options" id="options"></div><div class="feedback" id="feedback"></div></div><div class="bottom"><span id="streak">🔥 Niz: 0</span><button id="quit">✕ Izađi</button></div></section>
 </main><footer>POWERED BY <b>DE-MAX</b> • Od 2013. sa Vama!</footer>
 <div id="overlay" class="overlay hide"><div id="modal" class="modal glass" role="dialog" aria-modal="true"></div></div></div>
@@ -162,7 +188,42 @@ var wordLabels={
 };
 var game={mode:"solo",players:[],q:[],i:0,count:12,locked:true,done:false,deadline:0,tick:0,transition:0,remain:15,current:null,opts:[],bonus:false};
 var effects=true,music=true,ctx=null,loop=null,step=0,best=0;
-try{best=Number(localStorage.getItem("demax-deutschland-record")||0)}catch(e){}$("best").textContent=best;
+
+try{best=Number(localStorage.getItem("demax-deutschland-record")||0)}catch(e){}
+var rankKey="demax-deutschland-top-v1",ranking={solo:[],duel:[]};
+try{
+ var loaded=JSON.parse(localStorage.getItem(rankKey)||"null");
+ ["solo","duel"].forEach(function(m){
+  if(loaded&&Array.isArray(loaded[m]))ranking[m]=loaded[m].filter(function(x){
+   return x&&typeof x.name==="string"&&typeof x.id==="string"&&Number.isFinite(Number(x.score))&&Number(x.score)>=0
+  }).map(function(x){return{id:x.id,name:x.name.slice(0,20),score:Number(x.score),at:Number(x.at)||0}}).slice(0,100)
+ });
+}catch(e){}
+if(best>0&&!ranking.solo.some(function(x){return x.score>=best})){ranking.solo.push({id:"old-record",name:"Prethodni rekord",score:best,at:0})}
+function orderRank(m){return ranking[m].sort(function(a,b){return b.score-a.score||a.at-b.at})}
+function storeRank(){try{localStorage.setItem(rankKey,JSON.stringify(ranking))}catch(e){}}
+function safeName(n){return String(n).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function cleanName(n){return String(n||"").trim().slice(0,20)}
+function refreshRecord(){
+ var first=orderRank("solo")[0];best=first?first.score:best;
+ $("best").textContent=best.toLocaleString("sr-RS");$("bestName").textContent=first?" • "+first.name:"";
+ try{localStorage.setItem("demax-deutschland-record",String(best))}catch(e){}
+}
+function addRank(m,p){
+ var rec={id:Date.now()+"-"+Math.random().toString(36).slice(2,9),name:p.name,score:p.score,at:Date.now()};
+ ranking[m].push(rec);orderRank(m);ranking[m]=ranking[m].slice(0,100);storeRank();refreshRecord();return rec
+}
+function rankHtml(m){
+ var ranks=orderRank(m).slice(0,5);
+ if(!ranks.length)return "<div class='rankempty'>Još nema rezultata.</div>";
+ return ranks.map(function(p,i){return "<div class='rankrow'><span>"+["🥇","🥈","🥉","4.","5."][i]+"</span><span class='rankname'>"+safeName(p.name)+"</span><b>"+p.score.toLocaleString("sr-RS")+"</b></div>"}).join("")
+}
+function renameRank(m,rec,name){
+ name=cleanName(name);if(!name)return false;
+ var found=ranking[m].find(function(p){return p.id===rec.id});if(!found)return false;
+ found.name=name;storeRank();refreshRecord();return true
+}
+storeRank();refreshRecord();
 function initAudio(){try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume()}catch(e){}}
 function note(f,t,d,v,w,end){if(!ctx)return;var o=ctx.createOscillator(),g=ctx.createGain();o.type=w||"triangle";o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(Math.max(22,end),t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d+.03)}
 function hiss(t,d,v){if(!ctx)return;var b=ctx.createBuffer(1,Math.ceil(d*ctx.sampleRate),ctx.sampleRate),a=b.getChannelData(0);for(var i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);var s=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.setValueAtTime(4700,t);f.frequency.exponentialRampToValueAtTime(130,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.buffer=b;s.connect(f);f.connect(g);g.connect(ctx.destination);s.start(t);s.stop(t+d)}
