@@ -135,7 +135,7 @@ button{font:inherit}
 }
 
 .header{position:relative;min-height:75px;justify-content:space-between}.quiz-heading{position:absolute;left:50%;transform:translateX(-50%);width:min(55%,360px);text-align:center;justify-content:center}.quiz-heading h1{font-size:clamp(16px,3.8vw,22px)}.quiz-heading p{white-space:normal}.header>.wordmark{margin-left:auto;flex:none}@media(max-width:600px){.header{min-height:68px}.quiz-heading{width:54%}.quiz-heading h1{font-size:16px}.quiz-heading p{font-size:10px;line-height:1.25}.header>.wordmark{font-size:14px;padding:6px}.best{min-width:55px}}@media(max-width:365px){.quiz-heading{width:51%}.quiz-heading h1{font-size:14px}.quiz-heading p{font-size:9px}}.header{position:relative!important;display:flex!important;justify-content:space-between!important;align-items:flex-start!important;min-height:98px!important}.quiz-head-right{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:3px;max-width:75%;margin-left:auto}.quiz-head-right .wordmark{font-size:16px;padding:6px 9px}.quiz-head-right h1{margin:2px 0;font-size:clamp(17px,4.5vw,24px);line-height:1.15}.quiz-head-right p{font-size:11px;color:var(--muted);margin:0;line-height:1.25}.quiz-heading{display:none!important}@media(max-width:600px){.header{min-height:95px!important}.quiz-head-right{max-width:77%}}</style>
-</head>
+<style>.demax-sound-toggle{position:absolute;left:0;bottom:0;z-index:4;border:1px solid #bad5f1;background:#fff;color:#0756a5;font:800 11px system-ui,Arial,sans-serif;padding:6px 8px;min-height:30px;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px #0b4a8a19;touch-action:manipulation}.top,.header{position:relative}@media(max-width:410px){.demax-sound-toggle{font-size:10px;padding:5px 6px}}</style></head>
 <body>
 <div class="app">
   <div class="header"><div class="best"><span>REKORD</span><b id="bestScore">0</b></div><div class="quiz-head-right"><div class="wordmark" aria-label="De-Max">DE-MAX</div><h1>⏱️ A1 Brzi kviz</h1><p>120 sekundi • pitanja iz GitHub A1 baze</p></div></div>
@@ -260,6 +260,7 @@ function startGame(){
   $("nameError").textContent="";
   studentName=name;
   resetState();
+  window.DeMaxSound?.play('tap');
   $("startScreen").style.display="none";
   $("resultScreen").style.display="none";
   $("quizScreen").style.display="block";
@@ -310,7 +311,7 @@ function nextQuestion(){
 function choose(btn,orig){
   if(!running||locked)return;
   locked=true; answered++;
-  const ok=orig===current.a;
+  const ok=orig===current.a; window.DeMaxSound?.play(ok?'correct':'wrong');
   [...$("answers").children].forEach(b=>{
     b.disabled=true;
     if(Number(b.dataset.orig)===current.a)b.classList.add("correct");
@@ -337,6 +338,7 @@ function skip(){
 }
 function endGame(){
   if(!running)return;
+  window.DeMaxSound?.play('win');
   running=false; locked=true; clearInterval(timer); timer=null;
   const seconds=Math.min(TOTAL_TIME,Math.max(1,Math.round((Date.now()-startedAt)/1000)));
   $("time").textContent=Math.max(0,timeLeft);
@@ -398,5 +400,41 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',queueMo
 queueMobileFit();
 
 </script>
-</body>
+<script>
+/* DE-MAX sound effects: self-contained Web Audio, no downloaded files */
+(function(){
+  "use strict";
+  let enabled=true,ctx=null,lastTap=0;
+  try{enabled=localStorage.getItem("demax_a1_sound")!=="off"}catch(e){}
+  function audio(){if(!enabled)return null;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ctx)ctx=new C();if(ctx.state==="suspended")ctx.resume().catch(()=>{});return ctx}catch(e){return null}}
+  function tone(f,d,delay=0,kind="sine",vol=.075){
+    const a=audio();if(!a)return;
+    try{const t=a.currentTime+delay,o=a.createOscillator(),g=a.createGain();o.type=kind;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}catch(e){}
+  }
+  function play(type){
+    if(!enabled)return;
+    if(type==="tap"){tone(540,.065,0,"sine",.035)}
+    else if(type==="correct"){tone(660,.13,0);tone(880,.17,.12)}
+    else if(type==="wrong"){tone(290,.13,0,"triangle",.055);tone(220,.18,.13,"triangle",.048)}
+    else if(type==="win"){[523,659,784,1047].forEach((f,i)=>tone(f,.23,i*.13,"sine",.07))}
+    else if(type==="spin"){[330,440,550,660,770].forEach((f,i)=>tone(f,.09,i*.075,"triangle",.045))}
+  }
+  window.DeMaxSound={play};
+  const b=document.createElement("button");
+  b.type="button";b.className="demax-sound-toggle";
+  b.setAttribute("aria-label","Uključi ili isključi zvuk");
+  b.title="Zvuk uključen / isključen";
+  function label(){b.textContent=enabled?"🔊 Zvuk":"🔇 Zvuk";b.setAttribute("aria-pressed",String(enabled))}
+  label();
+  b.addEventListener("click",function(e){e.stopPropagation();enabled=!enabled;try{localStorage.setItem("demax_a1_sound",enabled?"on":"off")}catch(err){}label();if(enabled)play("tap")});
+  const header=document.querySelector(".top, .header");
+  if(header)header.appendChild(b);
+  document.addEventListener("click",function(e){
+    const btn=e.target.closest("button");
+    if(!btn||btn===b||!enabled)return;
+    const now=Date.now();if(now-lastTap<45)return;lastTap=now;
+    if(btn.textContent.includes("Zavrti"))play("spin");else play("tap");
+  },true);
+})();
+</script></body>
 </html>
