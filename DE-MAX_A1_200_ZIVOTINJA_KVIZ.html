@@ -1,4 +1,4 @@
-<!doctype html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#0a1126"><meta name="description" content="DE-MAX: 200 životinja na nemačkom. HD kviz sa muzikom, efektima i bonus pitanjima."><title>DE-MAX | 200 ŽIVOTINJA — ANIMAL ARENA</title><style>
+<!doctype html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#f2fbff"><meta name="description" content="DE-MAX: 50 osnovnih životinja na nemačkom. Svetli HD kviz sa muzikom, efektima i bonus pitanjima."><title>DE-MAX | OSNOVNE ŽIVOTINJE — KVIZ</title><style>
 :root{--gold:#ffd36a;--orange:#ff9f40;--green:#3dedaa;--red:#fc597d;--ink:#f9fbff;--sub:#b8c5e2;--line:#ffffff24}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
@@ -82,220 +82,113 @@ footer{text-align:center;flex:none;color:#9caccd;font-size:10px;letter-spacing:1
 @media(max-height:720px){#app{gap:5px;padding-top:5px;padding-bottom:5px}.top{min-height:35px}.logo{height:34px;width:34px;font-size:19px}.brand strong{font-size:18px}.brand small{font-size:9px}.hero{gap:6px;padding:9px}.orbit{height:clamp(100px,20vh,145px);width:clamp(110px,24vh,166px)}.orbit .paw{height:clamp(72px,15vh,105px);width:clamp(72px,15vh,105px);font-size:clamp(52px,10vh,75px)}.orbit .orb{width:35px;height:35px;font-size:21px}.hero h1{font-size:clamp(28px,7.7vw,38px)}.pills>div{padding:5px 3px}.pills b{font-size:17px}.menu{gap:6px}.cta{padding:10px}.screen{gap:5px}.stat{padding:4px}.stat b{font-size:18px}.questionpanel{gap:5px;padding:8px}.animal{width:75px;height:68px;font-size:43px;border-radius:14px}.question{font-size:clamp(18px,5vw,24px);min-height:1.9em}.ans{font-size:clamp(11px,3.2vw,15px);padding:6px}.feedback{font-size:11px}}
 @media(max-height:575px){.orbit{display:none}.hero h1{font-size:29px}.hero p{font-size:11px}.pills>div{font-size:10px;padding:4px 2px}.pills b{font-size:15px}.animal{height:49px;font-size:35px;width:60px}.question{font-size:17px;min-height:1.8em}.questionpanel{gap:4px;padding:7px}.stat b{font-size:16px}.progress{min-height:21px}.instruction{font-size:9px}.feedback{min-height:15px}.meta .badge{padding:3px 6px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* LIGHT HD THEME — DE-MAX A1 */
+:root{--gold:#d77d17;--ink:#1d3b57;--sub:#607c98;--line:#cbdfef}
+body{background:#eaf8ff;color:#173854}
+#app{color:#193e5f;background:radial-gradient(ellipse 100% 45% at 50% -5%,#c4edff,transparent 75%),radial-gradient(ellipse 70% 50% at 95% 95%,#ffe6b6,transparent 72%),linear-gradient(155deg,#f9fdff,#e9f8ff 70%,#fdf4ed)}
+#app:before{background-image:radial-gradient(#72b7d430 1px,transparent 1px);opacity:.65}
+.blob.one{background:#b8e8ff99}.blob.two{background:#fff5b2b3}
+.glass{background:linear-gradient(150deg,#fffefe,#f1faff);border:1px solid #c2dfef;box-shadow:0 12px 28px #7db7d322,inset 0 1px #ffffff}
+.logo{background:linear-gradient(140deg,#ffe892,#ffc56d);box-shadow:0 4px 19px #ffcb7059}
+.brand strong{color:#18416a}.brand strong em{color:#ed8528}.brand small{color:#6889a9}
+.sound button{background:#fff;border:1px solid #c7e0ec;color:#24516f;box-shadow:0 2px 8px #8cbbd322}
+.hero .tag,.tag{color:#c76d1e}
+.hero h1{color:#123b61}.hero h1 span{color:#eb8529}
+.hero p{color:#4d6a84}.hero p b{color:#155d91}
+.pills>div{background:#eef8ff;border:1px solid #c9e1f2;color:#225375}.pills b{color:#e18521}
+.cta.primary{background:linear-gradient(115deg,#ffe890,#ffbc54);color:#3c260a;box-shadow:0 5px #d9973b,0 7px 20px #dbac5648}
+.cta.secondary{background:linear-gradient(115deg,#baf2ff,#75c8ed);color:#16425e;box-shadow:0 5px #58a5cf}
+.cta.ghost{background:#edf8ff;color:#24506a;border:1px solid #b9d9ef}
+.records{color:#426785}.records span{color:#c7791a}
+.stat{background:#ffffffdd;border:1px solid #c5e0f0}
+.stat small{color:#6485a1}.stat b{color:#1e5075}.stat b.score{color:#cb781a}.stat b.time{color:#149678}
+.progress label{color:#315c7b}.progressbar{background:#d1e8f4}
+.progress .badge{background:#fff3d8;color:#a36b1c;border:1px solid #efd6a1}
+.timerbar{background:#cee4ed}
+.questionpanel{background:linear-gradient(150deg,#fff,#f3fbff);border-color:#bcddec}
+.questionpanel.bonus{background:linear-gradient(155deg,#fffef6,#fff8e9);border-color:#f5ba5b;box-shadow:0 0 21px #ffbf5a30}
+.meta .category{color:#3076a4}.meta .badge{color:#ac6418;background:#fff3d4;border-color:#f0cc87}
+.animal{background:radial-gradient(circle at 30% 20%,#fff8d3,#def5ff 85%);box-shadow:inset 0 2px #fff,0 6px 21px #9bcbeb50}
+.animal:after{background:#5a94be20}
+.instruction{color:#547999}
+.question{color:#173d63}
+.ans{background:linear-gradient(145deg,#fff,#eaf5fe);color:#183f5f;border:2px solid #c6e0ed;box-shadow:inset 0 1px #fff,0 4px 9px #8aadc324}
+.ans .num{color:#7a9bb2}
+.ans.right{color:#fff;background:linear-gradient(140deg,#1cab80,#3bce9c);border-color:#0c9d75;box-shadow:0 0 15px #38cda65a}
+.ans.wrong{color:#fff;background:linear-gradient(135deg,#d9315c,#ff6683);border-color:#d73f5c}
+.ans.muted{opacity:.48}
+.feedback{color:#53758e}.feedback.ok{color:#06865c}.feedback.no{color:#bb2b48}
+.bottom span{color:#9b6a27}.bottom button{background:#fff;border-color:#c3dbeb;color:#416580}
+footer{color:#6f93ac}footer b{color:#1c618b}
+.overlay{background:#3d769c98}
+.modal{background:linear-gradient(160deg,#fff,#edf9ff);border-color:#c2dfe9}
+.modal h2{color:#163e61}.modal p{color:#4d6c84}.modal .value{color:#dc8426}
+.resultgrid>div{background:#eef8ff;border-color:#cee3ef;color:#55738d}.resultgrid b{color:#194d71}
+.wintext{color:#bd7a17}
+@media(max-height:720px){.ans{border-width:1px}.hero h1{font-size:clamp(28px,7.7vw,38px)}}
 </style></head><body><div id="app"><div class="blob one"></div><div class="blob two"></div>
-<header class="top"><div class="brand"><span class="logo">🐾</span><div><strong>DE-<em>MAX</em></strong><small>ANIMAL ARENA • A1–B1</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button></div></header>
-<main class="view"><section id="home" class="screen home"><div class="hero glass"><div class="orbit"><div class="orb a">🦁</div><div class="orb b">🦋</div><div class="orb c">🐬</div><div class="orb d">🦅</div><div class="paw">🐾</div></div><div class="tag">VELIKI NEMAČKI IZAZOV</div><h1 id="heroTitle">200 <span>ŽIVOTINJA</span></h1><p>Nauči nazive životinja na nemačkom uz <b>der • die • das</b>, prevod, brzinu, bonus poene i takmičenje!</p><div class="pills"><div><b>🐾 200</b>životinja</div><div><b>⏱️ 15 s</b>po pitanju</div><div><b>🏆 x2</b>bonus poeni</div></div></div><div class="menu"><button id="marathon" class="cta primary">🔥 MARATON — SVIH 200</button><button id="quick" class="cta secondary">⚡ BRZI KVIZ — 20 PITANJA</button><div class="records"><div>🏅 Rekord 20: <span id="best20">0</span></div><div>👑 Rekord 200: <span id="best200">0</span></div></div></div></section>
-<section id="game" class="screen hide"><div class="hud"><div class="stat"><small>POENI</small><b class="score" id="score">0</b></div><div class="stat"><small>ŽIVOTI</small><b class="hearts" id="hearts">❤️❤️❤️❤️</b></div><div class="stat"><small>VREME</small><b class="time" id="seconds">15</b></div></div><div class="progress"><label id="stage">1 / 200</label><div class="progressbar"><div id="progress"></div></div><span class="badge">🏆 KVIZ</span></div><div class="timerbar"><div id="timerProgress"></div></div><div class="questionpanel glass" id="questionPanel"><div class="meta"><div class="category" id="category">DOMAĆE ŽIVOTINJE</div><div class="badge" id="badge">🔥 NIZ 0</div></div><div class="animal" id="animal">🦁</div><div class="instruction" id="instruction">PREVEDI NA SRPSKI</div><h2 class="question" id="question">der Löwe</h2><div id="answers" class="answers"></div><div class="feedback" id="feedback">Izaberi tačan odgovor</div></div><div class="bottom"><span>🎯 Tačno = više poena • 🌟 Bonus svakih 10</span><button id="quit">✕ Izađi</button></div></section></main>
+<header class="top"><div class="brand"><span class="logo">🐾</span><div><strong>DE-<em>MAX</em></strong><small>NEMAČKI A1 • KVIZ</small></div></div><div class="sound"><button id="music" aria-label="Uključi ili isključi muziku">♫ ON</button><button id="effects" aria-label="Uključi ili isključi zvučne efekte">🔊 ON</button></div></header>
+<main class="view"><section id="home" class="screen home"><div class="hero glass"><div class="orbit"><div class="orb a">🦁</div><div class="orb b">🦋</div><div class="orb c">🐬</div><div class="orb d">🦅</div><div class="paw">🐾</div></div><div class="tag">VELIKI NEMAČKI IZAZOV</div><h1 id="heroTitle">OSNOVNE <span>ŽIVOTINJE</span></h1><p>Mačka, pas, jarac, zec, lisica i druge osnovne životinje. Uči <b>der • die • das</b> uz prevod, muziku i bonus poene!</p><div class="pills"><div><b>🐾 50</b>osnovnih reči</div><div><b>⏱️ 15 s</b>po pitanju</div><div><b>🏆 x2</b>bonus poeni</div></div></div><div class="menu"><button id="marathon" class="cta primary">🐾 SVE ŽIVOTINJE — 50 PITANJA</button><button id="quick" class="cta secondary">⚡ BRZI KVIZ — 20 PITANJA</button><div class="records"><div>🏅 Rekord 20: <span id="best20">0</span></div><div>👑 Rekord 50: <span id="best200">0</span></div></div></div></section>
+<section id="game" class="screen hide"><div class="hud"><div class="stat"><small>POENI</small><b class="score" id="score">0</b></div><div class="stat"><small>ŽIVOTI</small><b class="hearts" id="hearts">❤️❤️❤️❤️❤️</b></div><div class="stat"><small>VREME</small><b class="time" id="seconds">15</b></div></div><div class="progress"><label id="stage">1 / 50</label><div class="progressbar"><div id="progress"></div></div><span class="badge">🏆 KVIZ</span></div><div class="timerbar"><div id="timerProgress"></div></div><div class="questionpanel glass" id="questionPanel"><div class="meta"><div class="category" id="category">DOMAĆE ŽIVOTINJE</div><div class="badge" id="badge">🔥 NIZ 0</div></div><div class="animal" id="animal">🦁</div><div class="instruction" id="instruction">PREVEDI NA SRPSKI</div><h2 class="question" id="question">der Löwe</h2><div id="answers" class="answers"></div><div class="feedback" id="feedback">Izaberi tačan odgovor</div></div><div class="bottom"><span>🎯 Tačno = više poena • 🌟 Bonus svakih 10</span><button id="quit">✕ Izađi</button></div></section></main>
 <footer>POWERED BY <b>DE-MAX</b></footer>
 <div id="overlay" class="overlay hide"><div id="modal" class="modal glass" role="dialog" aria-modal="true"></div></div>
-</div><script type="text/plain" id="animal-data"># DOMAĆE ŽIVOTINJE I FARMA
+</div><script type="text/plain" id="animal-data"># DOMAĆE ŽIVOTINJE
 der Hund|pas|🐕
 die Katze|mačka|🐈
 das Pferd|konj|🐎
-das Pony|poni|🐴
 die Kuh|krava|🐄
 der Stier|bik|🐂
-das Kalb|tele|🐮
 das Schwein|svinja|🐖
 das Ferkel|prase|🐷
 das Schaf|ovca|🐑
-der Widder|ovan|🐏
 das Lamm|jagnje|🐑
 die Ziege|koza|🐐
 der Ziegenbock|jarac|🐐
 der Esel|magarac|🫏
-das Maultier|mula|🐴
 das Huhn|kokoška|🐔
 der Hahn|petao|🐓
 das Küken|pile|🐥
 die Ente|patka|🦆
-der Erpel|patak|🦆
 die Gans|guska|🪿
-der Truthahn|ćuran|🦃
 das Kaninchen|kunić|🐇
-der Büffel|bivol|🦬
-# KUĆNI LJUBIMCI I MALE ŽIVOTINJE
-der Hamster|hrčak|🐹
-das Meerschweinchen|morsko prase|🐹
-die Maus|miš|🐁
-die Ratte|pacov|🐀
-der Wellensittich|tigrica|🦜
-der Papagei|papagaj|🦜
-der Goldfisch|zlatna ribica|🐠
-die Schildkröte|kornjača|🐢
-der Igel|jež|🦔
-das Frettchen|pitomi tvor|🦡
-das Chinchilla|činčila|🐭
-der Degu|degu|🐭
-der Gecko|gekon|🦎
-die Eidechse|gušter|🦎
-der Axolotl|aksolotl|🦎
-die Vogelspinne|tarantula|🕷️
-der Skorpion|škorpija|🦂
-der Salamander|daždevnjak|🦎
-die Rennmaus|gerbil|🐁
-die Fledermaus|slepi miš|🦇
-das Stachelschwein|bodljikavo prase|🦔
-das Eichhörnchen|veverica|🐿️
-das Streifenhörnchen|prugasta veverica|🐿️
-der Feldhamster|poljski hrčak|🐹
-der Maulwurf|krtica|🐾
-# ŠUMA I PLANINE
+# ŠUMA I POLJE
 der Wolf|vuk|🐺
 der Fuchs|lisica|🦊
 der Bär|medved|🐻
-der Braunbär|mrki medved|🐻
 der Eisbär|polarni medved|🐻‍❄️
-der Waschbär|rakun|🦝
-der Dachs|jazavac|🦡
-der Luchs|ris|🐈
 der Hirsch|jelen|🦌
 das Reh|srna|🦌
 das Wildschwein|divlja svinja|🐗
-der Elch|los|🫎
-das Rentier|irvas|🦌
-der Steinbock|kozorog|🐐
-die Gämse|divokoza|🐐
-das Murmeltier|mrmot|🐿️
 der Hase|zec|🐇
-der Vielfraß|žderavac|🐻
-der Otter|vidra|🦦
-der Biber|dabar|🦫
-das Wiesel|lasica|🐾
-der Marder|kuna|🐾
-der Hermelin|hermelin|🐾
-das Wisent|evropski bizon|🦬
-der Damhirsch|jelen lopatar|🦌
-# SAVANA I DŽUNGLA
+das Eichhörnchen|veverica|🐿️
+der Igel|jež|🦔
+# DIVLJE ŽIVOTINJE
 der Löwe|lav|🦁
 der Tiger|tigar|🐅
-der Leopard|leopard|🐆
-der Gepard|gepard|🐆
-der Jaguar|jaguar|🐆
 der Elefant|slon|🐘
 die Giraffe|žirafa|🦒
 das Zebra|zebra|🦓
-das Nashorn|nosorog|🦏
 das Flusspferd|nilski konj|🦛
 der Affe|majmun|🐒
 der Gorilla|gorila|🦍
-der Schimpanse|šimpanza|🐒
-der Orang-Utan|orangutan|🦧
-der Pavian|pavijan|🐵
-die Hyäne|hijena|🐺
-die Antilope|antilopa|🦌
-die Gazelle|gazela|🦌
-das Gnu|gnu|🦬
-das Kamel|kamila|🐪
-das Dromedar|jednogrba kamila|🐪
-das Lama|lama|🦙
-das Alpaka|alpaka|🦙
-das Faultier|lenjivac|🦥
-der Ameisenbär|mravojed|🐾
 # PTICE
 der Adler|orao|🦅
-der Falke|soko|🦅
-der Habicht|jastreb|🦅
 die Eule|sova|🦉
-der Uhu|buljina|🦉
-die Krähe|vrana|🐦‍⬛
-der Rabe|gavran|🐦‍⬛
-die Elster|svraka|🐦
 der Spatz|vrabac|🐦
-die Schwalbe|lasta|🐦
-die Amsel|kos|🐦‍⬛
-das Rotkehlchen|crvendać|🐦
-der Specht|detlić|🐦
-der Storch|roda|🕊️
-der Kranich|ždral|🐦
-der Flamingo|flamingo|🦩
 der Pinguin|pingvin|🐧
-der Strauß|noj|🪶
-der Pfau|paun|🦚
 die Taube|golub|🕊️
-die Möwe|galeb|🐦
-der Pelikan|pelikan|🐦
 der Schwan|labud|🦢
-der Eisvogel|vodomar|🐦
-der Kolibri|kolibri|🐦
-# MORE I OKEAN
+# VODENE ŽIVOTINJE
 der Hai|ajkula|🦈
 der Wal|kit|🐋
-der Blauwal|plavi kit|🐋
 der Delfin|delfin|🐬
-der Orca|orka|🐳
-die Robbe|foka|🦭
-der Seelöwe|morski lav|🦭
-das Walross|morž|🦭
-der Oktopus|hobotnica|🐙
-der Tintenfisch|lignja|🦑
-der Seestern|morska zvezda|⭐
-der Seeigel|morski jež|🦔
-die Qualle|meduza|🪼
-die Krabbe|kraba|🦀
-der Krebs|rak|🦞
-der Hummer|jastog|🦞
-die Garnele|škamp|🦐
-das Seepferdchen|morski konjić|🐠
-der Kugelfisch|riba naduvača|🐡
-der Clownfisch|riba klovn|🐠
-der Schwertfisch|sabljarka|🐟
-der Thunfisch|tuna|🐟
-der Hering|haringa|🐟
-die Sardine|sardina|🐟
-der Rochen|raža|🐟
-# REKE I MOČVARE
-der Frosch|žaba|🐸
-die Kröte|krastača|🐸
-der Laubfrosch|gatalinka|🐸
-der Molch|mrmoljak|🦎
-das Krokodil|krokodil|🐊
-der Alligator|aligator|🐊
-das Nilkrokodil|nilski krokodil|🐊
-die Wasserschildkröte|vodena kornjača|🐢
-der Karpfen|šaran|🐟
-die Forelle|pastrmka|🐟
-der Lachs|losos|🐟
-der Hecht|štuka|🐟
-der Wels|som|🐟
-der Zander|smuđ|🐟
-der Barsch|grgeč|🐟
-der Aal|jegulja|🐍
-die Schleie|linjak|🐟
-die Brasse|deverika|🐟
-der Stör|jesetra|🐟
-der Flusskrebs|rečni rak|🦞
-die Libelle|vilin konjic|🪰
-die Wasserspinne|vodeni pauk|🕷️
-die Ringelnatter|belouška|🐍
-der Reiher|čaplja|🐦
-der Kormoran|kormoran|🐦
-# INSEKTI I EGZOTIČNE ŽIVOTINJE
+der Goldfisch|zlatna ribica|🐠
+# INSEKTI
 die Biene|pčela|🐝
-die Wespe|osa|🐝
-die Hornisse|stršljen|🐝
-die Hummel|bumbar|🐝
 die Ameise|mrav|🐜
-die Termite|termit|🐜
-die Fliege|muva|🪰
-die Mücke|komarac|🦟
-die Motte|moljac|🦋
 der Schmetterling|leptir|🦋
-die Raupe|gusenica|🐛
-der Käfer|buba|🪲
-der Marienkäfer|bubamara|🐞
-der Hirschkäfer|jelenak|🪲
-die Heuschrecke|skakavac|🦗
-die Grille|zrikavac|🦗
-die Zikade|cvrčak|🦗
-die Spinne|pauk|🕷️
-die Schnecke|puž|🐌
-der Regenwurm|kišna glista|🪱
-die Schlange|zmija|🐍
-die Kobra|kobra|🐍
-die Python|piton|🐍
-die Anakonda|anakonda|🐍
-das Chamäleon|kameleon|🦎</script><script>
+der Marienkäfer|bubamara|🐞</script><script>
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
@@ -304,7 +197,7 @@ let cat="";const bank=[];
 raw.split("\n").forEach(row=>{row=row.trim();if(row.startsWith("# ")){cat=row.slice(2);return}const parts=row.split("|");if(parts.length===3)bank.push({de:parts[0],sr:parts[1],emoji:parts[2],cat})});
 const S={mode:200,order:[],i:0,score:0,lives:12,streak:0,correct:0,active:false,locked:true,deadline:0,remaining:15,tick:null,next:null,q:null,answers:[],direction:"de",bonus:false,played:0};
 let musicEnabled=true,fxEnabled=true,ctx=null,scheduler=null,nextBeat=0,beatStep=0,best20=0,best200=0;
-try{best20=Number(localStorage.getItem("de-max-animals-best20")||"0");best200=Number(localStorage.getItem("de-max-animals-best200")||"0")}catch(e){}
+try{best20=Number(localStorage.getItem("de-max-animals-best20")||"0");best200=Number(localStorage.getItem("de-max-animals-best50")||"0")}catch(e){}
 $("best20").textContent=best20;$("best200").textContent=best200;
 function audioInit(){try{if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume().catch(()=>{})}catch(e){}}
 function env(g,t,d,v,attack=.008){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+d)}
@@ -332,10 +225,10 @@ $("music").onclick=()=>{musicEnabled=!musicEnabled;$("music").textContent=musicE
 $("effects").onclick=()=>{fxEnabled=!fxEnabled;$("effects").textContent=fxEnabled?"🔊 ON":"🔇 OFF";$("effects").classList.toggle("off",!fxEnabled);fx("tap")};
 function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function clearTimers(){if(S.tick){clearInterval(S.tick);S.tick=null}if(S.next){clearTimeout(S.next);S.next=null}}
-function start(mode){clearTimers();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=mode===200?12:4;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
+function start(mode){clearTimers();closeModal();fx("tap");startMusic();S.mode=mode;S.order=shuffled(bank).slice(0,mode);S.i=0;S.score=0;S.lives=5;S.streak=0;S.correct=0;S.active=true;S.locked=false;S.played=0;$("home").classList.add("hide");$("game").classList.remove("hide");nextQuestion()}
 function nextQuestion(){clearTimers();if(S.i>=S.order.length){finish(false);return}S.q=S.order[S.i];S.bonus=(S.i+1)%10===0;S.direction=Math.random()<.5?"de":"sr";S.locked=false;
 const key=S.direction==="de"?"sr":"de";const correct=S.q[key];const pool=shuffled(bank.filter(x=>x.cat===S.q.cat&&x[key]!==correct));S.answers=shuffled([correct,...pool.slice(0,3).map(x=>x[key])]);
-$("questionPanel").classList.toggle("bonus",S.bonus);$("questionPanel").classList.remove("shake");$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("hearts").style.fontSize=S.mode===200?"clamp(9px,2.25vw,13px)":"clamp(15px,4.3vw,20px)";
+$("questionPanel").classList.toggle("bonus",S.bonus);$("questionPanel").classList.remove("shake");$("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("hearts").style.fontSize="clamp(13px,3.4vw,19px)";
 $("stage").textContent=(S.i+1)+" / "+S.mode;$("progress").style.width=(S.i/S.mode*100)+"%";$("category").textContent=S.q.cat;$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;$("animal").textContent=S.q.emoji;
 $("instruction").textContent=S.direction==="de"?"PREVEDI NA SRPSKI":"PREVEDI NA NEMAČKI";$("question").textContent=S.q[S.direction];$("feedback").className="feedback";$("feedback").textContent=S.bonus?"✨ BONUS RUNDA: DUPLI POENI!":"Izaberi tačan odgovor";
 $("answers").innerHTML="";
@@ -347,7 +240,7 @@ if(good){S.correct++;S.streak++;const gained=(100+Math.min(10,S.streak-1)*15+tim
 else{S.streak=0;S.lives--;$("feedback").className="feedback no";$("feedback").textContent=idx===-1?"⏰ VREME ISTEKLO!":"❌ TAČNO JE: "+correct;$("questionPanel").classList.add("shake");fx("wrong");if(navigator.vibrate)navigator.vibrate([60,50,70])}
 $("score").textContent=S.score;$("hearts").textContent="❤️".repeat(S.lives);$("badge").textContent=S.bonus?"⭐ BONUS x2":"🔥 NIZ "+S.streak;
 S.next=setTimeout(()=>{if(S.lives<=0){finish(true);return}S.i++;nextQuestion()},good?900:1350)}
-function saveRecord(){let changed=false;try{if(S.mode===200&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best200",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
+function saveRecord(){let changed=false;try{if(S.mode===50&&S.score>best200){best200=S.score;localStorage.setItem("de-max-animals-best200",String(best200));changed=true}else if(S.mode===20&&S.score>best20){best20=S.score;localStorage.setItem("de-max-animals-best20",String(best20));changed=true}}catch(e){}$("best20").textContent=best20;$("best200").textContent=best200;return changed}
 function modal(html){$("modal").innerHTML=html;$("overlay").classList.remove("hide")}
 function closeModal(){$("overlay").classList.add("hide");$("overlay").querySelectorAll(".spark,.explosion,.flash").forEach(e=>e.remove())}
 function sparks(target,count,explode){for(let i=0;i<count;i++){const p=document.createElement("span"),angle=Math.random()*Math.PI*2,distance=(explode?95:35)+Math.random()*(explode?330:130);p.className="spark";p.style.setProperty("--dx",Math.cos(angle)*distance+"px");p.style.setProperty("--dy",Math.sin(angle)*distance+"px");p.style.setProperty("--dur",(expludeDuration(explode)+Math.random()*550)+"ms");p.style.setProperty("--c",["#ffdc66","#ff9742","#fd4171","#9d77ff","#fff4ba"][i%5]);const size=(5+Math.random()*11)+"px";p.style.width=size;p.style.height=size;target.appendChild(p);setTimeout(()=>p.remove(),1650)}}
@@ -357,9 +250,9 @@ function finish(lost){clearTimers();S.locked=true;S.active=false;const newRecord
 modal("<div class='big'>"+(lost?"💔":"🏆")+"</div><h2>"+title+"</h2><p>"+msg+"</p><div class='value'>"+S.score+" <span style='font-size:17px'>POENA</span></div><div class='resultgrid'><div>TAČNI ODGOVORI<b>"+S.correct+" / "+S.played+"</b></div><div>PREĐENO<b>"+S.played+" / "+S.mode+"</b></div></div>"+(newRecord?"<p class='wintext'>🌟 NOVI LIČNI REKORD!</p>":"")+"<button id='again' class='cta primary'>🔄 IGRAJ PONOVO</button><button id='back' class='cta ghost'>⌂ POČETNA</button>");
 $("again").onclick=()=>start(S.mode);$("back").onclick=home;if(lost)explosion();else{fx("win");sparks($("overlay"),70,true)}}
 function home(){clearTimers();S.active=false;S.locked=true;closeModal();$("game").classList.add("hide");$("home").classList.remove("hide");fx("tap")}
-$("marathon").onclick=()=>start(200);$("quick").onclick=()=>start(20);
+$("marathon").onclick=()=>start(50);$("quick").onclick=()=>start(20);
 $("quit").onclick=()=>{if(!S.active)return;clearTimers();S.locked=true;modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");$("resume").onclick=()=>{closeModal();S.locked=false;S.deadline=performance.now()+Math.max(1,S.remaining)*1000;S.tick=setInterval(updateTimer,70)};$("exit").onclick=home};
 document.addEventListener("keydown",e=>{if(S.active&&!S.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
 document.addEventListener("visibilitychange",()=>{if(document.hidden){stopMusic();if(S.active&&!S.locked){clearInterval(S.tick);S.tick=null;S.remaining=Math.max(0,(S.deadline-performance.now())/1000);S.deadline=Infinity}}else{if(musicEnabled&&ctx)startMusic();if(S.active&&!S.locked&&S.deadline===Infinity){S.deadline=performance.now()+S.remaining*1000;S.tick=setInterval(updateTimer,70)}}});
-if(bank.length!==200){$("heroTitle").textContent="Greška u bazi: "+bank.length}
+if(bank.length!==50){$("heroTitle").textContent="Greška u bazi: "+bank.length}
 })();</script></body></html>
