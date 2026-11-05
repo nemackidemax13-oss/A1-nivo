@@ -210,6 +210,7 @@ function startQuiz(){
  const s=st(selected);if(learnPage<1)return;const limit=STATES.indexOf(s)>=10?22:STATES.indexOf(s)>=6?19:16;quiz={state:s,qs:questions(s),step:0,correct:0,lives:3,points:0,streak:0,history:[],remaining:limit,limit,answered:false,award:0};scene="quiz";render();sound("start");audioMood();
 }
 function renderQuiz(){
+ quiz.answered=false;
  const s=quiz.state,q=quiz.qs[quiz.step];
  const lifeDisplay=[0,1,2].map(i=>'<span class="life-heart'+(i>=quiz.lives?' lost':'')+'" aria-hidden="true">'+(i<quiz.lives?'❤️':'🖤')+'</span>').join("");
  qMain.innerHTML='<section class="view quiz'+(quiz.step===4?' challenge-last':'')+'"><div class="quizhead"><div class="quizbadge">'+s.emoji+' '+safe(s.name)+'</div><div class="life-counter" id="lifeCounter" role="status" aria-label="Životi: '+quiz.lives+' od 3">'+lifeDisplay+'</div><div class="timer"><div class="timer-arc" id="clockRing" style="--angle:360deg"><b id="clock">'+quiz.limit+'</b></div></div></div>'
