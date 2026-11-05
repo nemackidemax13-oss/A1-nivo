@@ -113,52 +113,93 @@ function scramble(){if(round>=10)return finish('Reči su složene! 🏆');const 
 @media(max-width:410px){.demax-music-toggle{font-size:10px;padding:5px 6px}}
 </style>
 <script>
-/* Original quiet procedural music: no external audio, licensed tracks or autoplay */
+/* DE-MAX original arcade groove: drums, warm bass, chords and syncopated hook */
 (function(){
-  "use strict";
-  let enabled=true,playing=false,ctx=null,interval=null,step=0,activeNodes=[];
-  try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
-  /* Točak • razigrani valcer: zasebna originalna melodija */
-  const notes=[392,493.88,587.33,659.25,587.33,493.88,440,587.33,698.46,587.33,493.88,392,440,523.25,493.88,392];
-  const b=document.createElement("button");
-  b.type="button";b.className="demax-music-toggle";b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
-  function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
-  function getAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ctx)ctx=new C();if(ctx.state==="suspended")ctx.resume().catch(()=>{});return ctx}catch(e){return null}}
-  function note(freq,when,seconds,volume){
-    const a=getAudio();if(!a||!enabled||!playing)return;
-    try{
-      const o=a.createOscillator(),g=a.createGain(),t=Math.max(a.currentTime+.005,when);
-      o.type="triangle";o.frequency.setValueAtTime(freq,t);
-      g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(volume,t+.09);
-      g.gain.exponentialRampToValueAtTime(.0001,t+seconds);
-      o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+seconds+.03);
-      activeNodes.push({o,g});o.onended=()=>{activeNodes=activeNodes.filter(v=>v.o!==o);o.disconnect();g.disconnect()};
-    }catch(e){}
-  }
-  function beat(){
-    if(!playing||!enabled)return;const a=getAudio();if(!a)return;
-    const now=a.currentTime+.02;
-    note(notes[step%notes.length],now,0.35,0.01);
-    if(step%4===0)note(notes[(step+5)%notes.length]/2,now,1.1,.006);
-    step++;
-  }
-  function stop(){
-    playing=false;
-    if(interval!==null){clearInterval(interval);interval=null}
-    activeNodes.forEach(({o,g})=>{try{g.gain.cancelScheduledValues(ctx.currentTime);g.gain.setTargetAtTime(.0001,ctx.currentTime,.03);o.stop(ctx.currentTime+.12)}catch(e){}});
-  }
-  function start(){
-    if(playing||!enabled)return;
-    playing=true;beat();interval=setInterval(beat,390);
-  }
-  b.addEventListener("click",function(e){
-    e.stopPropagation();enabled=!enabled;label();
-    try{localStorage.setItem("demax_a1_music",enabled?"on":"off")}catch(e){}
-    if(enabled&&document.documentElement.dataset.demaxGameStarted==="yes")start();else stop();
-  });
-  label();const header=document.querySelector(".top,.header");if(header)header.appendChild(b);
-  window.DeMaxMusic={start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()}};
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(document.documentElement.dataset.demaxGameStarted==="yes")start()});
-  window.addEventListener("pagehide",stop);
-})();
-</script></body></html>
+ "use strict";
+ let enabled=true,playing=false,ctx=null,tick=null,step=0,nextTime=0,master=null;
+ try{enabled=localStorage.getItem("demax_a1_music")!=="off"}catch(e){}
+ const BPM=112,beat=60/BPM/4;
+ const b=document.createElement("button");
+ b.type="button";b.className="demax-music-toggle";
+ b.setAttribute("aria-label","Uključi ili isključi pozadinsku muziku");
+ function label(){b.textContent=enabled?"🎵 Muzika: ON":"🔇 Muzika: OFF";b.setAttribute("aria-pressed",String(enabled))}
+ function audio(){
+  try{
+   const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+   if(!ctx){ctx=new C();master=ctx.createGain();master.gain.value=.26;master.connect(ctx.destination)}
+   if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+   return ctx;
+  }catch(e){return null}
+ }
+ const chords=[[261.63,329.63,392],[220,261.63,329.63],[174.61,220,261.63],[196,246.94,293.66]];
+ const bass=[130.81,110,87.31,98];
+ const riff=[659.25,0,783.99,0,659.25,587.33,0,523.25,587.33,0,659.25,783.99,0,587.33,523.25,0];
+ let noiseBuffer;
+ function noise(){
+  if(noiseBuffer||!ctx)return noiseBuffer;
+  noiseBuffer=ctx.createBuffer(1,ctx.sampleRate*.35,ctx.sampleRate);
+  const d=noiseBuffer.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  return noiseBuffer;
+ }
+ function osc(f,t,d,vol,type="triangle",attack=.01,filterHz=0){
+  const a=audio();if(!a||!playing)return;
+  const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);
+  let target=g;if(filterHz){const lp=a.createBiquadFilter();lp.type="lowpass";lp.frequency.value=filterHz;o.connect(lp);lp.connect(g)}else o.connect(g);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+attack);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  g.connect(master);o.start(t);o.stop(t+d+.03);
+ }
+ function kick(t){
+  const a=audio();if(!a||!playing)return;
+  const o=a.createOscillator(),g=a.createGain();o.type="sine";
+  o.frequency.setValueAtTime(155,t);o.frequency.exponentialRampToValueAtTime(48,t+.16);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.32,t+.006);
+  g.gain.exponentialRampToValueAtTime(.0001,t+.22);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+.23);
+ }
+ function percussion(t,isSnare){
+  const a=audio();if(!a||!playing)return;
+  const src=a.createBufferSource(),hp=a.createBiquadFilter(),g=a.createGain();
+  src.buffer=noise();hp.type="highpass";hp.frequency.value=isSnare?1400:6500;
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(isSnare?.095:.025,t+.004);
+  g.gain.exponentialRampToValueAtTime(.0001,t+(isSnare?.15:.055));
+  src.connect(hp);hp.connect(g);g.connect(master);src.start(t);src.stop(t+(isSnare?.16:.065));
+ }
+ function schedule(n,t){
+  const bar=Math.floor(n/16)%4,slot=n%16;
+  if(slot%4===0)kick(t);
+  if(slot===4||slot===12)percussion(t,true);
+  if(slot%2===0)percussion(t,false);
+  if(slot===0){chords[bar].forEach((f,j)=>osc(f,t,1.85,.024,"sine",.24,0))}
+  if([0,3,6,8,11,14].includes(slot))osc(bass[bar]*(slot===14?2:1),t,.19,.105,"sawtooth",.012,420);
+  const lead=riff[(slot+bar*3)%16];
+  if(lead&&slot%2===0)osc(lead,t,.15,.021,"triangle",.012,0);
+ }
+ function scheduleAhead(){
+  if(!playing||!enabled||!ctx)return;
+  while(nextTime<ctx.currentTime+.18){schedule(step,nextTime);step++;nextTime+=beat}
+ }
+ function stop(){
+  playing=false;if(tick!==null){clearInterval(tick);tick=null}
+  if(ctx&&master){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(.0001,ctx.currentTime,.04)}
+ }
+ function start(){
+  if(playing||!enabled)return;
+  const a=audio();if(!a)return;
+  playing=true;step=0;nextTime=a.currentTime+.035;
+  master.gain.cancelScheduledValues(a.currentTime);
+  master.gain.setValueAtTime(.0001,a.currentTime);
+  master.gain.linearRampToValueAtTime(.26,a.currentTime+.3);
+  scheduleAhead();tick=setInterval(scheduleAhead,25);
+ }
+ b.addEventListener("click",function(e){
+  e.stopPropagation();enabled=!enabled;label();
+  try{localStorage.setItem("demax_a1_music",enabled?"on":"off")}catch(e){}
+  if(enabled&&document.documentElement.dataset.demaxGameStarted==="yes")start();else stop();
+ });
+ label();const header=document.querySelector(".top,.header");if(header)header.appendChild(b);
+ window.DeMaxMusic={start:function(){document.documentElement.dataset.demaxGameStarted="yes";start()},stop:function(){document.documentElement.dataset.demaxGameStarted="no";stop()}};
+ document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(document.documentElement.dataset.demaxGameStarted==="yes")start()});
+ window.addEventListener("pagehide",stop);
+})();</script></body></html>
