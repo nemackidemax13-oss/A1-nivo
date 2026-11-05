@@ -533,8 +533,14 @@ $("quit").onclick=()=>{
  if(!S.active)return;
  const wasRunning=S.started;
  pauseQuestionClock();stopPronunciation();
+ if(S.next){clearTimeout(S.next);S.next=null}
  modal("<div class='big'>🚪</div><h2>Napustiti kviz?</h2><p>Možeš nastaviti sa trenutnog pitanja.</p><button id='resume' class='cta primary'>▶ NASTAVI IGRU</button><button id='exit' class='cta ghost'>⌂ POČETNA</button>");
- $("resume").onclick=()=>{closeModal();if(!S.answered){if(wasRunning)beginQuestionClock();else sayGerman()}};
+ $("resume").onclick=()=>{
+  closeModal();
+  if(S.answered){if(S.lives<=0)finish(true);else{S.i++;nextQuestion()}}
+  else if(wasRunning)beginQuestionClock();
+  else sayGerman();
+ };
  $("exit").onclick=home;
 };
 document.addEventListener("keydown",e=>{if(S.active&&!S.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
