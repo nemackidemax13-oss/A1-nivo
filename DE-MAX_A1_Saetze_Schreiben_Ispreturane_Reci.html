@@ -136,6 +136,7 @@ footer{text-align:center;color:#66768b;font-size:12px;padding:4px 15px 22px}
 </style>
 <style>@media(max-width:700px){*,*::before,*::after{box-sizing:border-box}html,body{width:100%;max-width:100%;min-width:0}body{min-height:100vh;min-height:100svh;padding-bottom:calc(20px + env(safe-area-inset-bottom))}.app{width:100%;max-width:100%;min-width:0;min-height:100vh;min-height:100svh;height:auto;margin-left:auto;margin-right:auto;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));padding-bottom:calc(26px + env(safe-area-inset-bottom))}.app :where(*),main :where(*){min-width:0}img,svg,video,canvas{max-width:100%}h1{font-size:clamp(1.35rem,6vw,2rem);line-height:1.12;overflow-wrap:anywhere}h2{font-size:clamp(1.1rem,5vw,1.55rem);overflow-wrap:anywhere}h3,h4{overflow-wrap:anywhere}:where(p,li,td,th,label,.question,.prompt,.sentence,.phrase,.de,.word,.option,.opt){overflow-wrap:anywhere}input,select,textarea{max-width:100%;min-width:0;min-height:44px;font-size:16px!important}button,[role=button],input[type=button],input[type=submit]{max-width:100%;min-height:44px;touch-action:manipulation}.tab,.btn,.option,.opt,.ans,.answer,.answerBtn,.choice,.pair,.vocab-btn,.word,.word-chip,.answer-chip,.speak,.reset,.check,.next,.listenQuestion,.auto-toggle,.listen-all,.control,.btn-answer,.wordbank button,.actions button,.btnrow button,.tabs button{min-height:44px}.footer{position:static;inset:auto;transform:none;width:100%;max-width:100%;margin-top:12px;margin-bottom:0}.footer-actions{position:static;inset:auto}.nav{overflow:visible;flex-wrap:wrap}table{max-width:100%}}</style>
 <style>@media(max-width:700px){.blank{min-width:min(8em,100%)!important}.pronounbank .choice{min-width:52px!important}.qopt{min-width:50px!important}.sectiontitle .num{min-width:32px!important}.score-box{min-width:min(130px,100%)!important}.badge{min-width:34px!important}button,[role=button],input[type=button],input[type=submit],.tab,.btn,.option,.opt,.ans,.answer,.answerBtn,.choice,.pair,.vocab-btn,.word,.word-chip,.answer-chip,.speak,.reset,.check,.next,.listenQuestion,.auto-toggle,.listen-all,.control,.btn-answer{min-width:44px!important}}</style>
+<link rel="stylesheet" href="./DE-MAX_A1_MOBILE_9x16.css">
 </head>
 <body>
 <div class="app">
@@ -172,36 +173,42 @@ footer{text-align:center;color:#66768b;font-size:12px;padding:4px 15px 22px}
 const items = [
   {
     src:"Larsen hört am Morgen Musik.",
+    translation:"Larsen ujutru sluša muziku.",
     html:"Larsen hört <span class='time'>am Morgen</span> Musik.",
     answer:"Am Morgen hört Larsen Musik.",
     words:["Am","Morgen","hört","Larsen","Musik."]
   },
   {
     src:"Larsen sieht am Vormittag fern.",
+    translation:"Larsen prepodne gleda televiziju.",
     html:"Larsen sieht <span class='time'>am Vormittag</span> fern.",
     answer:"Am Vormittag sieht Larsen fern.",
     words:["Am","Vormittag","sieht","Larsen","fern."]
   },
   {
     src:"Larsen isst am Mittag Pizza.",
+    translation:"Larsen u podne jede picu.",
     html:"Larsen isst <span class='time'>am Mittag</span> Pizza.",
     answer:"Am Mittag isst Larsen Pizza.",
     words:["Am","Mittag","isst","Larsen","Pizza."]
   },
   {
     src:"Larsen ruft am Nachmittag Sofia an.",
+    translation:"Larsen poslepodne zove Sofiju.",
     html:"Larsen ruft <span class='time'>am Nachmittag</span> Sofia an.",
     answer:"Am Nachmittag ruft Larsen Sofia an.",
     words:["Am","Nachmittag","ruft","Larsen","Sofia","an."]
   },
   {
     src:"Larsen geht am Abend ins Kino.",
+    translation:"Larsen uveče ide u bioskop.",
     html:"Larsen geht <span class='time'>am Abend</span> ins Kino.",
     answer:"Am Abend geht Larsen ins Kino.",
     words:["Am","Abend","geht","Larsen","ins","Kino."]
   },
   {
     src:"Larsen geht in der Nacht spazieren.",
+    translation:"Larsen noću ide u šetnju.",
     html:"Larsen geht <span class='time'>in der Nacht</span> spazieren.",
     answer:"In der Nacht geht Larsen spazieren.",
     words:["In","der","Nacht","geht","Larsen","spazieren."]
@@ -246,9 +253,9 @@ function render(){
         <div class="num">${i+1}</div>
         <div class="sentence-wrap">
           <div class="label">Ispravna rečenica</div>
-          <button class="speak" onclick="speak(${JSON.stringify(it.src)})">🔊</button>
+          <button class="speak" onclick='speak(${JSON.stringify(it.src)})'>🔊</button>
           <div class="sentence">${it.html}</div>
-          <div class="translation"></div>
+          <div class="translation">Prevod: ${it.translation}</div>
         </div>
       </div>
 
@@ -354,5 +361,6 @@ function resetAll(){
 }
 render();
 </script>
+<script defer src="./DE-MAX_A1_FEEDBACK_AUDIO.js" data-feedback-sound="on"></script>
 </body>
 </html>
