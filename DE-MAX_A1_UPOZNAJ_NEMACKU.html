@@ -91,7 +91,8 @@ header>.audio button{font-size:clamp(9px,2.5vw,11px);padding:5px 5px}
 .endactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
 .results-modal .endactions .btn{font-size:11px;padding:9px 3px;margin:0}
 @media(max-height:640px){.results-modal .rankrow{padding:3px 10px;min-height:23px}.results-modal .result strong{font-size:19px}.results-modal .emoji{font-size:29px}}
-</style></head>
+</style><link rel="stylesheet" href="./DE-MAX_A1_MOBILE_9x16.css">
+</head>
 <body><div id="app">
 <header><span class="flag" aria-label="Nemačka zastava"><i></i><i></i><i></i></span><div class="brand"><b>UPOZNAJ NEMAČKU</b></div><div class="audio"><button id="music">♫ ON</button><button id="effects">🔊 ON</button></div></header>
 <main>
@@ -320,4 +321,5 @@ $("quit").onclick=function(){clear();game.locked=true;modal("<div class='emoji'>
 document.addEventListener("keydown",function(e){if(!$("game").classList.contains("hide")&&$("overlay").classList.contains("hide")&&!game.locked&&/^[1-4]$/.test(e.key))answer(Number(e.key)-1)});
 document.addEventListener("visibilitychange",function(){if(document.hidden)musicStop();else if(music&&ctx)musicStart()});
 })();
-</script></body></html>
+</script><script defer src="./DE-MAX_A1_FEEDBACK_AUDIO.js" data-feedback-sound="off"></script>
+</body></html>
