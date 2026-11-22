@@ -20,6 +20,7 @@ button{font:inherit;cursor:pointer}.app{width:min(100%,520px);min-height:100dvh;
 .complete{text-align:center}.complete .big{font-size:54px}.complete h2{margin:8px 0}.complete p{color:var(--muted)}.footer{text-align:center;padding:16px;color:#aaa;font-size:11px}
 @media(min-width:700px){body{padding:24px}.app{min-height:calc(100dvh - 48px);border-radius:28px}}
 </style>
+<link rel="stylesheet" href="./DE-MAX_A1_MOBILE_9x16.css">
 </head>
 <body>
 <div class="app">
@@ -111,4 +112,5 @@ el("next").onclick=()=>{
 el("restart").onclick=()=>{index=0;el("complete").classList.add("hidden");el("exercise").classList.remove("hidden");render()};
 render();
 </script>
+<script defer src="./DE-MAX_A1_FEEDBACK_AUDIO.js" data-feedback-sound="on"></script>
 </body></html>
