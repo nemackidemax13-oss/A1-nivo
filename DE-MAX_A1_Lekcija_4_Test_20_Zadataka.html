@@ -47,13 +47,77 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
   .actions{flex-wrap:wrap}
   .actions .btn{flex:1 1 100%}
 }
-</style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo">DE-MAX TUTIN</div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 4 • Test</h1><div class="sub">Časovi 10–12 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>const questions = [{"type": "mcq", "q": "Dopuni: Das ist ___ Mann.", "options": ["der", "die", "das", "den"], "answer": "der"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Frau.", "options": ["die", "der", "das", "den"], "answer": "die"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Kind.", "options": ["das", "die", "der", "den"], "answer": "das"}, {"type": "mcq", "q": "Dopuni množinu: Das sind ___ Kinder.", "options": ["die", "der", "das", "den"], "answer": "die"}, {"type": "mcq", "q": "Koji član ide uz „Schlafzimmer“?", "options": ["das", "der", "die", "den"], "answer": "das"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: der Balkon → ___", "options": ["er", "sie", "es", "wir"], "answer": "er"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: die Wohnung → ___", "options": ["sie", "er", "es", "ihr"], "answer": "sie"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: das Bad → ___", "options": ["es", "er", "sie", "du"], "answer": "es"}, {"type": "mcq", "q": "Koji pridev znači „jeftino“?", "options": ["billig", "teuer", "breit", "dunkel"], "answer": "billig"}, {"type": "mcq", "q": "Dopuni komparaciju: gut – besser – ___", "options": ["am besten", "am liebsten", "mehr", "besserer"], "answer": "am besten"}, {"type": "mcq", "q": "Dopuni komparaciju: gern – lieber – ___", "options": ["am liebsten", "am besten", "am meisten", "mehr"], "answer": "am liebsten"}, {"type": "order", "q": "Sastavi rečenicu o hobiju.", "words": ["spiele", "Ich", "Fußball", "."], "answer": ["Ich", "spiele", "Fußball", "."], "translation": "Igram fudbal."}, {"type": "mcq", "q": "Kako se piše broj 123?", "options": ["einhundertdreiundzwanzig", "einhundertdreißigundzwanzig", "dreihundertzwölf", "hundertdreiundzwanzigtausend"], "answer": "einhundertdreiundzwanzig"}, {"type": "mcq", "q": "Kako se kaže 2.000?", "options": ["zweitausend", "zweihundert", "zwanzigtausend", "zwei Millionen"], "answer": "zweitausend"}, {"type": "mcq", "q": "Kako se kaže 10.000?", "options": ["zehntausend", "eintausend", "hunderttausend", "zehnhundert"], "answer": "zehntausend"}, {"type": "mcq", "q": "Kako se kaže 1.000.000?", "options": ["eine Million", "ein Million", "eine Milliarde", "einhunderttausend"], "answer": "eine Million"}, {"type": "mcq", "q": "Kako se zvanično kaže 14:30?", "options": ["vierzehn Uhr dreißig", "halb drei", "vier Uhr dreißig", "dreißig nach vierzehn"], "answer": "vierzehn Uhr dreißig"}, {"type": "mcq", "q": "Kako se zvanično kaže 19:50?", "options": ["neunzehn Uhr fünfzig", "zehn vor acht", "neun Uhr fünfzig", "neunzehn Uhr fünfzehn"], "answer": "neunzehn Uhr fünfzig"}, {"type": "order", "q": "Sastavi pitanje o slobodnom vremenu.", "words": ["du", "Was", "Freizeit", "machst", "der", "in", "?"], "answer": ["Was", "machst", "du", "in", "der", "Freizeit", "?"], "translation": "Šta radiš u slobodno vreme?"}, {"type": "order", "q": "Sastavi odgovor o slobodnom vremenu.", "words": ["Fahrrad", "Ich", "fahre", "."], "answer": ["Ich", "fahre", "Fahrrad", "."], "translation": "Vozim bicikl."}];
+
+/* Centered DE-MAX / TUTIN brand */
+.brand{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.logo{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.05;font-weight:900}
+.logo .brandTop{font-size:1em;letter-spacing:.8px}
+.logo .brandBottom{font-size:.75em;letter-spacing:2.5px;margin-top:2px}
+@media(max-width:700px){
+ html,body{width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none}
+ body{position:relative!important;display:block!important}
+ .app{position:absolute!important;top:0!important;left:50%!important;width:100%!important;max-width:640px!important;height:auto!important;min-height:0!important;margin:0!important;padding:max(5px,env(safe-area-inset-top)) 9px calc(5px + env(safe-area-inset-bottom))!important;transform:translateX(-50%);transform-origin:top center;overflow:visible}
+ .header{position:relative!important;top:auto!important;z-index:1;border-radius:15px!important;padding:8px 12px 9px!important}
+ .brand{align-items:center!important;justify-content:center!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:3px!important}
+ .brand .logo{font-size:15px!important;white-space:nowrap!important;overflow-wrap:normal!important}
+ .brand .badge{font-size:10px!important;padding:3px 7px!important}
+ .header h1{font-size:clamp(15px,4.2vw,18px)!important;text-align:center!important;line-height:1.2;margin:5px 0 2px!important}
+ .header .sub{text-align:center!important;font-size:11px!important;line-height:1.2}
+ .progressRow{margin-top:7px!important;gap:7px!important}
+ .bar{height:7px!important}
+ .card{margin-top:8px!important;padding:11px 12px!important;border-radius:15px!important}
+ .kicker{font-size:10px!important;letter-spacing:.5px!important}
+ .q{font-size:clamp(15px,4.1vw,18px)!important;line-height:1.23!important;margin:5px 0 9px!important}
+ .options{gap:6px!important}
+ .opt{min-height:38px!important;padding:9px 10px!important;font-size:clamp(13px,3.9vw,16px)!important;line-height:1.2!important;border-radius:11px!important;transform:none!important}
+ .wordbank,.assembled{gap:6px!important;min-height:38px!important;padding:7px!important;border-radius:11px!important}
+ .assembled{margin-bottom:7px!important}
+ .word{min-width:0!important;min-height:35px!important;padding:7px 9px!important;font-size:clamp(12px,3.7vw,15px)!important;line-height:1.2!important;border-radius:9px!important}
+ .placeholder{font-size:12px!important}
+ .feedback{margin-top:7px!important;padding:8px 10px!important;font-size:13px!important;line-height:1.3!important}
+ .translation{margin:6px 0!important;padding:7px 9px!important;font-size:12px!important;line-height:1.35!important}
+ .actions{display:flex!important;flex-wrap:nowrap!important;gap:6px!important;margin-top:9px!important}
+ .actions .btn{flex:1 1 0!important;min-width:0!important;min-height:37px!important;padding:8px 4px!important;font-size:clamp(11px,3.3vw,14px)!important;line-height:1.2!important}
+ .footerStat{margin-top:7px!important;gap:5px!important;font-size:11px!important}
+ .pill{padding:4px 8px!important}
+ .result{padding:4px 1px!important}
+ .scoreCircle{width:110px!important;height:110px!important;margin:9px auto!important}
+ .result h2{font-size:21px!important;margin:7px 0 5px!important}
+ .result p{margin:0 0 10px!important}
+}</style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo"><span class="brandTop">DE-MAX</span><span class="brandBottom">TUTIN</span></div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 4 • Test</h1><div class="sub">Časovi 10–12 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>const questions = [{"type": "mcq", "q": "Dopuni: Das ist ___ Mann.", "options": ["der", "die", "das", "den"], "answer": "der"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Frau.", "options": ["die", "der", "das", "den"], "answer": "die"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Kind.", "options": ["das", "die", "der", "den"], "answer": "das"}, {"type": "mcq", "q": "Dopuni množinu: Das sind ___ Kinder.", "options": ["die", "der", "das", "den"], "answer": "die"}, {"type": "mcq", "q": "Koji član ide uz „Schlafzimmer“?", "options": ["das", "der", "die", "den"], "answer": "das"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: der Balkon → ___", "options": ["er", "sie", "es", "wir"], "answer": "er"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: die Wohnung → ___", "options": ["sie", "er", "es", "ihr"], "answer": "sie"}, {"type": "mcq", "q": "Zameni imenicu zamenicom: das Bad → ___", "options": ["es", "er", "sie", "du"], "answer": "es"}, {"type": "mcq", "q": "Koji pridev znači „jeftino“?", "options": ["billig", "teuer", "breit", "dunkel"], "answer": "billig"}, {"type": "mcq", "q": "Dopuni komparaciju: gut – besser – ___", "options": ["am besten", "am liebsten", "mehr", "besserer"], "answer": "am besten"}, {"type": "mcq", "q": "Dopuni komparaciju: gern – lieber – ___", "options": ["am liebsten", "am besten", "am meisten", "mehr"], "answer": "am liebsten"}, {"type": "order", "q": "Sastavi rečenicu o hobiju.", "words": ["spiele", "Ich", "Fußball", "."], "answer": ["Ich", "spiele", "Fußball", "."], "translation": "Igram fudbal."}, {"type": "mcq", "q": "Kako se piše broj 123?", "options": ["einhundertdreiundzwanzig", "einhundertdreißigundzwanzig", "dreihundertzwölf", "hundertdreiundzwanzigtausend"], "answer": "einhundertdreiundzwanzig"}, {"type": "mcq", "q": "Kako se kaže 2.000?", "options": ["zweitausend", "zweihundert", "zwanzigtausend", "zwei Millionen"], "answer": "zweitausend"}, {"type": "mcq", "q": "Kako se kaže 10.000?", "options": ["zehntausend", "eintausend", "hunderttausend", "zehnhundert"], "answer": "zehntausend"}, {"type": "mcq", "q": "Kako se kaže 1.000.000?", "options": ["eine Million", "ein Million", "eine Milliarde", "einhunderttausend"], "answer": "eine Million"}, {"type": "mcq", "q": "Kako se zvanično kaže 14:30?", "options": ["vierzehn Uhr dreißig", "halb drei", "vier Uhr dreißig", "dreißig nach vierzehn"], "answer": "vierzehn Uhr dreißig"}, {"type": "mcq", "q": "Kako se zvanično kaže 19:50?", "options": ["neunzehn Uhr fünfzig", "zehn vor acht", "neun Uhr fünfzig", "neunzehn Uhr fünfzehn"], "answer": "neunzehn Uhr fünfzig"}, {"type": "order", "q": "Sastavi pitanje o slobodnom vremenu.", "words": ["du", "Was", "Freizeit", "machst", "der", "in", "?"], "answer": ["Was", "machst", "du", "in", "der", "Freizeit", "?"], "translation": "Šta radiš u slobodno vreme?"}, {"type": "order", "q": "Sastavi odgovor o slobodnom vremenu.", "words": ["Fahrrad", "Ich", "fahre", "."], "answer": ["Ich", "fahre", "Fahrrad", "."], "translation": "Vozim bicikl."}];
 
 let idx=0, score=0;
 const answered = Array(questions.length).fill(false);
 const results = Array(questions.length).fill(null);
 let assembled=[];
 const el = id => document.getElementById(id);
+let feedbackAudioContext = null;
+function playFeedbackSound(correct){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return;
+    if(!feedbackAudioContext) feedbackAudioContext = new Ctx();
+    if(feedbackAudioContext.state === 'suspended') void feedbackAudioContext.resume();
+    const start = feedbackAudioContext.currentTime + 0.015;
+    const notes = correct
+      ? [[523.25,0,0.11],[659.25,0.12,0.11],[783.99,0.24,0.19]]
+      : [[300,0,0.15],[215,0.18,0.23]];
+    notes.forEach(([frequency, offset, duration]) => {
+      const oscillator = feedbackAudioContext.createOscillator();
+      const volume = feedbackAudioContext.createGain();
+      oscillator.type = correct ? 'sine' : 'triangle';
+      oscillator.frequency.setValueAtTime(frequency, start + offset);
+      volume.gain.setValueAtTime(0.001, start + offset);
+      volume.gain.exponentialRampToValueAtTime(correct ? 0.095 : 0.075, start + offset + 0.015);
+      volume.gain.exponentialRampToValueAtTime(0.001, start + offset + duration);
+      oscillator.connect(volume);
+      volume.connect(feedbackAudioContext.destination);
+      oscillator.start(start + offset);
+      oscillator.stop(start + offset + duration + 0.01);
+    });
+  }catch(err){ /* Audio is optional if the browser does not allow playback. */ }
+}
+
 function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
 function render(){
   const q=questions[idx]; assembled=[];
@@ -75,7 +139,7 @@ function renderMCQ(q){
 }
 function chooseMCQ(btn,val,q){
   if(answered[idx]) return;
-  answered[idx]=true; results[idx]=(val===q.answer); if(results[idx]) score++;
+  answered[idx]=true; results[idx]=(val===q.answer); if(results[idx]) score++; playFeedbackSound(results[idx]);
   [...btn.parentElement.children].forEach(b=>{if(b.textContent===q.answer)b.classList.add('correct'); else if(b===btn)b.classList.add('wrong'); else b.classList.add('dim');});
   showFeedback(results[idx], q.answer, results[idx]?q.translation:null); el('next').disabled=false; el('scoreNow').textContent=`Tačno: ${score}`;
 }
@@ -101,7 +165,7 @@ function drawOrder(q,locked=false){
 }
 function checkOrder(){
   if(answered[idx]) return; const q=questions[idx]; const ok=assembled.join('\u0001')===q.answer.join('\u0001');
-  answered[idx]=true; results[idx]=ok; if(ok)score++; showFeedback(ok,q.answer.join(' '),ok?q.translation:null);
+  answered[idx]=true; results[idx]=ok; if(ok)score++; playFeedbackSound(ok); showFeedback(ok,q.answer.join(' '),ok?q.translation:null);
   assembled=[...q.answer]; drawOrder(q,true);
   el('check').disabled=true; el('next').disabled=false; el('scoreNow').textContent=`Tačno: ${score}`;
 }
@@ -119,4 +183,27 @@ function finish(){
 }
 function restart(){location.reload();}
 el('check').onclick=checkOrder; el('next').onclick=next; el('prev').onclick=prev; render();
+
+/* Automatic phone screen fit — no vertical page scrolling. */
+let mobileFitPending=false;
+function fitMobileA1(){
+ const app=document.querySelector('main.app');
+ if(!app)return;
+ if(!window.matchMedia('(max-width:700px)').matches){app.style.transform='';return;}
+ app.style.transform='translateX(-50%) scale(1)';
+ const visibleHeight=Math.min(window.innerHeight,window.visualViewport?window.visualViewport.height:window.innerHeight);
+ const contentHeight=Math.max(1,app.scrollHeight);
+ const scale=Math.min(1,Math.max(0,(visibleHeight-2)/contentHeight));
+ app.style.transform='translateX(-50%) scale('+scale+')';
+}
+function scheduleMobileA1(){
+ if(mobileFitPending)return;
+ mobileFitPending=true;
+ requestAnimationFrame(()=>{mobileFitPending=false;fitMobileA1();});
+}
+new MutationObserver(scheduleMobileA1).observe(document.querySelector('main.app'),{subtree:true,childList:true,characterData:true});
+window.addEventListener('resize',scheduleMobileA1,{passive:true});
+window.visualViewport?.addEventListener('resize',scheduleMobileA1,{passive:true});
+window.addEventListener('pageshow',scheduleMobileA1);
+scheduleMobileA1();
 </script></body></html>
