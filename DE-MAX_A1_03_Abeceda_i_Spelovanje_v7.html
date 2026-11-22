@@ -34,6 +34,7 @@ main{padding:14px 10px 28px}.card,.q{background:#fff;border:1px solid var(--line
 }
 </style>
 <style>@media(max-width:700px){.blank{min-width:min(8em,100%)!important}.pronounbank .choice{min-width:52px!important}.qopt{min-width:50px!important}.sectiontitle .num{min-width:32px!important}.score-box{min-width:min(130px,100%)!important}.badge{min-width:34px!important}button,[role=button],input[type=button],input[type=submit],.tab,.btn,.option,.opt,.ans,.answer,.answerBtn,.choice,.pair,.vocab-btn,.word,.word-chip,.answer-chip,.speak,.reset,.check,.next,.listenQuestion,.auto-toggle,.listen-all,.control,.btn-answer{min-width:44px!important}}</style>
+<link rel="stylesheet" href="./DE-MAX_A1_MOBILE_9x16.css">
 </head>
 <body>
 <div class="app">
@@ -84,4 +85,5 @@ wordData.forEach(([word,tr],i)=>{const q=document.createElement('div');q.classNa
 if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}
 updateBar();
 </script>
+<script defer src="./DE-MAX_A1_FEEDBACK_AUDIO.js" data-feedback-sound="on"></script>
 </body></html>
