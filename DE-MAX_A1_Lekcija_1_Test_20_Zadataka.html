@@ -100,8 +100,8 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
   #mainCard .feedback,#mainCard .actions{flex:0 0 auto!important}
   #footerStat{flex:0 0 auto!important}
   #mainCard .result{flex:1 1 auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;min-height:0!important}
-  .fullscreenToggle{position:absolute;right:10px;top:8px;display:grid;place-items:center;width:29px;height:29px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.13);border-radius:9px;color:white;font-size:18px;cursor:pointer}
-  .fullscreenToggle[hidden]{display:none!important}
+
+
   #mainCard .result .btn{flex:0 0 auto!important;align-self:stretch!important}
   .brand{padding:0 31px}
   .app[data-a1-compact="1"] .header{padding:6px 9px!important}
@@ -159,7 +159,7 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
   .app[data-a1-compact="1"] .q{font-size:15px!important}
   .app[data-a1-compact="1"] #content .options .opt{font-size:14px!important;max-height:none!important}
 }
-</style></head><body><main class="app"><section class="header"><button class="fullscreenToggle" id="fullscreenToggle" type="button" title="Ceo ekran" aria-label="Otvori ceo ekran" hidden>⛶</button><div class="brand"><div class="logo"><span class="brandTop">DE-MAX</span><span class="brandBottom">TUTIN</span></div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 1 • Test</h1><div class="sub">Časovi 1–3 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
+</style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo"><span class="brandTop">DE-MAX</span><span class="brandBottom">TUTIN</span></div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 1 • Test</h1><div class="sub">Časovi 1–3 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
 const questions = [{"type": "mcq", "q": "Koliko slova ima nemačka abeceda prema gradivu?", "options": ["26", "28", "30", "32"], "answer": "30", "hint": "U gradivu su zajedno obuhvaćena osnovna slova i posebna nemačka slova."}, {"type": "mcq", "q": "Koja grupa sadrži samoglasnike iz prve lekcije?", "options": ["a, e, i, o, u, y", "a, b, c, d, e, f", "ä, ö, ü, ß", "m, n, r, s, t, z"], "answer": "a, e, i, o, u, y"}, {"type": "mcq", "q": "Koji su nemački umlauti?", "options": ["ä, ö, ü", "ai, ei, eu", "ch, sch, tsch", "ß, x, z"], "answer": "ä, ö, ü"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „eu“?", "options": ["aj", "oj", "i", "au"], "answer": "oj"}, {"type": "mcq", "q": "Kako se približno izgovara kombinacija „ei“?", "options": ["aj", "oj", "ej", "i"], "answer": "aj"}, {"type": "mcq", "q": "Kako se izgovara „ie“ u reči „Liebe“?", "options": ["kao dugo i", "kao aj", "kao oj", "kao e"], "answer": "kao dugo i"}, {"type": "mcq", "q": "Koji primer sadrži glasovnu kombinaciju „sch“?", "options": ["Schule", "Katze", "Deutsch", "Weg"], "answer": "Schule"}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wie heißen Sie?“", "options": ["Ich heiße Amira.", "Ich komme aus Serbien.", "Ich wohne in Tutin.", "Ich spreche Deutsch."], "answer": "Ich heiße Amira."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Wer sind Sie?“", "options": ["Ich bin Emir.", "Ich heiße aus Emir.", "Ich komme Emir.", "Ich spreche Emir."], "answer": "Ich bin Emir."}, {"type": "order", "q": "Sastavi odgovor na pitanje „Wie ist Ihr Name?“", "words": ["ist", "Name", "Mein", "Amela", "."], "answer": ["Mein", "Name", "ist", "Amela", "."]}, {"type": "mcq", "q": "Šta znači W-pitanje „Wo?“", "options": ["gde", "ko", "kada", "zašto"], "answer": "gde"}, {"type": "mcq", "q": "Koja lična zamenica znači „ja“?", "options": ["ich", "du", "wir", "ihr"], "answer": "ich"}, {"type": "mcq", "q": "Koju zamenicu koristimo za formalno „Vi“?", "options": ["Sie", "du", "er", "ihr"], "answer": "Sie"}, {"type": "mcq", "q": "Koja rečenica je pravilno napisana?", "options": ["Deutschland ist ein schönes Land.", "deutschland ist ein schönes land.", "Deutschland ist ein schönes land.", "deutschland ist ein schönes Land."], "answer": "Deutschland ist ein schönes Land."}, {"type": "mcq", "q": "Odaberi pravilan odgovor na „Woher kommen Sie?“", "options": ["Ich komme aus Serbien.", "Ich wohne Serbien.", "Ich heiße Serbien.", "Ich spreche aus Serbien."], "answer": "Ich komme aus Serbien."}, {"type": "order", "q": "Sastavi neformalni odgovor: „Dolazim iz Tutina.“", "words": ["komme", "Ich", "Tutin", "aus", "."], "answer": ["Ich", "komme", "aus", "Tutin", "."]}, {"type": "mcq", "q": "Kako kažeš „Govorim srpski“?", "options": ["Ich spreche Serbisch.", "Ich komme Serbisch.", "Ich heiße Serbisch.", "Ich wohne Serbisch."], "answer": "Ich spreche Serbisch."}, {"type": "order", "q": "Sastavi rečenicu „Učim nemački.“", "words": ["Deutsch", "Ich", "lerne", "."], "answer": ["Ich", "lerne", "Deutsch", "."]}, {"type": "mcq", "q": "Šta znači „Familienname“ u prijavnom formularu?", "options": ["prezime", "ime", "adresa", "država"], "answer": "prezime"}, {"type": "order", "q": "Sastavi potpuno predstavljanje.", "words": ["Name", "ist", "Mein", "Naida", "."], "answer": ["Mein", "Name", "ist", "Naida", "."]}];
 let idx=0, score=0;
 const answered = Array(questions.length).fill(false);
@@ -283,21 +283,5 @@ new MutationObserver(scheduleMobileA1).observe(document.querySelector('main.app'
 window.addEventListener('resize',scheduleMobileA1,{passive:true});
 window.visualViewport?.addEventListener('resize',scheduleMobileA1,{passive:true});
 window.addEventListener('pageshow',scheduleMobileA1);
-function toggleA1Fullscreen(){
- if(document.fullscreenElement){if(document.exitFullscreen)void document.exitFullscreen();return;}
- const node=document.documentElement;
- if(node.requestFullscreen)void node.requestFullscreen().catch(()=>{});
-}
-const fullScreenButton=document.getElementById('fullscreenToggle');
-if(fullScreenButton){
- const supported=!!document.documentElement.requestFullscreen;
- fullScreenButton.hidden=!supported;
- fullScreenButton.addEventListener('click',toggleA1Fullscreen);
- document.addEventListener('fullscreenchange',()=>{
-  fullScreenButton.textContent=document.fullscreenElement?'⤢':'⛶';
-  fullScreenButton.setAttribute('aria-label',document.fullscreenElement?'Izađi iz celog ekrana':'Otvori ceo ekran');
-  scheduleMobileA1();
- });
-}
 scheduleMobileA1();
 </script></body></html>
