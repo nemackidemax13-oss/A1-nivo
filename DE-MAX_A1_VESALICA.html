@@ -90,7 +90,8 @@ h1 em{font-style:normal;color:var(--gold)}
 @media(max-height:560px){.brand small{display:none}.header{min-height:29px}.toggle{padding:5px}.titleRow h1{font-size:19px}.strip .stat label{display:none}.strip .stat{padding:2px}.strip .stat strong{font-size:13px}#progressTrack{height:3px}.scene{min-height:55px}.info{min-height:47px}.topic{font-size:9px}.letter{height:25px;font-size:14px}#clue{font-size:11px}.keyboard{gap:2px}.keyrow{gap:2px}.key{height:28px}.bottom .action{min-height:30px;padding:5px}.notice{height:14px;line-height:14px;font-size:10px}}
 @media(min-width:720px){#app{padding:20px 16px;gap:10px}.header{min-height:54px}.panel{padding:13px}.info{min-height:98px}.keyboard{gap:8px}.keyrow{gap:6px}.key{height:49px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style></head>
+</style><link rel="stylesheet" href="./DE-MAX_A1_MOBILE_9x16.css">
+</head>
 <body>
 <div id="app">
  <header class="header">
@@ -214,4 +215,5 @@ $("fxBtn").addEventListener("click",()=>{unlockAudio();state.fx=!state.fx;update
 document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;if(e.key==="Enter"&&state.finished){e.preventDefault();next();return}if(!$("overlay").classList.contains("hidden"))return;const c=char(e.key);if(ROWS.join("").includes(c)&&state.started){e.preventDefault();guess(c)}});
 document.addEventListener("visibilitychange",()=>{if(ambienceGain&&audio)ambienceGain.gain.setTargetAtTime(document.hidden?0:(state.music&&state.started?.047:0),audio.currentTime,.15)});
 buildKeyboard();updateToggles();$("record").textContent=getRecord();
-</script></body></html>
+</script><script defer src="./DE-MAX_A1_FEEDBACK_AUDIO.js" data-feedback-sound="off"></script>
+</body></html>
