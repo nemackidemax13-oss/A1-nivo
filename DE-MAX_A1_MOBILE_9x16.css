@@ -1,0 +1,20 @@
+/* DE-MAX A1: zajednička mobilna čitljivost, 9:16. Ne skriva sadržaj niti blokira skrolovanje dugih zadataka. */
+:root{--demax-a1-safe-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:clip}
+@media (max-width:700px){
+  html,body{width:100%;min-width:0}
+  body{overscroll-behavior-x:none}
+  :where(main,.wrap,.wrapper,.container,.app,.content,.page,.panel,.card,.task,.exercise,.question){max-width:100%;min-width:0}
+  :where(img,video){max-width:100%;height:auto}
+  :where(input,textarea,select,button){max-width:100%;min-width:0}
+  :where(input,textarea,select){font-size:16px}
+  :where(button,[role="button"],.opt,.option,.choice,.btn){touch-action:manipulation}
+  :where(.prompt,.sentence,.question,.translation,.feedback,.option,.opt,.choice,.answer,.hint){overflow-wrap:break-word;word-break:normal}
+  :where(.btn,.option,.opt,.choice){font-size:clamp(14px,3.8vw,18px)}
+  :where(.options,.answer-options,.choices,.actions,.btnrow,.controls){max-width:100%;min-width:0}
+  .demax-a1-brand-host{position:relative}
+  .demax-a1-brand-original{margin-left:auto!important;text-align:right!important}
+  .demax-a1-brand-added{position:absolute;right:9px;top:7px;z-index:3;display:block;border-radius:8px;padding:5px 7px;background:#0b56c7;color:white;font:900 12px/1.1 system-ui,Arial,sans-serif;letter-spacing:.6px;white-space:nowrap;pointer-events:none}
+  .demax-a1-brand-host:has(>.demax-a1-brand-added){padding-right:max(82px,18vw)!important}
+}
