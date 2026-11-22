@@ -382,6 +382,54 @@ const questions = [
   "Was werdet ihr am Wochenende machen?"
 ];
 
+const demaxFuturTranslation={
+  "Ich werde morgen Deutsch lernen.": "Sutra ću učiti nemački.",
+  "Du wirst am Samstag arbeiten.": "U subotu ćeš raditi.",
+  "Er wird heute Abend fernsehen.": "On će večeras gledati televiziju.",
+  "Sie wird morgen ihre Mutter besuchen.": "Ona će sutra posetiti svoju majku.",
+  "Es wird morgen regnen.": "Sutra će padati kiša.",
+  "Wir werden nächste Woche nach Berlin fahren.": "Sledeće nedelje ćemo putovati u Berlin.",
+  "Ihr werdet später Fußball spielen.": "Kasnije ćete igrati fudbal.",
+  "Sie werden morgen einkaufen.": "Oni će sutra ići u kupovinu.",
+  "Ich werde heute eine Pizza machen.": "Danas ću napraviti picu.",
+  "Du wirst morgen früh aufstehen.": "Sutra ćeš rano ustati.",
+  "Mein Vater wird am Montag arbeiten.": "Moj otac će raditi u ponedeljak.",
+  "Meine Schwester wird später anrufen.": "Moja sestra će kasnije pozvati.",
+  "Wir werden am Sonntag zu Hause bleiben.": "U nedelju ćemo ostati kod kuće.",
+  "Ihr werdet morgen einen Test schreiben.": "Sutra ćete raditi test.",
+  "Die Kinder werden draußen spielen.": "Deca će se igrati napolju.",
+  "Ich werde im Sommer Urlaub machen.": "Leti ću ići na odmor.",
+  "Du wirst heute Abend lernen.": "Večeras ćeš učiti.",
+  "Herr Müller wird morgen kommen.": "Gospodin Miler će doći sutra.",
+  "Anna und Paul werden später kochen.": "Ana i Paul će kasnije kuvati.",
+  "Sie werden nächste Woche Deutsch sprechen.": "Oni će sledeće nedelje govoriti nemački.",
+  "Sie wird morgen ihre Oma besuchen.": "Ona će sutra posetiti svoju baku.",
+  "Ihr werdet am Sonntag Fußball spielen.": "U nedelju ćete igrati fudbal.",
+  "Wir werden heute zu Hause bleiben.": "Danas ćemo ostati kod kuće.",
+  "Anna wird am Abend Musik hören.": "Ana će uveče slušati muziku.",
+  "Paul wird später ein Buch lesen.": "Paul će kasnije čitati knjigu.",
+  "Wir werden am Wochenende Freunde besuchen.": "Za vikend ćemo posetiti prijatelje.",
+  "Wirst du morgen Deutsch lernen?": "Hoćeš li sutra učiti nemački?",
+  "Wird er heute Abend fernsehen?": "Hoće li on večeras gledati televiziju?",
+  "Wird sie morgen ihre Oma besuchen?": "Hoće li ona sutra posetiti baku?",
+  "Werden wir nächste Woche nach Berlin fahren?": "Hoćemo li sledeće nedelje putovati u Berlin?",
+  "Werdet ihr am Sonntag Fußball spielen?": "Hoćete li u nedelju igrati fudbal?",
+  "Werden die Kinder draußen spielen?": "Hoće li se deca igrati napolju?",
+  "Werde ich heute eine Pizza machen?": "Hoću li danas napraviti picu?",
+  "Wirst du morgen früh aufstehen?": "Hoćeš li sutra rano ustati?",
+  "Wird dein Vater am Montag arbeiten?": "Hoće li tvoj otac raditi u ponedeljak?",
+  "Wird deine Schwester später anrufen?": "Hoće li tvoja sestra kasnije pozvati?",
+  "Werden wir heute zu Hause bleiben?": "Hoćemo li danas ostati kod kuće?",
+  "Werdet ihr morgen einen Test schreiben?": "Hoćete li sutra raditi test?",
+  "Wird Anna am Abend Musik hören?": "Hoće li Ana uveče slušati muziku?",
+  "Wird Paul später ein Buch lesen?": "Hoće li Paul kasnije čitati knjigu?",
+  "Werde ich im Sommer Urlaub machen?": "Hoću li leti ići na odmor?",
+  "Wirst du heute Abend lernen?": "Hoćeš li večeras učiti?",
+  "Wird Herr Müller morgen kommen?": "Hoće li gospodin Miler doći sutra?",
+  "Werden Anna und Paul später kochen?": "Hoće li Ana i Paul kasnije kuvati?",
+  "Wann wirst du nach Hause kommen?": "Kada ćeš doći kući?",
+  "Was werdet ihr am Wochenende machen?": "Šta ćete raditi za vikend?"
+};
 let mode = "werden";
 let index = 0;
 let locked = false;
@@ -435,6 +483,8 @@ function finish(ok, answer){
   } else {
     feedback(false, "❌ Nije tačno.<br>Tačno: <b>"+answer+"</b>");
   }
+  const sr=demaxFuturTranslation[answer];
+  if(sr){const line=document.createElement("div");line.className="demax-sr-translation";line.textContent="Prevod: "+sr;line.style.cssText="margin-top:7px;font-weight:700;line-height:1.4";$("feedback").appendChild(line);}
 }
 function cleanState(){
   locked = false;
