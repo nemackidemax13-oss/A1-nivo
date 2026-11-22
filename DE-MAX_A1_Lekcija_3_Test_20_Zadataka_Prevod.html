@@ -67,8 +67,8 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
   #mainCard .feedback,#mainCard .actions{flex:0 0 auto!important}
   #footerStat{flex:0 0 auto!important}
   #mainCard .result{flex:1 1 auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;min-height:0!important}
-  .fullscreenToggle{position:absolute;right:10px;top:8px;display:grid;place-items:center;width:29px;height:29px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.13);border-radius:9px;color:white;font-size:18px;cursor:pointer}
-  .fullscreenToggle[hidden]{display:none!important}
+
+
   #mainCard .result .btn{flex:0 0 auto!important;align-self:stretch!important}
   .brand{padding:0 31px}
   .app[data-a1-compact="1"] .header{padding:6px 9px!important}
@@ -126,7 +126,7 @@ h1{font-size:22px;margin:10px 0 2px}.sub{opacity:.88;font-size:13px}.progressRow
   .app[data-a1-compact="1"] .q{font-size:15px!important}
   .app[data-a1-compact="1"] #content .options .opt{font-size:14px!important;max-height:none!important}
 }
-</style></head><body><main class="app"><section class="header"><button class="fullscreenToggle" id="fullscreenToggle" type="button" title="Ceo ekran" aria-label="Otvori ceo ekran" hidden>⛶</button><div class="brand"><div class="logo"><span class="brandTop">DE-MAX</span><span class="brandBottom">TUTIN</span></div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 3 • Test</h1><div class="sub">Časovi 7–9 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
+</style></head><body><main class="app"><section class="header"><div class="brand"><div class="logo"><span class="brandTop">DE-MAX</span><span class="brandBottom">TUTIN</span></div><div class="badge">A1 TEST</div></div><h1>A1 • Lekcija 3 • Test</h1><div class="sub">Časovi 7–9 • 20 zadataka</div><div class="progressRow"><div class="bar"><div id="barFill"></div></div><div class="count" id="num">1 / 20</div></div></section><section class="card" id="mainCard"><div class="kicker" id="type"></div><div class="q" id="question"></div><div id="content"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="btn secondary" id="prev" type="button">← Nazad</button><button class="btn secondary" id="check" type="button">Proveri</button><button class="btn primary" id="next" type="button">Sledeće →</button></div></section><div class="footerStat" id="footerStat"><span class="pill" id="scoreNow">Tačno: 0</span><span>Dodirni odgovor • mobilno 9:16</span></div></main><script>
 const questions = [{"type": "mcq", "q": "Dopuni: Das ist ___ Mann.", "options": ["ein", "eine", "einen", "—"], "answer": "ein"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Frau.", "options": ["eine", "ein", "einen", "—"], "answer": "eine"}, {"type": "mcq", "q": "Dopuni: Das ist ___ Kind.", "options": ["ein", "eine", "einen", "—"], "answer": "ein"}, {"type": "mcq", "q": "Koji neodređeni član stoji uz množinu?", "options": ["nema člana", "ein", "eine", "einen"], "answer": "nema člana"}, {"type": "mcq", "q": "Negiraj: Das ist ein Mann.", "options": ["Das ist kein Mann.", "Das ist keine Mann.", "Das ist nicht ein Mann.", "Das kein ist Mann."], "answer": "Das ist kein Mann."}, {"type": "mcq", "q": "Negiraj: Das ist eine Frau.", "options": ["Das ist keine Frau.", "Das ist kein Frau.", "Das ist nicht Frau.", "Das keine ist Frau."], "answer": "Das ist keine Frau."}, {"type": "mcq", "q": "Negiraj: Das ist ein Kind.", "options": ["Das ist kein Kind.", "Das ist keine Kind.", "Das ist keinen Kind.", "Das ist nicht Kind."], "answer": "Das ist kein Kind."}, {"type": "mcq", "q": "Negiraj množinu: Das sind Kinder.", "options": ["Das sind keine Kinder.", "Das sind kein Kinder.", "Das ist keine Kinder.", "Das sind nicht ein Kinder."], "answer": "Das sind keine Kinder."}, {"type": "mcq", "q": "Dopuni: Ich ___ Brot.", "options": ["esse", "isst", "essen", "esst"], "answer": "esse"}, {"type": "mcq", "q": "Dopuni: Du ___ Pizza.", "options": ["isst", "esse", "essen", "esst"], "answer": "isst"}, {"type": "mcq", "q": "Dopuni: Wir ___ Salat.", "options": ["essen", "isst", "esst", "esse"], "answer": "essen"}, {"type": "mcq", "q": "Dopuni: Ich ___ Wasser.", "options": ["trinke", "trinkst", "trinkt", "trinken"], "answer": "trinke"}, {"type": "mcq", "q": "Dopuni: Du ___ Saft.", "options": ["trinkst", "trinke", "trinkt", "trinken"], "answer": "trinkst"}, {"type": "mcq", "q": "Koje pitanje znači „Šta je tvoje omiljeno jelo?“", "options": ["Was ist dein Lieblingsessen?", "Was trinkst du gern?", "Wie geht es dir?", "Woher kommst du?"], "answer": "Was ist dein Lieblingsessen?"}, {"type": "order", "q": "Sastavi odgovor: „Moje omiljeno jelo je pica.“", "words": ["ist", "Pizza", "Mein", "Lieblingsessen", "."], "answer": ["Mein", "Lieblingsessen", "ist", "Pizza", "."], "translation": "Moje omiljeno jelo je pica."}, {"type": "mcq", "q": "Dopuni: Ich ___ Wasser.", "options": ["brauche", "brauchst", "braucht", "brauchen"], "answer": "brauche"}, {"type": "mcq", "q": "Dopuni: Du ___ ein Heft.", "options": ["brauchst", "brauche", "braucht", "brauchen"], "answer": "brauchst"}, {"type": "mcq", "q": "Dopuni: Wir ___ mehr Zeit.", "options": ["brauchen", "braucht", "brauchst", "brauche"], "answer": "brauchen"}, {"type": "mcq", "q": "Koji oblik je pravilan uz „mit“: „Idem kolima.“", "options": ["Ich fahre mit dem Auto.", "Ich fahre mit das Auto.", "Ich fahre mit der Auto.", "Ich fahre mit den Auto."], "answer": "Ich fahre mit dem Auto."}, {"type": "order", "q": "Sastavi pitanje sa glagolom „brauchen“.", "words": ["du", "Was", "brauchst", "?"], "answer": ["Was", "brauchst", "du", "?"], "translation": "Šta ti treba?"}];
 let idx=0, score=0;
 const answered = Array(questions.length).fill(false);
@@ -258,21 +258,5 @@ new MutationObserver(scheduleMobileA1).observe(document.querySelector('main.app'
 window.addEventListener('resize',scheduleMobileA1,{passive:true});
 window.visualViewport?.addEventListener('resize',scheduleMobileA1,{passive:true});
 window.addEventListener('pageshow',scheduleMobileA1);
-function toggleA1Fullscreen(){
- if(document.fullscreenElement){if(document.exitFullscreen)void document.exitFullscreen();return;}
- const node=document.documentElement;
- if(node.requestFullscreen)void node.requestFullscreen().catch(()=>{});
-}
-const fullScreenButton=document.getElementById('fullscreenToggle');
-if(fullScreenButton){
- const supported=!!document.documentElement.requestFullscreen;
- fullScreenButton.hidden=!supported;
- fullScreenButton.addEventListener('click',toggleA1Fullscreen);
- document.addEventListener('fullscreenchange',()=>{
-  fullScreenButton.textContent=document.fullscreenElement?'⤢':'⛶';
-  fullScreenButton.setAttribute('aria-label',document.fullscreenElement?'Izađi iz celog ekrana':'Otvori ceo ekran');
-  scheduleMobileA1();
- });
-}
 scheduleMobileA1();
 </script></body></html>
