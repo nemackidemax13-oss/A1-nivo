@@ -433,57 +433,75 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 }
 
 
-/* Tastatura na mobilnom: polje za pisanje se uklapa tik iznad nje, bez pomeranja stranice. */
+/* Tastatura: mehanizam iz VEZBAJ-MEJLOVE-A1 — zaseban mobilni režim
+   i visina vidljivog dela iz visualViewport / VirtualKeyboard / iframe rezerve. */
 @media(max-width:700px){
- body.keyboard-open{height:var(--app-height,100dvh)!important;max-height:var(--app-height,100dvh)!important;overflow:hidden!important;overscroll-behavior:none}
- body.keyboard-open .app{position:fixed;top:var(--visual-top,0px);left:0;right:0;width:100%;height:var(--app-height,100dvh)!important;min-height:0;max-height:var(--app-height,100dvh)!important;overflow:hidden;overscroll-behavior:none}
- body.keyboard-open main{height:100%;flex:1 1 0%;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:3px 6px 4px!important;gap:0}
- body.keyboard-open main>.lesson{flex:1 1 0%;min-height:0;min-width:0;margin:0;padding:5px 7px!important;display:flex;flex-direction:column;overflow:hidden;gap:4px}
- body.keyboard-open #exerciseView:not([hidden]){flex:1 1 0%;min-height:0;display:flex;flex-direction:column;overflow:hidden;gap:4px;border:0;padding:0}
- body.keyboard-open #exerciseView .pillprog{flex:0 0 auto;font-size:10px}
- body.keyboard-open #exerciseView .quad-controls{flex:0 0 auto;gap:4px;margin:2px 0 0}
- body.keyboard-open #exerciseView .quad-controls .btn{min-height:35px;padding:3px 2px;font-size:clamp(9.5px,2.65vw,11.5px)}
- body.keyboard-open #exerciseView .write-label{flex:0 0 auto;margin:1px 0 0;font-size:11px}
+ html:has(body.keyboard-open){height:100%;overflow:hidden!important;overscroll-behavior:none}
+ body.keyboard-open{
+  position:fixed!important;top:var(--visual-top,0px)!important;left:0!important;right:0!important;
+  width:100%!important;height:var(--app-height,100dvh)!important;max-height:var(--app-height,100dvh)!important;
+  min-height:0!important;overflow:hidden!important;overscroll-behavior:none!important;background:#fff;
+ }
+ body.keyboard-open .app{
+  position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+  width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;
+  overflow:hidden!important;display:flex!important;flex-direction:column!important;margin:0!important;
+  touch-action:pan-y!important;
+ }
+ body.keyboard-open .head,body.keyboard-open .selection,
+ body.keyboard-open .lesson-header,body.keyboard-open #readView,
+ body.keyboard-open #readLocked,body.keyboard-open #readBottom{display:none!important}
+ body.keyboard-open main{
+  flex:1 1 0%!important;height:0!important;min-height:0!important;display:flex!important;
+  flex-direction:column!important;overflow:hidden!important;padding:4px 6px 5px!important;gap:0!important;
+ }
+ body.keyboard-open main>.lesson{
+  display:flex!important;flex-direction:column!important;flex:1 1 0%!important;
+  height:0!important;min-height:0!important;overflow:hidden!important;
+  margin:0!important;padding:6px 8px!important;gap:4px!important;
+  border-radius:9px!important;box-shadow:none!important;
+ }
+ body.keyboard-open #exerciseView:not([hidden]){
+  display:flex!important;flex-direction:column!important;flex:1 1 0%!important;
+  height:0!important;min-height:0!important;overflow:hidden!important;gap:4px!important;
+  border:0!important;padding:0!important;
+ }
+ body.keyboard-open #exerciseView .pillprog{flex:0 0 auto!important;font-size:10px;line-height:1.2}
+ body.keyboard-open #exerciseView .exercise-title{display:none!important}
+ body.keyboard-open #exerciseView .quad-controls{
+  flex:0 0 auto!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,.57fr) minmax(0,1fr)!important;
+  gap:4px!important;margin:1px 0 0!important;
+ }
+ body.keyboard-open #exerciseView .quad-controls .btn{
+  min-height:35px!important;padding:3px 2px!important;
+  line-height:1.08!important;font-size:clamp(9.5px,2.65vw,11.5px)!important;
+ }
+ body.keyboard-open #exerciseView .write-label{
+  display:block!important;flex:0 0 auto!important;margin:0!important;
+  font-size:11px!important;line-height:1.2!important;
+ }
+ body.keyboard-open #exerciseView .listening,
  body.keyboard-open #exerciseView #feedback,
  body.keyboard-open #exerciseView .auto-next-controls{display:none!important}
  body.keyboard-open #exerciseView #answer{
-  display:block;flex:1 1 0%;height:auto;min-height:65px!important;max-height:none!important;
-  margin:0;width:100%;padding:9px 10px;border-radius:10px;
-  font-size:16px;line-height:1.35;overflow:hidden!important;resize:none;
+  display:block!important;flex:1 1 0%!important;height:0!important;
+  width:100%!important;min-height:55px!important;max-height:none!important;margin:0!important;
+  padding:9px 10px!important;border-radius:10px!important;
+  font-size:16px!important;line-height:1.4!important;resize:none!important;
+  overflow-x:hidden!important;overflow-y:auto!important;touch-action:pan-y!important;
+  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;
  }
+ body.keyboard-open #exerciseView #answer::-webkit-scrollbar{display:none!important}
 }
-@media(max-width:700px) and (max-height:420px){
- body.keyboard-open #exerciseView .quad-controls .btn{min-height:31px}
- body.keyboard-open #exerciseView #answer{min-height:52px!important;padding:6px 8px}
+@media(max-width:700px) and (max-height:450px){
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:30px!important}
+ body.keyboard-open #exerciseView #answer{min-height:48px!important;padding:6px 8px!important}
+ body.keyboard-open main>.lesson{padding:4px 6px!important;gap:2px!important}
 }
-
-
-/* Dok je tastatura otvorena, nema skrolovanja stranice; kontrolne komande
-   i polje za odgovor dele tačnu visinu vidljivog dela ekrana. */
-@media(max-width:700px){
- body.keyboard-open,
- body.keyboard-open html{overflow:hidden!important}
- body.keyboard-open .app{margin:0;transform:none;contain:layout;touch-action:pan-x}
- body.keyboard-open .lesson{border-radius:8px;box-shadow:none}
- body.keyboard-open .lesson-header,
- body.keyboard-open #readView,
- body.keyboard-open #readLocked,
- body.keyboard-open #readBottom{display:none!important}
- body.keyboard-open #exerciseView:not([hidden]){gap:3px}
- body.keyboard-open #exerciseView .pillprog{font-size:10px;line-height:1}
- body.keyboard-open #exerciseView .quad-controls{gap:3px;margin:1px 0}
- body.keyboard-open #exerciseView .quad-controls .btn{min-height:32px;line-height:1.08}
- body.keyboard-open #exerciseView .write-label{margin:0;font-size:10px;line-height:1.1}
- body.keyboard-open #exerciseView #answer{
-   flex:1 1 0%;min-height:50px!important;max-height:none!important;
-   overflow-y:auto!important;overscroll-behavior:contain;scrollbar-width:none;
- }
- body.keyboard-open #exerciseView #answer::-webkit-scrollbar{display:none}
-}
-@media(max-width:700px) and (max-height:350px){
- body.keyboard-open #exerciseView .pillprog{display:none}
- body.keyboard-open #exerciseView .quad-controls .btn{min-height:29px;font-size:10px}
- body.keyboard-open main>.lesson{padding:3px 5px!important}
+@media(max-width:700px) and (max-height:330px){
+ body.keyboard-open #exerciseView .pillprog{display:none!important}
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:28px!important;font-size:10px!important}
 }
 
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
@@ -928,34 +946,86 @@ $("check").addEventListener("click",()=>registerCheck(false));
 $("advanceNow").addEventListener("click",()=>{if(autoNextTimer!==null)advanceSentence()});
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
+// Poseban režim kucanja kao u VEZBAJ-MEJLOVE-A1.
+let dictationFullHeight=0;
+let dictationFocusAt=0;
+let dictationWasKeyboardVisible=false;
+let dictationWasGeometry=false;
+let dictationWasViewport=0;
+let dictationKeyboardRestored=false;
 $("answer").addEventListener("focus",()=>{
+ dictationFocusAt=Date.now();
+ dictationKeyboardRestored=false;
+ dictationWasKeyboardVisible=false;
+ dictationWasGeometry=false;
+ const vv=window.visualViewport;
+ dictationFullHeight=Math.max(dictationFullHeight,Math.floor(window.innerHeight||0),Math.floor(vv?.height||0));
  syncViewport();
  requestAnimationFrame(syncViewport);
- setTimeout(syncViewport,120);
- setTimeout(syncViewport,360);
+ [120,280,460,720].forEach(ms=>setTimeout(syncViewport,ms));
 });
-$("answer").addEventListener("blur",()=>{requestAnimationFrame(syncViewport);setTimeout(syncViewport,140)});
+$("answer").addEventListener("blur",()=>{
+ dictationKeyboardRestored=true;
+ requestAnimationFrame(syncViewport);
+ [100,280,520].forEach(ms=>setTimeout(syncViewport,ms));
+});
 $("retry").addEventListener("click",()=>{saved.results[topic]=Array(DATA[topic].sentences.length).fill(null);persist();renderTopic();});
 $("goNext").addEventListener("click",()=>setTopic(topic+1));
 window.addEventListener("pagehide",()=>{cancelAutoNext();stopAudio();stopReadTimer()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tickReadTimer();});
 function syncViewport(){
  const vv=window.visualViewport;
- const typing=phase==="exercise"&&document.activeElement===$("answer");
- const h=vv&&Number.isFinite(vv.height)&&vv.height>0?vv.height:window.innerHeight;
- const top=vv&&Number.isFinite(vv.offsetTop)?Math.max(0,vv.offsetTop):0;
- if(Number.isFinite(h)&&h>0){
-  document.documentElement.style.setProperty("--app-height",Math.floor(h)+"px");
-  document.documentElement.style.setProperty("--visual-top",Math.floor(top)+"px");
+ const inner=Math.max(1,Math.floor(window.innerHeight||0));
+ const visual=Math.max(1,Math.floor(vv?.height||inner));
+ const raw=Math.min(inner,visual);
+ const focused=phase==="exercise"&&document.activeElement===$("answer")&&window.matchMedia("(max-width:700px)").matches;
+ const full=Math.max(raw,dictationFullHeight||raw);
+ const top=Math.max(0,Math.floor(vv?.offsetTop||0));
+ const vk=navigator.virtualKeyboard?.boundingRect;
+ const virtualHeight=Math.max(0,Math.floor(vk?.height||0));
+ const geometry=focused&&virtualHeight>80;
+ const resized=focused&&full-raw>105;
+ // Iframe ne mora prijaviti smanjenje; tada primeni istu rezervu kao vežba mejlova.
+ if(focused&&dictationWasGeometry&&!geometry)dictationKeyboardRestored=true;
+ if(focused&&dictationWasKeyboardVisible&&dictationWasViewport>0&&
+    dictationWasViewport<full-105&&raw>=full-65)dictationKeyboardRestored=true;
+ const fallback=focused&&!geometry&&!resized&&!dictationKeyboardRestored&&
+   dictationFocusAt>0&&Date.now()-dictationFocusAt>=260;
+ const keyboardVisible=focused&&!dictationKeyboardRestored&&(geometry||resized||fallback);
+ let height=raw;
+ if(keyboardVisible){
+  if(geometry)height=Math.min(raw,Math.max(155,Math.floor(vk.top-top)));
+  else if(resized)height=raw;
+  else height=Math.min(raw,Math.max(185,Math.floor(full*.57)));
  }
- document.body.classList.toggle("keyboard-open",typing);
+ if(!focused&&raw>=full-65)dictationFullHeight=raw;
+ document.documentElement.style.setProperty("--app-height",Math.max(150,Math.floor(height))+"px");
+ document.documentElement.style.setProperty("--visual-top",keyboardVisible?top+"px":"0px");
+ document.body.classList.toggle("keyboard-open",focused);
+ document.body.classList.toggle("keyboard-visible",keyboardVisible);
+ dictationWasViewport=raw;
+ dictationWasGeometry=geometry;
+ dictationWasKeyboardVisible=keyboardVisible;
 }
 if(window.visualViewport){
  window.visualViewport.addEventListener("resize",syncViewport);
  window.visualViewport.addEventListener("scroll",syncViewport);
 }
+navigator.virtualKeyboard?.addEventListener?.("geometrychange",syncViewport);
 window.addEventListener("resize",syncViewport);
-window.addEventListener("orientationchange",()=>setTimeout(syncViewport,150));
+window.addEventListener("orientationchange",()=>setTimeout(syncViewport,160));
+// Kao na referentnoj stranici: u iframe-u proveri visinu i bez resize događaja.
+let dictationViewportSignature="";
+setInterval(()=>{
+ if(phase!=="exercise"||document.activeElement!==$("answer")||window.innerWidth>700)return;
+ const vv=window.visualViewport,vk=navigator.virtualKeyboard?.boundingRect;
+ const signature=[window.innerHeight,Math.round(vv?.height||0),
+  Math.round(vv?.offsetTop||0),Math.round(vk?.height||0)].join(":");
+ if(signature!==dictationViewportSignature){
+  dictationViewportSignature=signature;
+  syncViewport();
+ }
+},300);
 renderTopic();syncViewport();
 </script>
 </body>
