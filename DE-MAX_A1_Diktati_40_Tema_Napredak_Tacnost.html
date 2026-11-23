@@ -50,6 +50,10 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .btn.light{background:#eef5ff;color:#175ab1;border:1px solid #d4e5fa}
 .btn.outline{background:#fff;color:#244f82;border:1px solid #d4e2f0}
 .btn:active:not(:disabled){transform:translateY(1px)}
+.reading-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(76px,.38fr) minmax(61px,.28fr);gap:7px;flex-wrap:nowrap}
+.reading-controls .btn{min-width:0;width:100%;padding-left:6px;padding-right:6px;font-size:12px}
+#pauseAudio{font-size:12px}
+
 .speedbar{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
 .speedbar span{font-size:12px;font-weight:800;color:var(--muted);margin-right:auto}
 .speed-btn{border:1px solid #dbe6f3;background:#fff;border-radius:9px;color:#456078;padding:7px 10px;font-size:12px;font-weight:750}
@@ -157,6 +161,9 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #readView .read-clock strong{font-size:18px}
  #readView .buttonrow{margin-top:4px!important}
  #readView .btn{min-height:37px;padding:7px;font-size:11.5px}
+ #readView .reading-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(65px,.36fr) minmax(51px,.26fr);gap:4px}
+ #readView .reading-controls .btn{padding:5px 2px;font-size:clamp(9.4px,2.7vw,11.5px);min-height:38px}
+
  #startDictation{min-height:39px;margin-top:2px;font-size:13px}
  #readLocked{flex:none;padding:7px 8px;font-size:11px;line-height:1.25}
  #readBottom{flex:none;margin:0}
@@ -300,8 +307,9 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="read-clock"><span>⏱ Vreme za čitanje i slušanje</span><strong id="readCountdown">02:00</strong></div>
 <div class="meter" aria-hidden="true"><div id="readProgress"></div></div>
 <p class="note">Imaš 120 sekundi da pročitaš i poslušaš tekst. Zatim se tekst automatski sakriva. Možeš početi i ranije.</p>
-<div class="buttonrow" style="margin-top:12px">
+<div class="buttonrow reading-controls" style="margin-top:12px">
 <button class="btn blue" id="playFull" type="button">🔊 Poslušaj ceo tekst</button>
+<button class="btn yellow" id="pauseAudio" type="button" aria-pressed="false" disabled>⏸ Pauza</button>
 <button class="btn red" id="stopAudio" type="button">■ Stop</button>
 </div>
 <button class="btn green" id="startDictation" type="button">✍ Piši diktat →</button>
@@ -356,6 +364,34 @@ let topic=saved.topic, sentence=0, phase="read";
 const rate=1;
 let readTimer=null, readDeadline=0;
 let audioToken=0, highlightTimer=null;
+let audioPaused=false,audioMode=null,pendingSpeechContinuation=null;
+function updatePauseButton(){
+ const btn=$("pauseAudio");
+ btn.disabled=audioMode!=="read";
+ btn.textContent=audioPaused?"▶ Nastavi":"⏸ Pauza";
+ btn.setAttribute("aria-pressed",audioPaused?"true":"false");
+}
+function togglePause(){
+ if(!synth||audioMode!=="read")return;
+ try{
+  if(audioPaused){
+   audioPaused=false;
+   synth.resume();
+   updatePauseButton();
+   $("audioStatus").textContent="🔊 Slušanje u toku…";
+   if(pendingSpeechContinuation){
+    const cont=pendingSpeechContinuation;
+    pendingSpeechContinuation=null;
+    cont();
+   }
+  } else {
+   audioPaused=true;
+   synth.pause();
+   updatePauseButton();
+   $("audioStatus").textContent="⏸ Čitanje pauzirano.";
+  }
+ }catch(e){$("audioStatus").textContent="Pauza nije podržana u ovom pregledaču.";}
+}
 const synth="speechSynthesis" in window?window.speechSynthesis:null;
 let autoNextTimer=null,autoNextInterval=null;
 function cancelAutoNext(){
@@ -401,7 +437,11 @@ function activeWord(index,mode){
 function stopAudio(){
  audioToken++;
  if(highlightTimer!==null){clearTimeout(highlightTimer);highlightTimer=null;}
- if(synth){try{synth.cancel()}catch(e){}}
+ audioPaused=false;
+ audioMode=null;
+ pendingSpeechContinuation=null;
+ if(synth){try{synth.cancel();synth.resume()}catch(e){}}
+ updatePauseButton();
  clearHighlight();$("audioStatus").textContent="";
 }
 function say(text,mode){
@@ -411,6 +451,8 @@ function say(text,mode){
   return;
  }
  const token=audioToken;
+ audioMode=mode;
+ updatePauseButton();
  const words=getWords(text);
  if(!words.length)return;
  const voices=synth.getVoices();
@@ -422,8 +464,11 @@ function say(text,mode){
  let index=0;
  function nextWord(){
   if(token!==audioToken)return;
+  if(audioPaused){pendingSpeechContinuation=nextWord;return;}
   if(index>=words.length){
    clearHighlight();
+   audioMode=null;
+   updatePauseButton();
    $("audioStatus").textContent="Slušanje završeno.";
    return;
   }
@@ -444,12 +489,14 @@ function say(text,mode){
    if(token!==audioToken)return;
    if(e.error==="canceled"||e.error==="interrupted")return;
    clearHighlight();
+   audioMode=null;audioPaused=false;updatePauseButton();
    $("audioStatus").textContent="Problem sa zvukom. Pritisni ponovo dugme za slušanje.";
   };
   try{synth.speak(utterance)}
   catch(e){
    if(token===audioToken){
     clearHighlight();
+    audioMode=null;audioPaused=false;updatePauseButton();
     $("audioStatus").textContent="Nije moguće pokrenuti zvuk.";
    }
   }
@@ -641,6 +688,7 @@ $("prevTopic").addEventListener("click",()=>setTopic(topic-1));
 $("nextTopic").addEventListener("click",()=>setTopic(topic+1));
 $("playFull").addEventListener("click",()=>say(textOf(DATA[topic]),"read"));
 $("stopAudio").addEventListener("click",stopAudio);
+$("pauseAudio").addEventListener("click",togglePause);
 $("startDictation").addEventListener("click",()=>beginDictation());
 $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
