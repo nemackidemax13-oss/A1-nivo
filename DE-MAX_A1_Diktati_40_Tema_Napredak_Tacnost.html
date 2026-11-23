@@ -552,6 +552,37 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 }
 
 
+/* Pisanje na mobilnom: donji rub textarea leži uz gornji rub tastature.
+   Sakrij ostatak layout-a i ukloni svaki donji razmak, čak i na malim ekranima. */
+@media(max-width:700px){
+ body.mobile-writing main>footer,
+ body.mobile-writing footer{display:none!important}
+ body.mobile-writing main{
+  padding-bottom:0!important;margin-bottom:0!important;
+ }
+ body.mobile-writing main>.lesson{
+  padding-bottom:0!important;margin-bottom:0!important;
+  border-bottom:0!important;border-bottom-left-radius:0!important;
+  border-bottom-right-radius:0!important;
+ }
+ body.mobile-writing #exerciseView:not([hidden]){
+  flex:1 1 0%!important;height:0!important;min-height:0!important;
+  padding-bottom:0!important;margin-bottom:0!important;gap:4px!important;
+  display:flex!important;flex-direction:column!important;
+ }
+ body.mobile-writing #exerciseView:not([hidden]) #answer{
+  flex:1 1 0%!important;height:0!important;min-height:48px!important;
+  max-height:none!important;align-self:stretch!important;
+  display:block!important;margin:0!important;padding-bottom:8px!important;
+  border-bottom-left-radius:0!important;border-bottom-right-radius:0!important;
+  overflow:hidden!important;resize:none!important;
+ }
+}
+@media(max-width:700px) and (max-height:310px){
+ body.mobile-writing main>.lesson{padding-bottom:0!important}
+ body.mobile-writing #exerciseView:not([hidden]){gap:2px!important}
+ body.mobile-writing #exerciseView:not([hidden]) #answer{min-height:36px!important}
+}
 /* Brojevi i prevodi: isti tekstualni grid-stubac bez odstupanja. */
 .reading-text{width:100%;min-width:0}
 .reading-line{
@@ -1157,9 +1188,9 @@ function syncViewport(){
  if(keyboardVisible){
   if(measured)height=measuredHeight;
   else if(recentMeasurement)height=Math.min(raw,dictationLastKeyboardHeight);
-  else height=Math.min(raw,Math.max(185,Math.floor(full*.52)));
+  else height=Math.min(raw,Math.max(185,Math.floor(full*.57)));
   // Bezbedna margina iznad virtuelne tastature.
-  height=Math.max(140,Math.floor(height)-2);
+  height=Math.max(140,Math.floor(height));
  }
  if(!focused&&raw>=full-65)dictationFullHeight=raw;
  document.documentElement.style.setProperty("--app-height",Math.max(140,Math.floor(height))+"px");
