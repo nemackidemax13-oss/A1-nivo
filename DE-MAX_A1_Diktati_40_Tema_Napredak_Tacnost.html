@@ -115,7 +115,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 </section>
 <section class="box lesson" aria-label="Diktat">
 <div class="lesson-header">
-<div><div class="eyebrow" id="lessonLevel">A1 · Osnove</div><h1 id="lessonTitle"></h1><p class="subtitle" id="lessonSubtitle"></p></div>
+<div><div class="eyebrow" id="lessonLevel">A1 · DIKTAT</div><h1 id="lessonTitle"></h1></div>
 <span class="chip" id="lessonWords"></span>
 </div>
 <div id="readView">
@@ -270,7 +270,7 @@ function updateOverall(){
 function fillSelect(){
  const t=DATA[topic];
  const complete=Array.isArray(saved.results[topic])&&saved.results[topic].every(Boolean);
- $("topicDisplay").textContent=(topic+1)+". "+t.title+(complete?" ✓":"");
+ $("topicDisplay").textContent=(topic+1)+". "+t.title+" ("+t.sr+")"+(complete?" ✓":"");
 }
 function setPhase(next){
  phase=next;
@@ -285,9 +285,8 @@ function renderTopic(){
  const t=DATA[topic];
  fillSelect();$("prevTopic").disabled=topic===0;$("nextTopic").disabled=topic===DATA.length-1;
  $("topicInfo").textContent=(topic+1)+" / 30";
- $("lessonLevel").textContent="A1 · "+t.level;
- $("lessonTitle").textContent=t.title;
- $("lessonSubtitle").textContent=t.sr;
+ $("lessonLevel").textContent="A1 · DIKTAT "+(topic+1)+" / "+DATA.length;
+ $("lessonTitle").textContent=t.title+" ("+t.sr+")";
  $("lessonWords").textContent=wc(t)+" reči";
  renderReading(t);
  sentence=0;
