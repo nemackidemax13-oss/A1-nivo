@@ -29,7 +29,7 @@ main{padding:12px 14px 18px;flex:1;display:flex;flex-direction:column;gap:10px;m
 .selectrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px}
 .topic-display{min-width:0;min-height:44px;width:100%;border:1.5px solid #cbddf1;border-radius:12px;background:#f8fbff;color:var(--dark);padding:8px 10px;font-weight:850;font-size:14px;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.25;overflow-wrap:anywhere}
 .topic-display.completed{color:#087542;border-color:#a4d8bb;background:#effbf4}
-.topic-display.pending{color:#bf2436;border-color:#f0bdc3;background:#fff7f8}
+.topic-display.in-progress{color:#a85d08;border-color:#ebc48f;background:#fff5e8}
 .icon-btn{border:1px solid #d7e4f4;border-radius:12px;background:#edf5ff;color:var(--blue);font-size:23px;font-weight:700;min-height:44px}#prevTopic{background:#dc3547;border-color:#c62e42;color:#fff}#nextTopic{background:#dc3547;border-color:#c62e42;color:#fff}
 .labelrow,.meterrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .micro{color:var(--muted);font-size:12px;font-weight:750}
@@ -476,10 +476,9 @@ const $ = id => document.getElementById(id);
 let saved={};
 try { saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; } catch(e) { saved={}; }
 if(!Array.isArray(saved.results)||saved.results.length!==DATA.length) saved.results=DATA.map(t=>Array(t.sentences.length).fill(null));
+if(!Array.isArray(saved.started)||saved.started.length!==DATA.length) saved.started=DATA.map(()=>false);
 if(!Number.isInteger(saved.topic)||saved.topic<0||saved.topic>=DATA.length) saved.topic=0;
 let topic=saved.topic, sentence=0, phase="read";
-// Boje statusa se uključuju tek po početku vežbanja; osvežavanje ih vraća na neutralno.
-let topicStatusColorsActive=false;
 const rate=1;
 let readTimer=null, readDeadline=0;
 let audioToken=0, highlightTimer=null;
@@ -646,10 +645,12 @@ function updateOverall(){
 }
 function fillSelect(){
  const t=DATA[topic];
- const complete=Array.isArray(saved.results[topic])&&saved.results[topic].length===t.sentences.length&&saved.results[topic].every(Boolean);
+ const records=saved.results[topic];
+ const complete=Array.isArray(records)&&records.length===t.sentences.length&&records.every(Boolean);
+ const started=Boolean(saved.started[topic])||(Array.isArray(records)&&records.some(Boolean));
  $("topicDisplay").textContent=(topic+1)+". "+t.title+" ("+t.sr+")"+(complete?" ✓":"");
- $("topicDisplay").classList.toggle("completed",topicStatusColorsActive&&complete);
- $("topicDisplay").classList.toggle("pending",topicStatusColorsActive&&!complete);
+ $("topicDisplay").classList.toggle("completed",complete);
+ $("topicDisplay").classList.toggle("in-progress",started&&!complete);
 }
 function setPhase(next){
  cancelAutoNext();
@@ -681,7 +682,8 @@ function startReadTimer(){
 }
 function beginDictation(auto=false){
  if(phase!=="read")return;
- topicStatusColorsActive=true;
+ saved.started[topic]=true;
+ persist();
  fillSelect();
  stopReadTimer();
  stopAudio();
