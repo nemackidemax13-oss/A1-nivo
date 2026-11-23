@@ -67,6 +67,9 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .feedback .solution{display:block;margin:6px 0 4px;color:#17345c;font-size:16px;font-weight:850}
 .feedback .translation{display:block;margin-top:5px;color:#19395f;font-size:14px;font-weight:800;line-height:1.3}
 .feedback .feedback-status{font-size:14px}
+.feedback .answer-translation-row{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:10px;margin-top:6px;min-width:0}
+.feedback .answer-translation-row .your-answer{margin:0;min-width:0;overflow-wrap:anywhere}
+.feedback .answer-translation-row .translation{margin:0;min-width:0;overflow-wrap:anywhere}
 .feedback .your-answer{margin-top:5px}
 .feedback .your-answer b{font-weight:850}
 .feedback .solution-title{margin-top:6px;font-size:12px;color:#667d97;font-weight:750}
@@ -171,7 +174,10 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #answer{flex:1;min-height:56px;max-height:100px;padding:8px 10px;font-size:16px;line-height:1.3;overflow:hidden;resize:none}
  #feedback{flex:0 1 auto;min-height:0;overflow:hidden;margin:1px 0 0;padding:7px;font-size:11px;line-height:1.28}
  #feedback .solution{font-size:13px;line-height:1.3;margin:3px 0}
- #feedback .translation{display:block;font-size:10px}
+ #feedback .translation{display:block;font-size:11px}
+ #feedback .answer-translation-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start;margin-top:4px!important}
+ #feedback .answer-translation-row .your-answer{font-size:11px;line-height:1.3}
+ #feedback .answer-translation-row .translation{font-size:11px;line-height:1.3}
  #feedback .error-detail{font-size:10px;line-height:1.3;margin:2px 0}
  #feedback div{margin-top:2px!important}
  .single-check{flex:none;margin:2px 0 0}.single-check .btn{min-height:38px;padding:6px;font-size:12px}
@@ -562,15 +568,16 @@ function showFeedback(record){
  const emptyReveal=record.status==="revealed"&&!answer;
  const label=correct?"✓ Tačno!":close?"Skoro tačno – proveri velika i mala slova.":record.status==="revealed"?"Prikazano rešenje":"✗ Ima grešaka. Pogledaj ispravke.";
  const cls=correct?"good":close||emptyReveal?"near":"";
- const yourAnswer=answer?'<div class="your-answer">Tvoj odgovor: <b lang="de">'+escapeHTML(answer)+'</b></div>':"";
+ const yourAnswer=answer?'<div class="your-answer"><b lang="de">'+escapeHTML(answer)+'</b></div>':"";
  const solution=!correct?'<div class="solution-title">Ispravljena rečenica:</div><span class="solution" id="solutionText" lang="de">'+(emptyReveal?wordHTML(item.de):corrected.html)+'</span>':"";
  const translation='<div class="translation"><b>'+escapeHTML(item.sr)+'</b></div>';
+ const answerAndTranslation='<div class="answer-translation-row">'+yourAnswer+translation+'</div>';
  const details=correct?'<div class="error-detail success-text">Sve reči su ispravne. Bravo!</div>'
   :emptyReveal?'<div class="error-detail">Pročitaj rešenje i uporedi ga sa svojim pisanjem.</div>'
   :corrected.details.length?'<div class="error-detail"><b>Ispravljeno:</b> '+corrected.details.map(escapeHTML).join("; ")+'</div>'
   :'<div class="error-detail success-text">Nema pogrešnih reči. Proveri interpunkciju.</div>';
  $("feedback").className="feedback "+cls;
- $("feedback").innerHTML='<b class="feedback-status">'+label+"</b>"+yourAnswer+solution+translation+details;
+ $("feedback").innerHTML='<b class="feedback-status">'+label+"</b>"+answerAndTranslation+solution+details;
  $("feedback").hidden=false;
 }
 function renderSentence(){
