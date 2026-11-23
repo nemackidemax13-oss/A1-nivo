@@ -217,6 +217,45 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #readView .reading{font-size:13px}
 }
 
+
+/* Mobile 9:16: compact four-button controls with a larger writing field. */
+.icon-only{min-height:34px!important;padding:2px 8px!important;gap:0!important}
+.icon-only span{font-size:23px!important;line-height:1.2!important}
+.quad-controls{display:grid;grid-template-columns:1.35fr .82fr .83fr 1.28fr;gap:6px;width:100%;margin-top:8px}
+.quad-controls .btn{min-width:0;min-height:46px;padding:7px 4px;font-size:12px;line-height:1.15;overflow-wrap:anywhere;text-align:center}
+#answer{min-height:125px}
+.navigation{width:100%}
+.navigation .btn{width:100%;font-size:12px}
+@media(max-width:700px){
+ #exerciseView .listening.icon-only{display:flex;flex:none;min-height:30px!important;max-height:30px;padding:1px!important}
+ #exerciseView .listening.icon-only span{font-size:23px!important}
+ #exerciseView .quad-controls{flex:none;grid-template-columns:1.32fr .79fr .80fr 1.25fr;gap:4px;margin-top:2px}
+ #exerciseView .quad-controls .btn{min-height:43px;padding:4px 2px;font-size:clamp(9.5px,2.55vw,11.5px);line-height:1.15;border-radius:8px}
+ #exerciseView .write-label{font-size:11px}
+ #exerciseView #answer{flex:1;min-height:88px;max-height:180px;padding:9px 10px;font-size:16px;line-height:1.38;resize:none;overflow:hidden}
+ #exerciseView.has-feedback #answer{flex:0 0 74px;min-height:74px}
+ #exerciseView .navigation{flex:none;width:calc(100% + 18px);margin:3px 0 -8px -9px;gap:0}
+ #exerciseView .navigation .btn{width:100%;min-height:30px;height:30px;padding:2px 6px;line-height:1.15;font-size:12px;border-radius:0 0 12px 12px}
+ #exerciseView.reviewing .quad-controls{flex:none}
+ #exerciseView.reviewing #feedback{flex:1;min-height:0}
+ body.keyboard-open #exerciseView .listening.icon-only{display:none!important}
+ body.keyboard-open #exerciseView #answer{flex:1;min-height:65px;max-height:none}
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:37px}
+ body.keyboard-open #exerciseView .navigation{width:calc(100% + 14px);margin:3px 0 -4px -7px}
+ body.keyboard-open #exerciseView .navigation .btn{min-height:29px;height:29px}
+}
+@media(max-width:700px) and (max-height:650px){
+ #exerciseView #answer{min-height:64px}
+ #exerciseView .listening.icon-only{display:flex!important;min-height:25px!important;max-height:25px}
+ #exerciseView.reviewing .listening.icon-only{display:none!important}
+ body.keyboard-open #exerciseView .listening.icon-only{display:none!important}
+}
+@media(max-width:700px) and (max-height:500px){
+ #exerciseView .listening.icon-only{display:none!important}
+ #exerciseView .quad-controls .btn{min-height:37px}
+ #exerciseView #answer{min-height:50px}
+}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -261,21 +300,18 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div id="exerciseView" hidden>
 <div class="pillprog"><span id="sentenceNumber"></span><div class="meter"><div id="sentenceBar"></div></div></div>
 <p class="step-title exercise-title">2. Poslušaj i napiši rečenicu</p>
-<div class="listening" aria-live="polite"><b>🎧 Rečenica <span id="listeningSentence"></span></b><span>Poslušaj rečenicu, zatim je napiši i proveri odgovor.</span></div>
-<div class="triple-controls">
-<button class="btn blue" id="playSentence" type="button">🔊 Pusti rečenicu</button>
+<div class="listening icon-only" aria-label="Slušanje rečenice"><span aria-hidden="true">🎧</span></div>
+<div class="quad-controls" aria-label="Kontrole diktata">
+<button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
 <button class="btn light" id="repeatSentence" type="button">↻ Ponovi</button>
+<button class="btn green" id="check" type="button">✓ Proveri</button>
 <button class="btn yellow" id="showSolution" type="button">Prikaži rešenje</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
-<textarea id="answer" rows="2" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
+<textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
 <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
 <div id="autoNextInfo" class="auto-next-info" role="status" aria-live="polite" hidden></div>
-<div class="single-check"><button class="btn green" id="check" type="button">✓ Proveri</button></div>
-<div class="navigation">
-<button class="btn red" id="prevSentence" type="button">← Prethodna</button>
-<button class="btn blue" id="nextSentence" type="button" disabled>Sledeća →</button>
-</div>
+<div class="navigation"><button class="btn blue" id="nextSentence" type="button" disabled>Sledeća rečenica →</button></div>
 </div>
 <div id="finishView" hidden class="results">
 <div class="eyebrow">Diktat završen</div><h2>Odlično, stigao si do kraja!</h2>
@@ -531,12 +567,10 @@ function renderSentence(){
  stopAudio();
  const t=DATA[topic],r=getResults(),record=r[sentence];
  $("sentenceNumber").textContent="Rečenica "+(sentence+1)+" / "+t.sentences.length;
- $("listeningSentence").textContent=(sentence+1)+" / "+t.sentences.length;
  $("sentenceBar").style.width=(100*(sentence+1)/t.sentences.length)+"%";
  $("answer").value=record&&record.answer?record.answer:"";
 
- $("nextSentence").textContent=sentence===t.sentences.length-1?"Završi diktat ✓":"Sledeća →";
- $("prevSentence").disabled=sentence===0;
+ $("nextSentence").textContent=sentence===t.sentences.length-1?"Završi diktat ✓":"Sledeća rečenica →";
  $("nextSentence").disabled=!record;
  $("check").textContent=record?"✓ Proveri ponovo":"✓ Proveri";
  showFeedback(record);
@@ -593,7 +627,6 @@ $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentenc
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
 $("showSolution").addEventListener("click",()=>registerCheck(true));
-$("prevSentence").addEventListener("click",()=>{cancelAutoNext();if(sentence>0){sentence--;renderSentence();say(DATA[topic].sentences[sentence].de,"sentence")}});
 $("nextSentence").addEventListener("click",advanceSentence);
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
