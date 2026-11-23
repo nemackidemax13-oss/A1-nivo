@@ -71,6 +71,7 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .feedback.near{border-color:#ffdfac;background:#fffaed}
 .feedback .solution{display:block;margin:6px 0 4px;color:#17345c;font-size:16px;font-weight:850}
 .feedback .translation{display:block;margin-top:5px;color:#19395f;font-size:14px;font-weight:800;line-height:1.3}
+.feedback .translation-label{display:block;font-size:11px;font-weight:850;color:#627d9b;margin-bottom:3px;letter-spacing:.01em}
 .feedback .feedback-status{font-size:14px}
 .feedback .answer-translation-row{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:10px;margin-top:6px;min-width:0}
 .feedback .answer-translation-row .your-answer{margin:0;min-width:0;overflow-wrap:anywhere}
@@ -190,6 +191,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #feedback .solution{font-size:13px;line-height:1.3;margin:3px 0}
  #feedback .solution.corrected-green{font-size:13px;line-height:1.34;padding:4px 6px;margin:5px 0 2px}
  #feedback .translation{display:block;font-size:11px}
+ #feedback .translation-label{display:block;font-size:10px;line-height:1.15;margin-bottom:2px}
  #feedback .answer-translation-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start;margin-top:4px!important}
  #feedback .answer-translation-row .your-answer{font-size:11px;line-height:1.3}
  #feedback .answer-translation-row .translation{font-size:11px;line-height:1.3}
@@ -680,7 +682,7 @@ function showFeedback(record){
  const label=correct?"✓ Tačno!":close?"Skoro tačno – proveri velika i mala slova.":record.status==="revealed"?"Prikazano rešenje":"✗ Ima grešaka. Pogledaj ispravke.";
  const cls=correct?"good":close||emptyReveal?"near":"";
  const yourAnswer=answer?'<div class="your-answer answer-frame'+(correct?" answer-correct":" answer-wrong")+'" lang="de"><b>'+(correct?escapeHTML(answer):corrected.typedHtml)+'</b></div>':"";
- const translation='<div class="translation"><b>'+escapeHTML(item.sr)+'</b></div>';
+ const translation='<div class="translation"><span class="translation-label">Prevod</span><b>'+escapeHTML(item.sr)+'</b></div>';
  const answerAndTranslation='<div class="answer-translation-row">'+yourAnswer+translation+'</div>';
  // Greške su crvene u upisanom tekstu, a odmah ispod je pravilna rečenica zelenom bojom.
  const solution=!correct?'<div class="solution corrected-green answer-frame" id="solutionText" lang="de">'+corrected.html+'</div>':"";
