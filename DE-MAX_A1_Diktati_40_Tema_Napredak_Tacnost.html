@@ -292,6 +292,17 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #exerciseView #answer{min-height:50px}
 }
 
+
+/* Oba nemačka odgovora u jasnim okvirima: pogrešan crveno, ispravljen zeleno. */
+.feedback .answer-frame{border:1.5px solid #d5e0ee;border-radius:10px;padding:8px 10px;background:#fff;box-sizing:border-box;overflow-wrap:anywhere}
+.feedback .your-answer.answer-wrong{border-color:#ed9aa7;background:#fff6f7;color:#192b42}
+.feedback .your-answer.answer-correct{border-color:#90d4b2;background:#f1fbf5;color:#192b42}
+.feedback .solution.corrected-green.answer-frame{border:1.5px solid #9bd9b7;background:#f3fcf6;color:#192b42!important}
+@media(max-width:700px){
+ #feedback .answer-frame{padding:6px 7px;border-radius:8px}
+ #feedback .solution.corrected-green.answer-frame{padding:6px 7px;margin:5px 0 2px}
+}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -639,11 +650,11 @@ function showFeedback(record){
  const emptyReveal=record.status==="revealed"&&!answer;
  const label=correct?"✓ Tačno!":close?"Skoro tačno – proveri velika i mala slova.":record.status==="revealed"?"Prikazano rešenje":"✗ Ima grešaka. Pogledaj ispravke.";
  const cls=correct?"good":close||emptyReveal?"near":"";
- const yourAnswer=answer?'<div class="your-answer" lang="de"><b>'+(correct?escapeHTML(answer):corrected.typedHtml)+'</b></div>':"";
+ const yourAnswer=answer?'<div class="your-answer answer-frame'+(correct?" answer-correct":" answer-wrong")+'" lang="de"><b>'+(correct?escapeHTML(answer):corrected.typedHtml)+'</b></div>':"";
  const translation='<div class="translation"><b>'+escapeHTML(item.sr)+'</b></div>';
  const answerAndTranslation='<div class="answer-translation-row">'+yourAnswer+translation+'</div>';
  // Greške su crvene u upisanom tekstu, a odmah ispod je pravilna rečenica zelenom bojom.
- const solution=!correct?'<span class="solution corrected-green" id="solutionText" lang="de">'+corrected.html+'</span>':"";
+ const solution=!correct?'<div class="solution corrected-green answer-frame" id="solutionText" lang="de">'+corrected.html+'</div>':"";
  const details=correct?'<div class="error-detail success-text">Sve reči su ispravne. Bravo!</div>'
   :emptyReveal?'<div class="error-detail">Pročitaj rešenje i uporedi ga sa svojim pisanjem.</div>'
   :corrected.details.length?'<div class="error-detail"><b>Ispravljeno:</b> '+corrected.details.map(escapeHTML).join("; ")+'</div>'
