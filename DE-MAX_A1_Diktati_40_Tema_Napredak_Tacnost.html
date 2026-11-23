@@ -952,8 +952,33 @@ $("playFull").addEventListener("click",()=>say(textOf(DATA[topic]),"read"));
 $("stopAudio").addEventListener("click",stopAudio);
 $("pauseAudio").addEventListener("click",togglePause);
 $("startDictation").addEventListener("click",()=>beginDictation());
-$("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
-$("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
+// Slušanje i ponavljanje ne smeju oduzeti fokus polju za pisanje:
+ // dok je tastatura otvorena, dodir se obrađuje bez browserovog fokusiranja dugmeta.
+function connectAudioButtonWithoutKeyboardDismiss(buttonId){
+ const button=$(buttonId);
+ let suppressClickUntil=0;
+ const play=()=>say(DATA[topic].sentences[sentence].de,"sentence");
+ const writingWithKeyboard=()=>phase==="exercise"&&
+  document.activeElement===$("answer")&&window.matchMedia("(max-width:700px)").matches;
+ // Desktop miš: spreči prebacivanje fokusa sa textarea na dugme.
+ button.addEventListener("mousedown",event=>{
+  if(writingWithKeyboard())event.preventDefault();
+ });
+ // iOS/Android: touchstart.preventDefault čuva fokus i softversku tastaturu.
+ // Pošto to zaustavlja naredni click, zvuk pokrećemo direktno u ovom gestu.
+ button.addEventListener("touchstart",event=>{
+  if(!writingWithKeyboard())return;
+  event.preventDefault();
+  suppressClickUntil=Date.now()+1000;
+  play();
+ },{passive:false});
+ button.addEventListener("click",()=>{
+  if(Date.now()<suppressClickUntil)return;
+  play();
+ });
+}
+connectAudioButtonWithoutKeyboardDismiss("playSentence");
+connectAudioButtonWithoutKeyboardDismiss("repeatSentence");
 $("check").addEventListener("click",()=>registerCheck(false));
 $("advanceNow").addEventListener("click",()=>{if(autoNextTimer!==null)advanceSentence()});
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
