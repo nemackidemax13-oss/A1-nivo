@@ -1005,13 +1005,10 @@ function registerCheck(reveal){
  cancelAutoNext();
  const item=DATA[topic].sentences[sentence];
  const typed=plain($("answer").value);
- if(!reveal&&!typed){
-  $("feedback").className="feedback near";
-  $("feedback").textContent="Prvo napiši rečenicu, pa pritisni „Proveri rečenicu“.";
-  $("feedback").hidden=false;return;
- }
+ // I prazno polje se proverava: prikaži nemačko rešenje i srpski prevod.
+ // Prazan odgovor se vodi kao prikazano rešenje, ne kao tačan odgovor.
  const results=getResults();
- const status=reveal?"revealed":compareAnswer(typed,item.de);
+ const status=(reveal||!typed)?"revealed":compareAnswer(typed,item.de);
  if(!results[sentence]){results[sentence]={status:status,answer:typed};persist()}
  const current={status:status,answer:typed};
  showFeedback(current);
