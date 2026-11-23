@@ -510,7 +510,7 @@ function startAutoNext(){
   const seconds=Math.ceil(Math.max(0,deadline-Date.now())/1000);
   const isLast=n===DATA[t].sentences.length-1;
   $("autoNextInfo").textContent=seconds>0
-   ? (isLast?"✓ Završni rezultat za ":"✓ Sledeća rečenica za ")+seconds+" s"
+   ? (isLast?"Završni rezultat za ":"Sledeća rečenica za ")+seconds+" s"
    : (isLast?"Prikaz završnog rezultata…":"Prelaz na sledeću rečenicu…");
  }
  countdown();
