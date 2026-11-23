@@ -327,14 +327,13 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="quad-controls" aria-label="Kontrole diktata">
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
 <button class="btn orange" id="repeatSentence" type="button">↻ Ponovi</button>
-<button class="btn green" id="check" type="button">✓ Proveri</button>
+<button class="btn green" id="check" type="button">✓ Završi diktat</button>
 <button class="btn yellow" id="showSolution" type="button">Prikaži rešenje</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
 <textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
 <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
 <div id="autoNextInfo" class="auto-next-info" role="status" aria-live="polite" hidden></div>
-<div class="navigation"><button class="btn blue" id="nextSentence" type="button" disabled>Sledeća rečenica →</button></div>
 </div>
 <div id="finishView" hidden class="results">
 <div class="eyebrow">Diktat završen</div><h2>Odlično, stigao si do kraja!</h2>
@@ -416,7 +415,10 @@ function startAutoNext(){
  function countdown(){
   if(phase!=="exercise"||topic!==t||sentence!==n){cancelAutoNext();return}
   const seconds=Math.ceil(Math.max(0,deadline-Date.now())/1000);
-  $("autoNextInfo").textContent=seconds>0?"✓ Sledeća rečenica za "+seconds+" s":"Prelaz na sledeću rečenicu…";
+  const isLast=n===DATA[t].sentences.length-1;
+  $("autoNextInfo").textContent=seconds>0
+   ? (isLast?"✓ Završni rezultat za ":"✓ Sledeća rečenica za ")+seconds+" s"
+   : (isLast?"Prikaz završnog rezultata…":"Prelaz na sledeću rečenicu…");
  }
  countdown();
  autoNextInterval=setInterval(countdown,250);
@@ -638,9 +640,7 @@ function renderSentence(){
  $("sentenceBar").style.width=(100*(sentence+1)/t.sentences.length)+"%";
  $("answer").value=record&&record.answer?record.answer:"";
 
- $("nextSentence").textContent=sentence===t.sentences.length-1?"Završi diktat ✓":"Sledeća rečenica →";
- $("nextSentence").disabled=!record;
- $("check").textContent=record?"✓ Proveri ponovo":"✓ Proveri";
+ $("check").textContent="✓ Završi diktat";
  showFeedback(record);
  updateOverall();
 }
@@ -660,11 +660,9 @@ function registerCheck(reveal){
  const current={status:status,answer:typed};
  showFeedback(current);
  $("exerciseView").classList.add("has-feedback");
- $("nextSentence").disabled=false;
- $("check").textContent="✓ Proveri ponovo";
  fillSelect();updateOverall();
  $("answer").blur();
- if(reveal)startAutoNext();
+ startAutoNext();
  syncViewport();
 }
 function finish(){
@@ -696,7 +694,6 @@ $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentenc
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
 $("showSolution").addEventListener("click",()=>registerCheck(true));
-$("nextSentence").addEventListener("click",advanceSentence);
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
 $("answer").addEventListener("focus",syncViewport);
