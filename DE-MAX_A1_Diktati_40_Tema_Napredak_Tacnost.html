@@ -478,6 +478,8 @@ try { saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; } catch(e) { saved=
 if(!Array.isArray(saved.results)||saved.results.length!==DATA.length) saved.results=DATA.map(t=>Array(t.sentences.length).fill(null));
 if(!Number.isInteger(saved.topic)||saved.topic<0||saved.topic>=DATA.length) saved.topic=0;
 let topic=saved.topic, sentence=0, phase="read";
+// Boje statusa se uključuju tek po početku vežbanja; osvežavanje ih vraća na neutralno.
+let topicStatusColorsActive=false;
 const rate=1;
 let readTimer=null, readDeadline=0;
 let audioToken=0, highlightTimer=null;
@@ -646,8 +648,8 @@ function fillSelect(){
  const t=DATA[topic];
  const complete=Array.isArray(saved.results[topic])&&saved.results[topic].length===t.sentences.length&&saved.results[topic].every(Boolean);
  $("topicDisplay").textContent=(topic+1)+". "+t.title+" ("+t.sr+")"+(complete?" ✓":"");
- $("topicDisplay").classList.toggle("completed",complete);
- $("topicDisplay").classList.toggle("pending",!complete);
+ $("topicDisplay").classList.toggle("completed",topicStatusColorsActive&&complete);
+ $("topicDisplay").classList.toggle("pending",topicStatusColorsActive&&!complete);
 }
 function setPhase(next){
  cancelAutoNext();
@@ -679,6 +681,8 @@ function startReadTimer(){
 }
 function beginDictation(auto=false){
  if(phase!=="read")return;
+ topicStatusColorsActive=true;
+ fillSelect();
  stopReadTimer();
  stopAudio();
  const pending=getResults().findIndex(x=>!x);
