@@ -476,7 +476,6 @@ const $ = id => document.getElementById(id);
 let saved={};
 try { saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; } catch(e) { saved={}; }
 if(!Array.isArray(saved.results)||saved.results.length!==DATA.length) saved.results=DATA.map(t=>Array(t.sentences.length).fill(null));
-if(!Array.isArray(saved.started)||saved.started.length!==DATA.length) saved.started=DATA.map(()=>false);
 if(!Number.isInteger(saved.topic)||saved.topic<0||saved.topic>=DATA.length) saved.topic=0;
 let topic=saved.topic, sentence=0, phase="read";
 const rate=1;
@@ -647,7 +646,7 @@ function fillSelect(){
  const t=DATA[topic];
  const records=saved.results[topic];
  const complete=Array.isArray(records)&&records.length===t.sentences.length&&records.every(Boolean);
- const started=Boolean(saved.started[topic])||(Array.isArray(records)&&records.some(Boolean));
+ const started=Array.isArray(records)&&records.some(Boolean);
  $("topicDisplay").textContent=(topic+1)+". "+t.title+" ("+t.sr+")"+(complete?" ✓":"");
  $("topicDisplay").classList.toggle("completed",complete);
  $("topicDisplay").classList.toggle("in-progress",started&&!complete);
@@ -682,9 +681,6 @@ function startReadTimer(){
 }
 function beginDictation(auto=false){
  if(phase!=="read")return;
- saved.started[topic]=true;
- persist();
- fillSelect();
  stopReadTimer();
  stopAudio();
  const pending=getResults().findIndex(x=>!x);
