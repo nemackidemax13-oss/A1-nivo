@@ -709,7 +709,7 @@ function showFeedback(record){
  const answerAndTranslation='<div class="answer-translation-row">'+yourAnswer+translation+'</div>';
  // Greške su crvene u upisanom tekstu, a odmah ispod je pravilna rečenica zelenom bojom.
  const solution=!correct?'<div class="solution corrected-green answer-frame" id="solutionText" lang="de">'+corrected.html+'</div>':"";
- const details=correct?'<div class="error-detail success-text">Sve reči su ispravne. Bravo!</div>'
+ const details=correct?''
   :emptyReveal?'<div class="error-detail">Pročitaj rešenje i uporedi ga sa svojim pisanjem.</div>'
   :corrected.details.length?'<div class="error-detail"><b>Ispravljeno:</b> '+corrected.details.map(escapeHTML).join("; ")+'</div>'
   :'<div class="error-detail success-text">Nema pogrešnih reči.</div>';
