@@ -575,7 +575,7 @@ function totalDone(){return saved.results.reduce((n,r)=>n+(Array.isArray(r)?r.fi
 function allDone(){return getResults().every(Boolean)}
 function updateOverall(){
  const done=totalDone(),pct=Math.round(100*done/totalSentences);
- $("overall").textContent=done+" / "+totalSentences+" · "+pct+"%";
+ $("overall").textContent=pct+"%";
  $("overallBar").style.width=pct+"%";
 }
 function fillSelect(){
