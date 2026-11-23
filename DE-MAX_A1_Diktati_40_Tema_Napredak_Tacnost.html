@@ -522,6 +522,24 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  }
 }
 
+/* Diktat: bezbedna donja ivica tekst-polja iznad tastature (Android/iOS). */
+@media(max-width:700px){
+ body.mobile-writing main>.lesson{padding-bottom:8px!important}
+ body.mobile-writing #exerciseView #answer{
+   margin-bottom:3px!important;
+   overscroll-behavior:contain!important;
+   scroll-padding-bottom:12px!important;
+ }
+}
+@media(max-width:700px) and (max-height:310px){
+ body.mobile-writing main{padding-top:2px!important;padding-bottom:2px!important}
+ body.mobile-writing main>.lesson{padding:3px 5px!important}
+ body.mobile-writing #exerciseView{gap:2px!important}
+ body.mobile-writing #exerciseView .quad-controls .btn{min-height:27px!important}
+ body.mobile-writing #exerciseView .write-label{font-size:10px!important}
+ body.mobile-writing #exerciseView #answer{min-height:40px!important;padding:5px 8px!important}
+}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -1001,11 +1019,17 @@ let dictationWasKeyboardVisible=false;
 let dictationWasGeometry=false;
 let dictationWasViewport=0;
 let dictationKeyboardRestored=false;
+// Kratko pamtimo stvarnu visinu tastature da skokovi Android/iOS viewport-a
+// ne bi pomerili polje za pisanje ispod tastature.
+let dictationLastKeyboardHeight=0;
+let dictationLastKeyboardAt=0;
 $("answer").addEventListener("focus",()=>{
  dictationFocusAt=Date.now();
  dictationKeyboardRestored=false;
  dictationWasKeyboardVisible=false;
  dictationWasGeometry=false;
+ dictationLastKeyboardHeight=0;
+ dictationLastKeyboardAt=0;
  const vv=window.visualViewport;
  dictationFullHeight=Math.max(dictationFullHeight,Math.floor(window.innerHeight||0),Math.floor(vv?.height||0));
  syncViewport();
@@ -1034,27 +1058,43 @@ function syncViewport(){
  const top=Math.max(0,Math.floor(vv?.offsetTop||0));
  const vk=navigator.virtualKeyboard?.boundingRect;
  const virtualHeight=Math.max(0,Math.floor(vk?.height||0));
- const geometry=focused&&virtualHeight>80;
+ const geometry=focused&&virtualHeight>80&&Number.isFinite(vk?.top);
  const resized=focused&&full-raw>105;
- // Kao na VEZBAJ-MEJLOVE-A1: iframe nekad ne prijavi virtuelnu tastaturu.
- if(focused&&dictationWasGeometry&&!geometry)dictationKeyboardRestored=true;
- if(focused&&dictationWasKeyboardVisible&&dictationWasViewport>0&&
-    dictationWasViewport<full-105&&raw>=full-65)dictationKeyboardRestored=true;
+ const measured=geometry||resized;
+ const now=Date.now();
+
+ // Merenje ima prednost nad privremenom oznakom da je tastatura zatvorena.
+ // Ovo rešava slučaj kada Android na trenutak proširi viewport tokom kucanja.
+ if(measured)dictationKeyboardRestored=false;
  if(!focused)dictationKeyboardRestored=true;
- const fallback=focused&&!geometry&&!resized&&!dictationKeyboardRestored&&
-  dictationFocusAt>0&&Date.now()-dictationFocusAt>=250;
- const keyboardVisible=focused&&!dictationKeyboardRestored&&(geometry||resized||fallback);
+
+ let measuredHeight=0;
+ if(geometry)measuredHeight=Math.min(raw,Math.floor(vk.top-top));
+ else if(resized)measuredHeight=raw;
+
+ if(measured&&measuredHeight>0){
+  dictationLastKeyboardHeight=measuredHeight;
+  dictationLastKeyboardAt=now;
+ }
+ const recentMeasurement=focused&&!measured&&dictationLastKeyboardHeight>0&&
+  now-dictationLastKeyboardAt<850;
+
+ // U iframe-u visualViewport ponekad ne registruje tastaturu.
+ const fallback=focused&&!measured&&!recentMeasurement&&!dictationKeyboardRestored&&
+  dictationFocusAt>0&&now-dictationFocusAt>=250;
+ const keyboardVisible=focused&&(measured||recentMeasurement||fallback);
  let height=writing?full:raw;
  if(keyboardVisible){
-  if(geometry)height=Math.min(raw,Math.max(155,Math.floor(vk.top-top)));
-  else if(resized)height=raw;
-  else height=Math.min(raw,Math.max(190,Math.floor(full*.57)));
+  if(measured)height=measuredHeight;
+  else if(recentMeasurement)height=Math.min(raw,dictationLastKeyboardHeight);
+  else height=Math.min(raw,Math.max(185,Math.floor(full*.52)));
+  // Bezbedna margina iznad virtuelne tastature.
+  height=Math.max(140,Math.floor(height)-8);
  }
  if(!focused&&raw>=full-65)dictationFullHeight=raw;
- document.documentElement.style.setProperty("--app-height",Math.max(150,Math.floor(height))+"px");
+ document.documentElement.style.setProperty("--app-height",Math.max(140,Math.floor(height))+"px");
  document.documentElement.style.setProperty("--visual-top",keyboardVisible?top+"px":"0px");
  document.body.classList.toggle("mobile-writing",writing);
- // Zadrži staru klasu za kompatibilnost, ali layout ne zavisi od fokusa.
  document.body.classList.toggle("keyboard-open",focused);
  document.body.classList.toggle("keyboard-visible",keyboardVisible);
  document.body.classList.toggle("keyboard-tight",height<410);
