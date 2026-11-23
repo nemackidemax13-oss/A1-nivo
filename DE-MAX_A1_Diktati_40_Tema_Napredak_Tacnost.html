@@ -254,6 +254,9 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 .quad-controls .btn:active:not(:disabled){transform:translateY(1px);box-shadow:0 1px 4px rgba(25,47,89,.12)}
 .quad-controls #playSentence{background:linear-gradient(135deg,#1669d9,#1052b3)}
 .quad-controls #repeatSentence{background:linear-gradient(135deg,#ffb837,#ef9610);border:1px solid #e2910d;color:#452b05}
+.quad-controls #repeatSentence{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;white-space:nowrap;line-height:1.05;padding-left:1px;padding-right:1px}
+.quad-controls #repeatSentence .repeat-sub{display:block;font-size:.9em;font-weight:800}
+
 .quad-controls #check{background:linear-gradient(135deg,#14a169,#067348)}
 #answer{min-height:125px}
 .navigation{width:100%}
@@ -336,7 +339,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 
 <div class="quad-controls" aria-label="Kontrole diktata">
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
-<button class="btn orange" id="repeatSentence" type="button">↻ Ponovi</button>
+<button class="btn orange" id="repeatSentence" type="button" aria-label="Ponovi rečenicu"><span>↻ Ponovi</span><span class="repeat-sub">rečenicu</span></button>
 <button class="btn green" id="check" type="button">✓ Završi diktat</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
