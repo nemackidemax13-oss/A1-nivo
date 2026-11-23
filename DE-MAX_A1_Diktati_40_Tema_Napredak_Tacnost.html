@@ -418,7 +418,7 @@ function advanceSentence(){
 }
 function startAutoNext(){
  cancelAutoNext();
- const t=topic,n=sentence,delay=5000,deadline=Date.now()+delay;
+ const t=topic,n=sentence,delay=30000,deadline=Date.now()+delay;
  $("exerciseView").classList.add("reviewing");
  $("autoNextInfo").hidden=false;
  function countdown(){
