@@ -28,6 +28,8 @@ main{padding:12px 14px 18px;flex:1;display:flex;flex-direction:column;gap:10px;m
 .selection{display:flex;flex-direction:column;gap:8px}
 .selectrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px}
 .topic-display{min-width:0;min-height:44px;width:100%;border:1.5px solid #cbddf1;border-radius:12px;background:#f8fbff;color:var(--dark);padding:8px 10px;font-weight:850;font-size:14px;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.25;overflow-wrap:anywhere}
+.topic-display.completed{color:#087542;border-color:#a4d8bb;background:#effbf4}
+.topic-display.pending{color:#bf2436;border-color:#f0bdc3;background:#fff7f8}
 .icon-btn{border:1px solid #d7e4f4;border-radius:12px;background:#edf5ff;color:var(--blue);font-size:23px;font-weight:700;min-height:44px}#prevTopic{background:#dc3547;border-color:#c62e42;color:#fff}#nextTopic{background:#dc3547;border-color:#c62e42;color:#fff}
 .labelrow,.meterrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .micro{color:var(--muted);font-size:12px;font-weight:750}
@@ -620,8 +622,10 @@ function updateOverall(){
 }
 function fillSelect(){
  const t=DATA[topic];
- const complete=Array.isArray(saved.results[topic])&&saved.results[topic].every(Boolean);
+ const complete=Array.isArray(saved.results[topic])&&saved.results[topic].length===t.sentences.length&&saved.results[topic].every(Boolean);
  $("topicDisplay").textContent=(topic+1)+". "+t.title+" ("+t.sr+")"+(complete?" ✓":"");
+ $("topicDisplay").classList.toggle("completed",complete);
+ $("topicDisplay").classList.toggle("pending",!complete);
 }
 function setPhase(next){
  cancelAutoNext();
