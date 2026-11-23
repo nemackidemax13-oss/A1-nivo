@@ -357,6 +357,17 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #finishView .buttonrow .btn{min-height:31px;padding:4px 3px;font-size:10px}
 }
 
+
+/* Diktat: zadrži odbrojavanje, ali omogući prelaz jednim dodirom. */
+.auto-next-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:8px;margin-top:6px;flex:none;min-width:0}
+.auto-next-controls .auto-next-info{display:flex;align-items:center;justify-content:center;margin:0;min-width:0;padding:7px 6px;line-height:1.25}
+.auto-next-controls .btn{flex:none;min-width:0;min-height:39px;padding:6px 7px;border-radius:9px;font-size:12px;line-height:1.25}
+@media(max-width:700px){
+ #exerciseView .auto-next-controls{gap:5px;margin-top:3px;flex:none}
+ #exerciseView .auto-next-controls .auto-next-info{margin:0;padding:5px 3px;font-size:10.5px;line-height:1.2}
+ #exerciseView .auto-next-controls .btn{min-height:36px;padding:5px 3px;font-size:clamp(10px,2.7vw,12px);line-height:1.18}
+}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -411,7 +422,10 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
 <textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
 <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
-<div id="autoNextInfo" class="auto-next-info" role="status" aria-live="polite" hidden></div>
+<div id="autoNextControls" class="auto-next-controls" hidden>
+<div id="autoNextInfo" class="auto-next-info" role="status" aria-live="polite"></div>
+<button id="advanceNow" class="btn blue" type="button">Sledeća rečenica →</button>
+</div>
 </div>
 <div id="finishView" hidden class="results">
 <div class="eyebrow">Diktat završen</div><h2>Odlično, stigao si do kraja!</h2>
@@ -477,7 +491,7 @@ function cancelAutoNext(){
  if(autoNextTimer!==null){clearTimeout(autoNextTimer);autoNextTimer=null}
  if(autoNextInterval!==null){clearInterval(autoNextInterval);autoNextInterval=null}
  $("exerciseView").classList.remove("reviewing");
- $("autoNextInfo").hidden=true;
+ $("autoNextControls").hidden=true;
 }
 function advanceSentence(){
  cancelAutoNext();
@@ -489,7 +503,8 @@ function startAutoNext(){
  cancelAutoNext();
  const t=topic,n=sentence,delay=30000,deadline=Date.now()+delay;
  $("exerciseView").classList.add("reviewing");
- $("autoNextInfo").hidden=false;
+ $("autoNextControls").hidden=false;
+ $("advanceNow").textContent=n===DATA[t].sentences.length-1?"Prikaži rezultat →":"Sledeća rečenica →";
  function countdown(){
   if(phase!=="exercise"||topic!==t||sentence!==n){cancelAutoNext();return}
   const seconds=Math.ceil(Math.max(0,deadline-Date.now())/1000);
@@ -788,6 +803,7 @@ $("startDictation").addEventListener("click",()=>beginDictation());
 $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
+$("advanceNow").addEventListener("click",()=>{if(autoNextTimer!==null)advanceSentence()});
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
 $("answer").addEventListener("focus",syncViewport);
