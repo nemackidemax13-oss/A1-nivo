@@ -341,7 +341,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="quad-controls" aria-label="Kontrole diktata">
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
 <button class="btn orange" id="repeatSentence" type="button" aria-label="Ponovi rečenicu"><span class="repeat-top">Ponovi</span><span class="repeat-icon" aria-hidden="true">↻</span><span class="repeat-sub">rečenicu</span></button>
-<button class="btn green" id="check" type="button">✓ Završi diktat</button>
+<button class="btn green" id="check" type="button">✓ Proveri rečenicu</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
 <textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
@@ -661,7 +661,7 @@ function renderSentence(){
  $("sentenceBar").style.width=(100*(sentence+1)/t.sentences.length)+"%";
  $("answer").value=record&&record.answer?record.answer:"";
 
- $("check").textContent="✓ Završi diktat";
+ $("check").textContent="✓ Proveri rečenicu";
  showFeedback(record);
  updateOverall();
 }
@@ -672,7 +672,7 @@ function registerCheck(reveal){
  const typed=plain($("answer").value);
  if(!reveal&&!typed){
   $("feedback").className="feedback near";
-  $("feedback").textContent="Prvo napiši rečenicu, pa pritisni „Završi diktat“.";
+  $("feedback").textContent="Prvo napiši rečenicu, pa pritisni „Proveri rečenicu“.";
   $("feedback").hidden=false;return;
  }
  const results=getResults();
