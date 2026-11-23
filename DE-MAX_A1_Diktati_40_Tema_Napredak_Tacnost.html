@@ -256,12 +256,6 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 </div>
 <div id="readLocked" class="lock-msg" hidden>🔒 Tekst je sakriven. Sada slušaj rečenice i piši diktat bez gledanja u tekst.</div>
 <div class="shared-audio" id="readBottom">
-<div class="speedbar" aria-label="Brzina izgovora">
-<span>Brzina izgovora</span>
-<button class="speed-btn" data-rate=".8" type="button">Sporo</button>
-<button class="speed-btn active" data-rate=".95" type="button">Normalno</button>
-<button class="speed-btn" data-rate="1.1" type="button">Brzo</button>
-</div>
 <div id="audioStatus" class="audio-status" aria-live="polite"></div>
 </div>
 <div id="exerciseView" hidden>
@@ -309,7 +303,8 @@ let saved={};
 try { saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; } catch(e) { saved={}; }
 if(!Array.isArray(saved.results)||saved.results.length!==DATA.length) saved.results=DATA.map(t=>Array(t.sentences.length).fill(null));
 if(!Number.isInteger(saved.topic)||saved.topic<0||saved.topic>=DATA.length) saved.topic=0;
-let topic=saved.topic, sentence=0, phase="read", rate=.95;
+let topic=saved.topic, sentence=0, phase="read";
+const rate=1;
 let readTimer=null, readDeadline=0;
 let audioToken=0, highlightTimer=null;
 const synth="speechSynthesis" in window?window.speechSynthesis:null;
@@ -606,10 +601,6 @@ $("answer").addEventListener("focus",syncViewport);
 $("answer").addEventListener("blur",()=>setTimeout(syncViewport,90));
 $("retry").addEventListener("click",()=>{saved.results[topic]=Array(DATA[topic].sentences.length).fill(null);persist();renderTopic();});
 $("goNext").addEventListener("click",()=>setTopic(topic+1));
-document.querySelectorAll(".speed-btn").forEach(b=>b.addEventListener("click",()=>{
- rate=Number(b.dataset.rate);
- document.querySelectorAll(".speed-btn").forEach(x=>x.classList.toggle("active",x===b));
-}));
 window.addEventListener("pagehide",()=>{cancelAutoNext();stopAudio();stopReadTimer()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tickReadTimer();});
 function syncViewport(){
