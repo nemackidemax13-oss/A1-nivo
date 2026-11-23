@@ -46,13 +46,14 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .btn{border:0;border-radius:12px;min-height:45px;padding:10px 14px;font-size:13px;font-weight:850;flex:1;line-height:1.2}
 .btn.blue{background:#115bc4;color:#fff}
 .btn.green{background:#09814f;color:#fff}
+.btn.orange{background:#f59e0b;color:#382200;border:1px solid #e18a00}
 .btn.red{background:#dc3547;color:white;border:1px solid #c62e42}.btn.yellow{background:#ffda33;color:#3e3200;border:1px solid #e3b51d}
 .btn.light{background:#eef5ff;color:#175ab1;border:1px solid #d4e5fa}
 .btn.outline{background:#fff;color:#244f82;border:1px solid #d4e2f0}
 .btn:active:not(:disabled){transform:translateY(1px)}
-.reading-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(76px,.38fr) minmax(61px,.28fr);gap:7px;flex-wrap:nowrap}
+.reading-controls{display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr);gap:7px;flex-wrap:nowrap}
 .reading-controls .btn{min-width:0;width:100%;padding-left:6px;padding-right:6px;font-size:12px}
-#pauseAudio{font-size:12px}
+#pauseAudio{font-size:10.5px;padding:5px 3px;min-width:0}
 
 .speedbar{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
 .speedbar span{font-size:12px;font-weight:800;color:var(--muted);margin-right:auto}
@@ -161,8 +162,9 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #readView .read-clock strong{font-size:18px}
  #readView .buttonrow{margin-top:4px!important}
  #readView .btn{min-height:37px;padding:7px;font-size:11.5px}
- #readView .reading-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(65px,.36fr) minmax(51px,.26fr);gap:4px}
+ #readView .reading-controls{display:grid;grid-template-columns:minmax(0,1fr) 60px minmax(0,1fr);gap:4px}
  #readView .reading-controls .btn{padding:5px 2px;font-size:clamp(9.4px,2.7vw,11.5px);min-height:38px}
+ #readView .reading-controls #pauseAudio{padding:5px 1px;font-size:9.3px}
 
  #startDictation{min-height:39px;margin-top:2px;font-size:13px}
  #readLocked{flex:none;padding:7px 8px;font-size:11px;line-height:1.25}
@@ -308,7 +310,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="meter" aria-hidden="true"><div id="readProgress"></div></div>
 <p class="note">Imaš 120 sekundi da pročitaš i poslušaš tekst. Zatim se tekst automatski sakriva. Možeš početi i ranije.</p>
 <div class="buttonrow reading-controls" style="margin-top:12px">
-<button class="btn blue" id="playFull" type="button">🔊 Poslušaj ceo tekst</button>
+<button class="btn blue" id="playFull" type="button">🔊 Poslušaj diktat</button>
 <button class="btn yellow" id="pauseAudio" type="button" aria-pressed="false" disabled>⏸ Pauza</button>
 <button class="btn red" id="stopAudio" type="button">■ Stop</button>
 </div>
@@ -324,7 +326,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 
 <div class="quad-controls" aria-label="Kontrole diktata">
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
-<button class="btn light" id="repeatSentence" type="button">↻ Ponovi</button>
+<button class="btn orange" id="repeatSentence" type="button">↻ Ponovi</button>
 <button class="btn green" id="check" type="button">✓ Proveri</button>
 <button class="btn yellow" id="showSolution" type="button">Prikaži rešenje</button>
 </div>
