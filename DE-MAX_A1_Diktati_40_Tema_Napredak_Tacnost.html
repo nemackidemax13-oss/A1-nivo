@@ -494,8 +494,8 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
   display:block!important;flex:0 1 51%!important;height:51%!important;
   width:100%!important;min-width:0!important;min-height:55px!important;
   max-height:51%!important;margin:0!important;padding:10px 11px!important;
-  border-radius:10px!important;font-size:18px!important;line-height:1.42!important;
-  resize:none!important;overflow-x:hidden!important;overflow-y:auto!important;
+  border-radius:10px 10px 0 0!important;font-size:18px!important;line-height:1.42!important;
+  resize:none!important;overflow-x:hidden!important;overflow-y:hidden!important;
   touch-action:pan-y!important;overscroll-behavior:contain!important;
   -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;
  }
@@ -522,14 +522,25 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  }
 }
 
-/* Diktat: bezbedna donja ivica tekst-polja iznad tastature (Android/iOS). */
+/* Kada je tastatura otvorena, dno polja naleže do tastature.
+   Bez unutrašnjeg skrolovanja pri pisanju jedne kratke A1 rečenice. */
 @media(max-width:700px){
- body.mobile-writing main>.lesson{padding-bottom:8px!important}
+ body.mobile-writing main{padding-bottom:0!important}
+ body.mobile-writing main>.lesson{padding-bottom:0!important}
+ body.mobile-writing #exerciseView:not([hidden]){padding-bottom:0!important}
  body.mobile-writing #exerciseView #answer{
-   margin-bottom:3px!important;
-   overscroll-behavior:contain!important;
-   scroll-padding-bottom:12px!important;
+  margin-bottom:0!important;
+  border-radius:10px 10px 0 0!important;
+  overflow-x:hidden!important;overflow-y:hidden!important;
+  overscroll-behavior:none!important;
+  scroll-padding-bottom:0!important;
+  scrollbar-width:none!important;
  }
+ body.mobile-writing #exerciseView #answer::-webkit-scrollbar{display:none!important}
+}
+@media(max-width:700px) and (max-height:310px){
+ body.mobile-writing main{padding-bottom:0!important}
+ body.mobile-writing main>.lesson{padding-bottom:0!important}
 }
 @media(max-width:700px) and (max-height:310px){
  body.mobile-writing main{padding-top:2px!important;padding-bottom:2px!important}
@@ -1089,7 +1100,7 @@ function syncViewport(){
   else if(recentMeasurement)height=Math.min(raw,dictationLastKeyboardHeight);
   else height=Math.min(raw,Math.max(185,Math.floor(full*.52)));
   // Bezbedna margina iznad virtuelne tastature.
-  height=Math.max(140,Math.floor(height)-8);
+  height=Math.max(140,Math.floor(height)-2);
  }
  if(!focused&&raw>=full-65)dictationFullHeight=raw;
  document.documentElement.style.setProperty("--app-height",Math.max(140,Math.floor(height))+"px");
