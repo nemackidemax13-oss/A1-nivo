@@ -552,28 +552,57 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 }
 
 
-/* Učenje pre pisanja: numerisane nemačke rečenice i prevod odmah ispod. */
+/* Brojevi i prevodi: isti tekstualni grid-stubac bez odstupanja. */
 .reading-text{width:100%;min-width:0}
-.reading-line{padding:7px 0;border-bottom:1px solid #dbe7f5}
+.reading-line{
+ display:grid;grid-template-columns:1.55em minmax(0,1fr);
+ column-gap:8px;row-gap:2px;align-items:baseline;
+ padding:7px 0;border-bottom:1px solid #dbe7f5;
+}
 .reading-line:first-child{padding-top:0}
 .reading-line:last-child{padding-bottom:0;border-bottom:0}
-.reading-german{display:flex;align-items:baseline;gap:8px;min-width:0;font-weight:750}
-.reading-number{flex:none;min-width:1.55em;color:#125cc7;font-weight:950;line-height:1.3}
-.reading-de{min-width:0;overflow-wrap:anywhere}
-.reading-translation{padding:3px 0 0 calc(1.55em + 8px);font-size:.77em;line-height:1.3;color:#5b708c;font-weight:600;overflow-wrap:anywhere}
+.reading-number{grid-column:1;grid-row:1;color:#125cc7;font-weight:950;line-height:1.3}
+.reading-de{grid-column:2;grid-row:1;min-width:0;font-weight:750;overflow-wrap:anywhere}
+.reading-translation{
+ grid-column:2;grid-row:2;min-width:0;padding:0;margin:0;
+ font-size:.77em;line-height:1.3;color:#5b708c;font-weight:600;overflow-wrap:anywhere;
+}
 @media(max-width:700px){
  #readView .reading{font-size:clamp(14px,3.7vw,17px);line-height:1.34}
  #readView .reading-text{margin:auto 0}
- #readView .reading-line{padding:6px 0}
- #readView .reading-number{min-width:1.35em}
- #readView .reading-german{gap:6px}
- #readView .reading-translation{padding:2px 0 0 calc(1.35em + 6px);font-size:clamp(11px,3vw,13px);line-height:1.28}
+ #readView .reading-line{grid-template-columns:1.35em minmax(0,1fr);column-gap:6px;padding:6px 0}
+ #readView .reading-translation{font-size:clamp(11px,3vw,13px);line-height:1.28}
 }
 @media(max-width:700px) and (max-height:600px){
  #readView .reading-line{padding:4px 0}
  #readView .reading-translation{font-size:11px;line-height:1.18}
 }
 
+/* Mobilni diktat kao pisanje mejla: bez skrolovanja, polje se širi do tastature.
+   Napredak i dugmad ostaju zajedno iznad textarea. */
+@media(max-width:700px){
+ body.mobile-writing #exerciseView:not([hidden]){overflow:hidden!important;min-height:0!important}
+ body.mobile-writing #exerciseView .pillprog{
+  margin-top:clamp(18px,calc(var(--app-height,100dvh) * .20),102px)!important;
+  margin-bottom:2px!important;flex:0 0 auto!important;
+ }
+ body.mobile-writing #exerciseView #answer{
+  flex:1 1 0%!important;height:0!important;max-height:none!important;
+  min-height:55px!important;overflow-x:hidden!important;overflow-y:hidden!important;
+  touch-action:manipulation!important;overscroll-behavior:none!important;
+ }
+ body.mobile-writing main,
+ body.mobile-writing main>.lesson,
+ body.mobile-writing #exerciseView:not([hidden]){
+  overscroll-behavior:none!important;overflow:hidden!important;
+ }
+}
+@media(max-width:700px) and (max-height:350px){
+ body.mobile-writing #exerciseView .pillprog{
+  margin-top:clamp(8px,calc(var(--app-height,100dvh) * .10),35px)!important;
+ }
+ body.mobile-writing #exerciseView #answer{min-height:42px!important}
+}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -731,8 +760,8 @@ function renderReading(t){
  // spoken-word elementi ostaju istim redosledom kao u nemačkom TTS tekstu.
  $("readText").innerHTML='<div class="reading-text">'+t.sentences.map((item,i)=>
   '<div class="reading-line">'+
-   '<div class="reading-german"><span class="reading-number" aria-hidden="true">'+(i+1)+'.</span>'+
-   '<span class="reading-de">'+wordHTML(item.de)+'</span></div>'+
+   '<span class="reading-number" aria-hidden="true">'+(i+1)+'.</span>'+
+   '<div class="reading-de">'+wordHTML(item.de)+'</div>'+
    '<div class="reading-translation" lang="sr">'+escapeHTML(item.sr)+'</div>'+
   '</div>'
  ).join("")+'</div>';
@@ -1180,7 +1209,10 @@ document.addEventListener("keydown",event=>{
 // Blokiraj pomeranje cele stranice; samo sadržaj polja može da se pomera.
 document.addEventListener("touchmove",event=>{
  if(!document.body.classList.contains("mobile-writing"))return;
- if(event.target.closest?.("#answer"))return;
+ if(event.cancelable)event.preventDefault();
+},{passive:false,capture:true});
+document.addEventListener("wheel",event=>{
+ if(!document.body.classList.contains("mobile-writing"))return;
  if(event.cancelable)event.preventDefault();
 },{passive:false,capture:true});
 renderTopic();syncViewport();
