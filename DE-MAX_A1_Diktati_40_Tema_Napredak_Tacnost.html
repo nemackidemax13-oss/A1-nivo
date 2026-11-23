@@ -78,6 +78,14 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .summary-metrics b{display:block;color:#145cbc;font-size:23px}
 .audio-status{font-size:11px;color:#526f93;min-height:15px;margin-top:5px}
 footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-top:4px}
+
+/* Compact reading + dictation screen; the user never needs to open a separate page. */
+#readView{margin-bottom:2px}
+#exerciseView{border-top:1px solid #dbe8f7;padding-top:12px}
+#readBottom{margin-top:7px;padding-top:0}
+#readBottom .speedbar{margin-top:6px}
+.listening{min-height:52px;padding:9px}
+#answer{min-height:72px}
 @media (max-width:450px){
  .head{padding:10px 12px;gap:8px}.logoimg{width:39px;height:39px;border-radius:10px}
  .brand b{font-size:15px}.brand small{font-size:11px}
@@ -86,7 +94,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  .reading{padding:13px;font-size:17px;line-height:1.48}
  .step-title{font-size:13px}.btn{padding:9px 10px;min-height:44px;font-size:12.5px}
  .write-label{margin-top:9px}#answer{min-height:74px}
- .listening{min-height:73px}.feedback{padding:10px}
+ .listening{min-height:50px}.feedback{padding:10px}
 }
 @media (max-height:720px) and (max-width:700px){
  main{gap:6px}.box{padding:10px}.head{padding-top:8px;padding-bottom:8px}
@@ -121,16 +129,25 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div id="readView">
 <p class="step-title">1. Pročitaj tekst i poslušaj ga</p>
 <div class="reading" lang="de" id="readText"></div>
-<p class="note">Prvo pročitaj nemački tekst. Možeš da poslušaš ceo tekst koliko god puta želiš.</p>
+<p class="note">Pročitaj ili poslušaj tekst. Ispod njega odmah vežbaš pisanje rečenicu po rečenicu.</p>
 <div class="buttonrow" style="margin-top:12px">
 <button class="btn blue" id="playFull" type="button">🔊 Poslušaj ceo tekst</button>
-<button class="btn outline" id="stopAudio" type="button">■ Stop</button>
+<button class="btn red" id="stopAudio" type="button">■ Stop</button>
+</div>
+<div class="actionbottom" id="readBottom">
+<div class="speedbar" aria-label="Brzina čitanja">
+<span>Brzina izgovora</span>
+<button class="speed-btn" data-rate=".8" type="button">Sporo</button>
+<button class="speed-btn active" data-rate=".95" type="button">Normalno</button>
+<button class="speed-btn" data-rate="1.1" type="button">Brzo</button>
+</div>
+<div id="audioStatus" class="audio-status" aria-live="polite"></div>
 </div>
 </div>
-<div id="exerciseView" hidden>
+<div id="exerciseView">
 <div class="pillprog"><span id="sentenceNumber"></span><div class="meter"><div id="sentenceBar"></div></div></div>
-<p class="step-title" style="margin-top:8px">2. Poslušaj rečenicu i zapiši je</p>
-<div class="listening" aria-live="polite"><b>🎧 Slušaj i piši na nemačkom</b><span>Tekst je sakriven dok ne proveriš odgovor.</span><div id="spokenProgress" class="spoken-dots" aria-hidden="true"></div></div>
+<p class="step-title" style="margin-top:8px">2. Poslušaj i napiši rečenicu ispod teksta</p>
+<div class="listening" aria-live="polite"><b>🎧 Rečenica <span id="listeningSentence"></span></b><span>Poslušaj rečenicu, zatim je napiši i proveri odgovor.</span></div>
 <div class="buttonrow" style="margin-top:10px">
 <button class="btn blue" id="playSentence" type="button">🔊 Pusti rečenicu</button>
 <button class="btn light" id="repeatSentence" type="button">↻ Ponovi</button>
@@ -157,17 +174,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <button class="btn blue" id="goNext" type="button">Sledeći diktat →</button>
 </div>
 </div>
-<div class="actionbottom" id="readBottom">
-<div class="speedbar" aria-label="Brzina čitanja">
-<span>Brzina izgovora</span>
-<button class="speed-btn" data-rate=".8" type="button">Sporo</button>
-<button class="speed-btn active" data-rate=".95" type="button">Normalno</button>
-<button class="speed-btn" data-rate="1.1" type="button">Brzo</button>
-</div>
-<div id="audioStatus" class="audio-status" aria-live="polite"></div>
-<button class="btn green" id="startExercise" type="button" style="width:100%;margin-top:8px;font-size:15px">Počni diktat →</button>
-</div>
-<div id="exerciseBottom" hidden class="audio-status">Slušanje možeš ponavljati. Provera prikazuje tačnu rečenicu i prevod.</div>
+
 </section>
 <footer>DE-MAX Tutin · Uči nemački korak po korak</footer>
 </main>
@@ -190,17 +197,16 @@ function getResults(){ if(!Array.isArray(saved.results[topic])) saved.results[to
 function getWords(text){return Array.from(text.matchAll(/\S+/g),m=>({word:m[0],start:m.index,end:m.index+m[0].length}));}
 function wordHTML(text){return text.split(/(\s+)/).map(part=>/^\s+$/.test(part)?escapeHTML(part):'<span class="spoken-word">'+escapeHTML(part)+'</span>').join("");}
 function renderReading(t){$("readText").innerHTML=wordHTML(textOf(t));}
-function renderDots(text){$("spokenProgress").innerHTML=getWords(text).map(()=>'<span class="spoken-dot"></span>').join("");}
 function clearHighlight(){document.querySelectorAll(".spoken-word.speaking,.spoken-dot.speaking").forEach(el=>el.classList.remove("speaking"));}
 function activeWord(index,mode){
  clearHighlight();
- const selector=mode==="read"?"#readText .spoken-word":"#solutionText .spoken-word";
- const words=document.querySelectorAll(selector);
- if(words[index])words[index].classList.add("speaking");
- if(mode==="sentence"){
-  const dots=$("spokenProgress").querySelectorAll(".spoken-dot");
-  if(dots[index])dots[index].classList.add("speaking");
- }
+ // For a single sentence, highlight its actual words inside the full text above.
+ const start=mode==="sentence"
+  ? DATA[topic].sentences.slice(0,sentence).reduce((n,item)=>n+getWords(item.de).length,0)
+  : 0;
+ const words=$("readText").querySelectorAll(".spoken-word");
+ const word=words[start+index];
+ if(word)word.classList.add("speaking");
 }
 function stopAudio(){
  audioToken++;
@@ -276,11 +282,11 @@ function fillSelect(){
 }
 function setPhase(next){
  phase=next;
- $("readView").hidden=next!=="read";
- $("exerciseView").hidden=next!=="exercise";
+ // Both reading and writing stay visible together on the same page.
+ $("readView").hidden=false;
+ $("exerciseView").hidden=false;
+ $("readBottom").hidden=false;
  $("finishView").hidden=next!=="finish";
- $("readBottom").hidden=next!=="read";
- $("exerciseBottom").hidden=next!=="exercise";
 }
 function renderTopic(){
  stopAudio();
@@ -291,8 +297,10 @@ function renderTopic(){
  $("lessonTitle").textContent=t.title+" ("+t.sr+")";
  $("lessonWords").textContent=wc(t)+" reči";
  renderReading(t);
- sentence=0;
+ const firstPending=getResults().findIndex(v=>!v);
+ sentence=firstPending<0?0:firstPending;
  setPhase("read");
+ renderSentence();
  updateOverall();
 }
 function showFeedback(record,justChecked){
@@ -312,21 +320,16 @@ function renderSentence(){
  stopAudio();
  const t=DATA[topic],r=getResults(),record=r[sentence];
  $("sentenceNumber").textContent="Rečenica "+(sentence+1)+" / "+t.sentences.length;
+ $("listeningSentence").textContent=(sentence+1)+" / "+t.sentences.length;
  $("sentenceBar").style.width=(100*(sentence+1)/t.sentences.length)+"%";
  $("answer").value=record&&record.answer?record.answer:"";
- renderDots(t.sentences[sentence].de);
+
  $("nextSentence").textContent=sentence===t.sentences.length-1?"Završi diktat ✓":"Sledeća →";
  $("prevSentence").disabled=sentence===0;
  $("nextSentence").disabled=!record;
  $("check").textContent=record?"✓ Proveri ponovo":"✓ Proveri";
  showFeedback(record,false);
  updateOverall();
-}
-function startExercise(){
- const results=getResults();
- sentence=results.findIndex(r=>!r);
- if(sentence===-1){finish();return}
- setPhase("exercise");renderSentence();say(DATA[topic].sentences[sentence].de,"sentence");
 }
 function registerCheck(reveal){
  const item=DATA[topic].sentences[sentence];
@@ -366,7 +369,6 @@ $("prevTopic").addEventListener("click",()=>setTopic(topic-1));
 $("nextTopic").addEventListener("click",()=>setTopic(topic+1));
 $("playFull").addEventListener("click",()=>say(textOf(DATA[topic]),"read"));
 $("stopAudio").addEventListener("click",stopAudio);
-$("startExercise").addEventListener("click",startExercise);
 $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
@@ -378,7 +380,7 @@ $("nextSentence").addEventListener("click",()=>{
  sentence++;renderSentence();say(DATA[topic].sentences[sentence].de,"sentence");
 });
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
-$("retry").addEventListener("click",()=>{saved.results[topic]=Array(DATA[topic].sentences.length).fill(null);persist();renderTopic();startExercise()});
+$("retry").addEventListener("click",()=>{saved.results[topic]=Array(DATA[topic].sentences.length).fill(null);persist();renderTopic();});
 $("goNext").addEventListener("click",()=>setTopic(topic+1));
 document.querySelectorAll(".speed-btn").forEach(b=>b.addEventListener("click",()=>{
  rate=Number(b.dataset.rate);
