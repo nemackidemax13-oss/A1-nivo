@@ -96,9 +96,9 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .error-detail{color:#8e3141;font-size:12px;line-height:1.5;margin-top:7px;overflow-wrap:anywhere}
 .full-review{text-align:left;border-top:1px solid #d9e7f6;margin-top:13px;padding-top:12px}
 .full-review h3{font-size:16px;color:#23548c;margin:0 0 5px}
-.full-review p{color:#5b7693;font-size:12px;margin:0 0 10px}
-.review-sentence{margin:0 0 9px;line-height:1.55;color:#18355c;font-size:15px;overflow-wrap:anywhere}
-.review-index{font-size:11px;color:#5d7ba0;margin-right:8px;font-weight:850}
+.full-review p{color:#18355c;font-size:12px;margin:0 0 7px}
+.review-sentence{margin:0 0 7px;line-height:1.45;color:#18355c;font-size:15px;overflow-wrap:anywhere}
+.review-index{font-size:12px;color:#5d7ba0;margin-right:5px;font-weight:850}
 
 .pillprog{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:850;color:#1b5cb4}
 .pillprog .meter{flex:1}
@@ -349,7 +349,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="big" id="resultScore"></div><p class="subtitle">Tačne rečenice iz prvog pokušaja</p>
 <div class="summary-metrics">
 <div><b id="resultDone"></b>ZAVRŠENO</div><div><b id="resultAccuracy"></b>TAČNOST</div>
-</div><div class="full-review"><h3>Ispravljen diktat</h3><p>Reči koje treba ispraviti označene su crveno.</p><div id="fullReview"></div></div>
+</div><div class="full-review"><h3>Ispravljen diktat</h3><div id="fullReview"></div></div>
 <div class="buttonrow">
 <button class="btn outline" id="retry" type="button">↻ Ponovi ovaj diktat</button>
 <button class="btn blue" id="goNext" type="button">Sledeći diktat →</button>
@@ -693,7 +693,7 @@ function finish(){
  $("resultScore").textContent=good+" / "+r.length;
  $("resultDone").textContent=done+" / "+r.length;
  $("resultAccuracy").textContent=Math.round(100*good/r.length)+"%";
- $("fullReview").innerHTML=DATA[topic].sentences.map((s,i)=>'<p class="review-sentence" lang="de"><span class="review-index">'+(i+1)+'.</span>'+wordCorrections((r[i]&&r[i].answer)||"",s.de).html+'</p>').join("");
+ $("fullReview").innerHTML=DATA[topic].sentences.map((s,i)=>'<p class="review-sentence" lang="de"><span class="review-index">'+(i+1)+'.</span> '+wordCorrections((r[i]&&r[i].answer)||"",s.de).html+'</p>').join("");
  $("goNext").disabled=topic===DATA.length-1;
  fillSelect();updateOverall();
 }
