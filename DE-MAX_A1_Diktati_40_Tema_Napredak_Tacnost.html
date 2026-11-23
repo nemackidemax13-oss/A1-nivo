@@ -2,7 +2,7 @@
 <html lang="sr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#0b5cc8">
 <meta name="description" content="DE-MAX Tutin: 30 A1 diktata sa čitanjem, slušanjem, proverom i rešenjima.">
 <title>DE-MAX Tutin · 30 A1 diktata</title>
@@ -432,6 +432,31 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #finishView .review-translation{font-size:9px}
 }
 
+
+/* Tastatura na mobilnom: polje za pisanje se uklapa tik iznad nje, bez pomeranja stranice. */
+@media(max-width:700px){
+ body.keyboard-open{height:var(--app-height,100dvh)!important;max-height:var(--app-height,100dvh)!important;overflow:hidden!important;overscroll-behavior:none}
+ body.keyboard-open .app{position:fixed;top:0;left:0;right:0;width:100%;height:var(--app-height,100dvh)!important;min-height:0;max-height:var(--app-height,100dvh)!important;overflow:hidden;overscroll-behavior:none}
+ body.keyboard-open main{height:100%;flex:1 1 0%;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:3px 6px 4px!important;gap:0}
+ body.keyboard-open main>.lesson{flex:1 1 0%;min-height:0;min-width:0;margin:0;padding:5px 7px!important;display:flex;flex-direction:column;overflow:hidden;gap:4px}
+ body.keyboard-open #exerciseView:not([hidden]){flex:1 1 0%;min-height:0;display:flex;flex-direction:column;overflow:hidden;gap:4px;border:0;padding:0}
+ body.keyboard-open #exerciseView .pillprog{flex:0 0 auto;font-size:10px}
+ body.keyboard-open #exerciseView .quad-controls{flex:0 0 auto;gap:4px;margin:2px 0 0}
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:35px;padding:3px 2px;font-size:clamp(9.5px,2.65vw,11.5px)}
+ body.keyboard-open #exerciseView .write-label{flex:0 0 auto;margin:1px 0 0;font-size:11px}
+ body.keyboard-open #exerciseView #feedback,
+ body.keyboard-open #exerciseView .auto-next-controls{display:none!important}
+ body.keyboard-open #exerciseView #answer{
+  display:block;flex:1 1 0%;height:auto;min-height:65px!important;max-height:none!important;
+  margin:0;width:100%;padding:9px 10px;border-radius:10px;
+  font-size:16px;line-height:1.35;overflow:hidden!important;resize:none;
+ }
+}
+@media(max-width:700px) and (max-height:420px){
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:31px}
+ body.keyboard-open #exerciseView #answer{min-height:52px!important;padding:6px 8px}
+}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
 </style>
 </head>
@@ -484,7 +509,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <button class="btn green" id="check" type="button">✓ Proveri rečenicu</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
-<textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
+<textarea id="answer" rows="4" lang="de" inputmode="text" enterkeyhint="done" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
 <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
 <div id="autoNextControls" class="auto-next-controls" hidden>
 <div id="autoNextInfo" class="auto-next-info" role="status" aria-live="polite"></div>
@@ -874,19 +899,30 @@ $("check").addEventListener("click",()=>registerCheck(false));
 $("advanceNow").addEventListener("click",()=>{if(autoNextTimer!==null)advanceSentence()});
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
-$("answer").addEventListener("focus",syncViewport);
-$("answer").addEventListener("blur",()=>setTimeout(syncViewport,90));
+$("answer").addEventListener("focus",()=>{
+ syncViewport();
+ requestAnimationFrame(syncViewport);
+ setTimeout(syncViewport,120);
+ setTimeout(syncViewport,360);
+});
+$("answer").addEventListener("blur",()=>{requestAnimationFrame(syncViewport);setTimeout(syncViewport,140)});
 $("retry").addEventListener("click",()=>{saved.results[topic]=Array(DATA[topic].sentences.length).fill(null);persist();renderTopic();});
 $("goNext").addEventListener("click",()=>setTopic(topic+1));
 window.addEventListener("pagehide",()=>{cancelAutoNext();stopAudio();stopReadTimer()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tickReadTimer();});
 function syncViewport(){
- const h=window.visualViewport?window.visualViewport.height:window.innerHeight;
- if(Number.isFinite(h)&&h>0)document.documentElement.style.setProperty("--app-height",h+"px");
- document.body.classList.toggle("keyboard-open",document.activeElement===$("answer")&&phase==="exercise");
+ const vv=window.visualViewport;
+ const h=vv&&Number.isFinite(vv.height)&&vv.height>0?vv.height:window.innerHeight;
+ if(Number.isFinite(h)&&h>0)document.documentElement.style.setProperty("--app-height",Math.floor(h)+"px");
+ const typing=phase==="exercise"&&document.activeElement===$("answer");
+ document.body.classList.toggle("keyboard-open",typing);
 }
-if(window.visualViewport)window.visualViewport.addEventListener("resize",syncViewport);
+if(window.visualViewport){
+ window.visualViewport.addEventListener("resize",syncViewport);
+ window.visualViewport.addEventListener("scroll",syncViewport);
+}
 window.addEventListener("resize",syncViewport);
+window.addEventListener("orientationchange",()=>setTimeout(syncViewport,150));
 renderTopic();syncViewport();
 </script>
 </body>
