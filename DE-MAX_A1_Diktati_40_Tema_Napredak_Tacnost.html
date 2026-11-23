@@ -436,7 +436,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 /* Tastatura na mobilnom: polje za pisanje se uklapa tik iznad nje, bez pomeranja stranice. */
 @media(max-width:700px){
  body.keyboard-open{height:var(--app-height,100dvh)!important;max-height:var(--app-height,100dvh)!important;overflow:hidden!important;overscroll-behavior:none}
- body.keyboard-open .app{position:fixed;top:0;left:0;right:0;width:100%;height:var(--app-height,100dvh)!important;min-height:0;max-height:var(--app-height,100dvh)!important;overflow:hidden;overscroll-behavior:none}
+ body.keyboard-open .app{position:fixed;top:var(--visual-top,0px);left:0;right:0;width:100%;height:var(--app-height,100dvh)!important;min-height:0;max-height:var(--app-height,100dvh)!important;overflow:hidden;overscroll-behavior:none}
  body.keyboard-open main{height:100%;flex:1 1 0%;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:3px 6px 4px!important;gap:0}
  body.keyboard-open main>.lesson{flex:1 1 0%;min-height:0;min-width:0;margin:0;padding:5px 7px!important;display:flex;flex-direction:column;overflow:hidden;gap:4px}
  body.keyboard-open #exerciseView:not([hidden]){flex:1 1 0%;min-height:0;display:flex;flex-direction:column;overflow:hidden;gap:4px;border:0;padding:0}
@@ -455,6 +455,35 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 @media(max-width:700px) and (max-height:420px){
  body.keyboard-open #exerciseView .quad-controls .btn{min-height:31px}
  body.keyboard-open #exerciseView #answer{min-height:52px!important;padding:6px 8px}
+}
+
+
+/* Dok je tastatura otvorena, nema skrolovanja stranice; kontrolne komande
+   i polje za odgovor dele tačnu visinu vidljivog dela ekrana. */
+@media(max-width:700px){
+ body.keyboard-open,
+ body.keyboard-open html{overflow:hidden!important}
+ body.keyboard-open .app{margin:0;transform:none;contain:layout;touch-action:pan-x}
+ body.keyboard-open .lesson{border-radius:8px;box-shadow:none}
+ body.keyboard-open .lesson-header,
+ body.keyboard-open #readView,
+ body.keyboard-open #readLocked,
+ body.keyboard-open #readBottom{display:none!important}
+ body.keyboard-open #exerciseView:not([hidden]){gap:3px}
+ body.keyboard-open #exerciseView .pillprog{font-size:10px;line-height:1}
+ body.keyboard-open #exerciseView .quad-controls{gap:3px;margin:1px 0}
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:32px;line-height:1.08}
+ body.keyboard-open #exerciseView .write-label{margin:0;font-size:10px;line-height:1.1}
+ body.keyboard-open #exerciseView #answer{
+   flex:1 1 0%;min-height:50px!important;max-height:none!important;
+   overflow-y:auto!important;overscroll-behavior:contain;scrollbar-width:none;
+ }
+ body.keyboard-open #exerciseView #answer::-webkit-scrollbar{display:none}
+}
+@media(max-width:700px) and (max-height:350px){
+ body.keyboard-open #exerciseView .pillprog{display:none}
+ body.keyboard-open #exerciseView .quad-controls .btn{min-height:29px;font-size:10px}
+ body.keyboard-open main>.lesson{padding:3px 5px!important}
 }
 
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
@@ -912,9 +941,13 @@ window.addEventListener("pagehide",()=>{cancelAutoNext();stopAudio();stopReadTim
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tickReadTimer();});
 function syncViewport(){
  const vv=window.visualViewport;
- const h=vv&&Number.isFinite(vv.height)&&vv.height>0?vv.height:window.innerHeight;
- if(Number.isFinite(h)&&h>0)document.documentElement.style.setProperty("--app-height",Math.floor(h)+"px");
  const typing=phase==="exercise"&&document.activeElement===$("answer");
+ const h=vv&&Number.isFinite(vv.height)&&vv.height>0?vv.height:window.innerHeight;
+ const top=vv&&Number.isFinite(vv.offsetTop)?Math.max(0,vv.offsetTop):0;
+ if(Number.isFinite(h)&&h>0){
+  document.documentElement.style.setProperty("--app-height",Math.floor(h)+"px");
+  document.documentElement.style.setProperty("--visual-top",Math.floor(top)+"px");
+ }
  document.body.classList.toggle("keyboard-open",typing);
 }
 if(window.visualViewport){
