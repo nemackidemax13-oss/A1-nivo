@@ -66,6 +66,20 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .feedback.near{border-color:#ffdfac;background:#fffaed}
 .feedback .solution{display:block;margin:6px 0 4px;color:#17345c;font-size:16px;font-weight:850}
 .feedback .translation{color:#506983}
+.read-clock{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 7px;background:#eff7ff;border:1px solid #d5e7ff;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:850}
+.read-clock strong{color:#125cc7;font-size:21px;font-variant-numeric:tabular-nums}
+#readProgress{background:linear-gradient(90deg,#1375e5,#28b0a0);height:100%;width:100%;transition:width .2s}
+#startDictation{width:100%;margin-top:10px;font-size:15px}
+.lock-msg{padding:12px;background:#edf5ff;border:1px solid #d3e4fa;border-radius:13px;color:#23528c;font-size:13px;font-weight:800;line-height:1.45}
+.correction{display:inline;font-weight:850;border-radius:3px}
+.correction.bad{background:#ffdddd;color:#9c2434;text-decoration:underline;text-decoration-color:#be3446;text-decoration-thickness:2px;text-underline-offset:3px;padding:1px 2px}
+.error-detail{color:#8e3141;font-size:12px;line-height:1.5;margin-top:7px;overflow-wrap:anywhere}
+.full-review{text-align:left;border-top:1px solid #d9e7f6;margin-top:13px;padding-top:12px}
+.full-review h3{font-size:16px;color:#23548c;margin:0 0 5px}
+.full-review p{color:#5b7693;font-size:12px;margin:0 0 10px}
+.review-sentence{margin:0 0 9px;line-height:1.55;color:#18355c;font-size:15px;overflow-wrap:anywhere}
+.review-index{font-size:11px;color:#5d7ba0;margin-right:8px;font-weight:850}
+
 .pillprog{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:850;color:#1b5cb4}
 .pillprog .meter{flex:1}
 .navigation{display:flex;gap:8px;margin-top:10px}
@@ -129,13 +143,18 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div id="readView">
 <p class="step-title">1. Pročitaj tekst i poslušaj ga</p>
 <div class="reading" lang="de" id="readText"></div>
-<p class="note">Pročitaj ili poslušaj tekst. Ispod njega odmah vežbaš pisanje rečenicu po rečenicu.</p>
+<div class="read-clock"><span>⏱ Vreme za čitanje i slušanje</span><strong id="readCountdown">02:00</strong></div>
+<div class="meter" aria-hidden="true"><div id="readProgress"></div></div>
+<p class="note">Imaš 120 sekundi da pročitaš i poslušaš tekst. Zatim se tekst automatski sakriva. Možeš početi i ranije.</p>
 <div class="buttonrow" style="margin-top:12px">
 <button class="btn blue" id="playFull" type="button">🔊 Poslušaj ceo tekst</button>
 <button class="btn red" id="stopAudio" type="button">■ Stop</button>
 </div>
-<div class="actionbottom" id="readBottom">
-<div class="speedbar" aria-label="Brzina čitanja">
+<button class="btn green" id="startDictation" type="button">✍ Piši diktat →</button>
+</div>
+<div id="readLocked" class="lock-msg" hidden>🔒 Tekst je sakriven. Sada slušaj rečenice i piši diktat bez gledanja u tekst.</div>
+<div class="shared-audio" id="readBottom">
+<div class="speedbar" aria-label="Brzina izgovora">
 <span>Brzina izgovora</span>
 <button class="speed-btn" data-rate=".8" type="button">Sporo</button>
 <button class="speed-btn active" data-rate=".95" type="button">Normalno</button>
@@ -143,8 +162,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 </div>
 <div id="audioStatus" class="audio-status" aria-live="polite"></div>
 </div>
-</div>
-<div id="exerciseView">
+<div id="exerciseView" hidden>
 <div class="pillprog"><span id="sentenceNumber"></span><div class="meter"><div id="sentenceBar"></div></div></div>
 <p class="step-title" style="margin-top:8px">2. Poslušaj i napiši rečenicu ispod teksta</p>
 <div class="listening" aria-live="polite"><b>🎧 Rečenica <span id="listeningSentence"></span></b><span>Poslušaj rečenicu, zatim je napiši i proveri odgovor.</span></div>
@@ -169,7 +187,8 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <div class="big" id="resultScore"></div><p class="subtitle">Tačne rečenice iz prvog pokušaja</p>
 <div class="summary-metrics">
 <div><b id="resultDone"></b>ZAVRŠENO</div><div><b id="resultAccuracy"></b>TAČNOST</div>
-</div><div class="buttonrow">
+</div><div class="full-review"><h3>Ispravljen diktat</h3><p>Reči koje treba ispraviti označene su crveno.</p><div id="fullReview"></div></div>
+<div class="buttonrow">
 <button class="btn outline" id="retry" type="button">↻ Ponovi ovaj diktat</button>
 <button class="btn blue" id="goNext" type="button">Sledeći diktat →</button>
 </div>
@@ -190,6 +209,7 @@ try { saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; } catch(e) { saved=
 if(!Array.isArray(saved.results)||saved.results.length!==DATA.length) saved.results=DATA.map(t=>Array(t.sentences.length).fill(null));
 if(!Number.isInteger(saved.topic)||saved.topic<0||saved.topic>=DATA.length) saved.topic=0;
 let topic=saved.topic, sentence=0, phase="read", rate=.95;
+let readTimer=null, readDeadline=0;
 let audioToken=0, highlightTimer=null;
 const synth="speechSynthesis" in window?window.speechSynthesis:null;
 function persist(){ saved.topic=topic; try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){} }
@@ -200,12 +220,10 @@ function renderReading(t){$("readText").innerHTML=wordHTML(textOf(t));}
 function clearHighlight(){document.querySelectorAll(".spoken-word.speaking,.spoken-dot.speaking").forEach(el=>el.classList.remove("speaking"));}
 function activeWord(index,mode){
  clearHighlight();
- // For a single sentence, highlight its actual words inside the full text above.
- const start=mode==="sentence"
-  ? DATA[topic].sentences.slice(0,sentence).reduce((n,item)=>n+getWords(item.de).length,0)
-  : 0;
- const words=$("readText").querySelectorAll(".spoken-word");
- const word=words[start+index];
+ // U fazi pisanja tekst nije vidljiv; rešenje je vidljivo tek nakon provere.
+ const root=mode==="read"?$("readText"):$("solutionText");
+ if(!root)return;
+ const word=root.querySelectorAll(".spoken-word")[index];
  if(word)word.classList.add("speaking");
 }
 function stopAudio(){
@@ -282,11 +300,41 @@ function fillSelect(){
 }
 function setPhase(next){
  phase=next;
- // Both reading and writing stay visible together on the same page.
- $("readView").hidden=false;
- $("exerciseView").hidden=false;
- $("readBottom").hidden=false;
+ $("readView").hidden=next!=="read";
+ $("readLocked").hidden=next!=="exercise";
+ $("exerciseView").hidden=next!=="exercise";
  $("finishView").hidden=next!=="finish";
+ $("readBottom").hidden=next==="finish";
+}
+function stopReadTimer(){
+ if(readTimer!==null){clearInterval(readTimer);readTimer=null;}
+ readDeadline=0;
+}
+function tickReadTimer(){
+ if(phase!=="read"||!readDeadline)return;
+ const remaining=Math.max(0,readDeadline-Date.now());
+ const seconds=Math.ceil(remaining/1000);
+ $("readCountdown").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");
+ $("readProgress").style.width=Math.max(0,Math.min(100,remaining/120000*100))+"%";
+ if(remaining===0)beginDictation(true);
+}
+function startReadTimer(){
+ stopReadTimer();
+ readDeadline=Date.now()+120000;
+ $("readCountdown").textContent="02:00";
+ $("readProgress").style.width="100%";
+ readTimer=setInterval(tickReadTimer,250);
+}
+function beginDictation(auto=false){
+ if(phase!=="read")return;
+ stopReadTimer();
+ stopAudio();
+ const pending=getResults().findIndex(x=>!x);
+ if(pending===-1){finish();return;}
+ sentence=pending;
+ setPhase("exercise");
+ renderSentence();
+ say(DATA[topic].sentences[sentence].de,"sentence");
 }
 function renderTopic(){
  stopAudio();
@@ -301,19 +349,45 @@ function renderTopic(){
  sentence=firstPending<0?0:firstPending;
  setPhase("read");
  renderSentence();
+ startReadTimer();
  updateOverall();
 }
-function showFeedback(record,justChecked){
+function wordCorrections(answer,correct){
+ const typed=plain(answer).match(/\S+/g)||[],expected=correct.match(/\S+/g)||[];
+ const norm=x=>x.replace(/[.,!?;:]+$/g,"");
+ const m=typed.length,n=expected.length,dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
+ for(let i=0;i<=m;i++)dp[i][0]=i;
+ for(let j=0;j<=n;j++)dp[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){
+  const cost=norm(typed[i-1])===norm(expected[j-1])?0:1;
+  dp[i][j]=Math.min(dp[i-1][j-1]+cost,dp[i-1][j]+1,dp[i][j-1]+1);
+ }
+ const wrong=new Set(),details=[];
+ let i=m,j=n;
+ while(i>0||j>0){
+  if(i&&j&&dp[i][j]===dp[i-1][j-1]+(norm(typed[i-1])===norm(expected[j-1])?0:1)){
+   if(norm(typed[i-1])!==norm(expected[j-1])){wrong.add(j-1);details.push("„"+typed[i-1]+"“ → „"+expected[j-1]+"“");}
+   i--;j--;continue;
+  }
+  if(j&&dp[i][j]===dp[i][j-1]+1){wrong.add(j-1);details.push("Nedostaje: „"+expected[j-1]+"“");j--;continue;}
+  if(i){details.push("Suvišna reč: „"+typed[i-1]+"“");i--;continue;}
+ }
+ const html=expected.map((w,k)=>'<span class="spoken-word correction'+(wrong.has(k)?" bad":"")+'">'+escapeHTML(w)+'</span>').join(" ");
+ return {html,details:details.reverse()};
+}
+function showFeedback(record){
  const item=DATA[topic].sentences[sentence];
  if(!record){$("feedback").hidden=true;$("feedback").innerHTML="";return;}
  let label,cls;
- if(record.status==="good"){label="✓ Tačno!";cls="good"}
- else if(record.status==="near"){label="Skoro tačno – proveri velika i mala slova.";cls="near"}
- else if(record.status==="revealed"){label="Rešenje je prikazano.";cls="near"}
- else{label="Odgovor nije tačan. Uporedi sa rešenjem.";cls=""}
+ if(record.status==="good"){label="✓ Tačno!";cls="good";}
+ else if(record.status==="near"){label="Skoro tačno – proveri velika i mala slova.";cls="near";}
+ else if(record.status==="revealed"){label="Rešenje je prikazano.";cls="near";}
+ else{label="Pronađene su greške. Pogrešne reči su označene crveno.";cls="";}
+ const result=wordCorrections(record.answer||"",item.de);
  const prev=record.answer?'<div style="margin-top:5px">Tvoj odgovor: <b>'+escapeHTML(record.answer)+'</b></div>':"";
+ const details=result.details.length?'<div class="error-detail"><b>Ispravi:</b> '+result.details.map(escapeHTML).join("; ")+'</div>':'<div class="error-detail" style="color:#09814f">Sve reči su ispravne.</div>';
  $("feedback").className="feedback "+cls;
- $("feedback").innerHTML="<b>"+label+"</b>"+(record.answer?prev:"")+"<span class='solution' lang='de' id='solutionText'>"+wordHTML(item.de)+"</span><span class='translation'>Prevod: "+escapeHTML(item.sr)+"</span>";
+ $("feedback").innerHTML="<b>"+label+"</b>"+prev+"<span class='solution' id='solutionText' lang='de'>"+result.html+"</span>"+details+"<span class='translation'>Prevod: "+escapeHTML(item.sr)+"</span>";
  $("feedback").hidden=false;
 }
 function renderSentence(){
@@ -328,10 +402,11 @@ function renderSentence(){
  $("prevSentence").disabled=sentence===0;
  $("nextSentence").disabled=!record;
  $("check").textContent=record?"✓ Proveri ponovo":"✓ Proveri";
- showFeedback(record,false);
+ showFeedback(record);
  updateOverall();
 }
 function registerCheck(reveal){
+ if(phase!=="exercise")return;
  const item=DATA[topic].sentences[sentence];
  const typed=plain($("answer").value);
  if(!reveal&&!typed){
@@ -343,13 +418,14 @@ function registerCheck(reveal){
  const status=reveal?"revealed":compareAnswer(typed,item.de);
  if(!results[sentence]){results[sentence]={status:status,answer:typed};persist()}
  const current={status:status,answer:typed};
- showFeedback(current,true);
+ showFeedback(current);
  $("nextSentence").disabled=false;
  $("check").textContent="✓ Proveri ponovo";
  fillSelect();updateOverall();
  $("answer").blur();
 }
 function finish(){
+ stopReadTimer();
  stopAudio();
  const r=getResults();
  const good=r.filter(v=>v&&v.status==="good").length;
@@ -358,6 +434,7 @@ function finish(){
  $("resultScore").textContent=good+" / "+r.length;
  $("resultDone").textContent=done+" / "+r.length;
  $("resultAccuracy").textContent=Math.round(100*good/r.length)+"%";
+ $("fullReview").innerHTML=DATA[topic].sentences.map((s,i)=>'<p class="review-sentence" lang="de"><span class="review-index">'+(i+1)+'.</span>'+wordCorrections((r[i]&&r[i].answer)||"",s.de).html+'</p>').join("");
  $("goNext").disabled=topic===DATA.length-1;
  fillSelect();updateOverall();
 }
@@ -369,6 +446,7 @@ $("prevTopic").addEventListener("click",()=>setTopic(topic-1));
 $("nextTopic").addEventListener("click",()=>setTopic(topic+1));
 $("playFull").addEventListener("click",()=>say(textOf(DATA[topic]),"read"));
 $("stopAudio").addEventListener("click",stopAudio);
+$("startDictation").addEventListener("click",()=>beginDictation());
 $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
@@ -387,6 +465,7 @@ document.querySelectorAll(".speed-btn").forEach(b=>b.addEventListener("click",()
  document.querySelectorAll(".speed-btn").forEach(x=>x.classList.toggle("active",x===b));
 }));
 window.addEventListener("pagehide",stopAudio);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)tickReadTimer();});
 renderTopic();
 </script>
 </body>
