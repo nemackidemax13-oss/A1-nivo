@@ -27,8 +27,8 @@ main{padding:12px 14px 18px;flex:1;display:flex;flex-direction:column;gap:10px;m
 .box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 6px 22px #2853840e;padding:14px}
 .selection{display:flex;flex-direction:column;gap:8px}
 .selectrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px}
-.selectrow select{min-width:0;width:100%;border:1.5px solid #cbddf1;border-radius:12px;background:#f8fbff;color:var(--dark);padding:10px;font-weight:750;font-size:14px}
-.icon-btn{border:1px solid #d7e4f4;border-radius:12px;background:#edf5ff;color:var(--blue);font-size:23px;font-weight:700;min-height:44px}#prevTopic{background:#dc3547;border-color:#c62e42;color:#fff}#nextTopic{background:#115bc4;border-color:#115bc4;color:#fff}
+.topic-display{min-width:0;min-height:44px;width:100%;border:1.5px solid #cbddf1;border-radius:12px;background:#f8fbff;color:var(--dark);padding:8px 10px;font-weight:850;font-size:14px;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.25;overflow-wrap:anywhere}
+.icon-btn{border:1px solid #d7e4f4;border-radius:12px;background:#edf5ff;color:var(--blue);font-size:23px;font-weight:700;min-height:44px}#prevTopic{background:#dc3547;border-color:#c62e42;color:#fff}#nextTopic{background:#dc3547;border-color:#c62e42;color:#fff}
 .labelrow,.meterrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .micro{color:var(--muted);font-size:12px;font-weight:750}
 .meter{height:7px;overflow:hidden;background:#e7eef8;border-radius:20px}
@@ -104,10 +104,10 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 </header>
 <main>
 <section class="box selection" aria-label="Izbor diktata">
-<div class="labelrow"><label for="topicSelect" class="micro">IZABERI DIKTAT</label><span id="topicInfo" class="micro"></span></div>
+<div class="labelrow"><span class="micro">IZABERI DIKTAT</span><span id="topicInfo" class="micro"></span></div>
 <div class="selectrow">
 <button class="icon-btn" id="prevTopic" type="button" aria-label="Prethodni diktat">‹</button>
-<select id="topicSelect" aria-label="Izaberi diktat"></select>
+<div class="topic-display" id="topicDisplay" role="status" aria-live="polite" aria-atomic="true"></div>
 <button class="icon-btn" id="nextTopic" type="button" aria-label="Sledeći diktat">›</button>
 </div>
 <div class="meterrow"><span class="micro">Ukupan napredak</span><span class="micro" id="overall">0%</span></div>
@@ -268,14 +268,9 @@ function updateOverall(){
  $("overallBar").style.width=pct+"%";
 }
 function fillSelect(){
- const select=$("topicSelect");select.innerHTML="";
- DATA.forEach((t,i)=>{
- const opt=document.createElement("option");
- opt.value=String(i);
- opt.textContent=(i+1)+". "+t.title+" ("+t.level+")"+(Array.isArray(saved.results[i])&&saved.results[i].every(Boolean)?" ✓":"");
- select.appendChild(opt);
- });
- select.value=String(topic);
+ const t=DATA[topic];
+ const complete=Array.isArray(saved.results[topic])&&saved.results[topic].every(Boolean);
+ $("topicDisplay").textContent=(topic+1)+". "+t.title+(complete?" ✓":"");
 }
 function setPhase(next){
  phase=next;
@@ -366,7 +361,6 @@ function setTopic(i){
  if(i<0||i>=DATA.length)return;
  topic=i;persist();renderTopic();
 }
-$("topicSelect").addEventListener("change",e=>setTopic(Number(e.target.value)));
 $("prevTopic").addEventListener("click",()=>setTopic(topic-1));
 $("nextTopic").addEventListener("click",()=>setTopic(topic+1));
 $("playFull").addEventListener("click",()=>say(textOf(DATA[topic]),"read"));
