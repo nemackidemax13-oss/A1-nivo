@@ -221,14 +221,16 @@ function say(text,mode){
   if(token!==audioToken||nativeBoundary||estimated>=words.length)return;
   activeWord(estimated,mode);
   const word=words[estimated++].word;
-  const pause=/[.!?]$/.test(word)?230:/[,;:]$/.test(word)?110:0;
-  const ms=Math.max(220,(150+48*word.length)/rate)+pause;
+  // Rezervni ritam za pregledače bez onboundary: sporije prati prirodni izgovor reči.
+  const pause=/[.!?]$/.test(word)?350:/[,;:]$/.test(word)?180:0;
+  const ms=Math.max(380,(230+80*word.length)/rate)+pause;
   highlightTimer=setTimeout(approximate,ms);
  }
  u.onstart=()=>{
   if(token!==audioToken)return;
   $("audioStatus").textContent="🔊 Slušanje u toku…";
-  approximate();
+  // Kratko sačekaj stvarni boundary događaj pre prelaska na rezervno praćenje.
+  highlightTimer=setTimeout(approximate,180);
  };
  u.onboundary=e=>{
   if(token!==audioToken||typeof e.charIndex!=="number"||!words.length)return;
