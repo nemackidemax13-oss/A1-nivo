@@ -254,11 +254,10 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 .quad-controls .btn:active:not(:disabled){transform:translateY(1px);box-shadow:0 1px 4px rgba(25,47,89,.12)}
 .quad-controls #playSentence{background:linear-gradient(135deg,#1669d9,#1052b3)}
 .quad-controls #repeatSentence{background:linear-gradient(135deg,#ffb837,#ef9610);border:1px solid #e2910d;color:#452b05}
-.quad-controls #repeatSentence{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:3px;white-space:nowrap;line-height:1.1;padding-left:2px;padding-right:2px}
-.quad-controls #repeatSentence .repeat-icon{font-size:15px;flex:none;font-weight:950}
-.quad-controls #repeatSentence .repeat-words{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;min-width:0;font-weight:850}
+.quad-controls #repeatSentence{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;white-space:nowrap;line-height:1;padding:3px 1px;text-align:center}
+.quad-controls #repeatSentence .repeat-top{display:block;font-weight:850}
+.quad-controls #repeatSentence .repeat-icon{display:block;font-size:13px;line-height:1;font-weight:950}
 .quad-controls #repeatSentence .repeat-sub{display:block;font-size:.9em;font-weight:800}
-
 .quad-controls #check{background:linear-gradient(135deg,#14a169,#067348)}
 #answer{min-height:125px}
 .navigation{width:100%}
@@ -341,7 +340,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 
 <div class="quad-controls" aria-label="Kontrole diktata">
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
-<button class="btn orange" id="repeatSentence" type="button" aria-label="Ponovi rečenicu"><span class="repeat-icon" aria-hidden="true">↻</span><span class="repeat-words"><span>Ponovi</span><span class="repeat-sub">rečenicu</span></span></button>
+<button class="btn orange" id="repeatSentence" type="button" aria-label="Ponovi rečenicu"><span class="repeat-top">Ponovi</span><span class="repeat-icon" aria-hidden="true">↻</span><span class="repeat-sub">rečenicu</span></button>
 <button class="btn green" id="check" type="button">✓ Završi diktat</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
