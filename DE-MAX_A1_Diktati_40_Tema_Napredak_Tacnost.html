@@ -249,16 +249,20 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 /* Mobile 9:16: compact four-button controls with a larger writing field. */
 .icon-only{min-height:34px!important;padding:2px 8px!important;gap:0!important}
 .icon-only span{font-size:23px!important;line-height:1.2!important}
-.quad-controls{display:grid;grid-template-columns:1.5fr .82fr 1.22fr;gap:6px;width:100%;margin-top:8px}
-.quad-controls .btn{min-width:0;min-height:46px;padding:7px 4px;font-size:12px;line-height:1.15;overflow-wrap:anywhere;text-align:center}
+.quad-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.57fr) minmax(0,1fr);gap:7px;width:100%;margin-top:8px}
+.quad-controls .btn{min-width:0;min-height:46px;padding:9px 6px;font-size:12px;line-height:1.15;overflow-wrap:anywhere;text-align:center;border-radius:12px;box-shadow:0 3px 8px rgba(25,47,89,.13);letter-spacing:-.01em;transition:transform .12s ease,box-shadow .12s ease}
+.quad-controls .btn:active:not(:disabled){transform:translateY(1px);box-shadow:0 1px 4px rgba(25,47,89,.12)}
+.quad-controls #playSentence{background:linear-gradient(135deg,#1669d9,#1052b3)}
+.quad-controls #repeatSentence{background:linear-gradient(135deg,#ffb837,#ef9610);border:1px solid #e2910d;color:#452b05}
+.quad-controls #check{background:linear-gradient(135deg,#14a169,#067348)}
 #answer{min-height:125px}
 .navigation{width:100%}
 .navigation .btn{width:100%;font-size:12px}
 @media(max-width:700px){
  #exerciseView .listening.icon-only{display:flex;flex:none;min-height:30px!important;max-height:30px;padding:1px!important}
  #exerciseView .listening.icon-only span{font-size:23px!important}
- #exerciseView .quad-controls{flex:none;grid-template-columns:1.52fr .78fr 1.22fr;gap:4px;margin-top:2px}
- #exerciseView .quad-controls .btn{min-height:43px;padding:4px 2px;font-size:clamp(10px,2.65vw,12px);line-height:1.15;border-radius:8px}
+ #exerciseView .quad-controls{flex:none;grid-template-columns:minmax(0,1fr) minmax(0,.55fr) minmax(0,1fr);gap:5px;margin-top:3px}
+ #exerciseView .quad-controls .btn{min-height:43px;padding:5px 4px;font-size:clamp(10px,2.65vw,12px);line-height:1.17;border-radius:10px}
  #exerciseView .write-label{font-size:11px}
  #exerciseView #answer{flex:1;min-height:88px;max-height:180px;padding:9px 10px;font-size:16px;line-height:1.38;resize:none;overflow:hidden}
  #exerciseView.has-feedback #answer{flex:0 0 74px;min-height:74px}
