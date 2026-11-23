@@ -249,7 +249,7 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 /* Mobile 9:16: compact four-button controls with a larger writing field. */
 .icon-only{min-height:34px!important;padding:2px 8px!important;gap:0!important}
 .icon-only span{font-size:23px!important;line-height:1.2!important}
-.quad-controls{display:grid;grid-template-columns:1.35fr .82fr .83fr 1.28fr;gap:6px;width:100%;margin-top:8px}
+.quad-controls{display:grid;grid-template-columns:1.5fr .82fr 1.22fr;gap:6px;width:100%;margin-top:8px}
 .quad-controls .btn{min-width:0;min-height:46px;padding:7px 4px;font-size:12px;line-height:1.15;overflow-wrap:anywhere;text-align:center}
 #answer{min-height:125px}
 .navigation{width:100%}
@@ -257,8 +257,8 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 @media(max-width:700px){
  #exerciseView .listening.icon-only{display:flex;flex:none;min-height:30px!important;max-height:30px;padding:1px!important}
  #exerciseView .listening.icon-only span{font-size:23px!important}
- #exerciseView .quad-controls{flex:none;grid-template-columns:1.32fr .79fr .80fr 1.25fr;gap:4px;margin-top:2px}
- #exerciseView .quad-controls .btn{min-height:43px;padding:4px 2px;font-size:clamp(9.5px,2.55vw,11.5px);line-height:1.15;border-radius:8px}
+ #exerciseView .quad-controls{flex:none;grid-template-columns:1.52fr .78fr 1.22fr;gap:4px;margin-top:2px}
+ #exerciseView .quad-controls .btn{min-height:43px;padding:4px 2px;font-size:clamp(10px,2.65vw,12px);line-height:1.15;border-radius:8px}
  #exerciseView .write-label{font-size:11px}
  #exerciseView #answer{flex:1;min-height:88px;max-height:180px;padding:9px 10px;font-size:16px;line-height:1.38;resize:none;overflow:hidden}
  #exerciseView.has-feedback #answer{flex:0 0 74px;min-height:74px}
@@ -334,7 +334,6 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
 <button class="btn blue" id="playSentence" type="button">🔊 Poslušaj rečenicu</button>
 <button class="btn orange" id="repeatSentence" type="button">↻ Ponovi</button>
 <button class="btn green" id="check" type="button">✓ Završi diktat</button>
-<button class="btn yellow" id="showSolution" type="button">Prikaži rešenje</button>
 </div>
 <label for="answer" class="write-label">Napiši ono što čuješ:</label>
 <textarea id="answer" rows="4" lang="de" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Ovde upiši nemačku rečenicu…"></textarea>
@@ -665,7 +664,7 @@ function registerCheck(reveal){
  const typed=plain($("answer").value);
  if(!reveal&&!typed){
   $("feedback").className="feedback near";
-  $("feedback").textContent="Prvo napiši rečenicu ili pritisni „Prikaži rešenje“.";
+  $("feedback").textContent="Prvo napiši rečenicu, pa pritisni „Završi diktat“.";
   $("feedback").hidden=false;return;
  }
  const results=getResults();
@@ -707,7 +706,6 @@ $("startDictation").addEventListener("click",()=>beginDictation());
 $("playSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("repeatSentence").addEventListener("click",()=>say(DATA[topic].sentences[sentence].de,"sentence"));
 $("check").addEventListener("click",()=>registerCheck(false));
-$("showSolution").addEventListener("click",()=>registerCheck(true));
 $("answer").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();registerCheck(false)}});
 $("answer").addEventListener("input",()=>{if(autoNextTimer!==null)cancelAutoNext()});
 $("answer").addEventListener("focus",syncViewport);
