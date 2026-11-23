@@ -234,46 +234,55 @@ function stopAudio(){
 }
 function say(text,mode){
  stopAudio();
- if(!synth||typeof SpeechSynthesisUtterance==="undefined"){$("audioStatus").textContent="Audio nije dostupan u ovom pregledaču. Pokušaj Chrome ili Safari.";return;}
- const token=audioToken,words=getWords(text),u=new SpeechSynthesisUtterance(text);
- u.lang="de-DE";u.rate=rate;u.pitch=1;u.volume=1;
+ if(!synth||typeof SpeechSynthesisUtterance==="undefined"){
+  $("audioStatus").textContent="Audio nije dostupan u ovom pregledaču. Pokušaj Chrome ili Safari.";
+  return;
+ }
+ const token=audioToken;
+ const words=getWords(text);
+ if(!words.length)return;
  const voices=synth.getVoices();
- const selected=voices.find(v=>/^de-DE$/i.test(v.lang)&&v.localService)||voices.find(v=>/^de-DE$/i.test(v.lang))||voices.find(v=>/^de/i.test(v.lang));
- if(selected)u.voice=selected;
- let nativeBoundary=false,estimated=0;
- function approximate(){
-  if(token!==audioToken||nativeBoundary||estimated>=words.length)return;
-  activeWord(estimated,mode);
-  const word=words[estimated++].word;
-  // Rezervni ritam za pregledače bez onboundary: sporije prati prirodni izgovor reči.
-  const pause=/[.!?]$/.test(word)?350:/[,;:]$/.test(word)?180:0;
-  const ms=Math.max(380,(230+80*word.length)/rate)+pause;
-  highlightTimer=setTimeout(approximate,ms);
- }
- u.onstart=()=>{
+ const selected=voices.find(v=>/^de-DE$/i.test(v.lang)&&v.localService)
+  ||voices.find(v=>/^de-DE$/i.test(v.lang))
+  ||voices.find(v=>/^de/i.test(v.lang));
+ // Svaka reč je zaseban govorni događaj: označava se tek kad glas zaista počne da je izgovara.
+ // Nema nezavisnog brojača koji bi kasnio ili žurio ispred glasa.
+ let index=0;
+ function nextWord(){
   if(token!==audioToken)return;
-  $("audioStatus").textContent="🔊 Slušanje u toku…";
-  // Kratko sačekaj stvarni boundary događaj pre prelaska na rezervno praćenje.
-  highlightTimer=setTimeout(approximate,180);
- };
- u.onboundary=e=>{
-  if(token!==audioToken||typeof e.charIndex!=="number"||!words.length)return;
-  nativeBoundary=true;
-  if(highlightTimer!==null){clearTimeout(highlightTimer);highlightTimer=null;}
-  const pos=e.charIndex;
-  let i=words.findIndex(w=>pos>=w.start&&pos<w.end);
-  if(i<0)i=words.findIndex(w=>w.start>=pos);
-  if(i<0)i=words.length-1;
-  activeWord(i,mode);
- };
- function finishSpeech(message){
-  if(token!==audioToken)return;
-  if(highlightTimer!==null){clearTimeout(highlightTimer);highlightTimer=null;}
-  clearHighlight();$("audioStatus").textContent=message;
+  if(index>=words.length){
+   clearHighlight();
+   $("audioStatus").textContent="Slušanje završeno.";
+   return;
+  }
+  const i=index++;
+  const utterance=new SpeechSynthesisUtterance(words[i].word);
+  utterance.lang="de-DE";
+  utterance.rate=rate;
+  utterance.pitch=1;
+  utterance.volume=1;
+  if(selected)utterance.voice=selected;
+  utterance.onstart=()=>{
+   if(token!==audioToken)return;
+   $("audioStatus").textContent="🔊 Slušanje u toku…";
+   activeWord(i,mode);
+  };
+  utterance.onend=()=>{if(token===audioToken)nextWord();};
+  utterance.onerror=e=>{
+   if(token!==audioToken)return;
+   if(e.error==="canceled"||e.error==="interrupted")return;
+   clearHighlight();
+   $("audioStatus").textContent="Problem sa zvukom. Pritisni ponovo dugme za slušanje.";
+  };
+  try{synth.speak(utterance)}
+  catch(e){
+   if(token===audioToken){
+    clearHighlight();
+    $("audioStatus").textContent="Nije moguće pokrenuti zvuk.";
+   }
+  }
  }
- u.onend=()=>finishSpeech("Slušanje završeno.");
- u.onerror=()=>finishSpeech("Zvuk nije pokrenut. Pritisni ponovo dugme za slušanje.");
- try{synth.speak(u)}catch(e){finishSpeech("Nije moguće pokrenuti zvuk.")}
+ nextWord();
 }
 function textOf(t){return t.sentences.map(s=>s.de).join(" ")}
 function wc(t){return textOf(t).trim().split(/\s+/).length}
