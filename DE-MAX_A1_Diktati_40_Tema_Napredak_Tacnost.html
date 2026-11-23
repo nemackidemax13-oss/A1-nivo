@@ -108,11 +108,11 @@ h1{font-size:clamp(20px,5vw,24px);letter-spacing:-.035em;line-height:1.12;margin
 .navigation{display:flex;gap:8px;margin-top:10px}
 .navigation .btn{min-width:0}
 .results{text-align:center}
-.results .big{font-size:46px;line-height:1.15;font-weight:950;color:#0b7c56;margin:10px 0 5px}
-.results h2{font-size:21px;margin:5px 0}
-.summary-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0}
-.summary-metrics>div{background:#f0f7ff;border-radius:13px;padding:13px 8px;font-size:11px;color:#6b8199}
-.summary-metrics b{display:block;color:#145cbc;font-size:23px}
+.results .big{font-size:31px;line-height:1.1;font-weight:950;color:#0b7c56;margin:5px 0 3px}
+.results h2{font-size:17px;margin:3px 0}
+.summary-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:7px 0}
+.summary-metrics>div{background:#f0f7ff;border-radius:10px;padding:7px 6px;font-size:10px;color:#6b8199}
+.summary-metrics b{display:block;color:#145cbc;font-size:19px}
 .audio-status{font-size:11px;color:#526f93;min-height:15px;margin-top:5px}
 footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-top:4px}
 
@@ -210,12 +210,12 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #exerciseView.reviewing #feedback{flex:1;font-size:12px;line-height:1.4}
  #exerciseView.reviewing #feedback .solution{font-size:15px;line-height:1.4}
  #exerciseView.reviewing #feedback .error-detail{font-size:12px;line-height:1.4}
- #finishView{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;justify-content:center}
- #finishView h2{font-size:16px;margin:3px 0}
- #finishView .big{font-size:29px;margin:3px 0}
+ #finishView{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;justify-content:flex-start}
+ #finishView h2{font-size:14px;margin:2px 0}
+ #finishView .big{font-size:23px;margin:2px 0}
  #finishView .summary-metrics{margin:5px 0;gap:5px}
  #finishView .summary-metrics>div{padding:5px}
- #finishView .summary-metrics b{font-size:18px}
+ #finishView .summary-metrics b{font-size:15px}
  #finishView .full-review{min-height:0;overflow:hidden;margin-top:6px;padding-top:6px}
  #finishView .full-review h3{font-size:13px}
  #finishView .full-review p{font-size:10px;margin-bottom:4px}
@@ -368,6 +368,28 @@ footer{font-size:11px;text-align:center;color:#8394a9;margin-top:auto;padding-to
  #exerciseView .auto-next-controls{gap:5px;margin-top:3px;flex:none}
  #exerciseView .auto-next-controls .auto-next-info{margin:0;padding:5px 3px;font-size:10.5px;line-height:1.2}
  #exerciseView .auto-next-controls .btn{min-height:36px;padding:5px 3px;font-size:clamp(10px,2.7vw,12px);line-height:1.18}
+}
+
+
+/* Na završnom pregledu: manja statistika i sitan prevod ispod ispravljenog nemačkog. */
+#finishView>.eyebrow{font-size:10px;line-height:1.2;margin-bottom:1px}
+#finishView>.subtitle{font-size:10.5px;line-height:1.2}
+.review-translation{font-size:11px;line-height:1.28;color:#5b708a;font-weight:550;margin-top:5px;padding-top:4px;border-top:1px solid #dcece2;overflow-wrap:anywhere}
+.review-translation-label{font-weight:800;color:#476682}
+@media(max-width:700px){
+ #finishView>.eyebrow{font-size:9px;margin-bottom:0}
+ #finishView>.subtitle{font-size:9px}
+ #finishView .summary-metrics{margin:3px 0;gap:5px}
+ #finishView .summary-metrics>div{padding:3px 4px;font-size:9px;border-radius:7px}
+ #finishView .full-review{margin-top:4px;padding-top:4px}
+ #finishView .review-translation{font-size:clamp(9px,2.35vw,10px);line-height:1.2;margin-top:3px;padding-top:3px}
+ #finishView .review-cell{line-height:1.22}
+}
+@media(max-width:700px) and (max-height:620px){
+ #finishView h2{font-size:12.5px}
+ #finishView .big{font-size:21px}
+ #finishView .summary-metrics b{font-size:13px}
+ #finishView .review-translation{font-size:9px;line-height:1.12;margin-top:2px;padding-top:2px}
 }
 
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
@@ -788,7 +810,7 @@ function finish(){
   const written=answer?corrected.typedHtml:'<span class="review-empty">Nije napisano</span>';
   return '<div class="review-pair">'+
    '<div class="review-cell review-written" lang="de">'+number+written+'</div>'+
-   '<div class="review-cell review-correct" lang="de">'+number+corrected.html+'</div>'+
+   '<div class="review-cell review-correct"><div lang="de">'+number+corrected.html+'</div><div class="review-translation" lang="sr"><span class="review-translation-label">Prevod:</span> '+escapeHTML(s.sr)+'</div></div>'+
    '</div>';
  }).join("");
  $("goNext").disabled=topic===DATA.length-1;
